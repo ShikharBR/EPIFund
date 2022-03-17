@@ -1,0 +1,16 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.RegistrationModel
+@{
+    ViewBag.Title = "Create User";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using (Html.BeginForm("CreateUser", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false)
+    <br />
+    @Html.EditorForModel()
+
+    <input type="submit" class="btn btn-primary create-user-save" id="btnSave" name="btnSave" value="Save User" />
+    
+}

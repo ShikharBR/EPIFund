@@ -1,0 +1,16 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.MbaViewModel
+@{
+    ViewBag.Title = "Update MBA";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Update MBA</h2>
+@using (Html.BeginForm("UpdateMba", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false)
+    <br />
+    @Html.EditorForModel()
+
+    <input type="submit" class="btn btn-primary" id="btnSave" name="btnSave" value="Save MBA" /> 
+}

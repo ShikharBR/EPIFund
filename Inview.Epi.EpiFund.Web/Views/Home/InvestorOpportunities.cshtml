@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "CRE Asset Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Welcome all Commercial Real Estate Principal Investors</h3>
+
+<p class="investor-op-links" style="text-align: center">
+    <input type="button" class="btn btn-default proceed-small" value="Multi-Family" onclick="location.href='@Url.Action("AssetList", "DataPortal", new { filter = "MultiFamily" })    '" />
+    <input type="button" class="btn btn-default proceed-small" value="Retail Tenant Property" onclick="location.href='@Url.Action("AssetList", "DataPortal", new { filter = "CRERetail" })    '" />
+    <input type="button" class="btn btn-default proceed-small" value="Office Tenant Property" onclick="location.href='@Url.Action("AssetList", "DataPortal", new { filter = "CREOffice" })    '" />
+    <input type="button" class="btn btn-default proceed-small" value="MHP" onclick="location.href='@Url.Action("AssetList", "DataPortal", new { filter = "MHP" })    '" />
+    <br />
+    <input type="button" class="btn btn-default proceed-small" value="Medical Tenant Property" onclick="location.href='@Url.Action("AssetList", "DataPortal", new { filter = "Medical" })    '" />
+    <input type="button" class="btn btn-default proceed-small" value="Industrial Tenant Property" onclick="location.href='@Url.Action("AssetList", "DataPortal", new { filter = "Indus" })    '" />    
+    <input type="button" class="btn btn-default proceed-small" value="Secured CRE Paper" onclick="location.href='@Url.Action("AssetList", "DataPortal", new { filter = "SecuredPaper" })    '" />
+    <br />
+    <input type="button" class="btn btn-default proceed-small" value="Resort/Hotel/Motel Property" onclick= "alert('This feature is coming soon. Please stay tuned!')" />
+    <input type="button" class="btn btn-default proceed-small" value="Fuel Service Retail Property" onclick="location.href='@Url.Action("AssetList", "DataPortal", new { filter = "Fuel" })    '" />
+    <input type="button" class="btn btn-default proceed-small" value="Mixed Use Commercial Property" onclick= "alert('This feature is coming soon. Please stay tuned!')" />
+    <br />
+    <input type="button" class="btn btn-default proceed-small" value="Mini-Storage Property" onclick= "alert('This feature is coming soon. Please stay tuned!')" />
+    <input type="button" class="btn btn-default proceed-small" value="Parking Garage Property" onclick= "alert('This feature is coming soon. Please stay tuned!')" />
+    <input type="button" class="btn btn-default proceed-small" value="Fractured Condominium Portfolio's" onclick= "alert('This feature is coming soon. Please stay tuned!')" />
+    <br />
+    [Click any of the above options to begin your CRE Investment Search]
+</p>
+
+<p><b>USCRE Online</b> database of United States Commercial Real Estate inventory is individually and wholly managed by <b>(1)</b> its vested CRE principals, and or <b>(2)</b> each respective Assets professional representative (NAR Community), and or <b>(3)</b> USC on its uploaded inventory of NAR Listed CRE inventory.  Assets that appear in a CRE summary [search result] for USC registered principal investors are purported and displayed as being either active-available or active-pending. As a registered principal investor you will communicate directly with either the vested CRE principal or its professional representative as to continuing interest in any and all [search result] inventory, and therefrom identify the protocol to engage for site review, expanded due diligence, and, if applicable, formal acquisition interest.</p> 
+<h4 style="text-align: center; font-weight: bold;">Comprehensively review detailed US CRE Inventory… in SECONDS!</h4>
+<h4 style="text-align: center; font-weight: bold;">Submit Automated Formal Binding LOI’s… in MINUTES!</h4>
+<p>Through USC CRE Asset Views and or through each USC Registrant’s “My USC Page”, principal investors are provided automated tools to (1) order* recorded documents from a Title Company of your election, (2) secure* a Property & Casualty Insurance Quote on the respective asset, and or (3) submit a formal acquisition interest (<a title="Letter of Intent to Purchase">LOI</a>) on any active CRE asset.  USC Users are urged to respect all notated <a title="Letter of Intent to Purchase">LOI</a> submittal dates as may be applicably displayed for each respective CRE Asset View.  Each USC Registrant will have a complete [time and date stamped] history of their activity on each CRE Asset of interest through their “My USC Page”.  In as much, as a presumed accredited principal investor of US based CRE, we respectively emphasize that time is of the essence in your analysis and determination of any inventory match to your immediate acquisition interests.</p>
+<small style="padding-left:20px">* Assumes recorded documents and or a P&C Quote have not already been provided the respective Asset.</small>
+<br />
+<h3>It is Critical for the Vesting Entity to have its Debt & Equity Acquisition
+Capital Fully Secured & Verified Before Submitting Any LOI </h3>
+
+<p>If you are a principal investor seeking to acquire certain CRE inventory, to have full access to the US CRE Online Asset Inventory you must complete the following protocol:</p>
+<ol>
+    <li>Complete your @Html.ActionLink("registration", "Registration", "Home") as a Principal Investor with USC;</li>
+    <li>Select any of the above [CRE Asset Search] buttons at the top of this page;</li>
+    <li><b>Expanded Search Option</b>: submit your customized CRE search criteria @Html.ActionLink("questionnaire", "InvestmentAssetSearchCriteria", "DataPortal"):
+        <ul><li>The form will be delivered to the exclusive USC database of matching vested principals and the professional community;</li></ul></li>
+    <li>Execute online the USC Non-Compete Non-Disclosure Confidentiality Agreement (@Html.ActionLink("NCND","DownloadNCNDTemplate", "DataPortal"));</li>
+    <li>You will be required to electronically execute the USC Internet Portal Agreement for vesting principal investors (@Html.ActionLink("IPA", "DownloadIPABuyerTemplate","DataPortal")) to have access to the complete USC CRE Inventory;</li>
+    <li>Review, edit, update, and re-submit your search criteria forms 24/7/365 through your “@Html.ActionLink("My USC Page", "MyUSCPage","Home")"</li>
+</ol>
+<p style="text-align: center">
+    <input type="button" class="btn btn-default proceed" value="Proceed to Registration" onclick="location.href='@Url.Action("Registration", "Home")    '" />
+</p>
+<p>Thank you for your patronage and trust of US CRE Online.  All User activity is strictly confidential and proprietary to USC.  All User and Asset data shall never be disseminated or distributed to any 3rd party for any purpose other than as shall be specifically defined herein (see @Html.ActionLink("Privacy Policy", "PrivacyPolicy", "Home")).  USC welcomes all constructive comments and suggestions from its Users for the improvement and technological advancements of its Portal that will better serve its registered users.</p>
+<p style="text-align: center">
+    <input type="button" class="btn btn-default proceed" value="Proceed to Your CRE Asset Search Questionnaire" onclick="location.href='@Url.Action("InvestmentAssetSearchCriteria", "DataPortal")    '" />
+</p>

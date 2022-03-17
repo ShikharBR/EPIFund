@@ -1,0 +1,33 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.ConfirmationReceiptContactUsEmail
+To: @Model.Email
+From: USCREonline <info@uscreonline.com>
+Subject: Receieved Contact Us Inquiry
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.To,</p>
+    <h3>Confirmation of Receipt of Contact Us Inquiry:</h3>
+    <table class="table">
+        <tr>
+            <td>Date and Time of Inquiry:</td>
+            <td>@Model.DateOfInquiry.ToString("MM/dd/yyyy") at @Model.DateOfInquiry.ToString("hh:mm tt") PSDT</td>
+        </tr>
+        <tr>
+            <td>Inquiry Selected:</td>
+            <td>@Model.Topics</td>
+        </tr>
+        <tr>
+            <td>Additional inquiry detail:</td>
+            <td>@Html.DisplayFor(s => s.Inquiry)</td>
+        </tr>
+    </table>
+    <p>
+        The Professional Staff of US CRE Online formerly thanks you for your inquiry.  USC is a fully automated data portal, with a state-of-the-art communications module, designed and administered to provide the best service possible for the commercial real estate investment community.  We take your &#91;Contact Us Inquiries&#93; very seriously.  We are committed to continually improve the profitability and liquidity of CRE holdings for our valued users worldwide.  USC logs all inquiries to ensure that we address all site maintenance and advancement requests in order of priority.
+    </p>
+    <p>We thank all USC Registrants for their participation at our Portal, and welcome all vested interests in US Commercial Real Estate to join our rapidly expanding community at United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+    <p>You will receive a formal response to your inquiry from USC via e mail within the ensuing 24-48 business hours.  Thank you again for your inquiry.  </p>
+    <p>The Professional Staff</p>
+    <p><b>US CRE Online, LLC</b></p>
+</body>
+</html>

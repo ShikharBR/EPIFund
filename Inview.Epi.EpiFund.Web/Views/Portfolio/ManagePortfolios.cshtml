@@ -1,0 +1,240 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.AdminPortfolioResultsModel
+@{
+    ViewBag.Title = "Manage Portfolios";
+    Layout = ViewBag.Layout; ;
+}
+<style>
+    .header
+    {
+        margin: 1px;
+        color: #fff;
+        padding: 3px 10px;
+        cursor: pointer;
+        position: relative;
+        background-color: #B1A795 !important;
+    }
+</style>
+<h3>Portfolios</h3>
+
+<input type="button" class="btn btn-primary" id="btnCreatePort" value="Create Portfolio" />
+<br />
+@using (Html.BeginForm("ManagePortfolios", "Portfolio", FormMethod.Post, new { id = "searchForm" }))
+{
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#searchbox">
+                        <button class="btn btn-default btn-xs" style="border: 1px solid #888">
+                            Search Portfolios
+                        </button>
+                    </a>
+                </h4>
+            </div>
+            <div id="searchbox" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.PortfolioName, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.PortfolioName)
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.AssetNumber, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.AssetNumber)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.AssetName, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.AssetName, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.SelectedAssetType, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.DropDownListFor(s => s.SelectedAssetType, @Model.AssetTypes, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.AddressLine1, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.AddressLine1)
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.City, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.City, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.State, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.DropDownListFor(s => s.State, @Model.States)
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.ZipCode, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.ZipCode, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.APN, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.APN, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <div class="input-group">
+                                @Html.HiddenFor(model => Model.Page)
+                                @Html.HiddenFor(model => Model.SortOrder)
+                                @Html.HiddenFor(model => Model.RowCount)
+                                @Html.HiddenFor(model => Model.IsSearching)
+                                <button class="btn btn-primary proceed" style="width: 200px; margin: 30px auto;" id="submitSearch">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@{ Html.RenderPartial("_PortfolioListView", Model.Portfolios); }
+
+<script>
+
+    $(document).ready(function () {
+
+        //jQuery(".header").hide();
+    });
+    $("#btnCreatePort").click(function () {
+        window.location.href = "@Url.Action("CreatePortfolio", "Portfolio")";
+    });
+    $('#submitSearch').click(function () {
+        $('#IsSearching').val(true);
+        $('#searchForm').submit();
+    })
+    $('.header').click(function () {
+
+        $(this).nextUntil('tr.header').toggle();
+    });
+
+    $(function () {
+        $(".datepicker").datepicker();
+    });
+    function EditAsset(aId) {
+        $.ajax({
+            type: "POST",
+            url: "/Admin/EditAsset/",
+            data: JSON.stringify({ assetId: aId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            cache: false,
+            success: function (response) {
+                if (response["Status"] == "unlocked") {
+                    window.location.href = '@Url.Action("UpdateAsset", "Admin")' + '/' + aId;
+                }
+                else if (response["Status"] == "locked") {
+                    alert('The asset is currently being edited at the moment. Please try again someday.');
+                }
+                else {
+                    // admin
+                    if (confirm('The asset is currently locked. Would you like to edit the asset anyway?')) {
+                        $.post('@Url.Action("UnlockAsset", "Admin")', { assetId: aId }, function () {
+                            window.location.href = '/Admin/UpdateAsset/' + aId;
+                        });
+                    }
+                }
+            },
+            error: function (jqXHR, exception) {
+            },
+            failure: function (response) {
+            }
+        });
+}
+
+$('.pagination li a').click(function () {
+    var href = $(this).attr('href');
+    if (typeof href !== typeof undefined && href !== false) {
+        var page = parseInt(getPageNumber(href));
+        $('#Page').val(page);
+        $('#searchForm').submit();
+        return false;
+    }
+});
+function postForm(order) {
+    $('#SortOrder').val(order);
+    $('#searchForm').submit();
+    return false;
+}
+function changeResults() {
+    $('#RowCount').val($('#ddlRowCount').val());
+    $('#searchForm').submit();
+}
+</script>
+

@@ -1,0 +1,39 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.AssetSearchCriteriaModel
+
+@{
+    ViewBag.Title = "Investment Asset Search Criteria";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @section CaptchaCss {
+        <link href="@Url.Content("~/Content/QapTcha.jquery.css")" rel="stylesheet" type="text/css" />
+    }
+    @section CaptchaJs {
+        <script src="@Url.Content("/Scripts/QapTcha.jquery.js")"></script>
+    }
+}
+@using (Html.BeginForm("InvestmentAssetSearchCriteria", "DataPortal"))
+{ 
+    <h3 class="page-header" id="topMost">CRE Available Inventory Questionnaire for End User Accredited Principals</h3>
+    <h4>THIS IS NOT A CONTRACT OR AGREEMENT OF ANY TYPE</h4>
+    <p>
+        Thank you for your interest in utilizing the @Html.ActionLink("USCREonline.com", "Index", "Home") ("USC") <span style="color: #f00; font-weight: bold;">Free</span> CRE Locator service.  Your responses to this questionnaire will be utilized by USC to identify assets within your defined demographic, geographic, and investment parameters.  This document shall not be construed and or implied and or understood by any party hereto to be an employment contract of any kind.  There is no implied or otherwise obligation by any party to this questionnaire to perform any search task and or to acquire any asset that may be identified by USC resulting from the data provided by the named respondent herein.  Please review the Q&A at the end of this document for further details.
+    </p>
+    @Html.ValidationSummary()
+    @Html.EditorForModel()  
+    <br />
+    <div class="row">
+        <div class="QapTcha"></div>
+    </div>
+    <br />
+    <div class="input-group">
+        <input type="submit" class="btn btn-primary" onclick="fixNumbers()" style="margin-right: 20px;" value="Submit" />
+        <a href="#topMost" class="btn btn-default">Go to Top of Page</a>
+    </div> 
+}
+<script type="text/javascript">
+    $(function () {
+        $('.QapTcha').QapTcha({
+            txtLock: 'Slide bar to the right to submit',
+            txtUnlock: 'Form can be submitted'
+        });
+    });
+</script>

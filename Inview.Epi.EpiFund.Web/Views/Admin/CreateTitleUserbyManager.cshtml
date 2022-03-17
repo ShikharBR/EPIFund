@@ -1,0 +1,25 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.TitleCompanyUserModel
+@{
+    ViewBag.Title = "Create Title Company Manager";
+    if (Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.TitleCompUser || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.TitleCompManager)
+    {
+        Layout = "~/Views/Shared/_LayoutTitleUser.cshtml";
+    }
+    if (Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.SiteAdmin)
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+}
+
+@using (Html.BeginForm("CreateTitleUserbyManager", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false)
+    <br />
+    @Html.EditorForModel()
+
+    <a  type ="submit"  style="margin-bottom:5px;" class="btn btn-warning" href="@Url.Action("CancelEditTitleUserforManager", "Admin")" title="Cancel">Cancel</a>
+    <input type="submit" class="btn btn-primary create-user-save" id="btnSave" name="btnSave" value="Save User" />
+    
+    
+}

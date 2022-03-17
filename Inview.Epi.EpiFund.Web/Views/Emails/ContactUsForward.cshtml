@@ -1,0 +1,43 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.ContactUsForwardEmail
+To: @Model.Email
+From: USCREonline <info@uscreonline.com>
+Subject: Receieved Contact Us Inquiry
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.To,</p>
+    <h3>Confirmation of Receipt of Contact Us Inquiry:</h3>
+    <table class="table">
+        <tr>
+            <td>Name of Person sending Inquiry</td>
+            <td>@Html.DisplayFor(s => s.Name)</td>
+        </tr>
+        <tr>
+            <td>Email of Person sending Inquiry</td>
+            <td>@Html.DisplayFor(s => s.EmailOfPersonSendingInquiry)</td>
+        </tr>
+        <tr>
+            <td>Date and Time of Inquiry</td>
+            <td>@Model.DateOfInquiry.ToString("MM/dd/yyyy") at @Model.DateOfInquiry.ToString("hh:mm tt") PSDT</td>
+        </tr>
+        <tr>
+            <td>Questions/comments pertaining to</td>
+            <td>@Model.Topics</td>
+        </tr>
+        <tr>
+            <td>Inquiry</td>
+            <td>@Html.DisplayFor(s => s.Inquiry)</td>
+        </tr>
+         <tr>
+            <td>Phone Number of Person sending Inquiry</td>
+            <td>@Html.DisplayFor(s => s.ContactNumber)</td>
+        </tr>
+    </table>
+    <p>
+        The Professional Staff of <b>US CRE Online</b> formerly thanks you for your inquiry.  You will receive a formal response to your inquiry by USC via e mail within the ensuing 24-48 business hours.  Thank you again for your inquiry.  
+    </p>
+    <p>The Professional Staff</p>
+    <p><b>US CRE Online, LLC</b></p>
+</body>
+</html>

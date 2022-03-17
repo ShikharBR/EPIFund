@@ -1,0 +1,156 @@
+﻿@using PagedList.Mvc
+@model List<Inview.Epi.EpiFund.Domain.ViewModel.AdminAssetQuickListModel>
+@{
+    bool showCreatedBy = false;   
+}
+<style>
+    .paging-nav {
+  text-align: right;
+  padding-top: 2px;
+}
+
+.paging-nav a {
+  margin: auto 1px;
+  text-decoration: none;
+  display: inline-block;
+  padding: 1px 7px;
+  background: #91b9e6;
+  color: white;
+  border-radius: 3px;
+}
+
+.paging-nav .selected-page {
+  background: #187ed5;
+  font-weight: bold;
+}
+
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var checkboxes = $("input[type='checkbox']");
+
+        checkboxes.click(function () {
+            if (checkboxes.is(":checked")) {
+                $("#notifyRegistrant").removeClass("hide", !checkboxes.is(":checked"));
+            } else {
+                $("#notifyRegistrant").addClass("hide", !checkboxes.is(":checked"));
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        /*$('#tbSearchAssets').paging({
+            limit: 25, rowDisplayStyle: 'block'
+        });*/
+    });
+   
+
+</script>
+
+<div class="panel panel-default" id="assetPartial" style="border: 1px solid #B1A795;">
+    
+    @*<div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+    </div>*@
+    @if (Model.Count > 0)
+    {
+        <div  class="overflow short-xs" >
+            <table class="table table-striped" id="tbSearchAssets" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="sortResults('@ViewBag.AssetIdSortParm')">Asset #</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="sortResults('@ViewBag.TypeSortParm')">Type</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="sortResults('@ViewBag.AddressSortParm')">Address</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="sortResults('@ViewBag.CitySortParm')">City</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="sortResults('@ViewBag.StateSortParm')">State</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="sortResults('@ViewBag.AssetNameSortParm')">Asset Name</a></b>
+                        </td>
+                        <td>
+                            <b>#Units / Sq.Ft.</b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="sortResults('@ViewBag.StatusSortParm')">Status</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="sortResults('@ViewBag.CreatedSortParm')">Created By</a></b>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody >
+                    @for (int i = 0; i < @Model.Count; i++)
+                    {
+                        string username = string.Empty;
+                        string email = string.Empty;
+                        if (!string.IsNullOrEmpty(Model[i].CreatedBy))
+                        {
+                            username = Model[i].CreatedBy.Split('~')[0];
+                            email = Model[i].CreatedBy.Split('~')[1];
+                        }
+                        <tr id="@Model[i].AssetId">
+                            @if (Model[i].IsOnHold)
+                            {
+                                <td>@Html.HiddenFor(s => Model[i].AssetId) @Html.HiddenFor(s => Model[i].AssetNumber)</td>
+                            }
+                            else
+                            {
+                                <td>@Html.CheckBoxFor(s => Model[i].IsSelected, new { onclick = "storeSelection()" })@Html.HiddenFor(s => Model[i].AssetId) @Html.HiddenFor(s => Model[i].AssetNumber)</td>
+                            }
+                            <td style="width: 200px;">
+                                <a href="@Url.Action("ViewAsset", "DataPortal", new { id = @Model[i].AssetId, fromManageAssets = true })">
+                                    @Model[i].AssetNumber</a>
+                            </td>
+                            <td style="width: 200px;">
+                                @Model[i].Type
+                            </td>
+                            <td style="width: 200px;">
+                                @Model[i].AddressLine1
+                            </td>
+                            <td style="width: 100px;">
+                                @Model[i].City
+                            </td>
+                            <td style="width: 100px;">
+                                @Model[i].State
+                            </td>
+                            <td style="width: 100px;">
+                                @Model[i].AssetName
+                            </td>
+                            <td style="width: 100px;">
+                                @(Model[i].SquareFeet > 0 ? Model[i].SquareFeet.ToString() : Model[i].NumberOfUnits.ToString())
+                            </td>
+                            <td style="width: 100px;">
+                                @Model[i].Status
+                            </td>
+                            <td>
+                                <label title="@email" style="font-size:12px;font-weight:initial;">@username</label>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+       
+    }
+</div>
+
+<br />
+
+
+@*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ManagePortfolios",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))*@
+

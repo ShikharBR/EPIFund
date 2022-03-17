@@ -1,0 +1,21 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.IPASellerTemplateModel
+@{
+    ViewBag.Title = "Execute Seller IPA";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("ExecuteSellerMDA", "Investors"))
+{ 
+    <h3 class="page-header">Execute Seller IPA</h3>
+    <p>To download a sample IPA template, click <a href="@Url.Action("DownloadIPASellerTemplate", "DataPortal")">here</a></p>
+    <p>Fill out fields below to execute IPA. DocuSign will email you to digitally sign document. Once document has been signed and received by USC. You will receive an email from USC with the signed document. You can also view executed IPA through My USC Page.</p>
+    @Html.ValidationSummary()
+    <div class="MDA">
+        @Html.EditorForModel()  
+    </div>
+    <br />
+    <div class="input-group">
+        <input type="submit" name="action:PreviewSellerMDAPdf" class="btn btn-default" style="margin-right: 20px;" value="Preview" />
+        <input type="submit" name="action:ExecuteSellerMDA" class="btn btn-primary" style="margin-right: 20px;" value="Submit" />
+    </div> 
+}

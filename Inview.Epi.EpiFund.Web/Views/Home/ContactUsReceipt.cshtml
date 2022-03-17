@@ -1,0 +1,43 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.ContactUsReceiptModel
+@{
+    ViewBag.Title = "Confirmation of Receipt of Contact Us Inquiry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>Dear @Model.Name,</p>
+<h3>Confirmation of Receipt of Contact Us Inquiry:</h3>
+<div class="overflow">
+    <table class="table table-striped" style="border: 1px solid #ddd; font-size: 10px">
+        <tr>
+            <td>@Html.LabelFor(s => s.Name)</td>
+            <td>@Html.DisplayFor(s => s.Name)</td>
+        </tr>
+        <tr>
+            <td><b>E mail of the person sending the inquiry</b></td>
+            <td>@Html.DisplayFor(s => s.Email)</td>
+        </tr>
+        <tr>
+            <td><b>Phone Number of Person sending Inquiry</b></td>
+            <td>@Html.DisplayFor(s => s.PhoneNumber)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(s => s.DateOfInquiry)</td>
+            <td>@Model.DateOfInquiry.ToString("MM/dd/yyyy") at @Model.DateOfInquiry.ToString("hh:mm tt") PSDT</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(s => s.Topics)</td>
+            <td>@Html.DisplayFor(s => s.Topics)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(s => s.Inquiry)</td>
+            <td>@Html.DisplayFor(s => s.Inquiry)</td>
+        </tr>
+    </table>
+</div>
+<p>
+    The Professional Staff of <b>US CRE Online</b> formerly thanks you for your inquiry.  You will receive a formal response to your inquiry by USC via e mail within the ensuing 24-48 business hours.  Thank you again for your inquiry.  
+</p>
+<p>The Professional Staff</p>
+<p><b>US CRE Online, LLC</b></p>
+
+

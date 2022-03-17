@@ -1,0 +1,40 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.TitleCompanyUserModel
+@using Inview.Epi.EpiFund.Domain.Helpers
+<ul class="nav">
+    <li class="admin-sidebar">
+        <h3>Title Company User Links</h3>
+    </li>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li class="@Html.IsSelected(action: "Login")"><a href="@Url.Action("Logout", "Home")">Logout</a></li>
+        <li class="@Html.IsSelected(action: "MyUSCPage", controller: "Home")"><a href="@Url.Action("MyUSCPage", "Home")">My USC Page</a></li>
+    }
+    else
+    {
+        <li class="@Html.IsSelected(action: "Login")"><a href="@Url.Action("Login", "Home")">Login</a></li>
+    }
+    @if (Model != null && Model.IsManager == true)
+    {
+        if (!Model.DoNotShowLinks)
+        {
+            <li><a href="@Url.Action("ManagerTitleUsersPage", "Admin", new { id = @Model.TitleCompanyId })">Manage Title Company Users</a></li>
+            <li><a href="@Url.Action("AccessAsset", "Admin")">Manage Assets</a></li>
+            @*<li><a href="@Url.Action("AssetAssignment", "Admin", new { id = @Model.TitleCompanyUserId })">Manage Assets</a></li>*@
+            <li><a href="@Url.Action("UpdateTitleCompanyUser", "Admin", new { id = @Model.TitleCompanyUserId })">Edit Your Profile </a></li>
+            <li><a href="@Url.Action("ViewOrderHistory", "Admin")">View Order History</a></li>
+        }
+    }
+    else
+    {
+        if (Model != null)
+        {
+            if (!Model.DoNotShowLinks)
+            {
+                <li><a href="@Url.Action("UpdateTitleCompanyUser", "Admin", new { id = @Model.TitleCompanyUserId })">Edit Your Profile</a></li>
+                <li><a href="@Url.Action("AccessAsset", "Admin")">Manage Assets</a></li>
+                <li><a href="@Url.Action("ViewOrderHistory", "Admin")">View Order History</a></li>
+            }
+        }
+    }
+
+</ul>

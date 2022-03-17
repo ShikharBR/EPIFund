@@ -1,0 +1,95 @@
+﻿@using Postal
+@model Inview.Epi.EpiFund.Web.Models.Emails.SendSearchCriteriaEmail
+
+To: @Model.Email
+From: USCREonline <info@uscreonline.com>
+Subject: Request for USC Principal Matching Inventory 
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <br />
+
+<p>Dear @Model.Name,</p>
+    <p>US CRE Online, the #1 &#91;Principal to Principal&#93; Commercial Real Estate Data & Communications Portal in the World, herewith introduces 
+        that a vetted Registered Principal from @Model.UserCity, @Model.UserState seeks to acquire specific commercial real estate 
+        in the US.  Said Registered Principal has both Corporate Proof of Funds and a secured Debt Funding Partner (CLA) 
+        respectively... subject to identifying a qualifying asset.  A Corporate history shall also accompany said Principal&#39;s intended 
+        LOI should a qualifying asset be presented.  The following data represents the specific CRE Asset Search Criteria from our 
+        Registered Principal: </p>
+
+    <table>
+        <tr>
+            <td>Type of CRE Asset Sought:</td>
+            <td>@Model.AssetSought</td>
+        </tr>
+        <tr>
+            <td>Low-High Budget for Asset:</td>
+            <td>Min: @Model.BudgetMin.ToString("C0")     Max: @Model.BudgetMax.ToString("C0")</td>
+        </tr>
+        <tr>
+            <td>Cities of Interest:</td>
+            <td>
+                @foreach (var item in @Model.GeographicInterests)
+                {
+                    <span>@item , </span>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>General Grade Rating of Asset:</td>
+            <td>Min: @Model.MinRating</td>
+        </tr>
+        <tr>
+            <td>Unit Mix Preference:</td>
+            <td>Max % Ratio of 1Bd Units: @Model.MaxRatio1BedroomUnits     Max % Ratio of Studio Units: @Model.MaxRatioStudioUnits</td>
+        </tr>
+        <tr>
+            <td>CAP Rating of Investment:</td>
+            <td>Asking Price Min: @Model.BudgetMin.ToString("C0")</td>
+        </tr>
+        @if (Model.AssetSought == "Retail" || Model.AssetSought == "Office" || Model.AssetSought == "Industrial")
+        {
+        <tr>
+            <td>Does Project require a Major Tenant:</td>
+            <td>@Model.MajorTenant</td>
+        </tr>
+            <tr>
+            <td>Percentage of Accredited Tenant Profile:</td>
+            <td>@Model.AccreditedTenantProfilePercentage %</td>
+        </tr>
+            <tr>
+            <td>Can Project be substantially vacant:</td>
+            <td>@Model.SubstantiallyVacant</td>
+        </tr>
+        }
+        else
+        {
+        <tr>
+            <td>Does Project have to be Turnkey:</td>
+            <td>@Model.DoesProjectHaveToBeTurnKey</td>
+        </tr>
+        <tr>
+            <td>Can Project require Rehab Budget:</td>
+            <td>@Model.RequireRehabBudget</td>
+        </tr>
+            <tr><td>Can Project be underperforming</td></tr>
+            <td>@Model.Underperforming</td>
+        }
+        </table>
+    <p>All Members of the NAR Community as well as the US CRE Online db of Principal Investors (&#34;PI&#34;) are receiving this &#91;search criteria&#93; request as a service for our Registered Principals.  The objective is to identify qualifying CRE Assets that reasonably meet our Registered PI&#39;s &#91;search criteria&#93; as quickly as available.  Our service is intended to improve the liquidity of CRE holdings in the United States... and beyond.  USC has fully vetted Registered PI with a specific search criteria set that we believe you or one of your colleagues may presently have as an active listing, pending active listing, or as a holding within your corporate portfolio.</p>
+    <p>All USC Principal Investor&#39;s have been fully vetted: they are not able to utilize the technological or communication protocols at USC without first providing proper vetting documentation.  Such documentation will be provided to all appropriate participants in any future proposed contractual relationship when applicable.  All such presentations of interest are administered through USC technology, with the principals and or USC Registered PI and Listing Agents transacting directly with each other.  Time is of the essence.  Our Principal will commit to its preliminary due diligence on each qualifying asset without delay when received from USC.  We respectfully request that, should you have an active listing and or holding that reasonably matches the herein defined &#91;search criteria&#93; of our Registered Principal, you please either:</p>
+    <ol>
+        <li> forward your marketing brochure to USC without delay (admin@uscreonline.com); or</li>
+        <li> as a member of the NAR, register at USCREonline.com and upload the data in our &#91;New Asset Create&#93; db (state of the art); or</li>
+        <li> as a principal, register at USCREonline.com and upload the data in our &#91;New Asset Create&#93; db (state of the art);</li>
+    </ol>
+    <p><span style="color:red; font-weight:bold;">Note</span>:  there are no registration nor recurring fees to register at USC and upload &#91;New Asset Files&#93;.</p>
+    <p>Thank you for your timely follow up with the information requested.</p>
+    <p>We thank all USC Registrants for their participation at our Portal, and welcome all vested interests in US Commercial Real Estate to join our rapidly expanding community at United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+
+<p>The Professional Staff</p>
+<p>US CRE Online, LLC</p>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.InsuranceCompanyViewModel
+
+<fieldset id="pnlUserInformation">
+   @* <legend>Please fill the following</legend>*@
+
+    @Html.HiddenFor(m => m.InsuranceCompanyId)
+    @Html.HiddenFor(m => m.IsActive)
+    @Html.HiddenFor(m => m.CreateDate)
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.CompanyName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">@Html.ValidationMessageFor(s => s.CompanyName, "*")</span>
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CompanyName)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.CompanyURL, new { @class = "control-label", style = "font-weight:bold;" })@*<span class="red">@Html.ValidationMessageFor(s => s.CompanyURL, "*")</span>*@
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CompanyURL)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.CompanyAddress, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CompanyAddress)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.CompanyAddress2, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CompanyAddress2)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.CompanyCity, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CompanyCity)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.CompanyState, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.CompanyState, Model.States as IEnumerable<SelectListItem>, "---")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.CompanyZip, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CompanyZip)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.CompanyPhone, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CompanyPhone)
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</fieldset>
+
+
+

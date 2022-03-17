@@ -1,0 +1,83 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.PrincipalInvestorQuickViewModel>
+
+<div class="panel panel-default" style="border: 1px solid #B1A795">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+    </div>
+    <div class="overflow short-xs" id="PrincipalInvestorView">
+        <table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="padding: 5px; font-size: 10px !important; vertical-align: middle;">
+                <thead>
+                    <tr>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.FirstNameSortParm')">First Name</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.LastNameSortParm')">Last Name</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.EmailSortParm')">Email</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.CompanyNameSortParm')">Company Name</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.StateSortParm')">State</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.IsActiveParm')">Active?</a></b>
+                        </td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in @Model)
+                    {
+                        <tr id="@item.PrincipalInvestorId">
+                            <td>
+                                @item.FirstName
+                            </td>
+                            <td>
+                                @item.LastName
+                            </td>
+                            <td>
+                                @item.Email
+                            </td>
+                            <td>
+                                @item.CompanyName
+                            </td>
+                            <td>
+                                @item.State
+                            </td>
+                            <td>
+                                @(item.IsActive ? "Yes" : "No")
+                            </td>
+                            <td style="text-align: center;">
+                                <a href="@Url.Action("UpdatePrincipalInvestor", "Admin", new { id = @item.PrincipalInvestorId })" title="edit">
+                                    <span class="glyphicon glyphicon-pencil"></span></a>
+                            </td>
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <a href="@Url.Action("DeactivatePrincipalInvestor", "Admin", new { id = @item.PrincipalInvestorId })" title="deactivate" onclick = "return confirm('Are you sure you wish to deactivate this Principal Investor?');">
+                                        <span class="glyphicon glyphicon-remove"></span></a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("ReactivatePrincipalInvestor", "Admin", new { id = @item.PrincipalInvestorId })" title="reactivate" onclick = "return confirm('Are you sure you wish to reactivate this Principal Investor?');">
+                                        <span class="glyphicon glyphicon-ok"></span></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+    </div>
+    
+</div>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ManagePrincipalInvestorsImport",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

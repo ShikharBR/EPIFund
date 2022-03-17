@@ -1,0 +1,94 @@
+﻿@using PagedList.Mvc
+@model Inview.Epi.EpiFund.Web.Models.InsuranceCompanyUserSearchResultsModel
+@{
+    ViewBag.Title = "Manage Insurance Company's Users";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h3 class="page-header">Manage Insurance Company Users</h3>
+    <div class="row">
+        <div class="col-lg-12">
+            <input type="button" class="btn btn-primary" value="New Insurance Company User" onclick="location.href='@Url.Action("CreateInsuranceCompanyUser", "Insurance", new { id = @Model.InsuranceCompanyId })'" />
+        </div>
+    </div>
+    <div style="float:right;">
+        <select id="ddlRowCount" onchange="changeRowCount('@Url.Action("ManageInsuranceCompanyUsers", "Admin")')">
+            <option value="25">25</option>
+            <option value="50" selected="selected">50</option>
+            <option value="75">75</option> 
+            <option value="100">100</option>
+        </select>
+    </div>
+    <br />
+    <br />
+@using (Html.BeginForm("ManageInsuranceCompanyUsers", "Insurance", new { id = @Model.InsuranceCompanyId }, FormMethod.Post))
+{
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#searchbox">
+                        <button class="btn btn-default btn-xs" style="border: 1px solid #888">
+                                Search Insurance Company Users
+                        </button>
+                    </a>
+                </h4>
+            </div>
+            <div id="searchbox" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.FirstName)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.FirstName)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.LastName)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.LastName)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.PhoneNumber)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.PhoneNumber)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.Email)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.Email)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                                <input type="submit" value="Search" class="btn btn-primary proceed" style="width: 200px; margin-top: 20px" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<br />
+@{ Html.RenderPartial("_InsuranceCompanyUsersListView", Model.Users); }
+<br />

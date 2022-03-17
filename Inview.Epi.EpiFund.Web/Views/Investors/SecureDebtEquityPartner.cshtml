@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "SecureDebtEquityPartner";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="modal fade" id="loginwarning" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <form>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Must Be Logged In To Continue</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="margin: 0">You must be logged in to proceed to the Personal Financial Statement form to complete and submit.  Click [continue] to be directed the USC Log In page.  If you have not Registered at USC click [Register] to be redirected to New Registration.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-warning" value="Cancel" data-dismiss="modal" />
+                    <input type="button" class="btn btn-default" value="Register" onclick="location.href='@Url.Action("Registration", "Home", new { rurl = "/Investors/SecureDebtEquityPartner" })    '" />
+                    <input type="button" class="btn btn-primary" value="Continue" onclick="location.href='@Url.Action("Login", "Home", new { rurl = "/Investors/SecureDebtEquityPartner" })    '" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="main-img"></div>
+
+<span style="font-size:22px;">Secure a Debt/Equity Funding Partner for all Your Acquisitions</span><hr />
+
+<p>US CRE Online has near every private debt and or equity funding entity for commercial real estate capitalization in the United States in its MBA database. If your intent is to acquire new CRE inventory utilizing debt and or equity capital from an approved source (along with your own equity vesting), you are encouraged to, and will likely be required to secure such commitment [before] you engage in a due diligence process on any asset with its owner and or professional representative. Listing Brokers generally will not engage in any discussion on their inventory with any prospective purchaser without the investor providing Proof of Funds to close (both equity and debt as applicable). As dictated by the CRE Professional Community, presentation of Proof of Funds (POF) with all submitted Letters of Intent to Purchase is mandatory. And if the intended vesting entity is not an [All Cash Buyer], then POF must include a bonafide Conditional <a title="Purchase Money">PM</a> Debt Commitment (<a title="Conditional Purchase Money Debt Commitment">CDC</a>) of no less than the LOI Pricing as a requisite to any consideration toward the LOI.  If the vesting principal is a referral from a USC registered CRE Mortgage Lender/Broker, we encourage you to engage with your pending funding partner to secure your <a title="Proof of Funds">POF</a> and <a title="Conditional Purchase Money Debt Commitment">CDC</a> as a prerequisite to reviewing any prospective acquisition inventory.</p>
+
+<p><span style="color: red; font-weight: bold;">Note:</span> it is the responsibility of all vesting principals to analyze and underwrite any asset intended for investment based solely on their own due diligence.</p>
+
+<span style="font-size:21px;">There are Five Key Components to Securing Purchase Money Funding </span><hr />
+
+<p>If you require a debt/equity partner and are not a referral to US CRE Online and are not engaged with a CRE Mortgage Lender/Broker, US CRE online has over 5,000 Debt & Equity Funding Entities in its MBA data base to refer the vesting entity to.  Requisite documentation to secure multiple quotes within 48 hours include the following:</p>
+<ol>
+    <li>Operating & Management Resumes of each Corporate Equity Partner;</li>
+    <li>Proof of Funds from Vesting Entity representing its Equity Participation;</li>
+    <li>Personal Financial Statement of each vesting Corporate Officer;</li>
+    <li>A credit report will be run by the prospective Funding Partner on each Vesting Entity Partner, even though a presented Funding Package may be non-recourse;</li>
+    <li>And ultimately, summary operating detail on an intended CRE Asset (accessible through USC);</li>
+</ol>
+<p>Getting started:</p>
+<ul style="margin-bottom: 30px;">
+    <li>Prepare your Corporate Operating and Management Resume in a PDF deliverable file;</li>
+    <li>Secure a POF Confirmation Letter from your Debt/Equity Funding Participant in a PDF;</li>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li>Click the @Html.ActionLink("Proceed to Personal Financial Statement", "ExecutePersonalFinancialStatement", "DataPortal") button below.  You will be able to complete a form for each Corporate Officer and then attach your Resume and POF to the Form;</li>
+    }
+    else
+    {
+        <li>Click the
+            <a href="#" data-toggle="modal" data-target="#loginwarning">Proceed to Personal Financial Statement</a>
+            button below.  You will be able to complete a form for each Corporate Officer and then attach your Resume and POF to the Form;"</li>
+    }
+</ul>
+
+<p>Your data will then be automatically delivered to either your selected Debt/Equity Funding Participant or, if you choose, to the USC Network of Private CRE Mortgage Lender/Brokers for their respective review and response. All responding D/E Funding Participants will communicate directly with the submitting Entity’s Corporate Officer’s. Any responding Lender who submits a formal debt/equity participation proposal will deliver their formal LOI, MOU (Memorandum of Understanding), or <a title="Conditional Purchase Money Debt Commitment">CDC</a> to both US CRE Online and to the respective Vesting Entity Corporate Officer’s. Your participation proposals will be posted at your [@Html.ActionLink("My USC Page", "MyUSCPage", "Home")].</p>
+
+<p>Utilizing the US CRE Online <b>[Funding Participation Search Platform]</b> technology and network enables our Principal Investor Registrant’s qualified access to timely and competitive debt and or equity purchase money capitalization for priority review and consideration for new transactional commitments. To get started, please select the Personal Financial Statement link below.</p>
+
+<br />
+<br />
+<input type="button" class="btn btn-default proceed" value="Preview Personal Financial Statement Template" onclick="location.href='@Url.Action("DownloadPFSTemplate", "DataPortal")    '" />
+
+@if (User.Identity.IsAuthenticated)
+{
+    <input type="button" class="btn btn-default proceed" value="Proceed to Personal Financial Statement Form" onclick="location.href='@Url.Action("ExecutePersonalFinancialStatement", "DataPortal")    '" />
+}
+else
+{
+    <input type="button" class="btn btn-default proceed" data-toggle="modal" data-target="#loginwarning" value="Proceed to Personal Financial Statement Form" />
+}

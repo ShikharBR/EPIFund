@@ -1,0 +1,53 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.PersonalFinancialStatementTemplateModel
+@{
+    ViewBag.Title = "Edit Personal Financial Statement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.BodyClass = "ExecutePersonalFinancialStatement";
+}
+@using (Html.BeginForm("EditPersonalFinancialStatement", "DataPortal"))
+{ 
+    <div class="executepersonalfinancialstatement">
+        <h3 class="page-header">Edit Personal Financial Statement</h3>
+        <p>To download a sample Personal Financial Statement template, click <a href="@Url.Action("DownloadPFSTemplate", "DataPortal")">here</a></p>
+        <p>Edit your Personal Financial Statement below. If you would like to re-execute this form, please go to your "My USC Page" and click execute. DocuSign will email you to digitally sign document. Once document has been signed and received by USC. You will receive an email from USC with the signed document. You can also view executed Personal Financial Statement through My USC Page.</p>
+        @Html.ValidationSummary()
+        @Html.EditorForModel()
+        <br />
+        <br />
+        <div class="input-group">
+            <input type="button" class="btn btn-default" style="margin-right: 20px;" name="EditPFS" value="Reset" onclick="resetForm()" />
+
+            @*issue#60 and issue#61
+            <input type="submit" class="btn btn-default" style="margin-right: 20px;" name="EditPFS" value="Save to My USC Page" onclick="return verify();" />
+            <input type="submit" class="btn btn-primary" style="margin-right: 20px;" value="Submit" name="EditPFS" onclick="return verifySubmit();" />*@                        
+            <input type="submit" class="btn btn-default" style="margin-right: 20px;" name="action:Update" value="Save to My USC Page" onclick="return verify();" />
+            <input type="submit" class="btn btn-primary" style="margin-right: 20px;" value="Submit" name="action:UpdateSubmit" onclick="return verifySubmit();" />
+            @*/////////////////////////////////////*@
+        </div>
+    </div>
+}
+
+<script>
+    function verifySubmit()
+    {
+        if (confirm('You are about to Submit your Personal Financial Statement Form to the MBA Member of your election.  USC will follow up with your elected MBA Member to ensure proper and timely response to your submittal, however, it is solely your responsibility to professionally engage with your elected MBA Member to ensure proper, timely, and effective service as you may request.  You will not be able to submit your PFS without attaching your Proof of Funds Verification and Corporate Operating Resume.  Your PFS and attachments will be saved to your My USC Page, where you can update and re-submit at any time.')) {
+            return true;
+        } 
+        return false;
+        
+    }
+    function verify() {
+        if (confirm('You are about to Save your Personal Financial Statement Form to your "My USC Page" at US CRE Online.  Your Form will not have been submitted to the MBA Member of your election for processing.  You can update and Submit the PFS Form to your elected MBA Member at any time.  Once you have submitted your Personal Financial Statement Form and attachments to your elected MBA Member, USC will follow up with your elected MBA Member to ensure proper and timely response to your submittal.  Please note that it is solely your responsibility to professionally engage with your elected MBA Member to ensure proper, timely, and effective service as you may request.  You will not be able to submit your PFS without attaching your Proof of Funds Verification and Corporate Operating Resume.   Your Form will be always be saved to your "My USC Page", where you can update and re-submit at any time.')) {
+            return true;
+        }
+        return false;
+    }
+    function resetForm() {
+        if (confirm('If you click ok, you will lose all of the data you entered and be returned to the top of the form.')) {
+            $(".resetable").each(function () {
+                $(this).val("");
+            });
+            $('html,body').scrollTop(0);
+        }
+    }
+</script>

@@ -1,0 +1,80 @@
+﻿@model AssetViewModel
+
+@using Inview.Epi.EpiFund.Domain.Helpers
+@using Inview.Epi.EpiFund.Domain.Entity
+@using Inview.Epi.EpiFund.Domain.ViewModel
+@{    
+    ViewBag.Title = "Edit Asset";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    @section DropzoneJs {
+        @Scripts.Render("~/bundles/dropzonescripts")
+        }
+    @section DropzoneCss {
+        @Styles.Render("~/Content/dropzonescss")
+        }
+}
+<style>
+    .hide
+    {
+        display:none;
+    }
+    .dropzone .dz-preview
+    {
+        font-size:12px;
+    }
+        .dropzone .dz-preview.dz-image-preview:hover
+        {
+            
+        }
+</style>
+@using (Html.BeginForm("UpdateImages", "admin", FormMethod.Post, new { id = "assetform" }))
+{
+    @Html.ValidationSummary()
+    <br />
+    
+    <div id="simpleUpload">
+ 
+        <!-- http://css-tricks.com/css3-progress-bars/ -->
+        <div class="meter red">
+          <span class="roller"><span></span></span>
+        </div>
+ 
+        <div id="dropzone" class="dropzone">
+      
+        </div>
+@Html.HiddenFor(s => s.CreationDate)
+@Html.HiddenFor(s => s.IsActive)
+@Html.HiddenFor(s => s.ListedByUserId)
+@Html.HiddenFor(s => s.AssetNumber)
+<input type="hidden" value="@(Model.AssetId)" data-asset="@(Model.AssetId)" id="AssetId" name="AssetId"/>
+<input type="hidden" value="@(Model.GetType())" name="TypeOfAsset"/>
+                    @Html.HiddenFor(model => model.AssetType)
+                    @Html.HiddenFor(s => s.ExistingListingStatus)
+                    @Html.HiddenFor(model => Model.AssetNumber)
+                    @Html.HiddenFor(model => Model.IsPaper)
+                    @Html.HiddenFor(model => Model.IsSubmitted)
+                    @Html.HiddenFor(model => Model.Show)
+
+                    @Html.HiddenFor(model => Model.TitleCompanyId)
+                    @Html.HiddenFor(model => Model.TitleCompanyUserId)
+                    @Html.HiddenFor(model => Model.OrderId)
+                    @Html.HiddenFor(model => Model.OrderStatus)
+                    @Html.HiddenFor(model => Model.OrderDate)
+                    @Html.HiddenFor(model => Model.OrderedByUserId)
+
+                    @Html.HiddenFor(model => Model.AssetSellerId)
+        @Html.HiddenFor(mdd => Model.JsonPictures)
+        @Html.HiddenFor(sdfsd => Model.AssetId)
+        <input type="submit" class="btn btn-primary" name="action:UpdateImages" value="Save Asset">
+        <!-- Also checkout BS example : http://www.dropzonejs.com/bootstrap.html -->
+ 
+    </div> 
+}
+<script>
+    function RemoveFile(file) {
+        file.previewElement.className += ' hide';
+        // remove the filename so we can remove the file on post
+        file.previewElement.children[0].children[2].children[0].value = '';
+    }
+</script>
+    

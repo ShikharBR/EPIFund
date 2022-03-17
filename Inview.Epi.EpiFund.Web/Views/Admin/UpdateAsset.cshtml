@@ -1,0 +1,26 @@
+﻿@model AssetViewModel
+
+@using Inview.Epi.EpiFund.Domain.Helpers
+@using Inview.Epi.EpiFund.Domain.Entity
+@using Inview.Epi.EpiFund.Domain.ViewModel
+@{
+    ViewBag.Title = "Edit Asset";
+    Layout = ViewBag.Layout;
+    @section DropzoneJs {
+        <script src="@Url.Content("~/Scripts/dropzone/dropzone.js")"></script>
+        <script src="@Url.Content("~/Scripts/dropzone/app.js")"></script>
+    }
+    @section DropzoneCss {
+        <link rel="stylesheet" href="@Url.Content("~/Scripts/dropzone/basic.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Scripts/dropzone/dropzone.css")" />
+    }
+}
+<h3>Edit Asset: @string.Format("{0}: {1} {2}, {3} {4}", Model.ProjectName, Model.PropertyAddress, Model.City, Model.State, Model.Zip)</h3>
+
+@using (Html.BeginForm("updateasset", "admin", FormMethod.Post, new { id = "assetform" }))
+{
+    @Html.ValidationSummary()
+    <br />
+    @Html.EditorFor(model => model, "AssetEditorTemplate")
+    <label id="saveDate"></label>
+}

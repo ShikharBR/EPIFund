@@ -1,0 +1,56 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.ValidateUserModel
+@{
+    ViewBag.Title = "Validate User";
+    Layout = "~/Views/Shared/_LayoutInsuranceUser.cshtml";
+}
+
+@using (@Html.BeginForm("ValidateUser", "Insurance", FormMethod.Post))
+{
+    <h3 class="page-header">Validate User</h3>
+    
+    @Html.ValidationSummary(false)
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="input-group">
+                <label>Email:</label>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.Email)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="input-group">
+                <label>Password:</label>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="input-group">
+                @Html.PasswordFor(s => s.Password)
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <input type="submit" class="btn btn-primary" id="SubmitButton" value="Submit" />
+    @Html.HiddenFor(m => m.ReturnUrl)
+    @Html.HiddenFor(m => m.InsuranceCompanyUserId)
+    
+}
+
+
+<script>
+    $(function () {
+        $('input').keydown(function (e) {
+            if (e.keyCode == 13) {
+                $("input[value='Submit']").focus().click();
+                return false;
+            }
+        });
+    });
+</script>

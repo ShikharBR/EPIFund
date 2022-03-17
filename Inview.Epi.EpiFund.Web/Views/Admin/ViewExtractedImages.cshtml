@@ -1,0 +1,117 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.ViewExtractedImagesModel
+@{
+    ViewBag.Title = "View Extracted Images";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script>
+    $(document).ready(function (event) {
+        $('#uploadingDoc').hide();
+        $('#add').click(function () {
+            $.post("/Admin/StartProcess", { id: uniqueId }, function () {
+                $('#statusBorder').show();
+                $('#uploadingDoc').show();
+                getStatus();
+            });
+            event.preventDefault;
+        });
+    });
+
+    function getStatus() {
+        var url = '/Admin/GetCurrentProgress/' + uniqueId;
+        $.get(url, function (data) {
+            if (data != "100") {
+                $('#status').html(data);
+                $('#statusFill').width(data);
+                window.setTimeout("getStatus()", 100);
+            }
+            else {
+                $('#status').html("Done");
+                $('#statusBorder').hide();
+                $('#uploadingDoc').hide();
+            };
+        });
+    }
+
+    function selectCheckboxes(checkbox) {
+        if (checkbox.checked) {
+            $(":checkbox").each(function () { this.checked = true; });
+        }
+        else {
+            $(":checkbox").each(function () { this.checked = false; });
+        }
+    }
+
+    function showOptions(cb, i) {
+        if (cb.checked) {
+            $("#image-" + i).show();
+        }
+        else {
+            $("#image-" + i).hide();
+            $("#image-" + i).children("input").removeAttr("checked");
+        }
+    }
+
+    function onlyOneCheckbox(cb) {
+        if (cb.checked) {
+            $("input:checkbox[class='mainflyer']").not(cb).removeAttr("checked");
+        }
+    }
+</script>
+<h2>View Extracted Images</h2>
+@using (Html.BeginForm("ViewExtractedImages", "Admin", FormMethod.Post))
+{
+    @Html.HiddenFor(s => s.FilePath)
+    @Html.HiddenFor(x => x.GuidId)
+    <br />
+    <br />
+    <label>Select Asset:</label>@Html.DropDownListFor(s => s.AssetId, @Model.Assets)
+    <br />
+    <br />
+    <input type="checkbox" value="Select All" onchange="selectCheckboxes(this)" /><label>Select All</label>
+    <br />
+    //Html.RenderAction("ExtractedImagesView", "Admin", new { filepath = Model.FilePath });
+    <div id="imgsPreviewer">
+        @for (int i = 0; i < Model.ExtractedImages.Count; i++)
+        {
+            @Html.HiddenFor(x => Model.ExtractedImages[i].Image)
+            <div class="imgPreviewDiv" style="display: inline-block;">
+                <a data-toggle="modal" data-target="#lightbox-@i">
+                    <img src="@Url.Action("GetTempImageSource", "Admin", new { filePath = Model.ExtractedImages[i].Image })" style="width:100px;height:100px;" />
+                </a>
+                <div class="modal fade" id="lightbox-@i" tabindex="-1" role="dialog" aria-labelledby="mrtgcalc-label" aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header" style="border-bottom: 0">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="@Url.Action("GetTempImageSource", "Admin", new { filePath = Model.ExtractedImages[i].Image })" style="width: 560px;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <span>@Model.ExtractedImages[i].Width x @Model.ExtractedImages[i].Height</span>
+                <br />
+                @Html.CheckBoxFor(s => Model.ExtractedImages[i].IsSelected, new { onchange = "showOptions(this, " + i + ")" })<span>Use this image?</span>
+                <br />
+                <div id="image-@i" style="display:none;">
+                    @Html.CheckBoxFor(s => Model.ExtractedImages[i].IsMainImage, new { @class = "mainflyer", style = "margin:0;", onclick = "onlyOneCheckbox(this)" })<span>Is Main Image?</span>
+                    <br />
+                    @Html.CheckBoxFor(s => Model.ExtractedImages[i].IsFlyerImage, new { style = "margin:0;" })<span>Is Flyer Image?</span>
+                    <br />
+                </div>
+            </div>
+        }
+    </div>
+    <br />
+    <div id="statusBorder">
+        <div id="statusFill">
+        </div>
+    </div>
+    <label id="uploadingDoc">Added images to asset. Please wait...</label>
+    <br />
+    <input type="button" class="btn btn-default" style="margin-right: 20px;" value="Back" onclick="if (confirm('If you click ok, you will need to re-upload the brochure.')) location.href='@Url.Action("ExtractImagesFromBrochure", "Admin")    '"/>
+    <input type="submit" value="Add to Asset" class="btn btn-primary" id="add" />
+}

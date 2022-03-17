@@ -1,0 +1,189 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.HoldingCompanyViewModel
+
+@Html.HiddenFor(m => m.HoldingCompanyId)
+@Html.HiddenFor(m => m.OperatingCompanyId)
+@Html.HiddenFor(s => s.IsActive)
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.AssetAssignment, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.AssetAssignment)@Html.ValidationMessageFor(s => s.AssetAssignment, "")
+
+            @Html.CheckBoxFor(s => s.OverwriteAsset)
+            Overwrite Asset if already assigned?
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.CompanyName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.CompanyName)@Html.ValidationMessageFor(s => s.CompanyName, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Email, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Email)@Html.ValidationMessageFor(s => s.Email, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.FirstName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.FirstName)@Html.ValidationMessageFor(s => s.FirstName, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.LastName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.LastName)@Html.ValidationMessageFor(s => s.LastName, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.AddressLine1, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.AddressLine1)@Html.ValidationMessageFor(s => s.AddressLine1, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.AddressLine2, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.AddressLine2)@Html.ValidationMessageFor(s => s.AddressLine2, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.City, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.City)@Html.ValidationMessageFor(s => s.City, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.State, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.State)@Html.ValidationMessageFor(s => s.State, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Zip, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Zip)@Html.ValidationMessageFor(s => s.Zip, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Country, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.DropDownListFor(s => s.Country, new SelectList(Model.Countries, "Value", "Text", Model.Country))
+            @Html.ValidationMessageFor(s => s.Country, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.CellNumber, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.CellNumber)@Html.ValidationMessageFor(s => s.CellNumber, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.WorkNumber, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.WorkNumber)@Html.ValidationMessageFor(s => s.WorkNumber, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.FaxNumber, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.FaxNumber)@Html.ValidationMessageFor(s => s.FaxNumber, "")
+        </div>
+    </div>
+</div>

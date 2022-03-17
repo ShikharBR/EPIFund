@@ -1,0 +1,10 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.OrderHistorySearchResultsModel
+
+@using System.Collections
+
+@{
+    ViewBag.Title = "Order History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ Html.RenderPartial("_OrderHistoryListView", Model.History); }

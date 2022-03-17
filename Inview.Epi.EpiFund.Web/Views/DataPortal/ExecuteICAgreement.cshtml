@@ -1,0 +1,63 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.ICAgreementTemplateModel
+@{
+    ViewBag.Title = "Execute IC Agreement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @section CaptchaCss {
+        <link href="@Url.Content("~/Content/QapTcha.jquery.css")" rel="stylesheet" type="text/css" />
+        }
+    @section CaptchaJs {
+        <script src="@Url.Content("/Scripts/QapTcha.jquery.js")"></script>
+        }
+}
+@using (Html.BeginForm("ExecuteICAgreement", "DataPortal"))
+{ 
+    <h3 class="page-header">Execute Independent Contractor Agreement</h3>
+    <p>To download a sample IC agreement template, click <a href="@Url.Action("DownloadICAgreementTemplate", "DataPortal")">here</a></p>
+    <p>Fill out fields below to execute IC Agreement.  The Agreement will be executed by you through the nationally recognized on line signing service known as “DocuSign”.  After you submit the Form below, DocuSign will email you to digitally sign document.  You need only to follow the prompts in their e mail to you.  You will also receive an e mail from USC with your temporary log in information to the site.  Once the document has been signed and received by USC you will receive an email from both DocuSign and USC with the signed document.  After you have logged in using the temporary log in data you can also change your password as well as update your site profile and view the executed IC Agreement through your “My USC Page” at <a href="http://www.uscreonline.com">www.uscreonline.com</a>.</p>
+    @Html.ValidationSummary()
+    @Html.EditorForModel()  
+    <br />
+    <div class="row">
+        <div class="QapTcha"></div>
+    </div>
+    <br />
+    <div class="input-group">
+        <input type="submit" name="action:PreviewICAgreementPdf" class="btn btn-default" style="margin-right: 20px;" value="Preview" />
+        <input type="submit" name="action:ExecuteICAgreement" class="btn btn-primary" style="margin-right: 20px;" value="Submit" />
+    </div> 
+}
+
+<div class="modal fade" id="newICAdminModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>IC Admin</h5>
+			</div>
+			<div class="modal-body text-center">
+				<p>
+                    If you have already Registered as an IC Admin, please @Html.ActionLink("Log In", "Login", "Home", new { rurl = "/DataPortal/ExecuteICAgreement" }, new { }).  
+                    You will be returned to this form page and all of your Registration data will auto fill the data fields herein.  
+                    If you have not Registered at all at US CRE Online then you may proceed at this page and manually complete the data fields as prompted.  
+                    If you have Registered as another user type at US CRE Online, you will need to go to your “My USC Page” and change your Registration type.  
+                    Please note that once you have registered as a user type other than IC Admin, you can never again register nor apply for IC Admin consideration. 
+                    Thank you for your continued interest in US CRE Online. Thank you
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.QapTcha').QapTcha({
+            txtLock: 'Slide bar to the right to submit',
+            txtUnlock: 'Form can be submitted'
+        });
+    });
+    $(window).bind("load", function () {
+        if ("@User.Identity.IsAuthenticated" == "False") {
+            $('#newICAdminModal').modal('show');
+        }
+    });
+</script>
+

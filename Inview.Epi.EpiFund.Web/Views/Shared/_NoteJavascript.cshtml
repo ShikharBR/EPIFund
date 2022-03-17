@@ -1,0 +1,442 @@
+﻿<script>
+    $("#imgUploader").change(function () {
+        var path = $(this).val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readIMG(this, fileName);
+    });
+
+    $("#videoUploader").change(function () {
+        var path = $(this).val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readVideo(this, fileName);
+    });
+
+    function calcMonthlyIncome(input, idOfFieldToShow, idOfFieldToSave) {
+        if (input.value) {
+            var num = getNumber(input);
+            var intVal = (num / 12).toFixed(0); // he wants whole numbers so we round up if we have to
+            var val = (num / 12).toFixed(2);
+            $('#' + idOfFieldToShow).text(addCommas(intVal.toString()));
+            $('#' + idOfFieldToSave).val(intVal);
+            calcProformaSGI();
+        }
+    }
+
+    function calcProformaSGI() {
+        var aoe = $('#ProformaAnnualOperExpenses').val();
+        var pagi = $('#ProformaAnnualIncome').val();
+        var pami = $('#ProformaMiscIncome').val();
+        if (aoe && pagi) {
+            aoe = getNumberFromValue(aoe);
+            pagi = getNumberFromValue(pagi);
+            if (pami) {
+                pami = getNumberFromValue(pami);
+            } else {
+                pami = 0;
+            }
+            var totalIncome = pagi + pami;
+            if (totalIncome > 0) {
+                var calc = ((aoe / totalIncome) * 100).toFixed(2);
+                document.getElementById('aoeFactor').innerHTML = calc;
+                $('#ProformaAoeFactorAsPerOfSGI').val(addCommas(calc.toString(), true));
+            }
+            calcCapRate();
+        }
+    }
+
+    function calcCapRate() {
+        var aoe = getNumberFromValue($('#ProformaAnnualOperExpenses').val());
+        var vf = getNumberFromValue($('#ProformaVacancyFac').val());
+        var pagi = getNumberFromValue($('#ProformaAnnualIncome').val());
+        var sgi = getNumberFromValue($('#ProformaAoeFactorAsPerOfSGI').val());
+        var pami = getNumberFromValue($('#ProformaMiscIncome').val());
+        var lp = getNumberFromValue($('#AskingPrice').val());
+        var bpo = getNumberFromValue($('#CurrentBpo').val());
+        var totalIncome = pagi + pami;
+
+        var pvf = (vf / 100) * totalIncome;
+        var pretax = totalIncome - pvf - aoe;
+        var calc = 0;
+        if ($("#IsTBDMarket").is(':checked')) {
+            calc = ((pretax / bpo) * 100).toFixed(2);
+        } else {
+            calc = ((pretax / lp) * 100).toFixed(2);
+        }
+        if (calc == "-Infinity" || calc == "NaN") {
+            calc = 0;
+        }
+
+        $("#cap").text(addCommas(calc.toString(), true));
+        $("#CashInvestmentApy").val(calc);
+
+        calculateOccupancyPercentage();
+    }
+
+    function calculateOccupancyPercentage() {
+        var vf = getNumberFromValue($('#ProformaVacancyFac').val());
+        $("#OccupancyPercentage").val((100 - vf).toFixed(2));
+    }
+
+    function readVideo(input, fileName) {
+
+        if (input.files && input.files[0]) {
+
+            var xhr = new XMLHttpRequest();
+            var fd = new FormData();
+            fd.append("file", input.files[0]);
+            fd.append("guidId", $('#GuidId').attr('data-asset'));
+            xhr.open("POST", "@Url.Action("VideoUpload", "Home")", true);
+            xhr.send(fd);
+            xhr.addEventListener("load", function (event) {
+                var response = JSON.parse(event.target.response);
+                var success = response["message"];
+                var newFilename = response["filename"];
+                var fileSize = response["size"];
+                var id = response["id"];
+                if (success == "true") {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#videosPreviewer').append("<div class='videoPreviewDiv'  style='display:inline-block;'><label>Uploaded Filename: " + newFilename + "<label/><br/><label>Size: " + fileSize + "<label/><input type='hidden' class='videoName'  name='Videos[" + videoCount + "].FilePath' value='" + newFilename + "'> <input type='hidden' name='Videos[" + videoCount + "].AssetId' value='" + id + "'> <input type='button' class='deleteImgUpload' value='Delete' data-button=" + newFilename + " onclick='videoDelete(this)'> </div>")
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                    videoCount++;
+                    $('#videosPreviewer .uploadPlaceholder').first().remove();
+                }
+                else {
+                    $('#videosPreviewer .uploadPlaceholder').first().find('img').remove();
+                    $('#videosPreviewer .uploadPlaceholder').first().html(success + " for " + fileName);
+                }
+            }, false);
+            $('#videosPreviewer').append("<div class='uploadPlaceholder' style='display:inline-block;text-align:center'> <img src='@Url.Content("~/Content/images/fileUploadPlaceholder.gif")' style='width:20px;' /></div>");
+        }
+    }
+
+    function readIMG(input, fileName) {
+
+        if (input.files && input.files[0]) {
+
+            var xhr = new XMLHttpRequest();
+            var fd = new FormData();
+            fd.append("file", input.files[0]);
+            fd.append("guidId", $('#GuidId').attr('data-asset'));
+            xhr.open("POST", "@Url.Action("ImageUpload", "Home")", true);
+            xhr.send(fd);
+            xhr.addEventListener("load", function (event) {
+                var response = JSON.parse(event.target.response);
+                var success = response["message"];
+                var contentType = response["contentType"];
+                var newFilename = response["filename"];
+                if (success == "true") {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#imgsPreviewer').append("<div class='imgPreviewDiv'  style='display:inline-block;'><div class='imgPreviewImg' style='background-image: url(" + e.target.result + ")'></div><hr/><input type='checkbox' style='display:none;' class='mainflyer' name='Images[" + imgCount + "].IsMainImage' value='true' style='margin:0' onclick='onlyOneCheckbox(this)'><input type='hidden' name='Images[" + imgCount + "].IsMainImage' value='false'/><br/> <input type='checkbox' style='display:none;' name='Images[" + imgCount + "].IsFlyerImage' value='true' style='margin:0'><input type='hidden' name='Images[" + imgCount + "].IsFlyerImage' value='false'/><br/><input type='hidden' class='imgName'  name='Images[" + imgCount + "].FileName' value=" + newFilename + ">  <input type='hidden' name='Images[" + imgCount + "].ContentType' value=" + contentType + "> <input type='hidden' name='Images[" + imgCount + "].GuidId' value='@Model.GuidId'> <input type='button' class='deleteImgUpload' value='Delete' data-button=" + newFilename + " onclick='imgDelete(this)'> </div>")
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                    imgCount++;
+                    $('#imgsPreviewer .uploadPlaceholder').first().remove();
+                }
+                else {
+                    $('#imgsPreviewer .uploadPlaceholder').first().find('img').remove();
+                    $('#imgsPreviewer .uploadPlaceholder').first().html(success + " for " + fileName);
+                }
+            }, false);
+            $('#imgsPreviewer').append("<div class='uploadPlaceholder' style='display:inline-block;text-align:center'> <img src='@Url.Content("~/Content/images/fileUploadPlaceholder.gif")' style='width:20px;' /></div>");
+        }
+    }
+
+    $("#mb").change(function () {
+        var path = $(this).val();
+        var type = $("#mb").attr('data-type');
+        var title = $('#mbTitle').val();
+        var description = $('#mbDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#marketingBrochure');
+    });
+
+    $("#od").change(function () {
+        var path = $(this).val();
+        var type = $("#od").attr('data-type');
+        var title = $('#odTitle').val();
+        var description = $('#odDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#otherDocuments');
+    });
+
+    $("#rentRoll").change(function () {
+        var path = $(this).val();
+        var type = $("#rentRoll").attr('data-type');
+        var title = $('#rentRollTitle').val();
+        var description = $('#rentRollDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#currentRentRoll');
+    });
+
+    $("#cor").change(function () {
+        var path = $(this).val();
+        var type = $('#cor').attr('data-type');
+        var title = $('#corTitle').val();
+        var description = $('#corDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#currentOperatingReport');
+    });
+
+    $("#pfyor").change(function () {
+        var path = $(this).val();
+        var type = $('#pfyor').attr('data-type');
+        var title = $('#pfyorTitle').val();
+        var description = $('#pfyorDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#priorFiscalYearOperReport');
+    });
+
+    $("#ptr").change(function () {
+        var path = $(this).val();
+        var type = $('#ptr').attr('data-type');
+        var title = $('#ptrTitle').val();
+        var description = $('#ptrDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#preliminaryTitleReport');
+    });
+
+    $("#pm").change(function () {
+        var path = $(this).val();
+        var type = $('#pm').attr('data-type');
+        var title = $('#pmTitle').val();
+        var description = $('#pmDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#platMap');
+    });
+
+    $("#am").change(function () {
+        var path = $(this).val();
+        var type = $('#am').attr('data-type');
+        var title = $('#amTitle').val();
+        var description = $('#amDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#arialMap');
+    });
+
+    $("#oa").change(function () {
+        var path = $(this).val();
+        var type = $('#oa').attr('data-type');
+        var title = $('#oaTitle').val();
+        var description = $('#oaDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#originalAppraisal');
+    });
+
+    $("#ca").change(function () {
+        var path = $(this).val();
+        var type = $('#ca').attr('data-type');
+        var title = $('#caTitle').val();
+        var description = $('#caDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#currentAppraisal');
+    });
+
+    function readDOC(input, fileName, title, description, type, id) {
+
+        if (input.files && input.files[0]) {
+            var xhr = new XMLHttpRequest();
+            var fd = new FormData();
+            fd.append("file", input.files[0]);
+            fd.append("guidId", $('#GuidId').attr('data-asset'));
+            fd.append("title", title);
+            xhr.addEventListener("progress", function (event) {
+                if (event.lengthComputable) {
+                    var progress = Math.round(event.loaded * 100 / event.total);
+                    $('#progressbar').show();
+                    $("#progressbar").progressbar("value", progress);
+                }
+            }, false);
+            xhr.open("POST", "@Url.Action("DocumentUpload", "Home")", true);
+            xhr.send(fd);
+            $("#progressbar").progressbar({
+                max: 100,
+                change: function (event, ui) {
+                    $("#progresslabel").text($("#progressbar").progressbar("value") + "%");
+                },
+                complete: function (event, ui) {
+                    $("#progresslabel").text("The file has been uploaded successfully");
+                }
+            });
+            xhr.addEventListener("load", function (event) {
+                var response = JSON.parse(event.target.response);
+                var success = response["message"];
+                var contentType = response["contentType"];
+                var newFilename = response["filename"];
+                var size = response["size"];
+                var downloadUrl = response["downloadUrl"];
+                if (success.toLowerCase() == "true") {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        if (isNaN(docCount)) {
+                            docCount = 0;
+                        }
+                        show(id.substring(1));
+                        jQuery(".detailsContent").hide();
+                        $(id).append("<div class='docPreviewDiv row'><div class='col-sm-10'><a target='_blank' class='spaceLab' href=" + downloadUrl + ">" + title + "</a><label class='description' name='Documents[" + docCount + "].Description'>" + description + "</label></div><div class='col-sm-2'><input type='hidden' class='docTitle' name='Documents[" + docCount + "].Title' value='" + title + "'><input type='hidden' class='docDescription' name='Documents[" + docCount + "].Description' value='" + description + "'><input type='hidden' class='docName' name='Documents[" + docCount + "].FileName' value=" + newFilename + "><input type='hidden' name='Documents[" + docCount + "].Size' value=" + size + "> <input type='hidden' name='Documents[" + docCount + "].ContentType' value=" + contentType + "> <input type='hidden' name='Documents[" + docCount + "].GuidId' value='@Model.GuidId'> <input type='hidden' name='Documents[" + docCount + "].Type' value='" + type + "'><input type='button' class='deleteDocUpload' value='Delete' data-button=" + newFilename + " onclick='docDelete(this)'></div></div>");
+                        $('#successDoc').show();
+                        $("#progressbar").delay(1200).fadeOut(300);
+                        document.getElementById('docUpload').value = '';
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                    docCount++;
+                }
+                else {
+                    alert("This document already exists on the server for this asset and this document. Please change the filename of the file before uploading.");
+                    $('#docsPreviewer').append("<div>" + success + " for " + fileName + "</div>")
+                }
+            }, false);
+        }
+    }
+
+    function docDelete(param,enclosingDiv,classType,linkDiv) {
+        var deleteDoc = confirm('Are you sure you want to delete?');
+        if (deleteDoc) {
+
+            $.ajax({
+                type: "POST",
+                url: "./DocumentDelete",
+                data: {
+                    docId: param.getAttribute("data-button"),
+                    guidId: $('#GuidId').attr('data-asset')
+                },
+                success: function (message) {
+                    var response = JSON.parse(JSON.stringify(message));
+                    if (response["message"] == "true") {
+                        $(param).closest('.docPreviewDiv').hide();
+                        $(param).closest('.docPreviewDiv').find('.docName').val('');
+                        var numItems = $(classType).length;
+                        if(numItems <2)
+                        {
+                            $(enclosingDiv).hide();
+                            $(linkDiv).hide();
+                        }
+                    }
+                    else {
+                        //alert("Data Saved: " + response["message"]);
+                        $(param).closest('.docPreviewDiv').hide();
+                        $(param).closest('.docPreviewDiv').find('.docName').val('');
+                    }
+                }
+            });
+        }
+
+    };
+    function imgDelete(param) {
+        $.ajax({
+            type: "POST",
+            url: "./ImageDelete",
+            data: {
+                imgId: param.getAttribute("data-button"),
+                guidId: $('#GuidId').attr('data-asset')
+            },
+            success: function (message) {
+                var response = JSON.parse(JSON.stringify(message));
+                if (response["message"] == "true") {
+                    $(param).closest('.imgPreviewDiv').hide();
+                    $(param).closest('.imgPreviewDiv').find('.imgName').val('');
+                }
+                else {
+                    //alert("Data Saved: " + response["message"]);
+                    $(param).closest('.imgPreviewDiv').hide();
+                    $(param).closest('.imgPreviewDiv').find('.imgName').val('');
+                }
+            }
+        });
+    };
+
+    function videoDelete(param) {
+        $.ajax({
+            type: "POST",
+            url: "./VideoDelete",
+            data: {
+                videoId: param.getAttribute("data-button"),
+                assetId: $('#GuidId').attr('data-asset')
+            },
+            success: function (message) {
+                var response = JSON.parse(JSON.stringify(message));
+                if (response["message"] == "true") {
+                    $(param).closest('.videoPreviewDiv').hide();
+                    $(param).closest('.videoPreviewDiv').find('.videoName').val('');
+                }
+                else {
+                    //alert("Data Saved: " + response["message"]);
+                    $(param).closest('.videoPreviewDiv').hide();
+                    $(param).closest('.videoPreviewDiv').find('.videoName').val('');
+                }
+            }
+        });
+    };
+
+    function show(id) {
+        $('#' + id).show();
+    }
+    function hide(id) {
+        $('#' + id).hide();
+    }
+
+    $('#addUnitSpecs').click(function () {
+        unitSpecCount++;
+        $('#unitSpecList').append("<div class='unitSpecDiv'><hr /><div class='row'><div class='col-lg-6'><div class='input-group'><label>Number of Unit Types</label></div></div><div class='col-lg-6'><div class='input-group'><input class='text-box single-line formatNumber' onchange = 'addCommasToInput(this)' name='UnitSpecifications[" + unitSpecCount + "].CountOfUnits' type='text' value='0'></div></div> </div><div class='row'><div class='col-lg-6'><div class='input-group'><label>Bedrooms:</label> </div></div><div class='col-lg-6'><div class='input-group'><select name='UnitSpecifications[" + unitSpecCount + "].BedCount'><option value='Zero'>Studio</option><option value='One'>1</option><option value='Two'>2</option><option value='Three'>3</option><option value='Four'>4</option><option value='Five'>5</option><option value='Six'>6</option><option value='SevenPlus'>7+</option></select> </div></div></div><div class='row'><div class='col-lg-6'><div class='input-group'><label>Baths:</label> </div></div><div class='col-lg-6'><div class='input-group'><select name='UnitSpecifications[" + unitSpecCount + "].BathCount'><option value='Zero'>0</option><option value='One'>1.0</option><option value='OneAndHalf'>1.5</option><option value='Two'>2.0</option><option value='TwoAndHalf'>2.5</option><option value='Three'>3.0</option><option value='ThreeAndHalf'>3.5</option><option value='Four'>4.0</option><option value='FourAndHalf'>4.5</option><option value='Five'>5.0</option><option value='FiveAndHalf'>5.5</option><option value='Six'>6+</option></select> </div></div></div><div class='row'><div class='col-lg-6'><div class='input-group'><label>Unit Base Rent</label> </div></div><div class='col-lg-6'><div class='input-group'><input class='text-box single-line formatNumber' onchange = 'addCommasToInput(this)' name='UnitSpecifications[" + unitSpecCount + "].UnitBaseRent' type='text' value='0'></div></div></div><div class='row'><div class='col-lg-6'><div class='input-group'><label>Unit Square Feet</label></div></div><div class='col-lg-6'><div class='input-group'><input class='text-box single-line formatNumber' onchange = 'addCommasToInput(this)' name='UnitSpecifications[" + unitSpecCount + "].UnitSquareFeet' type='text' value='0'></div></div></div></div></div>");
+       
+        if (unitSpecCount > 0) {
+            $('#removeUnitSpecs').show();
+        }
+    });
+
+    $('#removeUnitSpecs').click(function () {
+        if (unitSpecCount > 0) {
+            unitSpecCount--;
+            $('#unitSpecList').children('.unitSpecDiv').last().remove();
+        }
+    });
+
+    var imgCount = 0;
+    var docCount = 0;
+    var videoCount = 0;
+    var unitSpecCount = 0;
+    $(document).ready(function () {
+
+        $("input.formatNumber").each(function (index) {
+            $(this).val(addCommas($(this).val(), true));
+            $(this).on("input", null, null, function () {
+                $(this).val(addCommas($(this).val(), true));
+            });
+        });
+        $("input.formatMaint").each(function (index) {
+            $(this).val(addCommas($(this).val(), true));
+        });
+
+        imgCount = 0;
+        docCount = 0;
+        videoCount = 0;
+        unitSpecCount = 0;
+        imgCount--;
+        docCount--;
+        videoCount--;
+        //unitSpecCount--;
+
+        if (unitSpecCount < 1) {
+            $('#removeUnitSpecs').hide();
+        }
+        $(".datepicker").datepicker();
+
+        if (!$("#HasAAARatedMajorTenant").prop('checked')) {
+            toggleMajorTenant(false);
+        }
+        else {
+            toggleMajorTenant(true);
+        }
+
+    });
+
+    function toggleMajorTenant(show) {
+        if (show) {
+            $("#majorTenant").show();
+        } else {
+            $("#majorTenant").hide();
+        }
+    }
+</script>

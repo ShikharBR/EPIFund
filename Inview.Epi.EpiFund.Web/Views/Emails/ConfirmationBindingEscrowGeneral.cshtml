@@ -1,0 +1,36 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.ConfirmationBindingEscrowGeneralEmail
+To: @Model.Email
+From: USCREonline <info@uscreonline.com>
+Subject: Asset Entered Binding Escrow
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.Name,</p>
+
+<p>Notification:  a valued Principal Investor Registrant at US CRE Online.com has entered into a binding escrow directly resulting from website community participant activities:</p>
+
+<p>Asset ID # @Model.AssetNumber, @Model.AssetDescription</p>
+
+<p>List Price of Asset:		@Model.ListingPrice.ToString("C")</p>
+
+<p>Projected Closing schedule:	@Model.ProjectedClosingDate.ToString("MM/dd/yyyy")</p>
+
+<p>If you have/had a working interest in subject property, please update your file and joint venture participants accordingly.  We encourage you to communicate any continuing interest directly to the Asset&#39;s vested principal (as would be registered at US CRE Online), and or the Asset&#39;s respective Listing Broker (as applicable).  Listing Broker information is provided in the Asset View display at USCREonline.com.  Simply enter your log in data and the Asset ID # captioned above in the Asset ID # box at the USCREonline.com log in page. </p>
+
+<p>Review of all CRE Asset Files at USC bears no registration nor recurring cost.  To view any CRE Asset File at USC please follow these simple instructions:</p>
+
+<ol>
+<li>Go to www.uscreonline.com and log in.  You may enter any of the Asset ID #&#39;s captioned above as part of your log in to be taken directly to the respective CRE Asset View page.</li>
+<li>Select &#91;Investor Opportunities&#93; from the Directory, &#60;Click&#62; the &#91;Asset Search Questionnaire&#93; at the top or bottom of the page, and enter the Asset ID #&#39;s captioned above.</li>
+<li>All Asset ID #&#39;s selected for all searches will be retained at your &#91;&#34;My USC Page&#34;&#93; &#91;Assets of Interest&#93; Tab.</li>
+<li>4.	If you have not already done so, you will be required to approve a onetime IPA to view unlimited Asset Files going forward (Internet Portal Agreement).</li>
+    </ol>
+    <p>Note:  when your visit at USC is complete, please &#91;Log Out&#93;.  This will ensure the site is refreshed at each new session &#91;Log In&#93;.</p>
+<p>US CRE Online, the #1 &#91;Principal to Principal&#93; Commercial Real Estate Data & Communications Portal in the World, is the online CRE Investment Community for the future.  We thank all USC Registrants for their participation at our Portal, and welcome all vested interests in US Commercial Real Estate to join our rapidly expanding community at United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+
+    <p>The Professional Staff</p>
+    <p><b>US CRE Online, LLC</b></p>
+</body>
+</html>

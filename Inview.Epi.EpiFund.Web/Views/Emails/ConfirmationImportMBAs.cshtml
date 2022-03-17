@@ -1,0 +1,21 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.ConfirmationImportMBAsEmail
+To: @Model.EmailAddress
+From: USCREonline <info@uscreonline.com>
+Subject: Import MBA Members Results
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.Name,</p>
+    <p>US CRE Online welcomes you as a confirmed participant in our Joint Venture Marketing Program.  The upload of your registered network of referred principals was successful.  Your file has been credited with @Model.Results.Count() new and unique referrals.  Each of your referrals has been automatically assigned your unique referring code.  No future USC JVMA Participant will be able to register your unique registered network.  </p>
+    <p>
+        You can view the exclusive members of your registered network of principals 24/7 at http://www.uscreonline.com.  Simply log in and &#60;Click&#62; &#91;Inventory of Referred Principals&#93; at your &#91;&#34;My USC Page&#34;&#93;.  A complete history of all site activity of each and all of your Marketing Network Principals will be posted for your review.   
+    </p>
+    <p>As a member of the US CRE Online Joint Venture Marketing Program you will receive automated e mails of all new asset inventory and registration activity at our site by any and all of your respective Referred Network Principals.  You will also receive automated communications informing you of their search interests in CRE Assets.  The opportunity for joint venture participation in a debt and or equity capacity is always encouraged between our JVMA Participants and their referrals at USC.</p>
+    <p>We hope that you will find the data provided at US CRE Online as a valuable tool for your commercial real estate ventures... creating viable, immediately available foundations for joint ventures between your debt and equity capital relationships.  </p>
+    <p>Thank you for being a valued Marketing Partner of United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+    
+    <p>The Professional Staff</p>
+    <p><b>US CRE Online, LLC</b></p>
+</body>
+</html>

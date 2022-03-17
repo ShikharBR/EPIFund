@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "New Visitor Registration Introduction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-img"></div>
+<div id="registration-intro">
+    <h3>Welcome All New Visitors!</h3>
+
+    <h4>New Visitor Registration</h4>
+
+    <p>
+        Registering with US CRE Online (“USC”) is required for all Investor Principals, <a title="Mortgage Bankers Association">MBA</a> Members, and <a title="National Association of Realtors">NAR</a> Members to view all USC Asset Inventory and to engage in direct vesting communications and negotiations with participating PI’s, and or their professional representatives.
+    </p>
+    <ul class="ul-styled">
+        <li>All investor principals who would elect to engage in vesting negotiations on any presented asset shall be accredited to pursue said assets under the requisite guidelines of the United States Securities & Exchange Commission for accredited investors.</li>
+        <li>Completion of registration will also allow for engagement in the USC nationwide automated CRE @Html.ActionLink("Asset Search", "AssetList", "DataPortal", new { restrictRes=1 }, null) Network... a free service that identifies qualifying inventory for our valued registered principals within minutes to days of asset search submittal (as inventory is available).</li>
+    </ul>
+
+    <h4>Becoming a Member of USC's Network of Referring Participants</h4>
+    <p>
+        Registering with USC is a simple process. In order for each prospective registrant to gain access to the USC Nationwide CRE Inventory, you must complete the registration form accessed by clicking the gray button at the bottom of this page.  Upon completing the Registration process, which includes and requires proper one time on line execution of our <b>Non-Compete Non-Disclosure Confidentiality Agreement</b> ("@Html.ActionLink("NCND", "DownloadNCNDTemplate", "DataPortal")"), and our <b>Internet Portal Agreement</b> ("@Html.ActionLink("IPA", "DownloadIPABuyerTemplate", "DataPortal")"), you will have immediate access to view the asset ID# which was the subject of your invitation to uscreonline.com.  On line registration processing should only require a few minutes of your time, and registration confirmation is automated in seconds… and can be accessed 24/7/365.
+    </p>
+    <p>
+       With the completion of your USC Registration as defined, you will receive Asset ID codes for each applicable search function result, and have full online review access without interruption.  You will also have a complete inventory of all of your CRE Search Result Asset ID codes and site activity history available to you through your “My USC Page”.
+    </p>
+    <p>
+        You will be auto notified by e-mail (and or text message if you so elect) by USC when Assets are in its inventory that meet your specific search criteria, at which point, upon your auto authorization of an IPA for each such Asset ID, you will receive full access for online review thereof. Each notification will include a brief description of the Asset and its ID #.  When an Asset in our inventory is sold, it will no longer be available for viewing.
+    </p>
+    <p>
+        To proceed with your registration, please click the directional button below. Thank you for visiting US CRE Online. USC is the most comprehensive, state-of-the-art [CRE Data Cloud] for the United States Commercial Real Estate Community available.  And with its automated Asset Analysis Tools and automated Communications Module, USC Registered Users benefit substantially through its use in tremendous time management savings and asset equity enhancements.
+    </p>
+    <p>
+        To ensure that you do not accidentally discard any e-mails from USC, please program your e-mail service to accept e-mails from <a href="mailto:info@uscreonline.com">info@uscreonline.com</a>.  Thank you.
+    </p>
+
+    <input type="button" id="proceed" class="btn btn-default" value="Proceed with Registration" onclick="location.href='@Url.Action("Registration", "Home")'" />
+</div>

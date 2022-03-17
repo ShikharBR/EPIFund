@@ -1,0 +1,114 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.ViewModel.SellerIPAReceivedViewModel>
+@{
+    ViewBag.Title = "Summary Report Of IPAs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Summary Report Of IPAs</h2>
+<br />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Corporate Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>City</th>
+            <th>ST</th>
+            <th>Contact Phone #</th>
+            <th>Date IPA Received</th>
+            <th>Name of Asset</th>
+            <th>Does Buyer Have POF</th>
+            <th>Has Buyer Other IPA's</th>
+        </tr>
+    </thead>
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        <tr>
+            <td><a data-toggle="modal" data-target="#contactInformation-@i">@Model[i].CorporateName</a></td>
+            <td>@Model[i].FirstName</td>
+            <td>@Model[i].LastName</td>
+            <td>@Model[i].City</td>
+            <td>@Model[i].State</td>
+            <td><a data-toggle="modal" data-target="#contactInformation-@i">@Model[i].ContactPhoneNumber</a></td>
+            <td>@Model[i].DateIPAReceived.ToString("MM/dd/yyyy")</td>
+            <td>@Model[i].NameOfAsset</td>
+            <td>@string.Format("{0}", @Model[i].DoesBuyerHavePOF ? "Yes" : "No")</td>
+            <td>@string.Format("{0}", @Model[i].HasBuyerOtherIPAs ? "Yes" : "No")</td>
+        </tr>
+        <div class="modal fade" id="contactInformation-@i" tabindex="-1" role="dialog" aria-labelledby="contactInformation-label-@i" aria-hidden="true" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="contactInformation-label-@i">Additional Contact Information</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Home Phone #:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i].ContactHomeNumber
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Fax #:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i].ContactFaxNumber
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Cell Phone #:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i].ContactCellNumber
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Work Phone #:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i].ContactWorkNumber
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Email:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i].Email
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Alternate Email:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i].AlternateEmail
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn" value="Close" data-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</table>

@@ -1,0 +1,1264 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.PortfolioViewModel
+@using MVCVideo
+@using Inview.Epi.EpiFund.Domain.ViewModel
+@using Inview.Epi.EpiFund.Domain.Helpers
+@{
+    ViewBag.Title = "Portfolio Summary";
+    Layout = ViewBag.Layout;
+    ViewBag.IsAssetView = true;
+    List<MVCVideo.VideoOptions> videoOptions = ViewBag.Videos as List<MVCVideo.VideoOptions>;
+
+    MultiFamilyAssetViewModel mfAsset = new MultiFamilyAssetViewModel();
+    CommercialAssetViewModel cAsset = new CommercialAssetViewModel();
+
+    foreach (var AssetViewModel in Model.PortfolioProperties)
+    {
+
+        if (AssetViewModel.GetType() == typeof(MultiFamilyAssetViewModel))
+        {
+            mfAsset = (AssetViewModel as MultiFamilyAssetViewModel);
+        }
+        else if (Model.GetType() == typeof(CommercialAssetViewModel))
+        {
+            cAsset = (AssetViewModel as CommercialAssetViewModel);
+        }
+
+    }
+}
+@*<link rel="stylesheet" href="/resources/demos/style.css">*@
+
+<style>
+    .property-feature
+    {
+        padding-bottom: 3px;
+    }
+
+    div.scrollable
+    {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: auto;
+    }
+
+    .table-container
+    {
+        position: relative;
+        height: 100%;
+        width: 95%;
+        border: 2px #428bca;
+        display: inline-block;
+    }
+
+    .tabTH
+    {
+        border: 1px solid black;
+        min-width: 320px;
+        font-size: 12px;
+        font-family: "Open Sans", sans-serif;
+        color: #428bca;
+        text-align: center;
+    }
+
+    .tabTH2
+    {
+        border: 1px solid black;
+        min-width: 300px;
+        font-size: 12px;
+        font-family: "Open Sans", sans-serif;
+        color: #428bca;
+        text-align: center;
+    }
+
+    .tabTD
+    {
+        border: 1px solid black;
+        padding: 10px;
+        margin: 0;
+        white-space: nowrap;
+        font-size: 12px;
+        font-family: "Open Sans", sans-serif;
+    }
+
+    .right
+    {
+        overflow: auto;
+        position: absolute;
+        top: 0px;
+        left: 320px;
+        width: 65%;
+    }
+</style>
+<h3>United States Commercial Real Estate Online, LLC</h3>
+
+<h4 style="text-align: center;">@Model.PortfolioName</h4>
+<h4 style="text-align: center;">Number of assets in Portfolio: @Model.PortfolioProperties.Count</h4>
+<br />
+<br />
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#pics" data-toggle="tab">Images</a></li>
+    @*<li><a href="#videos" data-toggle="tab">Videos</a></li>*@
+</ul>
+<div class="tab-content" style="padding-left: 40px; padding-right: 40px;">
+    <div class="tab-pane active" id="pics">
+        @if (Model.Images != null)
+        {
+            <div id="asset-carousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+
+                <!-- Slides -->
+                <div class="carousel-inner">
+                    @for (int item = 0; item < Model.Images.Count; item++)
+                    {
+
+                        if (item == 0)
+                        {   
+                        <div class="item active" style="background-image: url('@Url.Action("GetImageSource", "Admin", new { fileName = Model.Images[item].FileName, assetId = Model.Images[item].AssetId, contentType = Model.Images[item].ContentType })')">
+                            <label>@Model.PortfolioProperties[item].ProjectName</label>
+                        </div>
+                        }
+                        else
+                        {
+                        <div class="item" style="background-image: url('@Url.Action("GetImageSource", "Admin", new { fileName = Model.Images[item].FileName, assetId = Model.Images[item].AssetId, contentType = Model.Images[item].ContentType })')">
+                            <label>@Model.PortfolioProperties[item].ProjectName</label>
+                        </div>
+                        }
+                    }
+                </div>
+
+                <!-- Controls -->
+                <a class="left carousel-control" href="#asset-carousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#asset-carousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                @for (int item = 0; item < Model.Images.Count; item++)
+                {
+                    if (item == 0)
+                    {
+                    <li data-target="#asset-carousel" data-slide-to="@item" class="active" style="background-image: url('@Url.Action("GetImageSource", "Admin", new { fileName = Model.Images[item].FileName, assetId = Model.Images[item].AssetId, contentType = Model.Images[item].ContentType })')"></li>
+                    }
+                    else
+                    {
+                    <li data-target="#asset-carousel" data-slide-to="@item" style="background-image: url('@Url.Action("GetImageSource", "Admin", new { fileName = Model.Images[item].FileName, assetId = Model.Images[item].AssetId, contentType = Model.Images[item].ContentType })')"></li>
+                    }
+                }
+            </ol>
+        
+        
+            <div class="input-group text-center" style="display: block; margin-top: -10px">
+                <button class="btn btn-default btn-xs" id="carousel-pause">
+                    <span class="glyphicon glyphicon-pause"></span>
+                </button>
+                <button class="btn btn-default btn-xs" id="carousel-play">
+                    <span class="glyphicon glyphicon-play"></span>
+                </button>
+            </div>
+        }
+    </div>
+    @*    <div class="tab-pane" id="videos">
+        <em>You must have Internet Explorer 9+, Safari 5+, or Chrome 6+ in order to view these videos. If you do not have these supported browsers, you may use the option to download the video and view in your own media player.</em>
+        <br />
+        <br />
+        @if (videoOptions != null)
+        {
+
+            for (int item = 0; item < videoOptions.Count; item++)
+            {
+             
+            @Html.Video(videoOptions[item], new { @class = "video-responsive", id = "video" + item })
+            <br />
+
+            }
+        }
+    </div>*@
+</div>
+@Html.Hidden("CODM", @cAsset.EstDeferredMaintenance)
+@Html.Hidden("MFDM", @mfAsset.EstDeferredMaintenance)
+@if (Model.GetType() == typeof(CommercialAssetViewModel))
+{
+    @Html.Hidden("CoType", true);
+}
+@if (Model.GetType() == typeof(MultiFamilyAssetViewModel))
+{
+    @Html.Hidden("MfType", true);
+}
+<hr />
+<h4>Portfolio Proforma Details</h4>
+<div class="row">
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <label>Listed/Asking Price</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @if (@Model.PortfolioListedPrice > 0)
+                        {
+                            <span class="padmoney" id="AskingPrice">@Model.PortfolioListedPrice.ToString("C0")</span> 
+                            <input type="hidden" value="@Model.CumiProformaNOI" id="bpo" />
+                        }
+                        else
+                        {
+                            <a title="Per Professional Listing, Pricing to be determined by Market Conditions and highest and best offer submitted">TBD</a>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Proforma <a title="Annualized Scheduled Gross Income">SGI</a> (Cumulative)</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @if (@Model.CumiProformaSGI > 0)
+                        {
+                            <span class="padmoney">@Model.CumiProformaSGI.ToString("C0")</span>
+                        }
+                        else
+                        {
+                            <a title="Per Professional Listing, Pricing to be determined by Market Conditions and highest and best offer submitted">TBD</a>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Proforma <a title="Vacancy Factor">VF</a> and Offsets (Averaged)</label>
+                    </td>
+                    <td style="text-align: right;">
+                        <span class="padmoney">@((Model.AvgProformaVF).ToString("P"))</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Proforma <a title="Annual Operating Expense">AOE</a>(Cumulative)</label>
+                    </td>
+                    <td style="text-align: right;">
+                        <span class="padmoney">@Model.CumiProformaAOE.ToString("C0")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label><a title="Common Area Maintenance">CAM</a>/ <a title="Annual Miscellaneous Income">AMI</a> Income</label>
+                    </td>
+                    <td style="text-align: right;">
+                        <span class="padmoney">@Model.CumiProformaCAM.ToString("C0")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Proforma <a title="Annual Operating Expense">AOE</a> as % of <a title="Scheduled Gross Income">SGI</a></label>
+                    </td>
+                    <td style="text-align: right;">
+                        <span class="pad">@Model.PFProformaAoeFactorAsPerOfSGI</span>%
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Proforma Pre Tax <a title="Annualized Net Operating Income">NOI</a>(Cumulative)</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @Model.CumiProformaNOI.ToString("C0")
+                        <input type="hidden" value="@Model.CumiProformaNOI" id="hdnProformaNOI" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Listed Price/<a title="Annual Capitalization Rate">CAP</a>Rate (Cumulative)</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @*<span class="padmoney">@Model.CumiLPCapRate.ToString("P2")</span> *@               
+                        <span style="text-align: right;" >@Model.CumiLPCapRate.ToString("P2")</span> 
+
+
+                        
+                        
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <label>
+                            Independent Appraisal/<a title="Broker Price Opinion and or weighted average of Sale Comps provided by List Agent">BPO</a>
+                        (Cumulative)</td>
+                    <td style="text-align: right;">
+                        @Model.CumiBPO.ToString("P2")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Independent Appraisal/<a title="Broker Price Opinion and or weighted average of Sale Comps provided by List Agent">BPO</a> <a title="Annual Capitalization Rate">CAP</a> Rate</label></td>
+                    <td style="text-align: right;">
+                        @Model.CumiBPOCapRate.ToString("P2")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(s => s.LastReportedOccupancyDate)
+                    </td>
+                    <td style="text-align: right;">
+                        <span>@Model.LastReportedOccupancyDate</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Current Annualized Gross Income</label>
+                    </td>
+                    <td style="text-align: right;">
+                        <span>@Model.CumiAnnualGrossIncome.ToString("c0")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(s => s.isSubjectToAuction)
+                    </td>
+                    <td style="text-align: right;">
+                        @if (Model.isSubjectToAuction)
+                        {
+                            <span class="asset-sold">Yes</span>
+                        }
+                        else
+                        {
+                            <span>No</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => s.hasOffersDate)
+                    </td>
+                    <td style="text-align: right;">
+                        @(Model.hasOffersDate ? "Yes" : "No")
+                    </td>
+                </tr>
+                @if (Model.CallforOfferDate.HasValue)
+                {
+                    <tr>
+                        <td>
+                            @Html.LabelFor(s => s.CallforOfferDate)
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.CallforOfferDate</span>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td>
+                        <label>Est Def Maintenance</label>
+                        <a data-toggle="modal" data-target="#loginwarning" style="margin-left: 10px;">(View list)</a>
+                    </td>
+                    @if (!Model.HasDeferredMaintenance)
+                    {
+                        <td style="text-align: right;">
+                            <span class="padmoney">$0</span>
+                        </td>
+                    }
+                    else if (Model.HasDeferredMaintenance)
+                    {
+                        <td style="text-align: right;">
+                            <span class="padmoney">@Model.EstDeferredMaintenance.ToString("C")</span>
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<hr />
+<h4>Debt Fund Calculators</h4>
+<div class="row">
+    <div class="col-md-6 text-center">
+        @if (@Model.ExistingDebtExists)
+        {
+            <input type="button" class="btn btn-primary" id="btnpopu1" value="Existing Debt Fund Calculator" onclick="OpenExistingCalc('@Model.PortfolioId    ')" />
+        }
+        else
+        {
+            <input type="button" class="btn" id="btnpopuInvalid" value="Existing Debt Fund Calculator" onclick="alert('There is no existing debt fund for this asset.')" />
+        }
+    </div>
+    <div class="col-md-6 text-center">
+        <input type="button" class="btn btn-primary "  id="btnpopu" value="Proposed Debt Fund Calculator" onclick="OpenProposedCalc('@Model.PortfolioId    ')" />
+    </div>
+</div>
+
+<hr />
+<h4>Preferred CAP Rate Analysis Calculator to Proforma Operating Data</h4>
+<div class="row">
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td style="line-height: 32px">
+                        <label>Enter Desired CAP Rate</label></td>
+                    <td style="line-height: 32px">
+                        <input type="text" id="txtBoxDesiredCapRate" style="width: 60px; text-align: right; margin-right: 5px; margin-bottom: 0" value="0.00%" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Comparative % to Listed Pricing/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a></label></td>
+                    <td style="text-align: right;"><span id="CompPercPerCapRate">0.00%</span><span id="PricePerUnitPerCapRate" style="display: none">$0.00</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <label>Calculated value at your selected <a title="Annual Capitalization Rate">CAP</a></label></td>
+                    <td style="text-align: right;"><span id="CalculatedPricePerCapRate">$0.00</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>New <a title="Annual Capitalization Rate">CAP</a> Pricing Per Sq.Ft</label></td>
+                    <td style="text-align: right;"><span id="PricePerFootPerCapRate">$0.00</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Equity Adjustment to selected <a title="Annual Capitalization Rate">CAP</a></label></td>
+                    <td style="text-align: right;"><span id="EquityAdjPerCapRate">$0.00</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-12" style="text-align: center">
+        <input type="button" id="BtnCapRateCalc" value="Calculate" />
+    </div>
+</div>
+
+<hr />
+<h4>Property Data for Each Property in the Portfolio</h4>
+
+<div class="table-container ">
+    <div class="headcol">
+        <table class="table-striped asset-table">
+            <thead>
+                <th class="tabTH">Attributes</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="tabTD"><b>Property Type</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Number of Apt Units / MHP Spaces</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Gross Rentable Sq. Ft.</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Property Address</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>City, State, Zip</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>County</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Tax Assessor Number(s)</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Year Orginally Built</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Total Lot Size of Property</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Number of Buildings</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>List Agent Grade Classification</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Property Condition</b></td>
+                </tr>
+                <tr>
+                    <td bgcolor="#FFFFFF" style="line-height: 10px;" colspan="3">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Has a Major Tenant</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Name of Major Tenant</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Is the Major Tenant a Publically Traded Company:</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Percentage of Property Leased</b></td>
+                </tr>
+                <tr>
+                    <td class="tabTD"><b>Is Pending a Foreclosure/Bankruptcy?</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="right">
+        <table>
+            <thead>
+                @foreach (var propModel in Model.PortfolioProperties)
+                {
+                    <th class="tabTH">@propModel.ProjectName</th>
+                }
+            </thead>
+
+            <tbody>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                    
+                        <td class="tabTD">@Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(propModel.AssetType)</td>
+                    
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+
+
+                        if (Model.GetType() == typeof(MultiFamilyAssetViewModel) && propModel.AssetType != AssetType.MHP)
+                        {
+                        <td class="tabTD">@mfAsset.TotalUnits</td>
+                        
+                        }
+                        else if (propModel.AssetType == AssetType.MHP)
+                        { 
+                        <td class="tabTD">@propModel.NumberNonRentableSpace</td>
+                        
+                        }
+                        else
+                        {
+                        <td class="tabTD">@cAsset.NumberofSuites</td>
+                       
+                        }
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        <td class="tabTD">@propModel.SquareFeet</td>
+                        <input id="mfAsset_SquareFeet" value="@Model.CumiSqFeet" style="display:none" />
+                        <input id="mfAsset_TotalUnits" value="@Model.CumiUnits" style="display:none;"/>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        <td class="tabTD"><span class="pad">@propModel.PropertyAddress</span> <a href="http://maps.google.com/maps?q=@propModel.PropertyAddress @propModel.City @propModel.State">Click Here For Map</a></td>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        <td class="tabTD">@(string.Format("{0}, {1} {2}", propModel.City, propModel.State, propModel.Zip))</td>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        <td class="tabTD">@propModel.County</td>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        <td class="tabTD">
+                            @foreach (var tpn in propModel.AssetTaxParcelNumbers)
+                            {
+                                <span>@tpn.TaxParcelNumber</span>
+                            }</td>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        <td class="tabTD">@propModel.YearBuilt</td>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        <td class="tabTD">@propModel.LotSize acres</td>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        <td class="tabTD">@propModel.BuildingsCount</td>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        <td class="tabTD">@propModel.GradeClassification</td>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        <td class="tabTD">@Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(propModel.PropertyCondition)</td>
+                    }
+                </tr>
+                <tr>
+                    <td bgcolor="#FFFFFF" style="line-height: 10px;" colspan="3">&nbsp;</td>
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        if (Model.GetType() == typeof(CommercialAssetViewModel))
+                        {
+                        <td class="tabTD">@(cAsset.HasAAARatedMajorTenant ? "Yes" : "No")</td>
+                        }
+                        else
+                        {
+                            <td class="tabTD"><span>N/A</span></td>
+
+                        }
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        if (Model.GetType() == typeof(CommercialAssetViewModel))
+                        {
+                        <td class="tabTD">@cAsset.NameOfAAARatedMajorTenant</td>
+                        
+                        }
+                        else
+                        { 
+                        <td class="tabTD"><span>N/A</span></td>
+                        
+                        }
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        if (Model.GetType() == typeof(CommercialAssetViewModel))
+                        {
+                        <td class="tabTD">@(cAsset.IsMajorTenantAAARated ? "Yes" : "No")</td>
+                        
+                        }
+                        else
+                        { 
+                        <td class="tabTD"><span>N/A</span></td>
+                        
+                        }
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        <td class="tabTD">@Model.PercentOfPropLeased %</td>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var propModel in Model.PortfolioProperties)
+                    {
+                        if (Model.GetType() == typeof(CommercialAssetViewModel))
+                        {
+                        <td class="tabTD">@(cAsset.isPendingForeclosure ? "Yes" : "No")</td>
+                        
+                        }
+                        else
+                        { 
+                        <td class="tabTD"><span>N/A</span></td>
+                        
+                        }
+                    }
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<br />
+<br />
+
+
+<hr />
+<h4>Adjusted Proforma Analysis: Tenant Improvement Inclusion</h4>
+
+<div class="row">
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <label>List Price + Est Tenant Improvement</label></td>
+                    <td style="text-align: right;"><span class="padmoney">@(Model.PortfolioListedPrice == 0 ? Model.AccumulatedBPO + Model.AccumulatedEstDef : Model.PortfolioListedPrice + Model.AccumulatedEstDef)</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Adjusted <a title="Annualized Scheduled Gross Income">SGI</a> after Tenant Improvement</label></td>
+                    <td style="text-align: right;">@Model.CumiDefProformaSGI.ToString("C0")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <label>Adjusted Proforma Pre Tax NOI</label></td>
+                    <td style="text-align: right;"><span class="padmoney">@Model.CumiDefProformaNOI.ToString("C0")</span><input type="hidden" value="@Model.CumiDefProformaNOI" id="hdnDefProformaNOI" /><input type="hidden" value="@Model.CumiTotalListing" id="hdnDefTotalListing" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Adjusted CAP Rate Calculation</label></td>
+                    <td style="text-align: right;"><span class="pad">@Model.CumiDefCapRate</span>%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<hr />
+<h4>Adjusted Preferred Cap Rate Analysis Calculator: Tenant Improvement Inclusion</h4>
+<div class="row">
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td style="line-height: 32px">
+                        <label>Enter Desired CAP Rate</label></td>
+                    <td style="line-height: 32px; text-align: right;">
+                        <input type="text" id="defTxtBoxDesiredCapRate" style="width: 60px; text-align: right; margin-right: 5px; margin-bottom: 0" value="0.00%" /></td>
+                </tr>
+
+                <tr style="display: none">
+                    <td>
+                        <label>New Tenant Improvement CAP Pricing Per Unit</label></td>
+                    <td style="text-align: right;"><span id="defPricePerUnitPerCapRate">$0.00</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>New Tenant Improvement Budget CAP Pricer per Sq.Ft</label></td>
+                    <td style="text-align: right;"><span id="defPricePerFootPerCapRate">$0.00</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Comparative % to Listed Pricing/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a></label></td>
+                    <td style="text-align: right;"><span id="defCompPercPerCapRate">0.00%</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <label>Calculated Price at your selected CAP</label></td>
+                    <td style="text-align: right;"><span id="defCalculatedPricePerCapRate">$0.00</span></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>Less DM/TI Budget of:</b><span style="padding: 5px" id="defLessDMBudget">$0.00</span>
+
+                        <b>Net Offering:</b><span style="padding: 5px" id="defNetOffering">$0.00</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Equity Adjustment to Selected CAP</label></td>
+                    <td style="text-align: right;"><span id="defEquityAdjPerCapRate">$0.00</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12" style="text-align: center">
+        <input type="button" id="defBtnCapRateCalc" value="Calculate" />
+    </div>
+</div>
+
+<div class="modal fade" id="loginwarning" tabindex="-1" role="dialog" aria-labelledby="loginwarning-label" aria-hidden="true" data-backdrop="false">
+    <form>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="loginwarning-label">Estimated Tenant Improvement Items</h4>
+                </div>
+                <div class="modal-body">
+                    @if (@Model.EstDeferredMaintenance == 0)
+                    {
+                    }
+                    else
+                    { 
+                        <table class="tabled table-striped">
+                            <thead>
+                                <tr>
+                                    <td style="width: auto;">
+                                        <label>Item</label></td>
+                                    <td style="width: auto;">
+                                        <label>Description</label></td>
+                                    <td>
+                                        <label>Unit Per Cost</label></td>
+                                    <td>
+                                        <label>Number of Items</label></td>
+                                    <td>
+                                        <label>Total Item Cost</label></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.DeferredMaintenanceItems)
+                                {
+                                    if (item.Selected)
+                                    {
+                                        
+                                    <tr>
+                                        <td style="text-align: center;">@item.ItemTitle</td>
+                                        <td style="text-align: center;">@item.ItemDescription</td>
+                                        <td style="text-align: right;">@item.UnitCost.ToString("C0")</td>
+                                        <td style="text-align: center;">@(string.Format("{0} {1}", item.NumberOfUnits, item.UnitTypeLabel))</td>
+                                        <td style="text-align: right;">@((item.NumberOfUnits * item.UnitCost).ToString("C0"))</td>
+                                    </tr>
+                                    
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    <label>Total Cost:</label>@Model.EstDeferredMaintenance.ToString("C0")
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn" value="Close" data-dismiss="modal" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+<script>
+
+    //$('#btnpopuInvalid').click(function () { alert('There is no Existing debt for this asset'); });
+
+    OpenProposedCalc = function (id) {
+        window.open('/Portfolio/OpenProposedCalc/' + id, "Proposed Debt Fund Calc", 'width=620px,height=400px,top=150,left=250');
+    }
+
+    OpenExistingCalc = function (id) {
+        window.open('/Portfolio/OpenExistingCalc/' + id, "Existing Debt Fund Calc", 'width=620px,height=400px,top=150,left=250');
+    }
+
+    function CalculatePropDebt() {
+
+        $.ajax({
+            url: '@Url.Action("ActionName", "ControllerName")',
+            type: 'POST',
+            data: {
+                name: $('#Dialog-Name').val(),
+                address: $('#Dialog-Address').val()
+            },
+            success: function (msg) {
+            },
+            error: function (msg) {
+            }
+        });
+
+    }
+
+    function submitTitleCompany() {
+        var selection = $("#TitleCompany").val();
+        if (typeof selection !== typeof undefined && selection !== false) {
+            if (selection.length > 0) {
+                $("#docForm").submit();
+                return true;
+            }
+        }
+        $("#divOrderDocumentsMessage").html("<span>Please select a Title Company.</span>");
+        $("#divOrderDocumentsMessage").show();
+        return false;
+    }
+
+    function submitInsuranceCompany() {
+        var selection = $("#InsuranceCompany").val();
+        if (typeof selection !== typeof undefined && selection !== false) {
+            if (selection.length > 0) {
+                $("#insDocForm").submit();
+                return true;
+            }
+        }
+        $("#divRequestInsMessage").html("<span>Please select an insurance Company.</span>");
+        $("#divRequestInsMessage").show();
+        return false;
+    }
+
+    function addUserOrder() {
+        var id = $("#AssetId").val();
+        $.post("/DataPortal/AddUserOrder", { assetId: id })
+        .done(function (data) {
+            if (data["result"] == true) {
+                alert("Recorded documents have already been ordered. You will receive an automatic email when documents have been uploaded.");
+            }
+            else {
+                alert("There was an error processing your request.");
+            }
+        })
+        .fail(function () {
+            alert("There was an error processing your request.");
+        });
+    }
+
+    function addUserOrderInsurance() {
+        var id = $("#AssetId").val();
+        $.post("/DataPortal/AddUserOrderInsurance", { assetId: id })
+        .done(function (data) {
+            if (data["result"] == true) {
+                alert("Recorded documents have already been ordered. You will receive an automatic email when documents have been uploaded.");
+            }
+            else {
+                alert("There was an error processing your request.");
+            }
+        })
+        .fail(function () {
+            alert("There was an error processing your request.");
+        });
+    }
+    $("#txtBoxDesiredCapRate").on('mouseup', function () { $(this).select(); });
+    $("#defTxtBoxDesiredCapRate").on('mouseup', function () { $(this).select(); });
+
+    $('#BtnCapRateCalc').click(function () {
+        var capRate = parseFloat($('#txtBoxDesiredCapRate').val());
+        if (capRate > 0) {
+            $('#txtBoxDesiredCapRate').val(addCommas(capRate.toFixed(2).toString(), true, false, true));
+            var calculatedPrice = Math.round(parseFloat($("#hdnProformaNOI").val()) / (capRate / 100));
+            $('#CalculatedPricePerCapRate').html(addCommas(Math.round(calculatedPrice).toFixed(0), false, true, false));
+            var totalUnits = $('#mfAsset_TotalUnits').val();
+            if (totalUnits == undefined || totalUnits == 0) {
+                $('#PricePerUnitPerCapRate').html(addCommas("0.00", false, true, false));
+            }
+            else {
+                $('#PricePerUnitPerCapRate').html(addCommas(Math.round((calculatedPrice / totalUnits).toFixed(2)).toString(), false, true, false));
+            }
+            var sqFeet = $('#mfAsset_SquareFeet').val();
+            if (sqFeet == undefined || sqFeet == 0) {
+                $('#PricePerFootPerCapRate').html(addCommas("0.00", true, true, false));
+            } else {
+                $('#PricePerFootPerCapRate').html(addCommas((calculatedPrice / sqFeet).toFixed(2).toString(), true, true, false));
+            }
+            var listPrice = getNumberFromValue($('#AskingPrice').text());
+            if (listPrice == undefined || listPrice == 0) {
+                // check appraisal/BPO
+                var bpo = getNumberFromValue($('#bpo').text());
+                $('#CompPercPerCapRate').html(addCommas(((calculatedPrice / bpo) * 100).toFixed(2).toString(), true, false, true));
+                var equity = Math.round(((calculatedPrice - bpo)));
+                $('#EquityAdjPerCapRate').html(addCommas(equity.toFixed(0).toString(), false, true, false));
+            }
+            else {
+                $('#CompPercPerCapRate').html(addCommas(((calculatedPrice / listPrice) * 100).toFixed(2).toString(), true, false, true));
+                var equity = Math.round(((calculatedPrice - listPrice)));
+                $('#EquityAdjPerCapRate').html(addCommas(equity.toFixed(0).toString(), false, true, false));
+            }
+            $("#EquityAdjPerCapRate").removeAttr('class');
+            if (equity < 0) {
+                $('#EquityAdjPerCapRate').addClass('asset-sold').css("font-weight", "normal");   
+            } else {
+                $('#EquityAdjPerCapRate').addClass('asset-available').css("font-weight", "normal");
+            }
+        }
+        else {
+            alert("You must enter a value greater than 0.");
+            $('#CalculatedPricePerCapRate').html(addCommas("0", false, true, false));
+            $('#PricePerUnitPerCapRate').html(addCommas("0.00", false, true, false));
+            $('#PricePerFootPerCapRate').html(addCommas("0.00", true, true, false));
+            $('#CompPercPerCapRate').html(addCommas("0.00", true, false, true));
+            $('#EquityAdjPerCapRate').html(addCommas("0", false, true, false));
+        }
+    });
+
+    //Implementation for Adjusted calculations based on deferred Maintenance
+    $('#defBtnCapRateCalc').click(function () {
+        if ($('#defTxtBoxDesiredCapRate').val() != '') {
+            var dmBudget = Number($('#defLessDMBudget').text().replace(/[^0-9\.]+/g, "")); //parseFloat($('#defLessDMBudget').text());
+            var capRate = parseFloat($('#defTxtBoxDesiredCapRate').val());
+            if (capRate > 0) {
+                $('#defTxtBoxDesiredCapRate').val(addCommas(capRate.toFixed(2).toString(), true, false, true));
+                var calculatedPrice = Math.round(parseFloat($('#hdnDefProformaNOI').val()) / (capRate * .01));
+                $('#defCalculatedPricePerCapRate').html(addCommas(Math.round(calculatedPrice).toFixed(0), false, true, false));
+                var totalUnits = $("#mfAsset_TotalUnits").val();
+                var defPricePerUnit = 0;
+                if (totalUnits == undefined || totalUnits == 0) {
+                }
+                else {
+                    defPricePerUnit = Math.round((calculatedPrice / totalUnits).toFixed(2));
+                }
+                var defPricePerSqFt = 0;
+                var sqFeet = $("#mfAsset_SquareFeet").val();
+                if (sqFeet == undefined || sqFeet == 0) {
+                } else {
+                    var defPricePerSqFt = (calculatedPrice / sqFeet).toFixed(2);
+                }
+                var defTotalListing = $("#hdnDefTotalListing").val();
+                $('#defPricePerUnitPerCapRate').html(addCommas(defPricePerUnit.toString(), false, true, false));
+                $('#defPricePerFootPerCapRate').html(addCommas(defPricePerSqFt.toString(), true, true, false));
+                var netOff = Math.round(calculatedPrice).toFixed(0) - dmBudget;
+                $('#defNetOffering').html(addCommas(netOff.toString(), true, true, false));
+                var defCompPercentage = ((calculatedPrice / defTotalListing) * 100).toFixed(2);
+                if (defCompPercentage == Infinity) {
+                    defCompPercentage = 0;
+                }
+                $('#defCompPercPerCapRate').html(addCommas(defCompPercentage.toString(), true, false, true));
+                var defEquityAdj = calculatedPrice - defTotalListing;
+                $('#defEquityAdjPerCapRate').html(addCommas(defEquityAdj.toString(), false, true, false));
+                $("#defEquityAdjPerCapRate").removeAttr('class');
+                if (defEquityAdj < 0) {
+                    $('#defEquityAdjPerCapRate').addClass('asset-sold').css("font-weight", "normal");
+                } else {
+                    $('#defEquityAdjPerCapRate').addClass('asset-available').css("font-weight", "normal");
+                }
+            }
+            else {
+                alert("You must enter a value greater than 0.");
+                $('#defTxtBoxDesiredCapRate').val(addCommas("0.00", true, false, true));
+                $('#defPricePerUnitPerCapRate').html(addCommas("0.00", false, true, false));
+                $('#defPricePerFootPerCapRate').html(addCommas("0.00", true, true, false));
+                $('#defCompPercPerCapRate').html(addCommas("0", true, false, true));
+                $('#defEquityAdjPerCapRate').html(addCommas("0", false, true, false));
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        $("#BtnCapRateCalc").attr("disabled", "true");
+        var coType = $('#CoType').val(); var mfType = $('#MfType').val();
+        if (coType == "True") {
+            var coDM = $('#CODM').val();
+            $('#defLessDMBudget').html(addCommas(coDM.toString(), false, true, false));
+        }
+        if (mfType == "True") {
+            var mfDM = $('#MFDM').val();
+            $('#defLessDMBudget').html(addCommas(mfDM.toString(), false, true, false));
+        }
+        $("#txtBoxDesiredCapRate").on('input', function () {
+            if ($(this).val() != "") {
+                $("#BtnCapRateCalc").removeAttr("disabled");
+            } else {
+                $("#BtnCapRateCalc").attr("disabled", "true");
+            }
+        });
+        $('.pad').each(function (index) {
+            padCommas(this, false);
+        });
+        $('.padmoney').each(function (index) {
+            padCommas(this, true);
+        });
+
+
+
+    });
+
+    $(document).ready(function () {
+        $('#carousel-pause').click(function () {
+            $('#asset-carousel').carousel('pause');
+        })
+
+        $('#carousel-play').click(function () {
+            $('#asset-carousel').carousel('cycle');
+        })
+
+    });
+
+
+
+
+
+    //function ProposedDebtCalc() {
+    //    $('#annualPreforma').value = 0;
+    //    $('#annualDebt1').value = 0;
+    //    $('#calcCashFlow').value = 0;
+    //    var moPayment = document.getElementsByName('#monthlyPayment').value;
+    //    var anPayment = document.getElementsByName('#annualDebt').value;
+    //}
+
+    function computeField(input) {
+        if (input.value != null && input.value.length != 0)
+            input.value = "" + eval(input.value);
+        // computeForm(input.form);
+    }
+
+    function checkNumber(fld, min, max, message) {
+        message = message + " field has invalid data: " + fld;
+
+        num = getNumber(fld);
+        if (num == null) {
+            //alert(message + " you must enter a value");
+            return false;
+        }
+
+        if (num < min || max < num) {
+            //alert(message + " is not in the range [" + min + ".." + max + "]");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    function getNumberFromNonInput(element) {
+        var str = element.innerHTML;
+        var tmp = '';
+
+        if (element.innerHTML.length == 0) {
+            return null;
+        }
+
+        for (var i = 0; i < str.length; i++) {
+            var ch = str.substring(i, i + 1);
+            if (ch == '$' || ch == ',' || ((ch < '0' || ch > '9') && ch != '.')) {
+                continue;
+            }
+            tmp += ch;
+        }
+
+        if (tmp == '') {
+            return null;
+        }
+
+        var num = parseFloat(tmp)
+
+        return num;
+    }
+
+    function getNumberFromValue(val) {
+        var tmp = '';
+
+        if (!val) {
+            return null;
+        }
+
+        for (var i = 0; i < val.length; i++) {
+            var ch = val.substring(i, i + 1);
+            if (ch == '$' || ch == ',' || ((ch < '0' || ch > '9') && ch != '.')) {
+                continue;
+            }
+            tmp += ch;
+        }
+
+        if (tmp == '') {
+            return null;
+        }
+
+        var num = parseFloat(tmp)
+
+        return num;
+    }
+
+    function toMoney(input, addDollarSign) {
+        if (input.value != null && input.value.length != 0) {
+            var sign = (addDollarSign) ? '$' : '';
+            num = getNumber(input);
+            if (num == null) {
+                return;
+            }
+
+            str = num.toString();
+            sig = str.split('.');
+
+            tmp = '';
+            len = sig[0].length;
+            for (var i = len, j = 1; i > 0; i--, j++) {
+                var t = sig[0].substring(i, i - 1);
+                tmp = t + tmp;
+                if ((j % 3 == 0) && j != len) {
+                    tmp = ',' + tmp;
+                }
+            }
+
+            if (sig.length > 1 && sig[1].length) {
+                tmp += '.' + sig[1].substr(0, 1);
+                var t = sig[1].substr(1, 1);
+                if (t) {
+                    tmp += t;
+                } else {
+                    tmp += '0';
+                }
+            }
+            str = sign + tmp;
+
+            input.value = str;
+        }
+    }
+
+    function padCommas(element, addDollarSign) {
+        // asumming element is span, not input
+        if (element) {
+            if (element.innerHTML.length != 0 && element.innerHTML != null) {
+                var sign = (addDollarSign) ? '$' : '';
+                num = getNumberFromNonInput(element);
+                if (num == null) {
+                    return;
+                }
+
+                str = num.toString();
+                sig = str.split('.');
+
+                tmp = '';
+                len = sig[0].length;
+                for (var i = len, j = 1; i > 0; i--, j++) {
+                    var t = sig[0].substring(i, i - 1);
+                    tmp = t + tmp;
+                    if ((j % 3 == 0) && j != len) {
+                        tmp = ',' + tmp;
+                    }
+                }
+
+                if (sig.length > 1 && sig[1].length) {
+                    tmp += '.' + sig[1].substr(0, 1);
+                    var t = sig[1].substr(1, 1);
+                    if (t) {
+                        tmp += t;
+                    } else {
+                        tmp += '0';
+                    }
+                }
+                str = sign + tmp;
+                element.innerHTML = str;
+            }
+        }
+    }
+
+    function addCommasToInput(control) {
+        $(control).val(addCommas($(control).val(), false));
+    };
+
+    function addCommas(str, includeDecimals, addDollarSign, addPercentSign) {
+        str = str.replace(/,/g, "");
+        var isNegative = str.indexOf("-") > -1;
+        str = str.replace(/-/g, "");
+        var output = getNumberFromValue(str);
+        output = (str + "").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+        if (addDollarSign) {
+            output = "$" + output;
+        }
+        else if (addPercentSign) {
+            output = output + "%";
+        }
+        if (isNegative) {
+            output = "<" + output + ">";
+        }
+        return output;
+    }
+
+</script>

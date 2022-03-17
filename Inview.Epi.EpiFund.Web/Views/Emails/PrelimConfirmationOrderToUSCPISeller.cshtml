@@ -1,0 +1,65 @@
+﻿@using Postal
+@model Inview.Epi.EpiFund.Web.Models.Emails.PrelimConfirmationOrderToUSCPISeller
+To: @Model.To
+From: USCREonline <info@uscreonline.com>
+Subject: @Model.Subject
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+<p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <table style="width: 100%;">
+        <tr>
+            <td align="left">To US CRE online Corp Admin,</td>
+            <td align="right">@Model.Date.ToString("MMMM d, yyyy")</td>
+        </tr>
+    </table>
+    <p><b style="color:darkgoldenrod">US CRE Online.com</b> Recorded Documents & Prelim Title Report Order:</p>
+    <table>
+        <tr>
+            <td width="80"></td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Title Company:</td>
+                        <td>@Model.TitleCompany</td>
+                    </tr>
+                    <tr>
+                        <td>Asset ID&#35;:</td>
+                        <td>@Model.AssetId</td>
+                    </tr>
+                    <tr>
+                        <td>Property Address:</td>
+                        <td>@Model.Address1 @Model.Address2, @Model.City, @Model.State @Model.Zip</td>
+                    </tr>
+                    <tr>
+                        <td>Property Type:</td>
+                        <td>@Model.AssetDescription</td>
+                    </tr>
+                    <tr>
+                        <td>APN:</td>
+                        <td>@Model.APN</td>
+                    </tr>
+                    <tr>
+                        <td>Ownership &#40;<b>PI</b>&#41;:</td>
+                        <td>@Model.Ownership</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <p>
+        The above captioned <b>Principal Investor</b> &#123;&#34;<b>PI</b>&#34;&#125; has contracted &#40;e.g., &#34;Internet Portal Agreement&#34;&#41; with &#123;<b style="color:darkgoldenrod"><i>USCREonline.com LLC</i></b>&#125; 
+        &#123;&#34;<b style="color:darkgoldenrod"><i>USC</i></b>&#34;&#125; and commenced uploading its CRE Asset Data to its respective data file at <a href="http://www.uscreonline.com">www.USCREonline.com</a>.
+        Per our relationship with @Model.TitleCompany, the <b>Preliminary Title Report</b> and <b>Recorded Documents</b> for the above captioned commercial investment property have been
+        automatically ordered. 
+    </p>
+    <p>
+        <b style="color:darkgoldenrod"><i>USC</i></b> will receive follow up notification when the <b>Recorded Documents</b>
+        have been uploaded by @Model.TitleCompany to the above captioned PI's Listed Asset File. Per the terms and conditions of its Service Agreement with 
+        <b style="color:darkgoldenrod"><i>USC</i></b>, @Model.TitleCompany will receive payment for its defined services according thereto.
+    </p>
+    <span>The Professional Staff</span><br />
+    <span><b style="color:darkgoldenrod"><i>US CRE Online, LLC</i></b></span>
+</body>
+</html>

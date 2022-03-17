@@ -1,0 +1,28 @@
+﻿@if (TempData["message"] != null)
+{
+    if (TempData["message"] is Inview.Epi.EpiFund.Web.Models.MessageViewModel)
+    {
+        var msg = TempData["message"] as Inview.Epi.EpiFund.Web.Models.MessageViewModel;
+        <div class="@msg.MessageClass main-alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @Html.Raw(msg.MessageText)
+        </div>
+    }
+    else
+    {
+        if (TempData["message-type"] != null)
+        {
+            <div class="alert main-alert alert-@TempData["message-type"]">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                @Html.Raw(TempData["message"].ToString())
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info main-alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                @Html.Raw(TempData["message"].ToString())
+            </div>
+        }
+    } 
+}

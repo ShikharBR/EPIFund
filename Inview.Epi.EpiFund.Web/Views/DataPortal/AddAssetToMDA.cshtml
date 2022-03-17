@@ -1,0 +1,61 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.NewAssetToMdaModel
+@{
+    ViewBag.Title = "Add Asset(s) To IPA";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add Asset(s) To Registrant's IPA</h2>
+
+@using (Html.BeginForm("AddAssetsToMDA", "DataPortal", FormMethod.Post))
+{
+    for (int i = 0; i < Model.AssetIdsToAdd.Count; i++)
+    {
+    @Html.HiddenFor(s => Model.AssetIdsToAdd[i])
+    }
+    @Html.HiddenFor(s => s.OriginalMDASignDate)
+    @Html.HiddenFor(s => s.UserId)
+
+    <p>
+        By
+        <clicking> the Approval button below, you acknowledge and agree to add the Asset ID #’s 
+            listed below (and their corresponding Properties/Data) to your <b>Internet Portal Agreement</b>
+            originally executed by you on @Model.OriginalMDASignDate.ToShortDateString() with 
+            US CRE Online LLC.  You further affirm that the 
+            terms and conditions of said <b>IPA</b> shall henceforth attach and apply to each and all of said Asset 
+            ID #’s (and their corresponding Properties).  If the/any of the subject Asset ID #’s are an 
+            Asset for which USC has an <b>IPA</b> with the Asset’s Vested Title Holder (or professional representative), 
+            you will automatically be notified and given Asset View access to the full CRE Portfolio of the 
+            respective Vested Title Holder (or full inventory of listed assets by said professional representative) 
+            as applicable/available at USC, and the {IPA Table} at your “<b>My USC Page</b>
+        ” will be updated accordingly 
+            with each respective Asset ID # line item of data.
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Asset Number
+                </th>
+                <th>Asset Description
+                </th>
+            </tr>
+        </thead>
+        @for (int i = 0; i < Model.AssetsToAdd.Count; i++)
+        {
+            <tr>
+                <td>@Model.AssetsToAdd[i].AssetNumber</td>
+                <td>@Model.AssetsToAdd[i].Description</td>
+            </tr>
+        }
+    </table>
+    
+    <div class="input-group">
+        <input type="button" class="btn btn-default" value="Reject" style="margin-right: 20px;" onclick="goBack()"  />
+        <input type="submit" class="btn btn-primary" style="margin-right: 20px;" value="Approve" />
+    </div> 
+}
+<script>
+    function goBack()
+    {
+        window.history.back()
+    }
+</script>

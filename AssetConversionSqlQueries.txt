@@ -1,0 +1,45 @@
+-- These queries make sure the asset is able to be MF or Commerce. COALESCE only changes the value if that value is null
+-- Change the AssetNumber to the desired asset you want changed
+/*
+DECLARE @AssetNumber int
+SET @AssetNumber = 1561
+-- 2 is COM, 3 is MF
+-- make asset available to all
+-- Convert COMMERCE to MF
+Update [EPIFund].[dbo].[Assets]
+SET 
+	OccupancyPercentage1 = COALESCE(OccupancyPercentage1, 0),
+	TotalUnits = COALESCE(TotalUnits, 0),
+	GrossRentableSquareFeet = COALESCE(GrossRentableSquareFeet, 0),
+	TotalSquareFootage = COALESCE(TotalSquareFootage, 0),
+	ElectricMeterMethod = COALESCE(ElectricMeterMethod, 1),
+	GasMeterMethod = COALESCE(GasMeterMethod, 1),
+	ParkOwnedMHUnits = COALESCE(ParkOwnedMHUnits, 0),
+	SquareFeet = COALESCE(SquareFeet, 0),
+	ParkingSpaces = COALESCE(ParkingSpaces, 0),
+	Discriminator = 'MultiFamilyAsset'
+where AssetNumber = @AssetNumber;
+*/
+/*
+DECLARE @AssetNumber int
+SET @AssetNumber = 1622
+-- Convert MF to COMMERCE
+Update [EPIFund].[dbo].[Assets]
+SET 
+	OccupancyPercentage = COALESCE(OccupancyPercentage, 0),
+	RentableSquareFeet = COALESCE(RentableSquareFeet, 0),
+	NumberOfTenants = COALESCE(NumberOfTenants, 1),
+	[Type] = COALESCE([Type], 1),
+	ProformaSgi = COALESCE(ProformaSgi, 1),
+	ProformaAnnualNoi = COALESCE(ProformaAnnualNoi, 1),
+	HasAAARatedMajorTenant = COALESCE(HasAAARatedMajorTenant, 1),
+	NumberofSuites = COALESCE(NumberofSuites, 0),
+	VacantSuites = COALESCE(VacantSuites, 0),
+	[LeasedSquareFootageByMajorTenant] = COALESCE([LeasedSquareFootageByMajorTenant], 0),
+	[BaseRentPerSqFtMajorTenant] = COALESCE([BaseRentPerSqFtMajorTenant], 0),
+	[CurrentMarkerRentPerSqFt] = COALESCE([CurrentMarkerRentPerSqFt], 0),
+	[IsMajorTenantAAARated] = COALESCE([IsMajorTenantAAARated], 0),
+	[NumberOfRentableSuites] = COALESCE([NumberOfRentableSuites], 0),
+	Discriminator = 'CommercialAsset'
+where AssetNumber = @AssetNumber;
+*/

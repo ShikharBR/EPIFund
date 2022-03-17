@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{42AAA615-8135-4CF0-988E-516A4270CE62}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Inview.Epi.EpiFund.Domain</RootNamespace>
+    <AssemblyName>Inview.Epi.EpiFund.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Flurl, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Flurl.1.0.7\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Flurl.Http, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Flurl.Http.0.6.0\lib\net45\Flurl.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mandrill, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mandrill.2.0.3.0\lib\net45\Mandrill.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.WebHelpers.3.2.3\lib\net45\Microsoft.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Postal">
+      <HintPath>..\packages\Postal.Mvc5.1.2.0\lib\net45\Postal.dll</HintPath>
+    </Reference>
+    <Reference Include="RazorEngine, Version=3.7.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RazorEngine.3.7.0\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.3.2.3\lib\net45\WebMatrix.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.3.2.3\lib\net45\WebMatrix.WebData.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entity\Asset.cs" />
+    <Compile Include="Entity\AssetCommission.cs" />
+    <Compile Include="Entity\AssetDeferredMaintenanceItem.cs" />
+    <Compile Include="Entity\AssetDocument.cs" />
+    <Compile Include="Entity\AssetHCOwnership.cs" />
+    <Compile Include="Entity\AssetImage.cs" />
+    <Compile Include="Entity\AssetIncome.cs" />
+    <Compile Include="Entity\AssetListingAgent.cs" />
+    <Compile Include="Entity\AssetLock.cs" />
+    <Compile Include="Entity\AssetNARMember.cs" />
+    <Compile Include="Entity\AssetOrderHistory.cs" />
+    <Compile Include="Entity\AssetOwnershipChange.cs" />
+    <Compile Include="Entity\ContractFeePayout.cs" />
+    <Compile Include="Entity\AssetMHPSpecification.cs" />
+    <Compile Include="Entity\OperatingCompany.cs" />
+    <Compile Include="Entity\PCInsuranceCompany.cs" />
+    <Compile Include="Entity\PCInsuranceCompanyManager.cs" />
+    <Compile Include="Entity\Portfolio.cs" />
+    <Compile Include="Entity\PortfolioAsset.cs" />
+    <Compile Include="Entity\HoldingCompany.cs" />
+    <Compile Include="Entity\TitleOrderPayment.cs" />
+    <Compile Include="Entity\AssetSalePayment.cs" />
+    <Compile Include="Entity\AssetSearchCriteria.cs" />
+    <Compile Include="Entity\AssetSeller.cs" />
+    <Compile Include="Entity\AssetTaxParcelNumber.cs" />
+    <Compile Include="Entity\AssetUserAssignment.cs" />
+    <Compile Include="Entity\AssetUserDisclosure.cs" />
+    <Compile Include="Entity\AssetUserMDA.cs" />
+    <Compile Include="Entity\AssetUserView.cs" />
+    <Compile Include="Entity\AssetVideo.cs" />
+    <Compile Include="Entity\TitleCompanyUser.cs" />
+    <Compile Include="Entity\TitleCompany.cs" />
+    <Compile Include="Entity\DeferredMaintenanceCost.cs" />
+    <Compile Include="Entity\DocusignEnvelope.cs" />
+    <Compile Include="Entity\EscrowCompany.cs" />
+    <Compile Include="Entity\ICAdminContractFeePayout.cs" />
+    <Compile Include="Entity\LOI.cs" />
+    <Compile Include="Entity\LOIDocument.cs" />
+    <Compile Include="Entity\MBAUser.cs" />
+    <Compile Include="Entity\NARMember.cs" />
+    <Compile Include="Entity\PaperCommercialAsset.cs" />
+    <Compile Include="Entity\PaperResidentialAsset.cs" />
+    <Compile Include="Entity\PersonalFinancialStatement.cs" />
+    <Compile Include="Entity\PrincipalInvestor.cs" />
+    <Compile Include="Entity\SearchCriteriaDemographicDetail.cs" />
+    <Compile Include="Entity\SearchCriteriaDueDiligenceItem.cs" />
+    <Compile Include="Entity\SearchCriteriaGeographicParameter.cs" />
+    <Compile Include="Entity\RealEstateCommercialAsset.cs" />
+    <Compile Include="Entity\RealEstateResidentialAsset.cs" />
+    <Compile Include="Entity\TempAssetDocument.cs" />
+    <Compile Include="Entity\TempAssetImage.cs" />
+    <Compile Include="Entity\TempAssetVideo.cs" />
+    <Compile Include="Entity\TempDeferredMaintenanceItem.cs" />
+    <Compile Include="Entity\TempUnitSpecification.cs" />
+    <Compile Include="Entity\UserFile.cs" />
+    <Compile Include="Entity\UserMachine.cs" />
+    <Compile Include="Entity\UserNote.cs" />
+    <Compile Include="Entity\UserRecord.cs" />
+    <Compile Include="Entity\UserReferral.cs" />
+    <Compile Include="Enum\AccessRoadType.cs" />
+    <Compile Include="Enum\AssetDocumentType.cs" />
+    <Compile Include="Enum\AssetOrderHistoryType.cs" />
+    <Compile Include="Enum\AssetStatus.cs" />
+    <Compile Include="Entity\AssetUnitSpecification.cs" />
+    <Compile Include="Entity\CommercialAsset.cs" />
+    <Compile Include="Enum\ContractFeePayoutType.cs" />
+    <Compile Include="Enum\InteriorRoadType.cs" />
+    <Compile Include="Enum\MasterCommercialPropertyDetails.cs" />
+    <Compile Include="Enum\MasterMultiFamilyPropertyDetails.cs" />
+    <Compile Include="Enum\MobileHomePropertyDetails.cs" />
+    <Compile Include="Enum\CorporateEntityType.cs" />
+    <Compile Include="Entity\EmailSchedule.cs" />
+    <Compile Include="Enum\DocumentType.cs" />
+    <Compile Include="Enum\EmailScheduleType.cs" />
+    <Compile Include="Entity\ForeclosureInfo.cs" />
+    <Compile Include="Entity\Inquiry.cs" />
+    <Compile Include="Entity\MultiFamilyAsset.cs" />
+    <Compile Include="Entity\PaperAsset.cs" />
+    <Compile Include="Enum\FileSize.cs" />
+    <Compile Include="Enum\FileType.cs" />
+    <Compile Include="Enum\ICStatus.cs" />
+    <Compile Include="Enum\ImportanceLevel.cs" />
+    <Compile Include="Enum\ListingStatus.cs" />
+    <Compile Include="Enum\LOIDocumentType.cs" />
+    <Compile Include="Enum\MachineStatus.cs" />
+    <Compile Include="Enum\MortgageLienAssumable.cs" />
+    <Compile Include="Enum\MortgageLienType.cs" />
+    <Compile Include="Enum\OrderStatus.cs" />
+    <Compile Include="Enum\PaymentType.cs" />
+    <Compile Include="Enum\OperatingStatus.cs" />
+    <Compile Include="Enum\PositionMortgageType.cs" />
+    <Compile Include="Enum\PreferredContactTime.cs" />
+    <Compile Include="Enum\PreferredMethod.cs" />
+    <Compile Include="Entity\ReportedOccupancy.cs" />
+    <Compile Include="Entity\User.cs" />
+    <Compile Include="Enum\PrincipalInvestorContractAssetType.cs" />
+    <Compile Include="Enum\SellerTerms.cs" />
+    <Compile Include="Enum\StatesOfUS.cs" />
+    <Compile Include="Enum\UploadUserFileType.cs" />
+    <Compile Include="Enum\UserRecordType.cs" />
+    <Compile Include="Enum\UserRegisteredReferralStatus.cs" />
+    <Compile Include="Enum\UserType.cs" />
+    <Compile Include="Enum\AssetCategory.cs" />
+    <Compile Include="Enum\BathroomCount.cs" />
+    <Compile Include="Enum\BedroomCount.cs" />
+    <Compile Include="Enum\CommercialPropertyDetails.cs" />
+    <Compile Include="Enum\CommercialType.cs" />
+    <Compile Include="Enum\LenderPosition.cs" />
+    <Compile Include="Enum\MaintenanceDetails.cs" />
+    <Compile Include="Enum\MeteringMethod.cs" />
+    <Compile Include="Enum\MultiFamilyPropertyDetails.cs" />
+    <Compile Include="Enum\OccupancyType.cs" />
+    <Compile Include="Enum\PaperPriority.cs" />
+    <Compile Include="Enum\PaperPropertyType.cs" />
+    <Compile Include="Enum\PaperType.cs" />
+    <Compile Include="Enum\PropertyCondition.cs" />
+    <Compile Include="Enum\RetailPropertyDetails.cs" />
+    <Compile Include="Enum\RetailPropertyType.cs" />
+    <Compile Include="Enum\SoldStatus.cs" />
+    <Compile Include="Enum\VacantSuites.cs" />
+    <Compile Include="Helpers\Common.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\MvcHtmlHelper.cs" />
+    <Compile Include="IAssetEmailServiceManager.cs" />
+    <Compile Include="IAssetManager.cs" />
+    <Compile Include="IAssetVideoServiceManager.cs" />
+    <Compile Include="IAuthProvider.cs" />
+    <Compile Include="IContactService.cs" />
+    <Compile Include="IDataCleanupServiceManager.cs" />
+    <Compile Include="IDocusignServiceManager.cs" />
+    <Compile Include="IEPIFundEmailService.cs" />
+    <Compile Include="IInsuranceManager.cs" />
+    <Compile Include="IPortfolioManager.cs" />
+    <Compile Include="ISecurityManager.cs" />
+    <Compile Include="ISellerManager.cs" />
+    <Compile Include="ISmtpService.cs" />
+    <Compile Include="IEPI.cs" />
+    <Compile Include="IEPIContextFactory.cs" />
+    <Compile Include="IEPIRepository.cs" />
+    <Compile Include="IFileManager.cs" />
+    <Compile Include="IPDFService.cs" />
+    <Compile Include="ITitleCompanyManager.cs" />
+    <Compile Include="IUserManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\AccountingRecordDisplayModel.cs" />
+    <Compile Include="ViewModel\AdminAssetQuickListModel.cs" />
+    <Compile Include="ViewModel\AssetAPNMatchModel.cs" />
+    <Compile Include="ViewModel\AssetAssignmentSearchModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModel\AssetAssignmentQuickViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModel\AssetDeferredItemViewModel.cs" />
+    <Compile Include="ViewModel\AssetDescriptionModel.cs" />
+    <Compile Include="ViewModel\AssetDocumentOrderRequestModel.cs" />
+    <Compile Include="ViewModel\AssetHCOwnershipModel.cs" />
+    <Compile Include="ViewModel\AssetEscrowModel.cs" />
+    <Compile Include="ViewModel\AssetImagesViewModel.cs" />
+    <Compile Include="ViewModel\AssetImageViewModel.cs" />
+    <Compile Include="ViewModel\AssetOwnershipChangeViewModel.cs" />
+    <Compile Include="ViewModel\AssetUserMDATempModel.cs" />
+    <Compile Include="ViewModel\BaseIncomeTemplateModel.cs" />
+    <Compile Include="ViewModel\CityModel.cs" />
+    <Compile Include="ViewModel\CompanySearchModel.cs" />
+    <Compile Include="ViewModel\CompanyUserSearchModel.cs" />
+    <Compile Include="ViewModel\CountyModel.cs" />
+    <Compile Include="ViewModel\DueDiligenceOptionalModel.cs" />
+    <Compile Include="ViewModel\ExtractedImageModel.cs" />
+    <Compile Include="ViewModel\GeneralUploadUserFileModel.cs" />
+    <Compile Include="ViewModel\HoldingCompanySearchModel.cs" />
+    <Compile Include="ViewModel\HoldingCompanyUpdateResult.cs" />
+    <Compile Include="ViewModel\ImportUserModel.cs" />
+    <Compile Include="ViewModel\ImportUsersModel.cs" />
+    <Compile Include="ViewModel\InsuranceUSCViewModel.cs" />
+    <Compile Include="ViewModel\IPABuyerTemplateModel.cs" />
+    <Compile Include="ViewModel\IPagedList_T_.cs" />
+    <Compile Include="ViewModel\IPANARTemplateModel.cs" />
+    <Compile Include="ViewModel\IPASellerTemplateModel.cs" />
+    <Compile Include="ViewModel\IPATemplateViewModels.cs" />
+    <Compile Include="ViewModel\JVMAUserMDAViewModels.cs" />
+    <Compile Include="ViewModel\ManagePortfoliosModel.cs" />
+    <Compile Include="ViewModel\MHPadType.cs" />
+    <Compile Include="ViewModel\OperatingCompanyViewModel.cs" />
+    <Compile Include="ViewModel\PortfolioAssetsModel.cs" />
+    <Compile Include="ViewModel\PortfolioQuickListViewModel.cs" />
+    <Compile Include="ViewModel\PortfolioViewModel.cs" />
+    <Compile Include="ViewModel\PrincipalInvestorSearchModel.cs" />
+    <Compile Include="ViewModel\PropHoldType.cs" />
+    <Compile Include="ViewModel\HoldingCompanyViewModel.cs" />
+    <Compile Include="ViewModel\SellerAssetQuickListModel.cs" />
+    <Compile Include="ViewModel\Emails\AssetListingStatusRequestEmail.cs" />
+    <Compile Include="ViewModel\Emails\AllAssetListingStatusRequestEmail.cs" />
+    <Compile Include="ViewModel\Emails\ConfirmationJVMarketingLenderBrokerEmail.cs" />
+    <Compile Include="ViewModel\Emails\ConfirmationSignedMDAEmail.cs" />
+    <Compile Include="ViewModel\Emails\NotificationToListingAgentBindingLOISubmittalEmail.cs" />
+    <Compile Include="ViewModel\InsuranceCompanyUserViewModel.cs" />
+    <Compile Include="ViewModel\JVMAMDAHistoryItem.cs" />
+    <Compile Include="ViewModel\MBAMemberImpViewModel.cs" />
+    <Compile Include="ViewModel\JVMANetUpSearchModel.cs" />
+    <Compile Include="ViewModel\JVMANetUpViewModel.cs" />
+    <Compile Include="ViewModel\JVMAUserMDASearchModel.cs" />
+    <Compile Include="ViewModel\JVMAUserMDAViewModel.cs" />
+    <Compile Include="ViewModel\AssetOrderHistoryViewModel.cs" />
+    <Compile Include="ViewModel\AssetQuickListViewModel.cs" />
+    <Compile Include="ViewModel\AssetSearchCriteriaModel.cs" />
+    <Compile Include="ViewModel\AssetSearchCriteriaQuickViewModel.cs" />
+    <Compile Include="ViewModel\AssetSearchModel.cs" />
+    <Compile Include="Enum\AssetType.cs" />
+    <Compile Include="ViewModel\AssetViewModel.cs" />
+    <Compile Include="ViewModel\BaseModel.cs" />
+    <Compile Include="ViewModel\BindingContingentTemplateModel.cs" />
+    <Compile Include="ViewModel\BuysRealEstateModel.cs" />
+    <Compile Include="ViewModel\CarouselAssetData.cs" />
+    <Compile Include="ViewModel\ChangeListingStatusModel.cs" />
+    <Compile Include="ViewModel\ChangePasswordModel.cs" />
+    <Compile Include="ViewModel\CommercialAssetViewModel.cs" />
+    <Compile Include="ViewModel\ContactUsModel.cs" />
+    <Compile Include="ViewModel\ContactUsReceiptModel.cs" />
+    <Compile Include="ViewModel\BuysPaperModel.cs" />
+    <Compile Include="ViewModel\CookieViewModel.cs" />
+    <Compile Include="ViewModel\NarMemberRegSearchModel.cs" />
+    <Compile Include="ViewModel\NarMemberRegViewModel.cs" />
+    <Compile Include="ViewModel\NarMemberViewModel.cs" />
+    <Compile Include="ViewModel\NewAssetToMdaModel.cs" />
+    <Compile Include="ViewModel\OrderHistoryQuickListViewModel.cs" />
+    <Compile Include="ViewModel\InsuranceCompanyViewModel.cs" />
+    <Compile Include="ViewModel\RecordJVMAContractPaymentModel.cs" />
+    <Compile Include="ViewModel\AssetImageModel.cs" />
+    <Compile Include="ViewModel\SellerIPAReceivedViewModel.cs" />
+    <Compile Include="ViewModel\SellerLOIReceivedViewModel.cs" />
+    <Compile Include="ViewModel\StateSearchCriteriaModel.cs" />
+    <Compile Include="ViewModel\TempUserViewModel.cs" />
+    <Compile Include="ViewModel\ThumbnailViewModel.cs" />
+    <Compile Include="ViewModel\OrderModel.cs" />
+    <Compile Include="ViewModel\OrderSearchModel.cs" />
+    <Compile Include="ViewModel\UploadUserFileModel.cs" />
+    <Compile Include="ViewModel\ValidateUserModel.cs" />
+    <Compile Include="ViewModel\TitleUserSearchModel.cs" />
+    <Compile Include="ViewModel\TitleUserQuickViewModel.cs" />
+    <Compile Include="ViewModel\TitleCompanyUserModel.cs" />
+    <Compile Include="ViewModel\TitleQuickViewModel.cs" />
+    <Compile Include="ViewModel\TitleSearchModel.cs" />
+    <Compile Include="ViewModel\TitleCompanyModel.cs" />
+    <Compile Include="ViewModel\ICAdminAssetHistoryItem.cs" />
+    <Compile Include="ViewModel\ContractFeeDetail.cs" />
+    <Compile Include="ViewModel\ImportMbaModel.cs" />
+    <Compile Include="ViewModel\ImportNarMemberModel.cs" />
+    <Compile Include="ViewModel\ImportPrincipalInvestorModel.cs" />
+    <Compile Include="ViewModel\MbaSearchModel.cs" />
+    <Compile Include="ViewModel\MbaViewModel.cs" />
+    <Compile Include="ViewModel\EmailInvestmentSearchCriteriaModel.cs" />
+    <Compile Include="ViewModel\EmailPersonalFinancialStatementModel.cs" />
+    <Compile Include="ViewModel\JVAgreementTemplateModel.cs" />
+    <Compile Include="ViewModel\ManageAssetsModel.cs" />
+    <Compile Include="ViewModel\MiscellaneousIncomeTemplateModel.cs" />
+    <Compile Include="ViewModel\MyUSCViewModel.cs" />
+    <Compile Include="ViewModel\NarMemberSearchModel.cs" />
+    <Compile Include="ViewModel\NotifyRegistrantOfMatchingAssetsModel.cs" />
+    <Compile Include="ViewModel\PaperCommercialAssetViewModel.cs" />
+    <Compile Include="ViewModel\PaperResidentialAssetViewModel.cs" />
+    <Compile Include="ViewModel\PrincipalInvestorQuickViewModel.cs" />
+    <Compile Include="ViewModel\OperatingCompanySearchModel.cs" />
+    <Compile Include="ViewModel\RealEstateCommercialAssetViewModel.cs" />
+    <Compile Include="ViewModel\RealEstateResidentialAssetViewModel.cs" />
+    <Compile Include="ViewModel\RecordContractPaymentModel.cs" />
+    <Compile Include="ViewModel\RegistrationModel.cs" />
+    <Compile Include="ViewModel\UserAssetSearchCriteriaQuickViewModel.cs" />
+    <Compile Include="ViewModel\UserFileModel.cs" />
+    <Compile Include="ViewModel\UserMachineModel.cs" />
+    <Compile Include="ViewModel\UserNoteModel.cs" />
+    <Compile Include="ViewModel\UserSearchModel.cs" />
+    <Compile Include="ViewModel\DueDiligenceCheckListModel.cs" />
+    <Compile Include="ViewModel\DueDiligenceOption.cs" />
+    <Compile Include="ViewModel\FinancialInvestmentParametersModel.cs" />
+    <Compile Include="ViewModel\GeographicParameterInterestModel.cs" />
+    <Compile Include="ViewModel\GeographicParametersModel.cs" />
+    <Compile Include="ViewModel\ICAgreementTemplateModel.cs" />
+    <Compile Include="ViewModel\LoginModel.cs" />
+    <Compile Include="ViewModel\MDATemplateModel.cs" />
+    <Compile Include="ViewModel\MultiFamilyAssetViewModel.cs" />
+    <Compile Include="ViewModel\MultiFamilyHomeDemographicDetailModel.cs" />
+    <Compile Include="ViewModel\NCNDTemplateModel.cs" />
+    <Compile Include="ViewModel\OtherDemographicDetailModel.cs" />
+    <Compile Include="Enum\PropertyType.cs" />
+    <Compile Include="ViewModel\PersonalFinancialStatementTemplateModel.cs" />
+    <Compile Include="ViewModel\RecordCommissionPaymentModel.cs" />
+    <Compile Include="ViewModel\RecordPaymentModel.cs" />
+    <Compile Include="ViewModel\ResetPasswordModel.cs" />
+    <Compile Include="ViewModel\SignedMDAQuickViewModel.cs" />
+    <Compile Include="ViewModel\UserModel.cs" />
+    <Compile Include="ViewModel\UserQuickViewModel.cs" />
+    <Compile Include="ViewModel\UserViewAssetModel.cs" />
+    <Compile Include="ViewModel\ViewAssetDisclosureModel.cs" />
+    <Compile Include="ViewModel\ViewExtractedImagesModel.cs" />
+    <Compile Include="ViewModel\WaitingForDocumentModel.cs" />
+    <Compile Include="ViewModel\WasteWaterType.cs" />
+    <Compile Include="ViewModel\WaterServType.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Views\Emails\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

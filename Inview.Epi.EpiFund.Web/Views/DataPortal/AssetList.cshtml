@@ -1,0 +1,557 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.AssetSearchResultsModel
+
+@using System.Collections
+
+@{
+    ViewBag.Title = "Asset Display";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .header
+    {
+        margin: 1px;
+        color: #fff;
+        padding: 3px 10px;
+        cursor: pointer;
+        position: relative;
+        background-color: #B1A795 !important;
+    }
+</style>
+<div class="modal fade" id="loginwarning" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <form>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Must Be Logged In To Continue</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="margin: 0">You must be logged in to proceed to the JV Marketing Agreement. Click [continue] to be directed the <b>USC</b> Log In page.  If you have not Registered at <b>USC</b> click [Register] to be redirected to New Registration.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-warning" value="Cancel" data-dismiss="modal" />
+                    <input type="button" class="btn btn-default" value="Register" onclick="postForm('register')" />
+                    <input type="button" class="btn btn-primary" value="Continue" onclick="postForm('login')" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="well search-well">
+    <h3>United States Commercial Real Estate Online, LLC</h3>
+    @using (Html.BeginForm("AssetList", "DataPortal", FormMethod.Post, new { id = "searchForm" }))
+    {
+        <div class="row asset-list-form">
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.SelectedAssetType, new { @style = "line-height: 32px;" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.DropDownListFor(s => s.SelectedAssetType, @Model.AssetTypes, new { @style = "width: 100%", onchange = "showControls(this)" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.MinGrade, new { @style = "margin-bottom:20px;" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.DropDownListFor(s => s.MinGrade, @Model.GradeClassifications, new { @style = "width: 100%" })
+                </div>
+            </div>
+        </div>
+        <div class="row asset-list-form">
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.MinPriceRange, new { @style = "line-height: 32px;" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.MinPriceRange, new { @style = "margin-bottom:20px;", @class = "pad4input", onchange = "padCommasforInput(this, false)" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.MaxPriceRange, new { @style = "line-height: 32px;" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.MaxPriceRange, new { @style = "margin-bottom:20px;", @class = "pad4input", onchange = "padCommasforInput(this, false)" })
+                </div>
+            </div>
+        </div>
+        <div class="row asset-list-form">
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.MaxAgeRange, new { @style = "line-height: 32px;" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.DropDownListFor(s => s.MaxAgeRange, @Model.MaxAges, new { @style = "width: 100%" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.TurnKey, new { @style = "margin-bottom:20px;" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.DropDownListFor(s => s.TurnKey, @Model.TurnKeyOptions, new { @style = "width: 100%" })
+                </div>
+            </div>
+        </div>
+        @*<div class="row asset-list-form">
+                <div class="col-sm-3">
+                    <div class="input-group text-right">
+                        @Html.LabelFor(s => s.AccListPrice, new { @style = "line-height: 32px;" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        @Html.TextBoxFor(s => s.AccListPrice, new { @style = "margin-bottom:20px;" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group text-right">
+                        @Html.LabelFor(s => s.AccUnits, new { @style = "margin-bottom:20px;" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        @Html.TextBoxFor(s => s.AccUnits, new { @style = "margin-bottom:20px;" })
+                    </div>
+                </div>
+            </div>*@
+        <div class="row asset-list-form">
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.AssetName, new { @style = "line-height: 32px;" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                @Html.TextBoxFor(s => s.AssetName, new { @style = "line-height: 32px;" })
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.AssetIds)
+                </div>
+            </div>
+            <div class="col-sm-3 text-right">
+                <div id="assetIds" data-count="@Model.AssetIds.Count">
+                    @for (int c = 0; c < Model.AssetIds.Count; c++)
+                    {
+                        <div class="idDiv">
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.AssetIds[c])
+                            </div>
+                        </div>
+                    }
+                </div>
+                <i id="removeAssetId" title="Remove Last" class="fa fa-minus-circle"></i>
+                <i id="addAssetId" title="Add Asset ID" class="fa fa-plus-circle"></i>
+                <br />
+            </div>
+        </div>
+        <div class="row asset-list-form" id="MFSearch" style="display:none;">
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.MinUnitsSpaces, new { @style = "line-height: 32px; margin:0" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.MinUnitsSpaces, new { @style = "width: 100%" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.MaxUnitsSpaces, new { @style = "line-height: 32px; margin:0" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.MaxUnitsSpaces, new { @style = "width: 100%" })
+                </div>
+            </div>
+        </div>
+        <div class="row asset-list-form" id="ComSearch" style="display:none;">
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.MinSquareFeet, new { @style = "line-height: 32px; margin:0" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.MinSquareFeet, new { @style = "width: 100%" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.MaxSquareFeet, new { @style = "line-height: 32px; margin:0" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.MaxSquareFeet, new { @style = "width: 100%" })
+                </div>
+            </div>
+        </div>
+        <div class="row asset-list-form">
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.IsPaper, new { @style = "line-height: 32px;" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                @Html.CheckBoxFor(s => s.IsPaper, new { @style = "line-height: 32px;" })
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    
+                </div>
+            </div>
+            <div class="col-sm-3 text-right">
+                
+            </div>
+        </div>
+        <hr />
+
+        <div class="row">
+            <div class="statesDiv col-sm-12" data-count="@Model.SelectedStates.Count">
+                @for (int states = 0; states < Model.SelectedStates.Count; states++)
+                {
+                    <div class="stateTable clearfix">
+                        <div class="col-sm-2 state-column">
+                            <label>
+                                State:
+                            </label>
+                            <div>
+                                @Html.DropDownListFor(model => Model.SelectedStates[states].State, @Model.States)
+                            </div>
+                        </div>
+                        <div id="countyTable-@states" class="col-sm-5 countyDiv" data-count="@Model.SelectedStates[states].Counties.Count">
+                            <label>
+                                County:
+                            </label>
+                            <div id="county-@states">
+                                @for (int county = 0; county < Model.SelectedStates[states].Counties.Count; county++)
+                                {
+                                    @Html.TextBoxFor(model => model.SelectedStates[states].Counties[county], new { @class = "txtCounty" })
+                                }
+                            </div>
+                            <div class="text-right">
+                                <i title="Remove Last" onclick="removeCounty(@states)" class="fa fa-minus-circle"></i>
+                                <i title="Add County" onclick="addCounty(@states)" class="fa fa-plus-circle"></i>
+                            </div>
+                        </div>
+                        <div id="cityTable-@states" class="col-sm-5 cityDiv" data-count="@Model.SelectedStates[states].Cities.Count">
+                            <label>
+                                City:
+                            </label>
+                            <div id="city-@states">
+                                @for (int city = 0; city < Model.SelectedStates[states].Cities.Count; city++)
+                                {
+                                    @Html.TextBoxFor(model => model.SelectedStates[states].Cities[city], new { @class = "txtCity" })
+                                }
+                            </div>
+                            <div class="text-right">
+                                <i title="Remove Last" onclick="removeCity(@states)" class="fa fa-minus-circle"></i>
+                                <i title="Add City" onclick="addCity(@states)" class="fa fa-plus-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="button" id="addState" value="Add State" />
+                <input type="button" id="removeState" value="Remove Last" />
+            </div>
+        </div>
+        <div class="row asset-list-form">
+
+            <div class="col-sm-3">
+                <div class="input-group">
+                </div>
+            </div>
+            <div class="col-sm-12 text-center">
+                <div class="input-group">
+                    @Html.HiddenFor(model => Model.Page)
+                    @Html.HiddenFor(model => Model.RowCount)
+                    <input type="submit" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto;" onclick="preupdate(); clearSearchValues()" />
+                </div>
+            </div>
+        </div>
+    }
+    <div>
+        <label>Search results per page:</label>
+        <select id="ddlRowCount" onchange="changeResults()">
+            <option value="25">25</option>
+            <option value="50" selected="selected">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
+        </select>
+    </div>
+</div>
+
+<br />
+@if (Model.ShowSearchFormLink)
+{
+    <div class="alert alert-info" style="color:black">
+        Your specific CRE Asset Search Criteria has produced no matches of Published Available or Pending CRE Inventory at US CRE Online.  We recommend that you amend your search criteria and re-submit to improve your opportunity to identify available inventory that matches your CRE vesting interests.  You may also fill out the expanded @Html.ActionLink("USC Search Criteria Form", "InvestmentAssetSearchCriteria", new { MaxAgeRange = Model.MaxAgeRange, MinPriceRange = Model.MinPriceRange, MaxPriceRange = Model.MaxPriceRange, AssetCategory = Model.SelectedAssetCategory, AssetType = Model.SelectedAssetType, ListingStatus = Model.SelectedListingStatus }, new { @style="color:darkred;" }) and [Publish] it to the USC Community of CRE Principals and Professional Representatives to expand your opportunities to secure the CRE Inventory you seek.  CRE Principals and Professional Representatives who have available matching CRE Inventory will communicate directly with you through USC as to any such matching inventory.  Your @Html.ActionLink("Search Criteria Form", "InvestmentAssetSearchCriteria", new { MaxAgeRange = Model.MaxAgeRange, MinPriceRange = Model.MinPriceRange, MaxPriceRange = Model.MaxPriceRange, AssetCategory = Model.SelectedAssetCategory, AssetType = Model.SelectedAssetType, ListingStatus = Model.SelectedListingStatus }, new { @style="color:darkred;" }) will be accessible for you to update and [Publish] at any and all times.
+        <br />
+    </div>
+}
+<h4>Asset Results</h4>
+@{ Html.RenderPartial("_AssetListView", Model.Assets); }
+<h4>Portfolio Results</h4>
+@{ Html.RenderPartial("_AssetListPFView", Model.Portfolios); }
+
+<p style="font-size:12px">
+    To view any of the Property Profiles displayed in the above Search Results Table you must first be @Html.ActionLink("logged in", "Login", "Home").
+</p>
+
+<p style="font-size:12px">
+    Once logged in you may proceed to each individual Comprehensive <span style="font-weight:bold; color: red"><a title="Identical Display Templates for all types of Commercial Property Data Profiles">Asset View</a></span> of any of the CRE Inventory resulting from your CRE Asset Search by <Clicking> the [View Button] next to any of the matching property.  You will be required to sign or acknowledge the standard US CRE Online <span style="font-weight:bold; color: red"><a title="Internet Portal Agreement adapted respectively for US CRE Online Registered Accredited Principal Users and NAR Member Users">IPA</a></span> for each Asset you wish to view.  You are able to execute one Master <span style="font-weight:bold; color: red"><a title="Internet Portal Agreement adapted respectively for US CRE Online Registered Accredited Principal Users and NAR Member Users">IPA</a></span> for all USC CRE Asset Views going forward. To do this simply click the □ radial selection button next to each matching Asset Summary, then click any [View Button] in the Summary Table. You will be directed to the <span style="font-weight:bold; color: red"><a title="Internet Portal Agreement adapted respectively for US CRE Online Registered Accredited Principal Users and NAR Member Users">IPA</a></span> Protocol where each Asset ID # will be identified for integration into your @Html.ActionLink("Master IPA", "DownloadIPABuyerTemplate", "DataPortal") for review and online execution through DocuSign.
+</p>
+
+<p style="font-size:12px">
+    If your site CRE Asset Search did not produce requisite available inventory results for your review we recommend that you amend your search criteria and re-submit to improve your opportunity to identify available inventory that matches your CRE vesting interests.  You may also proceed to the 
+    @Html.ActionLink("Advanced CRE Asset Search Criteria", "InvestmentAssetSearchCriteria", "DataPortal") section of the site to [Publish] your Advanced Search Criteria to the USC Community of CRE Principals and Professional Representatives. The service is free and highly effective and timely.  Generally, if there is matching available inventory to your search criteria within the USC Community, you will be notified within hours to a few days of same by the respective Assets Registered Principals or their Professional Representatives. 
+</p>
+
+<p>Thank you for visiting @Html.ActionLink("USCRE Online.com", "Index", "Home")</p>
+
+<input type="button" id="proceed" class="btn btn-default" value="Proceed to Advanced CRE Asset Search Criteria" onclick="location.href='@Url.Action("InvestmentAssetSearchCriteria", "DataPortal")    '" />
+
+<script>
+    var stateCount = 0;
+    var idCount = 0;
+    function postForm(action) {
+        if (action == 'login') {
+            $('#ipaForm').attr('action', '/Home/LoginAlt');
+            $('#ipaForm').submit();
+        }
+        else if (action == 'register') {
+            $('#ipaForm').attr('action', '/Home/RegistrationAlt');
+            $('#ipaForm').submit();
+        }
+    }
+
+    $(document).ready(function () {
+        stateCount = 0;
+        idCount = 0;
+        stateCount = $('.statesDiv').attr('data-count');
+        idCount = $('#assetIds').attr('data-count');
+        stateCount--;
+        idCount--;
+        var control = $("#SelectedAssetType");
+        if (control.val() == "MultiFamily" || control.val() == "MHP") {
+            $("#MFSearch").show();
+            $("#ComSearch").hide();
+        }
+        else if(control.val() =="" || control.val() == undefined)
+        {
+            $("#ComSearch").hide();
+            $("#MFSearch").hide();
+        }
+        else {
+            $("#ComSearch").show();
+            $("#MFSearch").hide();
+        }
+    });
+    $('.header').click(function () {
+        $(this).nextUntil('tr.header').slideToggle(1000);
+    });
+    $('.pagination li a').click(function () {
+        var href = $(this).attr('href');
+        if (typeof href !== typeof undefined && href !== false) {
+            var page = parseInt(getPageNumber(href));
+            $('#Page').val(page);
+            $('#searchForm').submit();
+            return false;
+        }
+    });
+
+    function changeResults() {
+        $('#RowCount').val($('#ddlRowCount').val());
+        $('#searchForm').submit();
+    }
+
+    $('#addState').click(function () {
+        stateCount++;
+        $('.statesDiv').append("<div class='stateTable clearfix'><div class='col-sm-2 state-column'><label>State:</label><div><select name='SelectedStates[" + stateCount + "].State'><option value=''></option> <option value='AL'>AL</option> <option value='AK'>AK</option> <option value='AZ'>AZ</option> <option value='AR'>AR</option> <option value='CA'>CA</option> <option value='CO'>CO</option> <option value='CT'>CT</option> <option value='DE'>DE</option> <option value='FL'>FL</option> <option value='GA'>GA</option> <option value='HI'>HI</option> <option value='ID'>ID</option> <option value='IL'>IL</option> <option value='IN'>IN</option> <option value='IA'>IA</option> <option value='KS'>KS</option> <option value='KY'>KY</option> <option value='LA'>LA</option> <option value='ME'>ME</option> <option value='MD'>MD</option> <option value='MA'>MA</option> <option value='MI'>MI</option> <option value='MN'>MN</option> <option value='MS'>MS</option> <option value='MO'>MO</option> <option value='MT'>MT</option> <option value='NE'>NE</option> <option value='NV'>NV</option> <option value='NH'>NH</option> <option value='NJ'>NJ</option> <option value='NM'>NM</option> <option value='NY'>NY</option> <option value='NC'>NC</option> <option value='ND'>ND</option> <option value='OH'>OH</option> <option value='OK'>OK</option> <option value='OR'>OR</option> <option value='PA'>PA</option> <option value='RI'>RI</option> <option value='SC'>SC</option> <option value='SD'>SD</option> <option value='TN'>TN</option> <option value='TX'>TX</option> <option value='UT'>UT</option> <option value='VT'>VT</option> <option value='VA'>VA</option> <option value='WA'>WA</option> <option value='WV'>WV</option> <option value='WI'>WI</option> <option value='WY'>WY</option></select></div></div><div id='countyTable-" + stateCount + "' class='col-sm-5 countyDiv' data-count='1'><label>County:</label><div id='county-" + stateCount + "'><input class='txtCounty' name='SelectedStates[" + stateCount + "].Counties[0]' type='text' value=''></div><div class='text-right'><i title='Remove Last' onclick='removeCounty(" + stateCount + ")' class='fa fa-minus-circle' style='margin-right:3px'></i><i title='Add County' onclick='addCounty(" + stateCount + ")' class='fa fa-plus-circle'></i></div></div><div id='cityTable-" + stateCount + "' class='col-sm-5 cityDiv' data-count='1'><label>City:</label><div id='city-" + stateCount + "'><input class='txtCity' name='SelectedStates[" + stateCount + "].Cities[0]' type='text' value='' /></div><div class='text-right'><i title='Remove Last' onclick='removeCity(" + stateCount + ")' class='fa fa-minus-circle' style='margin-right:3px'></i><i title='Add City' onclick='addCity(" + stateCount + ")' class='fa fa-plus-circle'></i></div></div></div>");
+        if (stateCount > 0) {
+            $('#removeState').show();
+        }
+    });
+
+    $('#removeState').click(function () {
+        if (stateCount > 0) {
+            stateCount--;
+            $('.statesDiv').children('.stateTable').last().remove();
+        }
+    });
+
+    $('#addAssetId').click(function () {
+        idCount++;
+        $('#assetIds').append("<div class='idDiv'><div class='input-group'><input name='AssetIds[" + idCount + "]' type='text' value=''></div></div>");
+        if (idCount > 0) {
+            $('#removeAssetId').show();
+        }
+    });
+
+    $('#removeAssetId').click(function () {
+        if (idCount > 0) {
+            idCount--;
+            $('#assetIds').children('.idDiv').last().remove();
+        }
+    });
+
+    function addCity(state) {
+        var city = parseInt($('#cityTable-' + state).attr('data-count'));
+        $('#city-' + state).append("<input class='txtCity' name='SelectedStates[" + state + "].Cities[" + city + "]' type='text' value='' />");
+        $('#cityTable-' + state).attr('data-count', city + 1);
+    }
+
+    function removeCity(state) {
+        var city = parseInt($('#cityTable-' + state).attr('data-count'));
+        if (city > 1)
+        {
+            $('#city-' + state).children('.txtCity').last().remove();
+            $('#cityTable-' + state).attr('data-count', city - 1);
+        }
+    }
+
+    function addCounty(state) {
+        var county = parseInt($('#countyTable-' + state).attr('data-count'));
+        $('#county-' + state).append("<input class='txtCounty' name='SelectedStates[" + state + "].Counties[" + county + "]' type='text' value='' />");
+        $('#countyTable-' + state).attr('data-count', county + 1);
+    }
+
+    function removeCounty(state) {
+        var county = parseInt($('#countyTable-' + state).attr('data-count'));
+        if (county > 1) {
+            $('#county-' + state).children('.txtCounty').last().remove();
+            $('#countyTable-' + state).attr('data-count', county - 1);
+        }
+    }
+    function showControls(control) {
+        if (control.value == "MultiFamily" || control.value == "MHP") {
+            $("#MFSearch").show();
+            $("#ComSearch").hide();
+        }
+        else if(control.value =="" || control.value == undefined)
+        {
+            $("#ComSearch").hide();
+            $("#ComSearch").hide();
+        }
+        else {
+            $("#ComSearch").show();
+            $("#MFSearch").hide();
+        }
+    }
+
+    $(document).ready(function () {
+        $('.pad').each(function (index) {
+            padCommas(this, false);
+        });
+        $('.pad4input').each(function (index) {
+            padCommasforInput(this, false);
+        });
+        
+
+    });
+
+    function padCommas(element, addDollarSign) {
+        
+        // asumming element is span, not input
+        if (element) {        
+            if (element.innerHTML.length != 0 && element.innerHTML != null) {
+                var sign = (addDollarSign) ? '$' : '';
+                num = getNumberFromNonInput(element);
+                if (num == null) {
+                    return;
+                }
+                
+                str = num.toString();
+                sig = str.split('.');
+
+                tmp = '';
+                len = sig[0].length;
+                for (var i = len, j = 1; i > 0; i--, j++) {
+                    var t = sig[0].substring(i, i - 1);
+                    tmp = t + tmp;
+                    if ((j % 3 == 0) && j != len) {
+                        tmp = ',' + tmp;
+                    }
+                }
+
+                if (sig.length > 1 && sig[1].length) {
+                    tmp += '.' + sig[1].substr(0, 1);
+                    var t = sig[1].substr(1, 1);
+                    if (t) {
+                        tmp += t;
+                    } else {
+                        tmp += '0';
+                    }
+                }
+                str = sign + tmp;
+                element.innerHTML = str;
+            }
+        }       
+    }
+
+    function padCommasforInput(element, addDollarSign) {
+        $(element).val($(element).val().replace(/,/g, '')); //this reset comma str to numeric value
+
+        if (element) {        
+            if (element.value.length != 0 && element.value != null) {
+                var sign = (addDollarSign) ? '$' : '';
+                //num = getNumberFromNonInput(element);
+                num=$(element).val();
+                if (num == null) {
+                    return;
+                }
+                
+                str = num.toString();
+                sig = str.split('.');
+
+                tmp = '';
+                len = sig[0].length;
+                for (var i = len, j = 1; i > 0; i--, j++) {
+                    var t = sig[0].substring(i, i - 1);
+                    tmp = t + tmp;
+                    if ((j % 3 == 0) && j != len) {
+                        tmp = ',' + tmp;
+                    }
+                }
+
+                if (sig.length > 1 && sig[1].length) {
+                    tmp += '.' + sig[1].substr(0, 1);
+                    var t = sig[1].substr(1, 1);
+                    if (t) {
+                        tmp += t;
+                    } else {
+                        tmp += '0';
+                    }
+                }
+                str = sign + tmp;
+                element.value = str;
+            }
+        }       
+    }
+
+    function preupdate(element) {        
+        $('#MinPriceRange').val($('#MinPriceRange').val().replace(/,/g, ''));
+        $('#MaxPriceRange').val($('#MaxPriceRange').val().replace(/,/g, ''));        
+    }
+</script>

@@ -1,0 +1,112 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.UserQuickViewModel>
+
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+    </div>
+    <div class="overflow short-xs" id="UserView">
+        <table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+            <thead>
+                <tr>
+                    <td>
+                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.FirstName')">First Name</a></b>
+                    </td>
+                    <td>
+                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.LastName')">LastName</a></b>
+                    </td>
+                    <td>
+                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.CorpEntity')">Corp Entity</a></b>
+                    </td>
+                    <td>
+                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.UserType')">User Type</a></b>
+                    </td>
+                    <td>
+                        Corp TIN
+                    </td>
+                    <td>
+                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.RegisterDate')">Date of Register</a></b>
+                    </td>
+                    <td>
+                        JVMA
+                    </td>
+                    <td>
+                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.ReferralDB')">Referral db</a></b>
+                    </td>
+                    <td>
+                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.PendingEscrows')">Pend Escrows</a></b>
+                    </td>
+                    <td colspan="3">Site Manage</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in @Model)
+                {
+                    <tr id="@item.UserId">
+                        <td>
+                            @item.FirstName
+                        </td>
+                        <td>
+                            @item.LastName
+                        </td>
+                        <td>
+                            @item.CompanyName
+                        </td>
+                        <td>
+                            @item.UserTypeString
+                        </td>
+                        <td>
+                            @item.TIN
+                        </td>
+                        <td>
+                            @item.RegisterDate.ToString("MM/dd/yyyy")
+                        </td>
+                        <td>
+                            @if (item.HasJVMA)
+                            {
+                                <span class="glyphicon glyphicon-ok"></span>
+                            }
+                            else
+                            {
+                                <span>NA</span>
+                            }
+                        </td>
+                        <td>
+                            @item.ReferralDB
+                        </td>
+                        <td>
+                            @item.PendingEscrows
+                        </td>
+                        <td style="text-align: center;">
+                                <a href="@Url.Action("JVMAAccountingReportDisplay", "Admin", new { id = @item.UserId })" title="accounting">
+                                    <span class="glyphicon glyphicon-usd"></span></a>
+                            </td>
+                        <td style="text-align: center;">
+                            <a href="@Url.Action("EditUser", "Admin", new { id = @item.UserId })" title="edit" >
+                                <span class="glyphicon glyphicon-pencil"></span></a>
+                        </td>
+                        @if (item.IsActive)
+                        {
+                            <td>
+                                <a href="@Url.Action("DeactivateUser", "Admin", new { id = @item.UserId, method = "ManageJVMAParticipants" })" title="disable" onclick = "return confirm('Are you sure you wish to deactivate this user?');">
+                                    <span class="glyphicon glyphicon-remove"></span></a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <a href="@Url.Action("ReactivateUserAll", "Admin", new { id = @item.UserId, method = "ManageJVMAParticipants" })" title="activate" onclick = "return confirm('Are you sure you wish to reactivate this user?');">
+                                    <span class="glyphicon glyphicon-ok"></span></a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ManageJVMAParticipants",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

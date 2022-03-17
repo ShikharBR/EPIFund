@@ -1,0 +1,128 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.OrderModel>
+
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+    </div>
+    @if (Model.Count > 0)
+    {
+        <div class="overflow short-xs">
+            <table class="table-striped table" id="tbUsers" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+                        <thead>
+                            <tr>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.AssetIdSortParm')">Asset ID</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.TypeSortParm')">Asset Type</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.NameSortParm')">Asset Name</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.CountySortParm')">County</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.CitySortParm')">City</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.StateSortParm')">ST</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.ApnSortParm')">APN</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DateOrderSortParm')">Date of<br /> Order</a></b></th> 
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.StatusSortParm')">Order<br /> Status</a></b></th>
+                                <th><b><a style="cursor: pointer" title="Order Fullfilled By" onclick="postForm('@ViewBag.BySortParam')">By</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DateSubmitSortParm')">Date of<br /> Submit</a></b></th>
+                                <th style="min-width: 44px"><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DueSortParm')">&#36; due</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DatePaidSortParm')">Date Paid</a></b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < @Model.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (Model[i].OrderStatus == Inview.Epi.EpiFund.Domain.Enum.OrderStatus.Pending)
+                                        {
+                                            <a style="font-weight:bold;" href="@Url.Action("CompleteAsset", "Admin", new { id = Model[i].AssetId })">@Model[i].AssetNumber</a>
+                                        }
+                                        else
+                                        {
+                                            <b>@Model[i].AssetNumber</b>
+                                        }
+                                
+                                    </td>
+                                    <td>
+                                        @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(@Model[i].Type)
+                                    </td>
+                                    <td>
+                                        @Model[i].AssetName
+                                    </td>
+                                    <td>
+                                        @Model[i].County
+                                    </td>
+                                    <td>
+                                        @Model[i].City
+                                    </td>
+                                    <td>
+                                        @Model[i].State
+                                    </td>
+                                    <td>
+                                        @Model[i].APN
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DateOfOrder.HasValue)
+                                        {
+                                            <span>
+                                                @Model[i].DateOfOrder.Value.ToShortDateString()
+                                            </span>
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].OrderStatus == Inview.Epi.EpiFund.Domain.Enum.OrderStatus.Pending)
+                                        {
+                                            <b style="color:blue">Pending</b>
+                                        }
+                                        else
+                                        {
+                                            <b style="color:green">Completed</b>
+                                        }
+                                    </td>
+                                    <td>
+                                         @if (!string.IsNullOrEmpty(Model[i].FirstName) && !string.IsNullOrEmpty(Model[i].LastName))
+                                        {
+                                           <b title="@Model[i].FirstName @Model[i].LastName">@Model[i].FirstName[0]@Model[i].LastName[0]</b> 
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DateOfSubmit.HasValue)
+                                        {
+                                            <span>@Model[i].DateOfSubmit.Value.ToShortDateString()</span>
+                                        }
+                                        else
+                                        {
+                                            <span>&nbsp;</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (@Model[i].Due.HasValue)
+                                        {
+                                         <span>@Model[i].Due.Value.ToString("C0")</span>   
+                                        }
+                                        else
+                                        {
+                                            <span>&nbsp;</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DatePaid.HasValue)
+                                        {
+                                            <span>@Model[i].DatePaid.Value.ToShortDateString()</span>
+                                        }
+                                    </td>
+                            
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+        </div>
+    }
+</div>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ViewOrderHistory",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

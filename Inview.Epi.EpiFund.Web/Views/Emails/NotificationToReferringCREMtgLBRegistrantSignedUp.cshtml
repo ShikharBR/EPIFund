@@ -1,0 +1,32 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.NotificationToReferringCREMtgLBRegistrantSignedUp
+To: @Model.EmailAddress
+From: USCREonline <info@uscreonline.com>
+Subject: A new principal has registered!
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.NameOfReferredBy,</p>
+
+<p>Congratulations!  One of your referred Principals in the Joint Marketing Campaign with US CRE Online has registered at USC as &#91;Principal Investor Owner/Seller&#93; &#91;Principal Investor Buyer&#93; specific to the following Commercial Real Estate:</p>
+
+<p>Name of Registrant: @Model.NameOfRegistrant</p>
+
+<p>Contact Data of Registrant:	Phone:  @Model.RegistrantPhone	e mail: @Model.RegistrantEmail</p>
+
+    @if (!string.IsNullOrEmpty(Model.AssetNumber))
+    {
+        <p>Asset ID #: @Model.AssetNumber    <span style="margin-left: 10px;">@Model.AssetDescription</span></p>
+
+        <p>The Asset has a list price/CMV of @Model.AssetListPrice.ToString("C0").  A requisite of any formal interest (LOI) to CRE Investment is Proof of Funds (POF) (both equity and debt as applicable).  We encourage you to follow up with said principal to provide your respective services.</p>
+    }
+
+<p>We hope that you will find the data provided at US CRE Online as a valuable tool for your commercial real estate ventures... creating viable, immediately available foundations for joint ventures between your debt and equity capital relationships.  We invite and encourage you to share the marketing information with your principal contingents as a foundation for creating the opportunity for more transactional pipeline.</p>
+
+<p>You may login in anytime at http://www.uscreonline.com to access all areas of the site now available to you and to view all authorized asset files. You will receive via e mail market status updates on each Asset ID as such information becomes available.  USC will e mail introduction brochures to you on new available assets as they are uploaded going forward.  You are also encouraged to visit your &#91;&#34;My USC Page&#34;&#93; to review your inventory of referred principals and their respective site activity status.</p>
+
+<p>Thank you for being a valued Registrant of United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+    <p>The Professional Staff</p>
+    <p><b>US CRE Online, LLC</b></p>
+</body>
+</html>

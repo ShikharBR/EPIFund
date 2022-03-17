@@ -1,0 +1,221 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.JVMANetUpSearchResultsModel
+@using System.Collections
+@{
+    ViewBag.Title = "Inventory of Marketing Network Uploads";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="page-header">@Model.FullName: Inventory of Marketing Network Uploads</h3>
+<div>
+    <select id="ddlRowCount" onchange="changeResults()">
+        <option value="25">25</option>
+        <option value="50" selected="selected">50</option>
+        <option value="75">75</option>
+        <option value="100">100</option>
+    </select>
+</div>
+@using (Html.BeginForm("ViewNetworkUploadInventory", "DataPortal", FormMethod.Post, new { id = "searchForm" }))
+{
+    @Html.HiddenFor(s => s.FullName)
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#searchbox">
+                        <button class="btn btn-default btn-xs" style="border: 1px solid #888">
+                                Search Inventory
+                        </button>
+                    </a>
+                </h4>
+            </div>
+            <div id="searchbox" class="panel-collapse collapse">
+                <div class="panel-body">
+
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.FirstName, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.FirstName)
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.LastName, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.LastName)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.City, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.City)
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.State, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.DropDownListFor(s => s.State, @Model.States)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateOfUploadStart, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateOfUploadStart, new { @class = "datepicker" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateOfUploadEnd, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateOfUploadEnd, new { @class = "datepicker" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateRefRegisteredStart, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateRefRegisteredStart, new { @class = "datepicker" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateRefRegisteredEnd, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateRefRegisteredEnd, new { @class = "datepicker" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateOfDFSubmittalStart, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateOfDFSubmittalStart, new { @class = "datepicker" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateOfDFSubmittalEnd, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateOfDFSubmittalEnd, new { @class = "datepicker" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateOfLOISubmittalStart, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateOfLOISubmittalStart, new { @class = "datepicker" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateOfLOISubmittalEnd, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateOfLOISubmittalEnd, new { @class = "datepicker" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.SelectedAssetType, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.DropDownListFor(s => s.SelectedAssetType, @Model.AssetTypes, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <div class="input-group">
+                                @Html.HiddenFor(model => Model.Page)
+                                @Html.HiddenFor(model => Model.SortOrder)
+                                @Html.HiddenFor(model => Model.RowCount)
+                                <input type="submit" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto;" onclick="clearSearchValues()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@{ Html.RenderPartial("_JVMAUserNetworkUploadHistoryListView", Model.Uploads); }
+
+<script>
+    $(function () {
+        $(".datepicker").datepicker();
+    });
+    $('.pagination li a').click(function () {
+        var href = $(this).attr('href');
+        if (typeof href !== typeof undefined && href !== false) {
+            var page = parseInt(getPageNumber(href));
+            $('#Page').val(page);
+            $('#searchForm').submit();
+            return false;
+        }
+    });
+    function postForm(order) {
+        $('#SortOrder').val(order);
+        $('#searchForm').submit();
+        return false;
+    }
+    function changeResults() {
+        $('#RowCount').val($('#ddlRowCount').val());
+        $('#searchForm').submit();
+    }
+</script>

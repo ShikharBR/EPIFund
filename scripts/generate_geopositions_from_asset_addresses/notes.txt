@@ -1,0 +1,8 @@
+Script created in order to generate longitude and latitude coordinates from all of the complete asset addresses in the database for google maps.
+
+- The asset will be skipped if its missing a critical piece of the address
+- All of the errors and sql will be generated at the end of the process, the json is saved to disk immediately.
+- the assets are processed in order just in case some progress breaking error occurs. If an error occurs that breaks the script, just set the startBy val to asset # you left off of(or go one up)
+- I havent tested remote DB connections
+- the generateSqlFromJson.js script generates the lng/lat SQL from the json result of index.js without bothering with google's API.
+- Dont increase the elapsed timer too fast or you'll get us temporarily blocked by google. If we keep getting blocked they will eventually ban. I blew the limit at 7 geocoding request in a second for reference.

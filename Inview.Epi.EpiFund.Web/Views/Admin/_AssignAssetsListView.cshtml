@@ -1,0 +1,82 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.AssetAssignmentQuickViewModel>
+@{
+    int i = 0;
+}
+<div class="panel panel-default" style="border: 1px solid #B1A795;" id="assignmentsList">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+    </div>
+    <div class="overflow short-xs">
+        <table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 150px">Asset Number</th>
+                        <th style="width: 150px">Status</th>
+                        <th style="width: 150px">Company Users</th>
+                        <th colspan="1">Assign</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+   
+                        foreach (var item in @Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(s => s[i].AssetNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(s => s[i].Status)
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(s => s[i].SelectedCompanyUserId, @item.CompanyUsers, new { @id = "userList" + item.AssetNumber.ToString(), @class = "selectChange", @onchange = "CallChangefunc(this.value,id)" }) @Html.ValidationMessageFor(s => s[i].SelectedCompanyUserId, "")
+                                @Html.HiddenFor(s => s[i].SelectedCompanyUserId, new { id = "hiddenSelectedId" + item.AssetNumber.ToString() })
+                            </td>
+                            <td>
+                               <a href="javascript:SaveAssignment(@item.AssetNumber);" title="Save Assignment">
+                                    <span class="glyphicon glyphicon-saved"></span></a>
+                            </td>
+
+                        </tr>
+                            i++;
+                        }
+                    }
+                </tbody>
+            </table>
+    </div>
+</div>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+
+<script>
+    function verify(i) {
+        if (confirm("Are you sure you wish to reject this IC Admin's application?")) {
+            $('.postLink-' + i).hide();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    
+    function CallChangefunc(val, id) {
+        var res = id.substring(8)
+        var hiddenId = '#hiddenSelectedId' + res;
+        // and update the hidden input's value
+        $(hiddenId).val(val);
+    }
+
+    function SaveAssignment(assetId) {
+
+        var hiddenId = '#hiddenSelectedId' + assetId;
+        var selectedId = $(hiddenId).val();
+        $.post('@Url.Action("SaveAssignment")', "&assetNumber="+assetId + "&selectedUserId=" + selectedId, function (data) {
+            $('#assignmentsList').html(data);
+        });
+    }
+
+</script>

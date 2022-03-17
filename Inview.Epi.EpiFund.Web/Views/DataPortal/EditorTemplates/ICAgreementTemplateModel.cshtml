@@ -1,0 +1,230 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.ICAgreementTemplateModel
+@Html.HiddenFor(s => s.Year)
+@Html.HiddenFor(s => s.Day)
+@Html.HiddenFor(s => s.Month)
+<div class="icagreementtemplatemodel">
+    <h4>Independent Contractor Agreement Fields</h4>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                <label class="control-label">Execution Date</label>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Model.ExecutionDate.ToString("MMMM dd, yyyy")
+            </div>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                <label class="control-label">Expiration Date</label>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Model.ExpirationDate.ToString("MMMM dd, yyyy")
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                <i>Date when your 1st IC Admin Agreement with US CRE Online Expires</i>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.UserFirstName, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.UserFirstName, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.UserFirstName, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.UserLastName, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.UserLastName, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.UserLastName, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.OperatingCorporateName, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.OperatingCorporateName, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <i>Complete only if you intend on providing service for USC under your existing Corporate Entity</i>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.AcronymOfCorporateEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.AcronymOfCorporateEntity, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.AcronymOfCorporateEntity, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <i>If contracting with USC under Corporate Entity, enter acronym for same. Example: acronym for US CRE Online LLC is "USC"</i>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.UserAddressLine1, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.UserAddressLine1, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.UserAddressLine1, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <i>Use Corporate Address if signing up under Corporate Name</i>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.UserAddressLine2, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.UserAddressLine2, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <i>Example: Suite 123</i>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.City, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.City, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.City, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.State, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.State, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.DropDownListFor(s => s.State, @Model.States, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Zip, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.Zip, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.Zip, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Email, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.Email, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.Email, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <i>This will also be your "Log in User Name"</i>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.CorpTitle, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.DropDownListFor(s => s.CorpTitle, @Model.CorporateTitles)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.CorporateTIN, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.CorporateTIN, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.CorporateTIN, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <i>This is required for all IRS Form 1099 Independent Contractors</i>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.LicenseDesc, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.LicenseDesc, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.LicenseDesc, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <i>Define what State or Municipal License you currently perform professional services under. Ex: Real Estate Agent/Broker Contractor, etc.</i>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.LicenseNumber, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.LicenseNumber, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.LicenseNumber, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <i>Enter your State/Municipal Issued License #</i>
+        </div>
+    </div>
+</div>

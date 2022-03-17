@@ -1,0 +1,48 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.ConfirmationFundingPackageSubmittalMBAEmail
+To: @Model.Email
+From: USCREonline <uscre@inviewlabs.com>
+Subject: Asset Entered Binding Escrow
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.Name,</p>
+
+    <p>Thank you for completing and submitting your &#91;CRE Private Funding Package&#93; through US CRE Online.  Please confirm if your submittal included the following requisite data forms:</p>
+    <ul>
+        <li>Operating & Management Resumes of each Corporate Equity Partner</li>
+        <li>Proof of Funds from the Corporate Vesting Entity representing its Equity Participation in the contemplated Funding Package</li>
+        <li>Personal Financial Statement (&#34;PFS&#34;) on each Corporate Equity Partner</li>
+    </ul>
+    <p>Per your instruction at www.uscreonline.com, you elected to have your &#91;CRE Private Funding Package&#93; delivered to the following MBA Member:</p>
+    <table>
+        <tr>
+            <td>MBA Member:</td>
+            <td>@Model.MBAMemberName</td>
+        </tr>
+        <tr>
+            <td>Corporate Name of MBA Member:</td>
+            <td>@Model.MBACorporateName</td>
+        </tr>
+        <tr>
+            <td>Corporate Address of MBA Member:</td>
+            <td>@Model.MBACorporateAddress</td>
+        </tr>
+        <tr><td>Phone # of MBA Member:</td>
+            <td>@Model.MBAPhoneNumber</td>
+        </tr>
+        <tr>
+            <td>E mail address of MBA Member:</td>
+            <td>@Model.MBAEmailAddress</td>
+        </tr>
+    </table>
+    <p>You are encouraged to follow up with your selected MBA Member within 24 business hours to confirm the status of processing of your &#91;CRE Private Funding Package&#93;.  Effectively no one should submit a binding letter of intent to purchase any commercial investment asset without inclusion of POF and or a bonafide CLA.  Time is always of the essence.</p>
+    <p>Your &#91;CRE Private Funding Package&#93;, including your Personal Financial Statement (&#34;PFS&#34;), is stored at your &#91;&#34;My USC Page&#34;&#93;.  You can edit your PFS and submit your Funding Package to any MBA Member, whether in our db or not.  A history of your submittals is stored at your &#91;&#34;My USC Page&#34;&#93; as well.</p>
+    <p>We hope that you will find the data and service provided at US CRE Online as a valuable tool for your commercial real estate ventures... creating viable, immediately available foundations for joint ventures between your debt and equity capital relationships.  We invite and encourage you to fully utilize the USC Data Portal, Inventory, and Automated Communications Modules as a foundation for creating opportunity for more transactional pipeline for your Vesting Entity.</p>
+    <p>US CRE Online, the #1 &#91;Principal to Principal&#93; Commercial Real Estate Data & Communications Portal in the World, is the online CRE Investment Community for the future.  We thank all USC Registrants for their participation at our Portal, and welcome all vested interests in US Commercial Real Estate to join our rapidly expanding community at United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+
+    <p>The Professional Staff</p>
+    <p><b>US CRE Online, LLC</b></p>
+</body>
+</html>

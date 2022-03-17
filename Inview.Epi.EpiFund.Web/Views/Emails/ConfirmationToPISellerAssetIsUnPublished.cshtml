@@ -1,0 +1,74 @@
+﻿@using Postal
+@model Inview.Epi.EpiFund.Web.Models.Emails.ConfirmationPISellerAssetIsUnPublishedEmail
+To: @Model.To
+From: USCREonline <info@uscreonline.com>
+Subject: Confirmation Asset Is Published
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+
+<p>Dear @Model.SellerName,</p>
+
+<p><span style="font-weight:bold; color: red;">CONFIRMATION</span> of unpublished CRE Asset as authorized by US CRE Online Registrant @Model.SellerName:</p>
+
+<p>Please verify that the following summary data on your unpublished CRE Asset Data at USC is accurate:</p>
+
+<table>
+    <tr>
+        <td>Asset ID #:</td>
+        <td>@Model.AssetNumber</td>
+    </tr>
+    <tr>
+        <td>Property address:</td>
+        <td>@Model.AssetAddressOneLine</td>
+    </tr>
+    <tr>
+        <td>Property Type:</td>
+        <td>@Model.AssetDescription</td>
+    </tr>
+    <tr>
+        <td>APN:</td>
+        <td>@Model.APN</td>
+    </tr>
+    <tr>
+        <td>Vesting Entity:</td>
+        <td>@Model.VestingEntity</td>
+    </tr>
+    <tr>
+        <td>Corp Officer:</td>
+        <td>@Model.CorpOfficer</td>
+    </tr>
+    <tr>
+        <td>Date Published:</td>
+        <td>@Model.DatePublished.ToString("MM/dd/yyyy")</td>
+    </tr>
+    <tr>
+        <td>Time Published:</td>
+        <td>@Model.DatePublished.ToString("hh:mm tt PST")</td>
+    </tr>
+</table>
+
+<p>You may &#91;Publish&#93; your Asset or Portfolio of Assets to the USC Private Investor Global Community at any time by following these steps:</p>
+
+    <ol>
+        <li>Go to <a href="http://www.uscreonline.com">http://www.uscreonline.com</a> and log in.</li>
+        <li>From your &#91;&#34;My USC Page&#34;&#93; select the &#91;Manage Assets&#93; tab from the directory.</li>
+        <li>Locate the Asset ID that matches the Asset ID captioned above, and &#60;Click&#62; the Globe <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> under the Right Column Header &#91;Publish&#93;.</li>
+        <ul>
+            <li><span style="color: red;">Note:</span> when there is an image of <span class="glyphicon glyphicon-lock" aria-hidden="true"></span> it means that the Asset is presently published to the USC Global PI db</li>
+        </ul>
+    </ol>
+
+<p>You are in complete &#91;user&#93; control of the Data File for the above captioned Asset ID #.  All Data Files are fully encrypted with USC operating within multiple layers of firewalls making it virtually impossible for any unauthorized party to have access to your data file and uploaded documentation.  You will be able to Publish and Un-Publish your Asset and or selected Portfolio of Assets to the US CRE Online Community of NAR, MBA and Private Investor db Members at any time.  Communications between you and all respondents to your &#91;Asset Memorandum Publications&#93; is always initiated through fully secured and private intra-site e mails through your respective &#91;&#34;My USC Page&#34;&#93;: thus you will not be sharing any of your contact data with respondents until you initiate the invitation.</p>
+
+<p style="margin-left:10px;"><span style="color:red; font-weight:bold;">Note: </span>all communications from &#91;Asset Memorandum Publication&#93; respondents are required to come from qualified principal investors registered at and with US CRE Online.com.  Verifiable Proof of Funds and Corporate Resumes are standard, requisite attachments to all LOI submittals to USC Asset Holders with published Assets.  Automated &#34;Letters of Intent to Acquire Assets&#34; are available for all USC Registrants at any CRE Asset View page.  We encourage you to review the template to become familiar with it should you elect to utilize the LOI in the future.</p>
+
+<p>Should any of our registered principals submit a CRE Search Criteria request form through US CRE Online that qualifies your property, you will receive an automated notification of said Registrant&#39;s interest.  You will be able to further communications with each such USC Registrant through USC&#39;s fully secured and private intra-site e mails at your respective &#91;&#34;My USC Page&#34;&#93;.</p>
+
+<p>Thank you for being a valued Principal Investor Registrant of United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+
+<p>The Professional Staff</p>
+<p>US CRE Online, LLC</p>
+</body>
+</html>

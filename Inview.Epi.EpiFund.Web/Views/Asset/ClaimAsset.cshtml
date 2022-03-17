@@ -1,0 +1,799 @@
+﻿
+@{
+    ViewBag.Title = "Claim Asset";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @section JqueryConfirmCss {
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    }
+    @section JqueryConfirmJs {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+    }
+}
+<style>
+    .col-center {
+        margin-right: auto;
+        margin-left: auto;
+    }
+    .box-round {
+        margin: 0 auto;
+        border: solid 1px #999;
+        background: #eee;
+        margin-bottom: 40px;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .m-b20 {
+        margin-bottom: 20px !important;
+    }
+    .h-30x {
+        font-size: 2.143em;
+    }
+    input[type="button"] {
+        -webkit-transition: all 300ms ease;
+        transition: all 0.3s ease 0s;
+        word-wrap: break-word;
+        outline: 0;
+        padding: 8px 12px;
+        font-size: 18px;
+        border-radius: 6px;
+    }
+</style>
+<div class="add-new-property">
+    <div class="section-account">
+        <div class="row">
+            <div class="col-xs-12 text-center"><h1>Add New Property</h1></div>
+        </div>
+        <div class="main-center">
+            <div class="wrapper">
+                <div class="x_panel">
+                    <div class="col-xs-12">
+                        <h3>Find Property</h3>
+                    </div>
+
+                    <input id="AssetActive_Id" name="AssetActive.Id" type="hidden" value="" />
+                    <input id="AssetActiveNumber" name="AssetActive.Number" type="hidden" value="" />
+                    <input type="hidden" name="AssetId" value="" />
+                    <input id="hdnTaxNumbers" name="TaxNumbers" type="hidden" value="" />
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label>Property State<span class="asterisk"></span></label>
+                        <div class="select-box">
+                            <select class="selectpicker" data-Style="select-white" data-val="true" data-val-required="State field is required." id="AssetActive_AssetState" name="AssetActive.AssetState" tabindex="1">
+                                <option value="">State</option>
+                                <option value="AL">Alabama</option>
+                                <option value="AK">Alaska</option>
+                                <option value="AZ">Arizona</option>
+                                <option value="AR">Arkansas</option>
+                                <option value="CA">California</option>
+                                <option value="CO">Colorado</option>
+                                <option value="CT">Connecticut</option>
+                                <option value="DC">District of Columbia</option>
+                                <option value="DE">Delaware</option>
+                                <option value="FL">Florida</option>
+                                <option value="GA">Georgia</option>
+                                <option value="HI">Hawaii</option>
+                                <option value="ID">Idaho</option>
+                                <option value="IL">Illinois</option>
+                                <option value="IN">Indiana</option>
+                                <option value="IA">Iowa</option>
+                                <option value="KS">Kansas</option>
+                                <option value="KT">Kentucky</option>
+                                <option value="LA">Louisiana</option>
+                                <option value="ME">Maine</option>
+                                <option value="MD">Maryland</option>
+                                <option value="MA">Massachusetts</option>
+                                <option value="MI">Michigan</option>
+                                <option value="MN">Minnesota</option>
+                                <option value="MS">Mississippi</option>
+                                <option value="MO">Missouri</option>
+                                <option value="MT">Montana</option>
+                                <option value="NE">Nebraska</option>
+                                <option value="NV">Nevada</option>
+                                <option value="NH">New Hampshire</option>
+                                <option value="NJ">New Jersey</option>
+                                <option value="NM">New Mexico</option>
+                                <option value="NY">New York</option>
+                                <option value="NC">North Carolina</option>
+                                <option value="ND">North Dakota</option>
+                                <option value="OH">Ohio</option>
+                                <option value="OK">Oklahoma</option>
+                                <option value="OR">Oregon</option>
+                                <option value="RI">Rhode Island</option>
+                                <option value="SC">South Carolina</option>
+                                <option value="SD">South Dakota</option>
+                                <option value="TN">Tennessee</option>
+                                <option value="TX">Texas</option>
+                                <option value="UT">Utah</option>
+                                <option value="VT">Vermont</option>
+                                <option value="VI">Virginia</option>
+                                <option value="WA">Washington</option>
+                                <option value="WV">West Virginia</option>
+                                <option value="WI">Wisconsin</option>
+                                <option value="WY">Wyoming</option>
+                            </select>
+                        </div>
+                        <div id="StateValidate" style="color: red; display: none;"></div>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label class="asterisk" for="County">County</label>
+                        <input class="form-control taxno" data-val="true" data-val-required="County is required." id="County" maxlength="50" name="County" tabindex="2" type="text" value="" />
+                        <div id="CountyValidate" style="color: red; display: none;"></div>
+
+                    </div>
+
+                    <div class="clearfix"></div>
+                    <div class="form-group col-xs-12">
+                        <label class="asterisk" for="AssetTaxAssessorNumber">County Assessor Primary Tax ID Number</label>
+                        <input class="form-control taxno" data-val="true" data-val-regex="Please use only letters (a-z), numbers, hyphens &#39;-&#39;, and periods &#39;.&#39; ." data-val-regex-pattern="^[a-zA-Z0-9-.]*$" data-val-required="County Assessor Primary Tax ID Number field is required." id="AssetTaxAssessorNumber" maxlength="50" name="AssetTaxAssessorNumber" tabindex="3" type="text" value="" />
+                        <div id="AssetTaxAssessorNumberValidate" style="color: red; display: none;"></div>
+
+                    </div>
+                    <div class="form-group col-xs-12 m-b0" id='TextBoxesGroup' style="display:none">
+
+                    </div>
+                    <div class="form-group col-xs-12 m-t10 m-b10">
+                        <a href="javascript:void(0)" id="btnAdditionalTaxIdNumber" tabindex="3" class="btn btn-primary btn-sm m-b10"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Additional Tax Id Number</a>
+                        <a href="javascript:void(0)" id="btnRemoveTaxIdNumber" tabindex="4" class="btn btn-primary btn-sm m-b10" style="display:none"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Remove Additional Tax Id Number</a>
+
+                    </div>
+                    <div class="form-group m-t30">
+                        <div class="col-md-8 col-sm-10 text-center col-center">
+                            <button type="submit" class="btn btn-primary full-width" tabindex="5" id="btnCheckMatchingProperty">Check For Matching Property</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Exist Asset For Claim-->
+    <div style="display:none" id="divAlreadyExistProperty">
+        <div id="alreadyExistAssetData">
+
+        </div>
+    </div>
+    <!--Exist Asset For Claim-->
+    <!--Send Msg For Exist Asser With Claimed By Other -->
+    <div class="row m-t40" id="divSendMessage" style="display:none">
+        <div class="col-md-12 col-xs-12 col-center">
+            <div class="box-round gothammedium">
+                <p class="text-center h-24x m-tb20">This property looks like it is owned by someone else.<span class="block">If you would like to dispute ownership, send a message to our Corp Admin below.</span></p>
+                <!--Send Msg For Exist Asset With Claimed By Other -->
+                <textarea class="full-width" cols="20" id="MessageForClaimAsset" maxlength="1000" name="MessageForClaimAsset" placeholder="Type message here..." rows="2" tabindex="6"></textarea>
+                <div class="text-right m-t20"><input type="button" class="btn btn-primary pull-righ" id="btnSendMsg" value="Send" tabindex="7" /></div>
+            </div>
+        </div>
+    </div>
+    <!--Send Msg For Exist Asser With Claimed By Other -->
+    <!--NotFoundAsset-->
+    <div class="row m-t40" id="divNoMatchFound" style="display:none">
+        <div class="col-md-8 col-xs-12 col-center">
+            <div class="box-round gothammedium text-center">
+                <div class="h-30x m-b20">No Match Found</div>
+                <label>Asset Type<span class="asterisk"></span></label>
+                <div class="selectbox">
+                    @Html.DropDownList("AssetType", (ViewBag.AssetTypes as IEnumerable<SelectListItem>), "---")
+                </div>
+                <div id="AssetTypeValidate" style="color: red; display: none;"></div>
+                <input type="button" class="btn btn-primary" id="btnCreateAsset" value="Create Property" tabindex="6" />
+            </div>
+        </div>
+    </div>
+    <!--NotFoundAsset-->
+    <script id="alreadyExistAssetDataTemplate" type="text/x-jquery-tmpl">
+        <div>
+            <input type="hidden" value="${Id}" id="hdnAssetId" />
+            <div class="exist-property">
+                <div class="row">
+                    <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 col-center">
+                        <div class="panel panel-default m-t40">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-sm-8"><h3 class="m-t5 m-b0">Is this your Property?</h3></div>
+                                    <div class="col-sm-4 text-right"><input type="button" class="btn btn-primary" value="Claim Property" tabindex="6" onclick=ClaimAsset.fnGoProveOwnershipPage("${Id}") /></div>
+                                </div>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="row">
+                                    {{if AssetImages}}
+                                    {{each AssetImages}}
+                                    <div class="">
+                                        {{if (Order==1)}}
+                                        <div class="col-sm-4">
+                                            <figure class="property-image large">
+                                                <a href="/Asset/ViewAsset?AssetId=${Id}"><img src="${FileName}" /></a>
+                                            </figure>
+                                        </div>
+                                        {{else}}
+                                        <div class="col-sm-2 p-l0">
+                                            <figure class="property-image small m-b5">
+                                                <a href="/Asset/ViewAsset/${Id}"><img src="${FileName}" /></a>
+                                            </figure>
+                                            {{each AssetVideo}}
+                                            <iframe width="100" controls src="${FileName}"></iframe>
+                                            {{/each}}
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                    {{/each}}
+                                    {{else}}
+                                    <a href="/Asset/ViewAsset?AssetId=${Id}"><img src="/Content/images/dummy.jpg" /></a>
+                                    {{/if}}
+
+                                    <div class="col-sm-6">
+                                        <div class="row">
+                                            <div class="col-xs-12 property-info">
+                                                <div class="address gothambold">
+                                                    {{if IsUserLoggedIn}}${AssetAddress}{{/if}} ${AssetCity}, ${AssetState}
+                                                </div>
+                                                <div class="address-view gothammedium">${AssetName}</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="property-detail">
+                                            <div class="row">
+                                                <div class="col-lg-4 col-sm-6 col-xs-6">Property Type</div>
+                                                <div class="col-lg-8 col-sm-6 col-xs-6"><b>${AssetType}</b></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-4 col-sm-6 col-xs-6">Number of Units</div>
+                                                <div class="col-lg-8 col-sm-6 col-xs-6"><b class="addCommas">${AssetNumberOfUnits}</b></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-4 col-sm-6 col-xs-6">Year Built</div>
+                                                <div class="col-lg-8 col-sm-6 col-xs-6">
+                                                    <b>
+                                                        {{if AssetBuiltYear}}
+                                                        ${AssetBuiltYear}
+                                                        {{else}}
+                                                        &nbsp;
+                                                        {{/if}}
+                                                    </b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+</div>
+<script>
+    (function (n) {
+        function o(i, r, f, o) {
+            var s = {
+                data: o || o === 0 || o === !1 ? o : r ? r.data : {},
+                _wrap: r ? r._wrap : null,
+                tmpl: null,
+                parent: r || null,
+                nodes: [],
+                calls: d,
+                nest: g,
+                wrap: nt,
+                html: tt,
+                update: it
+            };
+            return i && n.extend(s, i, {
+                nodes: [],
+                parent: r
+            }), f && (s.tmpl = f, s._ctnt = s._ctnt || s.tmpl(n, s), s.key = ++e, (c.length ? u : t)[e] = s), s
+        }
+
+        function s(t, i, u) {
+            var f, e = u ? n.map(u, function (n) {
+                return typeof n == "string" ? t.key ? n.replace(/(<\w+)(?=[\s>])(?![^>]*_tmplitem)([^>]*)/g, "$1 " + r + '="' + t.key + '" $2') : n : s(n, t, n._ctnt)
+            }) : t;
+            return i ? e : (e = e.join(""), e.replace(/^\s*([^<\s][^<]*)?(<[\w\W]+>)([^>]*[^>\s])?\s*$/, function (t, i, r, u) {
+                f = n(r).get();
+                b(f);
+                i && (f = l(i).concat(f));
+                u && (f = f.concat(l(u)))
+            }), f ? f : l(e))
+        }
+
+        function l(t) {
+            var i = document.createElement("div");
+            return i.innerHTML = t, n.makeArray(i.childNodes)
+        }
+
+        function p(t) {
+            return new Function("jQuery", "$item", "var $=jQuery,call,__=[],$data=$item.data;with($data){__.push('" + n.trim(t).replace(/([\\'])/g, "\\$1").replace(/[\r\t\n]/g, " ").replace(/\$\{([^\}]*)\}/g, "{{= $1}}").replace(/\{\{(\/?)(\w+|.)(?:\(((?:[^\}]|\}(?!\}))*?)?\))?(?:\s+(.*?)?)?(\(((?:[^\}]|\}(?!\}))*?)\))?\s*\}\}/g, function (t, i, r, u, f, e, o) {
+                var c = n.tmpl.tag[r],
+                    l, s, a;
+                if (!c) throw "Unknown template tag: " + r;
+                return l = c._default || [], e && !/\w$/.test(f) && (f += e, e = ""), f ? (f = h(f), o = o ? "," + h(o) + ")" : e ? ")" : "", s = e ? f.indexOf(".") > -1 ? f + h(e) : "(" + f + ").call($item" + o : f, a = e ? s : "(typeof(" + f + ")==='function'?(" + f + ").call($item):(" + f + "))") : a = s = l.$1 || "null", u = h(u), "');" + c[i ? "close" : "open"].split("$notnull_1").join(f ? "typeof(" + f + ")!=='undefined' && (" + f + ")!=null" : "true").split("$1a").join(a).split("$1").join(s).split("$2").join(u || l.$2 || "") + "__.push('"
+            }) + "');}return __;")
+        }
+
+        function w(t, i) {
+            t._wrap = s(t, !0, n.isArray(i) ? i : [v.test(i) ? i : n(i).html()]).join("")
+        }
+
+        function h(n) {
+            return n ? n.replace(/\\'/g, "'").replace(/\\\\/g, "\\") : null
+        }
+
+        function k(n) {
+            var t = document.createElement("div");
+            return t.appendChild(n.cloneNode(!0)), t.innerHTML
+        }
+
+        function b(f) {
+            function p(f) {
+                function p(n) {
+                    n = n + a;
+                    s = v[n] = v[n] || o(s, t[s.parent.key + a] || s.parent)
+                }
+                var y, h = f,
+                    c, s, l;
+                if (l = f.getAttribute(r)) {
+                    while (h.parentNode && (h = h.parentNode).nodeType === 1 && !(y = h.getAttribute(r)));
+                    y !== l && (h = h.parentNode ? h.nodeType === 11 ? 0 : h.getAttribute(r) || 0 : 0, (s = t[l]) || (s = u[l], s = o(s, t[h] || u[h]), s.key = ++e, t[e] = s), i && p(l));
+                    f.removeAttribute(r)
+                } else i && (s = n.data(f, "tmplItem")) && (p(s.key), t[s.key] = s, h = n.data(f.parentNode, "tmplItem"), h = h ? h.key : 0);
+                if (s) {
+                    for (c = s; c && c.key != h;) c.nodes.push(f), c = c.parent;
+                    delete s._ctnt;
+                    delete s._wrap;
+                    n.data(f, "tmplItem", s)
+                }
+            }
+            for (var a = "_" + i, c, l, v = {}, h, s = 0, y = f.length; s < y; s++)
+                if ((c = f[s]).nodeType === 1) {
+                    for (l = c.getElementsByTagName("*"), h = l.length - 1; h >= 0; h--) p(l[h]);
+                    p(c)
+                }
+        }
+
+        function d(n, t, i, r) {
+            if (!n) return c.pop();
+            c.push({
+                _: n,
+                tmpl: t,
+                item: this,
+                data: i,
+                options: r
+            })
+        }
+
+        function g(t, i, r) {
+            return n.tmpl(n.template(t), i, r, this)
+        }
+
+        function nt(t, i) {
+            var r = t.options || {};
+            return r.wrapped = i, n.tmpl(n.template(t.tmpl), t.data, r, t.item)
+        }
+
+        function tt(t, i) {
+            var r = this._wrap;
+            return n.map(n(n.isArray(r) ? r.join("") : r).filter(t || "*"), function (n) {
+                return i ? n.innerText || n.textContent : n.outerHTML || k(n)
+            })
+        }
+
+        function it() {
+            var t = this.nodes;
+            n.tmpl(null, null, null, this).insertBefore(t[0]);
+            n(t).remove()
+        }
+        var a = n.fn.domManip,
+            r = "_tmplitem",
+            v = /^[^<]*(<[\w\W]+>)[^>]*$|\{\{\! /,
+            t = {},
+            u = {},
+            f, y = {
+                key: 0,
+                data: {}
+            },
+            e = 0,
+            i = 0,
+            c = [];
+        n.each({
+            appendTo: "append",
+            prependTo: "prepend",
+            insertBefore: "before",
+            insertAfter: "after",
+            replaceAll: "replaceWith"
+        }, function (r, u) {
+            n.fn[r] = function (e) {
+                var o = [],
+                    h = n(e),
+                    c, s, a, v, l = this.length === 1 && this[0].parentNode;
+                if (f = t || {}, l && l.nodeType === 11 && l.childNodes.length === 1 && h.length === 1) h[u](this[0]), o = this;
+                else {
+                    for (s = 0, a = h.length; s < a; s++) i = s, c = (s > 0 ? this.clone(!0) : this).get(), n(h[s])[u](c), o = o.concat(c);
+                    i = 0;
+                    o = this.pushStack(o, r, h.selector)
+                }
+                return v = f, f = null, n.tmpl.complete(v), o
+            }
+        });
+        n.fn.extend({
+            tmpl: function (t, i, r) {
+                return n.tmpl(this[0], t, i, r)
+            },
+            tmplItem: function () {
+                return n.tmplItem(this[0])
+            },
+            template: function (t) {
+                return n.template(t, this[0])
+            },
+            domManip: function (r, u, e) {
+                if (r[0] && n.isArray(r[0])) {
+                    for (var o = n.makeArray(arguments), s = r[0], l = s.length, h = 0, c; h < l && !(c = n.data(s[h++], "tmplItem")););
+                    c && i && (o[2] = function (t) {
+                        n.tmpl.afterManip(this, t, e)
+                    });
+                    a.apply(this, o)
+                } else a.apply(this, arguments);
+                return i = 0, f || n.tmpl.complete(t), this
+            }
+        });
+        n.extend({
+            tmpl: function (i, r, f, e) {
+                var h, c = !e;
+                if (c) e = y, i = n.template[i] || n.template(null, i), u = {};
+                else if (!i) return i = e.tmpl, t[e.key] = e, e.nodes = [], e.wrapped && w(e, e.wrapped), n(s(e, null, e.tmpl(n, e)));
+                return i ? (typeof r == "function" && (r = r.call(e || {})), f && f.wrapped && w(f, f.wrapped), h = n.isArray(r) ? n.map(r, function (n) {
+                    return n ? o(f, e, i, n) : null
+                }) : [o(f, e, i, r)], c ? n(s(e, null, h)) : h) : []
+            },
+            tmplItem: function (t) {
+                var i;
+                for (t instanceof n && (t = t[0]); t && t.nodeType === 1 && !(i = n.data(t, "tmplItem")) && (t = t.parentNode););
+                return i || y
+            },
+            template: function (t, i) {
+                return i ? (typeof i == "string" ? i = p(i) : i instanceof n && (i = i[0] || {}), i.nodeType && (i = n.data(i, "tmpl") || n.data(i, "tmpl", p(i.innerHTML))), typeof t == "string" ? n.template[t] = i : i) : t ? typeof t != "string" ? n.template(null, t) : n.template[t] || n.template(null, v.test(t) ? t : n(t)) : null
+            },
+            encode: function (n) {
+                return ("" + n).split("<").join("&lt;").split(">").join("&gt;").split('"').join("&#34;").split("'").join("&#39;")
+            }
+        });
+        n.extend(n.tmpl, {
+            tag: {
+                tmpl: {
+                    _default: {
+                        $2: "null"
+                    },
+                    open: "if($notnull_1){__=__.concat($item.nest($1,$2));}"
+                },
+                wrap: {
+                    _default: {
+                        $2: "null"
+                    },
+                    open: "$item.calls(__,$1,$2);__=[];",
+                    close: "call=$item.calls();__=call._.concat($item.wrap(call,__));"
+                },
+                each: {
+                    _default: {
+                        $2: "$index, $value"
+                    },
+                    open: "if($notnull_1){$.each($1a,function($2){with(this){",
+                    close: "}});}"
+                },
+                "if": {
+                    open: "if(($notnull_1) && $1a){",
+                    close: "}"
+                },
+                "else": {
+                    _default: {
+                        $1: "true"
+                    },
+                    open: "}else if(($notnull_1) && $1a){"
+                },
+                html: {
+                    open: "if($notnull_1){__.push($1a);}"
+                },
+                "=": {
+                    _default: {
+                        $1: "$data"
+                    },
+                    open: "if($notnull_1){__.push($.encode($1a));}"
+                },
+                "!": {
+                    open: ""
+                }
+            },
+            complete: function () {
+                t = {}
+            },
+            afterManip: function (t, r, u) {
+                var f = r.nodeType === 11 ? n.makeArray(r.childNodes) : r.nodeType === 1 ? [r] : [];
+                u.call(t, r);
+                b(f);
+                i++
+            }
+        })
+    })(jQuery);
+    v = {
+        hdnTaxNumbers: "#hdnTaxNumbers",
+        AssetTaxAssessorNumber: "#AssetTaxAssessorNumber",
+        btnAdditionalTaxIdNumber: "#btnAdditionalTaxIdNumber",
+        btnRemoveTaxIdNumber: "#btnRemoveTaxIdNumber",
+        alreadyExistAssetData: "#alreadyExistAssetData",
+        divSendMessage: "#divSendMessage",
+        divNoMatchFound: "#divNoMatchFound",
+        alreadyExistAssetDataTemplate: "#alreadyExistAssetDataTemplate",
+        TextBoxesGroup: "#TextBoxesGroup",
+        btnCheckMatchingProperty: "#btnCheckMatchingProperty",
+        divAlreadyExistProperty: "#divAlreadyExistProperty",
+        AssetState: "#AssetActive_AssetState",
+        btnSendMsg: "#btnSendMsg",
+        MessageForClaimAsset: "#MessageForClaimAsset",
+        btnCreateAsset: "#btnCreateAsset",
+        AssetActive_Id: "#AssetActive_Id",
+        AssetActiveNumber: "#AssetActiveNumber",
+        frmAssetClaim: "#frmAssetClaim",
+        StateValidate: "#StateValidate",
+        AssetTaxAssessorNumberValidate: "#AssetTaxAssessorNumberValidate",
+        County: "#County",
+        CountyValidate: "#CountyValidate",
+        AssetType: "#AssetType",
+        AssetTypeValidate: "#AssetTypeValidate"
+    };
+    counter = 2;
+    $(document).ready(function () {
+        $(document).on("keyup", "input.taxno", function () {
+            var n = $(this).attr("id"), t;
+            $(v.divAlreadyExistProperty).hide();
+            $(v.divNoMatchFound).hide();
+            $(v.divSendMessage).hide();
+            t = new RegExp("[a-zA-Z0-9-.]+");
+            $(this).val() != "" ? $(this).val() != t.exec($(this).val()) ? $("#div" + n).html("Please use only letters (a-z), numbers, hyphens '-', and periods '.' .").show() : $("#div" + n).html("").hide() : $("#div" + n).html("").hide()
+        });
+        $(document).on("change", "input.taxno", function () {
+            ClaimAsset.findDuplicates($(this).attr("id"))
+        });
+        ClaimAsset.fnPageLoad()
+    });
+    ClaimAsset = {
+        fnPageLoad: function () {
+            ClaimAsset.fnValidateOnKeyUp();
+            ClaimAsset.fnAddMultipleTextBoxFortaxnumber();
+            ClaimAsset.fnOnChangeState();
+            $(v.btnCheckMatchingProperty).click(function () {
+                $(v.AssetTypeValidate).html("").hide()
+                if (!ClaimAsset.fnIsvalidForm())
+                    return !1;
+                for (i = 2; i < counter; i++)
+                    if ($("#divtextbox" + i).html() != "")
+                        return ScrollOnWithoutTarget(),
+                            !1;
+                var n = ClaimAsset.findDuplicates();
+                if (n == !1)
+                    return ScrollOnWithoutTarget(),
+                        !1;
+                ClaimAsset.fnGetTaxNumbers();
+                ClaimAsset.fnCheckPropertyAlreadyExist()
+            });
+            $(v.btnSendMsg).click(function () {
+                $(v.MessageForClaimAsset).val() == "" ? $.alert({
+                    title: "Alert!",
+                    content: "Please enter message.",
+                    buttons: {
+                        Ok: {
+                            btnClass: "btn btn-primary",
+                            keys: ["enter"],
+                            text: "Ok"
+                        }
+                    }
+                }) : ClaimAsset.fnSaveSendMessage()
+            });
+            $(v.btnCreateAsset).click(function () {
+                if ($(v.AssetType).val() === '') $(v.AssetTypeValidate).html("Please select an asset type.").show()
+                else ClaimAsset.fnGoToCreatAssetPage()
+            })
+        },
+        fnGoProveOwnershipPage: function (n) {
+            window.location.href = "/Asset/ProveOwnership?AssetId=" + n
+        },
+        fnAddMultipleTextBoxFortaxnumber: function () {
+            $(v.btnAdditionalTaxIdNumber).click(function () {
+                counter == 2 && $(v.btnRemoveTaxIdNumber).show();
+                $(v.TextBoxesGroup).show();
+                var n = $(document.createElement("div")).attr("id", "TextBoxDiv" + counter);
+                n.after().html("<label>Additional Tax Number #" + counter + ' : <\/label><input type="text" tabindex="3" maxlength="50" class = "form-control taxno  m-b10" name="textbox' + counter + '" id="textbox' + counter + '" value="" ><div id="divtextbox' + counter + '" style="display:none;color:red;"><\/div>');
+                n.appendTo("#TextBoxesGroup");
+                counter++
+            });
+            $(v.btnRemoveTaxIdNumber).click(function () {
+                if (counter == 2)
+                    return $(v.TextBoxesGroup).hide(),
+                        $.alert({
+                            title: "Alert!",
+                            content: "No more textbox to remove.",
+                            buttons: {
+                                Ok: {
+                                    btnClass: "btn btn-primary",
+                                    keys: ["enter"],
+                                    text: "Ok"
+                                }
+                            }
+                        }),
+                        !1;
+                counter--;
+                $("#TextBoxDiv" + counter).remove();
+                counter == 2 && $(v.btnRemoveTaxIdNumber).hide()
+            })
+        },
+        fnGetTaxNumbers: function () {
+            var n = "";
+            for (i = 2; i < counter; i++)
+                n += $("#textbox" + i).val() + ",";
+            n = n.slice(0, -1);
+            $(v.hdnTaxNumbers).val(n)
+        },
+        findDuplicates: function (n) {
+            var t = !1;
+            return jQuery(".taxno").each(function (n, i) {
+                var r = jQuery(i).val();
+                r != "" && jQuery(".taxno").each(function (n, u) {
+                    if (jQuery(u).val().toLowerCase() == r.toLowerCase() && jQuery(i).attr("name") != jQuery(u).attr("name")) {
+                        t = !0;
+                        var f = jQuery(u).attr("name");
+                        return
+                    }
+                })
+            }),
+                t ? ($.alert({
+                    title: "Alert!",
+                    content: "You can not enter duplicate assessor primary tax id number.",
+                    buttons: {
+                        Ok: {
+                            btnClass: "btn btn-primary",
+                            keys: ["enter"],
+                            text: "Ok",
+                            action: function () {
+                                $("#" + n).focus()
+                            }
+                        }
+                    }
+                }),
+                    !1) : !0
+        },
+        fnCheckPropertyAlreadyExist: function () {
+            $.ajax({
+                url: "/Asset/CheckPropertyExists",
+                data: {
+                    AssessorParcelNumber: $(v.AssetTaxAssessorNumber).val() + "," + $(v.hdnTaxNumbers).val(),
+                    State: $(v.AssetState).val(),
+                    County: $(v.County).val()
+                },
+                cache: !1,
+                async: !1,
+                type: "GET",
+                dataType: "JSON",
+                contentType: "application/json",
+                success: function (n) {
+                    var t, i;
+                    n != null && (n.Assetdata,
+                        n.IsClaimed,
+                        n.AssetId != "" ? ($(v.AssetActive_Id).val(n.AssetId),
+                            $(v.AssetActiveNumber).val(n.AssetNumber),
+                            n.IsClaimed == !1 ? (t = "",
+                                $(v.alreadyExistAssetData).html(""),
+                                i = $(v.alreadyExistAssetDataTemplate).tmpl(n.Assetdata).html(),
+                                t += i,
+                                $(v.alreadyExistAssetData).append(t),
+                                $(v.divAlreadyExistProperty).show(),
+                                $(v.divNoMatchFound).hide(),
+                                $(v.divSendMessage).hide()) : ($(v.divAlreadyExistProperty).hide(),
+                                    $(v.divNoMatchFound).hide(),
+                                    $(v.divSendMessage).show())) : ($(v.divAlreadyExistProperty).hide(),
+                                        $(v.divNoMatchFound).show(),
+                                        $(v.divSendMessage).hide()))
+                },
+                error: function (jqXHR, exception) {
+                    console.error(jqXHR, exception)
+                },
+                failure: function (response) {
+                    console.error(response)
+                }
+            })
+        },
+        fnSaveSendMessage: function () {
+            $.ajax({
+                url: "/Asset/SaveMessage",
+                data: {
+                    AssetId: $(v.AssetActive_Id).val(),
+                    Message: $(v.MessageForClaimAsset).val()
+                },
+                cache: !1,
+                async: !1,
+                type: "GET",
+                dataType: "JSON",
+                contentType: "application/json",
+                success: function (n) {
+                    n != null && $.alert({
+                        title: "Success!",
+                        content: "Send Message Successfully.",
+                        buttons: {
+                            Ok: {
+                                btnClass: "btn btn-primary",
+                                keys: ["enter"],
+                                text: "Ok",
+                                action: function () {
+                                    window.location.href = "/Asset/ClaimAsset"
+                                }
+                            }
+                        }
+                    })
+                }
+            })
+        },
+        fnGoToCreatAssetPage: function () {
+            window.location.href = "/Admin/Create?assetType=" + $(v.AssetType).val() + "&portfolioName=&isPaper=false&isPortfolio=false&isNewPF=false&NewPfName=&taxParcelNumber="
+        },
+        fnIsvalidForm: function () {
+            var n = !0;
+            return ($(v.AssetState).val() == "" ? (n = !1,
+                $(v.StateValidate).html("State field is required.").show()) : $(v.StateValidate).html("").hide(),
+                $(v.AssetTaxAssessorNumber).val() == "" ? (n = !1,
+                    $(v.AssetTaxAssessorNumberValidate).html("County Assessor Primary Tax ID Number field is required.").show()) : $(v.AssetTaxAssessorNumberValidate).html() != "" ? n = !1 : $(v.AssetTaxAssessorNumberValidate).html("").hide(),
+                n == !1) ? !1 : !0
+        },
+        fnValidateOnKeyUp: function () {
+            $(v.AssetState).change(function () {
+                $(v.AssetState).val() == "" ? $(v.StateValidate).html("State field is required.").show() : $(v.StateValidate).html("").hide()
+            });
+            $(v.AssetTaxAssessorNumber).keyup(function () {
+                if ($(v.AssetTaxAssessorNumber).val() == "")
+                    $(v.AssetTaxAssessorNumberValidate).html("County Assessor Primary Tax ID Number field is required.").show();
+                else {
+                    $(v.AssetTaxAssessorNumberValidate).html("").hide();
+                    var n = new RegExp("[a-zA-Z0-9-.\s ]+");
+                    $(this).val() != "" && ($(this).val() != n.exec($(this).val()) ? $(v.AssetTaxAssessorNumberValidate).html("Please use only letters (a-z), numbers, hyphens '-', and periods '.' .").show() : $(v.AssetTaxAssessorNumberValidate).html("").hide())
+                }
+            })
+        },
+        fnOnChangeState: function () {
+            $(v.AssetState).change(function () {
+                $(v.divAlreadyExistProperty).hide();
+                $(v.divNoMatchFound).hide();
+                $(v.divSendMessage).hide()
+            })
+        }
+    }
+</script>
+
+@*<div id="">
+        <h2>Add New Property</h2>
+        @Html.Label("Which Type Asset?")
+        @Html.DropDownList("assetType", (ViewBag.AssetType as IEnumerable<SelectListItem>), "---")
+        <br />
+        @Html.Label("State")
+        @Html.DropDownList("State", (new SelectList(Model.States, "Value", "Text"))))
+        <br />
+        @Html.Label("County")
+        @Html.TextBox("County", "")
+        <br />
+        @Html.Label("Tax Parcel Number")
+        @Html.TextBox("TaxParcelNumber", "", new { @class = "parcelNumber" })
+        <br />
+        @Html.CheckBox("isPaper") Is Paper Asset?
+        <br />
+        @Html.CheckBox("isPortfolio", new { @onclick = "OnChangeCheckbox (this)" }) Is this Asset part of a Portfolio?
+        <div id="portfolioDiv" style="display: none">
+            @Html.Label("Select from existing Portfolios")
+            @Html.DropDownList("portFolioName", (ViewBag.PortfolioList as IEnumerable<SelectListItem>), "---")
+            <br />
+            @Html.CheckBox("isNewPF", new { @onclick = "OnChangeNewPF (this)" }) Create a new Portfolio?
+            <div id="newPFDiv" style="display: none">
+                @Html.Label("Portfolio Name")
+                @Html.TextBox("NewPfName", "")
+                <em id="errorMsg" style="display: none">This Portfolio already exists</em>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button id="cancelCreation" type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+        <button type="button" onclick="verify();" class="btn btn-primary">Create Asset</button>
+    </div>*@
+

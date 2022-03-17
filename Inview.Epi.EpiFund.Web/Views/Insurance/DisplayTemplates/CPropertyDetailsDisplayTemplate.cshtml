@@ -1,0 +1,80 @@
+﻿@model List<CommercialPropertyDetails>
+
+@using Inview.Epi.EpiFund.Domain.Helpers
+@using Inview.Epi.EpiFund.Domain.Enum
+
+@{
+    List<Tuple<string, string>> groups = new List<Tuple<string,string>>();
+    foreach (var detail in Model)
+    {
+        var desc = Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(detail);
+        var group = desc.Split('~');
+        groups.Add(new Tuple<string, string>(group.First(), group.Last()));
+    }
+
+    var sections = groups.GroupBy(s => s.Item1).ToList();
+    int sectionCount;
+    sectionCount = sections.Count;
+    if (sectionCount % 2 == 1)
+    {
+        sectionCount--;
+    }
+}
+
+
+@for (int i = 0; i < (sections.Count-1); i = i + 2)
+{
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="input-group">
+                <label>@sections[i].Key.ToString()</label>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="input-group">
+                <ul>
+                    @foreach (var j in sections[i])
+                    {
+                        <li class="property-feature">@j.Item2</li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="input-group">
+                <label>@sections[i + 1].Key.ToString()</label>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="input-group">
+                <ul>
+                    @foreach (var j in sections[i + 1])
+                    {
+                        <li class="property-feature">@j.Item2</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+@if (sections.Count % 2 == 1)
+{
+       
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="input-group">
+                <label>@sections.Last().Key</label>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="input-group">
+                <ul>
+                    @foreach (var j in sections.Last())
+                    {
+                        <li class="property-feature">@j.Item2</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}

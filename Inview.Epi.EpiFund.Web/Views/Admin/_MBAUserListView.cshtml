@@ -1,0 +1,161 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.UserQuickViewModel>
+
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+    </div>
+    <div class="overflow short-xs" id="UserView">
+        <table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+            <thead>
+                <tr>
+                    <td>
+                        <b>Name</b>
+                    </td>
+                    <td>
+                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.TypeSortParm')">User Type</a></b>
+                    </td>
+                    <td>
+                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.CitySortParm')">City</a></b>
+                    </td>
+                    <td>
+                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.StateSortParm')">State</a></b>
+                    </td>
+                    <td>Date of Register
+                    </td>
+                    <td>NCND
+                    </td>
+                    <td>Referred by JVMA
+                    </td>
+                    <td>Assets of Int
+                    </td>
+                    <td>IPA's
+                    </td>
+                    <td>Search Criteria
+                    </td>
+                    <td>POF / CLA
+                    </td>
+                    <td>Escrow
+                    </td>
+                    <td colspan="4">Site Manage</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in @Model)
+                {
+                    <tr id="@item.UserId">
+                        <td>
+                            @item.FullName
+                        </td>
+                        @*<td style="width: 200px;">
+                            @item.LastName
+                        </td>*@
+                        <td>
+                            @item.UserTypeString
+                        </td>
+                        <td>
+                            @item.City
+                        </td>
+                        <td>
+                            @item.State
+                        </td>
+                        <td>
+                            @item.RegisterDate.ToString("MM/dd/yyyy")
+                        </td>
+                        <td>
+                             @if (item.HasNCND)
+                            {
+                                <a href="@Url.Action("DownloadNCND", "Records", new { id = @item.UserId })"><span class="glyphicon glyphicon-ok"></span></a>
+                            }
+                            else
+                            {
+                                 
+                                <span>NA</span>
+                            }
+                        
+                        </td>
+                        <td>
+                            @if (item.ReferredByJVMA && item.ReferredByUserId.HasValue)
+                            {
+                                <a href="@Url.Action("EditUser", "Admin", new { id = @item.ReferredByUserId.Value })" title="view referring user's profile">Yes</a>
+                            }
+                            else
+                            {
+                                <span>No</span>
+                            }
+                        </td>
+                        <td>
+                            @Html.Raw(item.AssetsOfInterest)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("AdminUserSignedMDAList", "Records", new { id = @item.UserId })">@item.NumberOfSignedMDAs</a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("UserSearchList", "Admin", new { id = @item.UserId })">@item.NumberOfSearchCriteria</a>
+                        </td>
+                        <td>
+                            @(item.HasPOFCLA ? "Yes" : "No")
+                        </td>
+                        <td>
+                            @(item.InEscrow ? "Yes" : "No")
+                        </td>
+                        @if (item.ICStatus.HasValue)
+                        {
+                            if (item.ICStatus.Value == Inview.Epi.EpiFund.Domain.Enum.ICStatus.Pending)
+                            {
+                            <td>
+                                <a href="@Url.Action("ApproveICAdmin", "Admin", new { id = @item.UserId, name = @item.FullName, email = @item.Username })" title="approve">
+                                    <span class="glyphicon glyphicon-thumbs-up"></span></a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("RejectICAdmin", "Admin", new { id = @item.UserId, name = @item.FullName, email = @item.Username })" title="reject" onclick = "return confirm('Are you sure you wish to reject this IC Admin's application?');">
+                                    <span class="glyphicon glyphicon-thumbs-down"></span></a>
+                            </td>
+                            }
+                            else if (item.ICStatus.Value == Inview.Epi.EpiFund.Domain.Enum.ICStatus.Approved)
+                            {
+                            <td colspan="1"></td>
+                            <td style="text-align: center;">
+                                <a href="@Url.Action("AccountingReportDisplay", "Admin", new { id = @item.UserId })" title="accounting">
+                                    <span class="glyphicon glyphicon-usd"></span></a>
+                            </td>
+                            }
+                            else
+                            {
+                            <td colspan="2"></td>
+                            }
+                        }
+                        else
+                        {
+                            <td colspan="2"></td>
+                        }
+                        <td style="text-align: center;">
+                            <a href="@Url.Action("EditUser", "Admin", new { id = @item.UserId })" title="edit">
+                                <span class="glyphicon glyphicon-pencil"></span></a>
+                        </td>
+                        @if (item.IsActive)
+                        {
+                            <td>
+                                <a href="@Url.Action("DeactivateUserMBA", "Admin", new { id = @item.UserId })" title="disable" onclick = "return confirm('Are you sure you wish to deactivate this user?');">
+                                    <span class="glyphicon glyphicon-remove"></span></a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <a href="@Url.Action("ReactivateUserMBA", "Admin", new { id = @item.UserId })" title="activate" onclick = "return confirm('Are you sure you wish to reactivate this user?');">
+                                    <span class="glyphicon glyphicon-ok"></span></a>
+                            </td>
+                        }
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ManageMBAMembersReg",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

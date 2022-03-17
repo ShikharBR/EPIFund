@@ -1,0 +1,21 @@
+﻿<html>
+<body>
+<p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+
+<p>Dear @Model.RecipientName,</p>
+
+<p>US CRE Online.com Asset View Report:</p>
+
+<p>Asset ID # @Model.AssetNumber, @Model.AssetDescription has been viewed by the following USCREonline users:</p>
+    <table>
+        <tr>
+            <td>Full Name</td>
+            <td>View Date</td>
+        </tr>
+        @Model.UserViews
+    </table>
+
+<p>The Professional Staff</p>
+<p>US CRE Online, LLC</p>
+</body>
+</html>

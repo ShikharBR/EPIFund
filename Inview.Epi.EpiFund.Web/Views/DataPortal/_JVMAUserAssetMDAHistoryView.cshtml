@@ -1,0 +1,116 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.JVMAUserMDAViewModel>
+
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+    </div>
+    @if (Model.Count > 0)
+    {
+        int increment = 1;
+        <div class="overflow short-xs">
+            <table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+                        <thead>
+                            <tr>
+                                <th><b># IPA</b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.AssetNumber')">Asset ID</a></b></th>
+                                <th><b>Asset<br /> Image</b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.AssetType')">Asset<br /> Type</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.State')">ST</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DateOfMDA')">Date of<br /> IPA</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DateOfDFSubmittal')">Date of <span title="test">DF</span><br /> Submittal</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DateOfLOISubmittal')">Date of<br /> LOI Sub</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.ProposedCOE')">Proposed<br />COE Date</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.ActualCOE')">Actual<br />COE Date</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DateRefFeePaid')">Date USC<br />Ref Fee Pd</a></b></th>
+                                <th><b>Ref Fee Pd</b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < @Model.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @increment
+                                    </td>
+                                    <td>
+                                        @Model[i].AssetNumber
+                                    </td>
+                                    <td>
+                                        <a data-toggle="modal" data-target="#lightbox-@i">
+                                            <img style="width: 60px;" src="@Url.Action("GetMainImageSource", "Admin", new { assetId = Model[i].AssetId })" />
+                                        </a>
+                                        <div class="modal fade" id="lightbox-@i" tabindex="-1" role="dialog" aria-labelledby="mrtgcalc-label" aria-hidden="true" data-backdrop="false">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header" style="border-bottom: 0">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <img src="@Url.Action("GetMainImageSource", "Admin", new { assetId = Model[i].AssetId })" style="width: 560px;" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @Model[i].AssetTypeString
+                                    </td>
+                                    <td>
+                                        @Model[i].State
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DateOfMDA.HasValue)
+                                        {
+                                            <span>@Model[i].DateOfMDA.Value.ToString("MM/dd/yyyy")</span>   
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DateOfDFSubmittal.HasValue)
+                                        {
+                                            <span>@Model[i].DateOfDFSubmittal.Value.ToString("MM/dd/yyyy")</span>   
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DateOfLOISubmittal.HasValue)
+                                        {
+                                            <span>@Model[i].DateOfLOISubmittal.Value.ToString("MM/dd/yyyy")</span>   
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].ProposedCOE.HasValue)
+                                        {
+                                            <span>@Model[i].ProposedCOE.Value.ToString("MM/dd/yyyy")</span>   
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].ActualCOE.HasValue)
+                                        {
+                                            <span>@Model[i].ActualCOE.Value.ToString("MM/dd/yyyy")</span>   
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DateRefFeePaid.HasValue)
+                                        {
+                                            <span>@Model[i].DateRefFeePaid.Value.ToString("MM/dd/yyyy")</span>   
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DateRefFeePaid.HasValue)
+                                        {
+                                            <span>@Model[i].RefFeePaid</span>   
+                                        }
+                                    </td>
+                                </tr>
+                                increment++;
+                            }
+                        </tbody>
+                    </table>
+        </div>
+    }
+</div>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ViewUserMDAHistory",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

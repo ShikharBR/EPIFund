@@ -1,0 +1,197 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.ViewModel.SellerLOIReceivedViewModel>
+@{
+    ViewBag.Title = "Summary Report Of LOIs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Summary Report Of Received LOI's</h2>
+<br />
+<div class="well well-sm alert-info">
+    <b>Instructions</b>
+    <br />
+    <ul>
+        <li>Click on # link on the left of each row to download LOI.</li>
+        <li>The LOI’s listed below are only those generated through the USC Portal by Registered USC Principal Investors.  Each LOI Document Set is to include the submitting Entity's POF and Corporate Resume.</li>
+        <li>Click on the Corporate Name to view the full Contact Data on the Entity who submitted the respective LOI.</li>
+    </ul>
+</div>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Corporate Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>City</th>
+            <th>ST</th>
+            <th>Contact Phone #</th>
+            <th>Date LOI Received</th>
+            <th>Name of Asset</th>
+            <th>Offer Price</th>
+            <th>Proposed COE Date</th>
+        </tr>
+    </thead>
+    @for (int i = 1; i <= Model.Count; i++)
+    {
+        if (!Model[i - 1].HasReadLOI)
+        {
+        <tr class="alert-danger">
+            <td><a href="@Url.Action("DownloadLOI", "Investors", new { userFileId = Model[i - 1].UserFileId, loiId = @Model[i - 1].LoiId })">@i</a></td>
+            <td><a data-toggle="modal" data-target="#contactInformation-@i">@Model[i - 1].CorporateName</a></td>
+            <td>@Model[i - 1].FirstName</td>
+            <td>@Model[i - 1].LastName</td>
+            <td>@Model[i - 1].City</td>
+            <td>@Model[i - 1].State</td>
+            <td><a data-toggle="modal" data-target="#contactInformationOfCorporateRep-@i">@Model[i - 1].ContactPhoneNumber</a></td>
+            <td>@Model[i - 1].DateLOIReceived.ToString("MM/dd/yyyy")</td>
+            <td><a data-toggle="modal" data-target="#assetNavigate-@i">@string.Format("{0}", string.IsNullOrEmpty(Model[i - 1].NameOfAsset) ? "N/A" : Model[i-1].NameOfAsset)</a></td>
+            <td>@Model[i - 1].OfferPrice.ToString("C0")</td>
+            <td>@Model[i - 1].ProposedCOEDate.ToString("MM/dd/yyyy")</td>
+        </tr>
+        }
+        else
+        {
+        <tr>
+            <td><a href="@Url.Action("DownloadLOI", "Investors", new { userFileId = Model[i - 1].UserFileId, loiId = @Model[i - 1].LoiId })">@i</a></td>
+            <td><a data-toggle="modal" data-target="#contactInformation-@i">@Model[i - 1].CorporateName</a></td>
+            <td>@Model[i - 1].FirstName</td>
+            <td>@Model[i - 1].LastName</td>
+            <td>@Model[i - 1].City</td>
+            <td>@Model[i - 1].State</td>
+            <td><a data-toggle="modal" data-target="#contactInformationOfCorporateRep-@i">@Model[i - 1].ContactPhoneNumber</a></td>
+            <td>@Model[i - 1].DateLOIReceived.ToString("MM/dd/yyyy")</td>
+            <td><a data-toggle="modal" data-target="#assetNavigate-@i">@string.Format("{0}", string.IsNullOrEmpty(Model[i - 1].NameOfAsset) ? "N/A" : Model[i-1].NameOfAsset)</a></td>
+            <td>@Model[i - 1].OfferPrice.ToString("C0")</td>
+            <td>@Model[i - 1].ProposedCOEDate.ToString("MM/dd/yyyy")</td>
+        </tr>
+        }
+        <div class="modal fade" id="contactInformation-@i" tabindex="-1" role="dialog" aria-labelledby="contactInformation-label-@i" aria-hidden="true" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="contactInformation-label-@i">Additional Contact Information</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Home Phone #:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i - 1].ContactHomeNumber
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Fax #:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i - 1].ContactFaxNumber
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Cell Phone #:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i - 1].ContactCellNumber
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Work Phone #:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i - 1].ContactWorkNumber
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Email:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i - 1].Email
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Alternate Email:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i - 1].AlternateEmail
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn" value="Close" data-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="contactInformationOfCorporateRep-@i" tabindex="-1" role="dialog" aria-labelledby="contactInformationOfCorporateRep-label-@i" aria-hidden="true" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="contactInformationOfCorporateRep-label-@i">Corporate Rep Contact Information</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Cell Phone #:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i - 1].CorporateRepCellNumber
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="control-group">
+                                    <label>Work #:</label>
+                                </div>
+                                <div class="controls">
+                                    @Model[i - 1].CorporateRepBusinessNumber
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn" value="Close" data-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="assetNavigate-@i" tabindex="-1" role="dialog" aria-labelledby="assetNavigate-label-@i" aria-hidden="true" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <label>Where would you like to go?</label>
+                        <br />
+                        @Html.ActionLink("Go to Asset View", "ViewAsset", "DataPortal", new { id = Model[i - 1].AssetId }, new { @class = "btn btn-primary" })
+                        @Html.ActionLink("Go to Edit Asset", "UpdateAsset", "Admin", new { id = Model[i - 1].AssetId }, new { @class = "btn btn-primary" })
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn" value="Close" data-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</table>
+
+

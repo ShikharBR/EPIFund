@@ -1,0 +1,12 @@
+﻿@using Inview.Epi.EpiFund.Domain.Helpers
+<nav class="navbar navbar-default secondary-nav" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <ul class="nav navbar-nav">
+        @*<li class="@Html.IsSelected(action: "Index", controller: "Home")"><a href="@Url.Action("Index", "Home")">Home</a></li>*@
+        <li class="@Html.IsSelected(action: "MortgageCalculator")"><a id="mortgageCalculatorLink" data-toggle="modal" data-target="#mrtgcalc" style="cursor:pointer">Mortgage Calculator</a></li>
+        <li class="@Html.IsSelected(action: "EquityCalculator")"><a id="equityCalculatorLink" data-toggle="modal" data-target="#eqcalc" style="cursor:pointer">Equity Calculator</a></li>
+        <li class="@Html.IsSelected(action: "CAPRate")"><a id="capCalculatorLink" data-toggle="modal" data-target="#capcalc" style="cursor:pointer">CAP Rate Calculator</a></li>
+        <li class="@Html.IsSelected(action: "AboutUs", controller: "Home")"><a href="@Url.Action("AboutUs", "Home")">About USCREonline</a></li>
+        <li class="@Html.IsSelected(action: "ContactUs")"><a href="@Url.Action("ContactUs", "Home")">Contact Us</a></li>
+    </ul>
+</nav>

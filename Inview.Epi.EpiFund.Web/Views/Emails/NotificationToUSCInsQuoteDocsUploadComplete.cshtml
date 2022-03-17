@@ -1,0 +1,65 @@
+﻿@using Postal
+@model Inview.Epi.EpiFund.Web.Models.Emails.NotificationToUSCInsQuoteDocsUploadCompleteEmail
+To: @Model.To
+From: USCREonline <info@uscreonline.com>
+Subject: @Model.Subject
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+<p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <table style="width: 100%;">
+        <tr>
+            <td align="left">To US CRE online Corp Admin,</td>
+            <td align="right">@Model.Date.ToString("MMMM d, yyyy")</td>
+        </tr>
+    </table>
+    <p><b style="color:darkgoldenrod">US CRE Online.com</b> P&C Insurance Quote Order Delivery Confirm – for PI Buyer:</p>
+    <table>
+        <tr>
+            <td width="80"></td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Ins. Underwriter:</td>
+                        <td>@Model.CompanyName</td>
+                    </tr>
+                    <tr>
+                        <td>Asset ID&#35;:</td>
+                        <td>@Model.AssetId</td>
+                    </tr>
+                    <tr>
+                        <td>Property Address:</td>
+                        <td>@Model.AssetAddress1 @Model.AssetAddress2, @Model.AssetCity, @Model.AssetState @Model.AssetZip</td>
+                    </tr>
+                    <tr>
+                        <td>Property Type:</td>
+                        <td>@Model.AssetDescription</td>
+                    </tr>
+                    <tr>
+                        <td>APN:</td>
+                        <td>@Model.APN</td>
+                    </tr>
+                    <tr>
+                        <td>Registrant (PI-B)</td>
+                        <td>@Model.BuyerName</td>
+                    </tr>
+                    <tr>
+                        <td>PI-B Vesting Entity:</td>
+                        <td>@Model.VestingEntity</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <p>
+        The above captioned Insurance Underwriter has completed the upload of the P&C Insurance Quote for the above captioned commercial
+        investment property with USCREonline.com LLC "USC". 
+    </p>
+    <p>
+        Per the terms and conditions of its Service Agreement with USC, @Model.CompanyName will not be compensated for its defined services (e.g., 
+        providing said quote) according thereto.
+    </p>
+    <span>The Professional Staff</span><br />
+    <span><b style="color:darkgoldenrod"><i>US CRE Online, LLC</i></b></span>
+</body>
+</html>

@@ -1,0 +1,41 @@
+﻿@model List<MultiFamilyPropertyDetails>
+
+@using Inview.Epi.EpiFund.Domain.Helpers
+@using Inview.Epi.EpiFund.Domain.Enum
+
+@{
+    List<Tuple<string, string>> groups = new List<Tuple<string, string>>();
+    foreach (var detail in Model)
+    {
+        var desc = Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(detail);
+        var group = desc.Split('~');
+        groups.Add(new Tuple<string, string>(group.First(), group.Last()));
+    }
+
+    var sections = groups.GroupBy(s => s.Item1).ToList();
+    int sectionCount;
+    sectionCount = sections.Count;
+    if (sectionCount % 2 == 1)
+    {
+        sectionCount--;
+    }
+}
+
+
+@foreach (var item in sections)
+{
+    if (item.Key.Contains("Landscape Watering System"))
+    {
+    <label>Landscape Watering System</label>
+    }
+    else
+    {
+    <label>@item.Key.ToString()</label>
+    }
+    <ul>
+        @foreach (var j in item)
+        {
+            <li>@j.Item2</li>
+        }
+    </ul>
+}

@@ -1,0 +1,39 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.ConfirmationLOISubmittalEmail
+To: @Model.UserEmail
+From: USCREonline <info@uscreonline.com>
+Subject: CRE Private Funding Package
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.UserName,</p>
+
+        <p>Thank you for completing and submitting your &#91;CRE Private Funding Package&#93; through US CRE Online.  Please confirm if your submittal included the following requisite data forms:</p>
+            <ol>
+            <li>Operating & Management Resumes of each Corporate Equity Partner</li>
+            <li>Proof of Funds from the Corporate Vesting Entity representing its Equity Participation in the contemplated Funding Package</li>
+            <li>Personal Financial Statement (&#34;PFS&#34;) on each Corporate Equity Partner</li>
+            </ol>
+        <p>Per your instruction at www.uscreonline.com, you elected to have your &#91;CRE Private Funding Package&#93; delivered to the following MBA Member:</p>
+    <ol>
+            <li>MBA Member:				@Model.MBAMember</li>
+            <li>Corporate Name of MBA Member:		@Model.MBACorporateName</li>
+            <li>Corporate Address of MBA Member:	@Model.MBACorporateAddress</li>
+            <li>Phone # of MBA Member:			@Model.MBAPhone               </li>
+            <li>E mail address of MBA Member:		@Model.MBAEmail           </li>
+        </ol>
+        <p>You are encouraged to following up with your selected MBA Member within 24 business hours to follow up on the status of the processing of your CRE Private Funding Package.  Effectively no one should submit a binding letter of intent to purchase any commercial investment asset without inclusion of POF and or a bonafide CLA.  Time is always of the essence.</p>
+
+        <p>We hope that you will find the data and service provided at US CRE Online as a valuable tool for your commercial real estate ventures... creating viable, immediately available foundations for joint ventures between your debt and equity capital relationships.  We invite and encourage you to fully utilize Data Portal, Inventory, and automated Communications Modules as a foundation for creating opportunity for more transactional pipeline for your Vesting Entity.</p>
+
+        <p>You may login in anytime at http://www.uscreonline.com to access all areas of the site now available to you and to view all authorized asset files. You will receive via e mail market status updates on each Asset ID as such information becomes available.  USC will e mail introduction brochures to you on new available assets as they are uploaded going forward.</p>
+
+        <p>Thank you for being a valued Registrant of United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+
+        <p>The Professional Staff</p>
+        <p>US CRE Online, LLC</p>
+    
+
+</body>
+</html>

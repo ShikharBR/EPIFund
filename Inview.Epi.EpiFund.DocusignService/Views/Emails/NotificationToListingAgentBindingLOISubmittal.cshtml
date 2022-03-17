@@ -1,0 +1,53 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.NotificationToListingAgentBindingLOISubmittalEmail
+To: @Model.RecipientEmail
+From: USCREonline <uscre@inviewlabs.com>
+Subject: Asset Status Change
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.ListingAgent</p>
+
+    <p>As you have been prior notified, <b style="color:blue;">EPI Fund LLC</b> is presently engaged with one or more vetted principals who have expressed interest in your Listing identified below:</p>
+
+    <ol>
+        <li>Asset Name: @Model.ProjectName</li>
+        <li>@Model.Description</li>
+    </ol>
+
+    <p>We are pleased to present to you and your Property Owner Client the following Binding LOI Package on behalf of our registered and vetted Principal Investor on the CRE Asset defined above:</p>
+
+    <ol>
+        <li>Registered Principal Investor of EPI (Vesting): @Model.Vesting</li>
+        <li>Registered Principal Investor of EPI (Principal): @Model.Principal</li>
+        <li>Contact Data for Principal of Vesting Entity: @Model.Phone</li>
+        <li>
+            <p>Documents Attached Herewith:</p>
+            <ol>
+                <li>1.	Binding Letter of Intent to Purchase</li>
+                <li>2.	Proof of Funds for Vesting Principal</li>
+                <li>3.	Resume of Vesting Principal</li>
+            </ol>
+        </li>
+    </ol>
+
+    <p>We look forward to following up with you in the coming days for status reports on your submittal of the Binding LOI and attachments to your client.</p>
+
+    <p>Thank you for your time and consideration in the very important process.  Please do not hesitate to call me directly with any questions or comments you may have regarding the subject matter herein.</p>
+
+    <pre style="color:blue;">
+    Kenneth Perkins
+    MM: EPI Fund, LLC: NV LLC
+    3870 E. Flamingo Road, Suite A2-145
+    Las Vegas, NV  89121
+    702-883-1927 [Dir]
+    877-717-7506 [Fax]
+    ken@epifund.com
+    admin@epifund.com
+    www.epifund.com  
+    </pre>
+
+    <p><b>Legal Disclaimer</b>:  The information contained in this message may be privileged and confidential.  It is intended to be read only by the individual or entity to whom it is addressed or by their designee.  If the reader of this message is not the intended recipient, you are on notice that any distribution of this message, in any form, is strictly prohibited.  If you have received this message in error, please immediately notify the sender and delete or destroy any copy of this message.  All reasonable precautions have been taken to ensure no viruses are present in this e-mail.  We do not accept responsibility for any loss or damage arising from the use of this e-mail or attachments.  We recommend that you subject these to your virus checking procedures prior to use.</p>
+</body>
+</html>

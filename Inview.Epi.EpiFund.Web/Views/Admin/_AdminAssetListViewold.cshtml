@@ -1,0 +1,224 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.AdminAssetQuickListModel>
+@{
+    bool showCreatedBy = false;   
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var checkboxes = $("input[type='checkbox']");
+
+        checkboxes.click(function () {
+            if (checkboxes.is(":checked")) {
+                $("#notifyRegistrant").removeClass("hide", !checkboxes.is(":checked"));
+            } else {
+                $("#notifyRegistrant").addClass("hide", !checkboxes.is(":checked"));
+            }
+        });
+    });
+</script>
+<p>Select checkbox(es) and click "Hold and Notify Registrant" to hold asset for specific registrant (per asset search criteria). Note: Assets without a checkbox is already on hold for another registrant and is waiting action before being published to general database. If you would like to circumvent this process, you may click on the globe icon to publish to the general database.</p>
+
+@Html.PagedListPager(Model, page => Url.Action("ManageAssets",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+        @if ((Inview.Epi.EpiFund.Domain.Enum.UserType)ViewBag.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin2 ||
+            (Inview.Epi.EpiFund.Domain.Enum.UserType)ViewBag.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+        {
+            <a style="float: right; color: white;" title="export master db spreadsheet" href="@Url.Action("DownloadAssetList", "Admin")">
+                <span class="glyphicon glyphicon-export"></span>
+            </a>
+        }
+        </div>
+    @if (Model.Count > 0)
+    {
+        using (Html.BeginForm("GetSelectedItemsAndNotifyRegistrant", "Admin", FormMethod.Post))
+        { 
+        <div class="overflow short-xs">
+            <table class="table table-striped" id="tbAssets" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.AssetIdSortParm')">Asset #</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.TypeSortParm')">Type</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.AddressSortParm')">Address</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.CitySortParm')">City</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.StateSortParm')">State</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.AssetNameSortParm')">Asset Name</a></b>
+                        </td>
+                        @if (Model.First().isSpecificType)
+                        {
+                            if (Model.First().SquareFeet > 0)
+                            {
+                            <td>
+                                <b>Sq.Ft.</b>
+                            </td>
+                            }
+                            else
+                            {
+                            <td>
+                                <b>Units</b>
+                            </td>
+                                
+                            }
+                        }
+                        else
+                        {
+                            <td>
+                                <b>#Units/Sq.Ft</b>
+                            </td>
+                        }
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.StatusSortParm')">Status</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.ShowSortParm')">Public?</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.CreatedSortParm')">Created By</a></b>
+                        </td>
+                        <td colspan="5"></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < @Model.Count; i++)
+                    {
+                        string username = string.Empty;
+                        string email = string.Empty;
+                        if (!string.IsNullOrEmpty(Model[i].CreatedBy))
+                        {
+                            username = Model[i].CreatedBy.Split('~')[0];
+                            email = Model[i].CreatedBy.Split('~')[1];
+                        }
+                    <tr id="@Model[i].AssetId">
+                        @if (Model[i].IsOnHold)
+                        {
+                            <td>@Html.HiddenFor(s => Model[i].AssetId) @Html.HiddenFor(s => Model[i].AssetNumber)</td>
+                        }
+                        else
+                        {
+                            <td>@Html.CheckBoxFor(s => Model[i].IsSelected)@Html.HiddenFor(s => Model[i].AssetId) @Html.HiddenFor(s => Model[i].AssetNumber)</td>
+                        }
+                        <td style="width: 200px;">
+                            <a href="@Url.Action("ViewAsset", "DataPortal", new { id = @Model[i].AssetId, fromManageAssets = true })">
+                                @Model[i].AssetNumber
+                            </a>
+                        </td>
+                        <td style="width: 200px;">
+                            @Model[i].Type
+                        </td>
+                        <td style="width: 200px;word-wrap: break-word;" class="kill-width-for-td-address">
+                            @Model[i].AddressLine1
+                        </td>
+                        <td style="width: 100px;word-wrap: break-word;">
+                            @Model[i].City
+                        </td>
+                        <td style="width: 100px;">
+                            @Model[i].State
+                        </td>
+                        <td style="width: 100px;word-wrap: break-word;">
+                            @Model[i].AssetName
+                        </td>
+                        <td style="width: 100px;">
+                            <span class="padNumber">@(Model[i].SquareFeet > 0 ? Model[i].SquareFeet.ToString() : Model[i].NumberOfUnits.ToString())</span>
+                        </td>
+                        <td style="width: 100px;">
+                            @Model[i].Status
+                        </td>
+                        <td style="width: 100px;">
+                            @Model[i].Show
+                        </td>
+                        <td>
+                            <label title="@email" style="font-size:10px;font-weight:initial;">@username</label>
+                        </td>
+                        @if ((Model[i].Show == "No" && Model[i].ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin) ||
+                            Model[i].ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin ||
+                            Model[i].ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin2)
+                        {
+                            <td style="text-align: center;">
+                                <a onclick="EditAsset('@Model[i].AssetId')" style="cursor:pointer" title="edit">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                            </td>
+                        }
+                        @*<td>
+            <a href="@Url.Action("AssetAssignmentDetails", "Admin", new { id = @Model[i].AssetId })" title="assignment">
+                    <span class="glyphicon glyphicon-briefcase"></span></a>
+        </td>*@
+                        @if (Model[i].ControllingUserType != Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin)
+                        {
+                            <td>
+                                <a href="@Url.Action("AssetEscrowProcess", "Admin", new { id = @Model[i].AssetId })" title="escrow">
+                                    <span class="glyphicon glyphicon-usd"></span>
+                                </a>
+                            </td>
+                            <td>
+                                @if (Model[i].Show == "Yes")
+                                {
+                                    <a href="@Url.Action("UnPublishAsset", "Admin", new { id = @Model[i].AssetId })" title="unpublish" onclick="return confirm('Are you sure you wish to unpublish this asset?');">
+                                        <span class="fa fa-lock" style="font-size: 13px; margin-top: 1px;"></span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("PublishAsset", "Admin", new { id = @Model[i].AssetId })" title="publish" onclick="return confirm('Are you sure you wish to publish this asset?');">
+                                        <span class="glyphicon glyphicon-globe"></span>
+                                    </a>
+                                }
+                            </td>
+                            <td>
+                                @if (Model[i].IsSampleAsset)
+                                {
+                                    <a title="current sample asset">
+                                        <span class="glyphicon glyphicon-star" style="font-size: 12px;"></span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("SetSampleAsset", "Admin", new { id = @Model[i].AssetId })" title="set sample asset" onclick="return confirm('Are you sure you wish to make this asset the sample asset that will appear on the main page?');">
+                                        <span class="glyphicon glyphicon-star-empty" style="font-size: 12px;"></span>
+                                    </a>
+                                }
+                            </td>
+                            <td>
+                                <a href="@Url.Action("DeleteAsset", "Admin", new { id = @Model[i].AssetId })" title="delete" onclick="return confirm('Are you sure you wish to delete this asset?');">
+                                    <span class="fa fa-trash-o" style="font-size: 12px;"></span>
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td colspan="5"></td>
+                        }
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="">
+            <input type="submit" class="btn btn-default proceed hide" value="Hold Asset(s) and Notify Registrant" id="notifyRegistrant" style="width: 300px; margin-bottom: 30px;" />
+        </div>
+        }
+    }
+</div>
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ManageAssets",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

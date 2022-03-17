@@ -1,0 +1,243 @@
+﻿<div class="modal fade" id="assetTypeModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5>Create Asset</h5>
+            </div>
+            @using (Html.BeginForm("create", "admin", FormMethod.Get, new { @id = "CreateAssetPartialCreateAssetForm" }))
+            {
+            <div class="modal-body text-center" onload="removeAllItem()">
+                @Html.Label("Which Type Asset?")
+                <select class="selectpicker" data-Style="select-white" data-val="true" id="CreateAssetPartialAssetType" name="CreateAssetPartialAssetType" tabindex="1"></select>
+                <div id="CreateAssetPartialAssetTypeValidate" style="color: red; display: none;"></div>
+                <br />
+                @Html.Label("State")
+                <select class="selectpicker" data-Style="select-white" data-val="true" id="CreateAssetPartialState" name="CreateAssetPartialState" tabindex="1"></select>
+                <div id="CreateAssetPartialStateValidate" style="color: red; display: none;"></div>
+                <br />
+                @Html.Label("County")
+                @Html.TextBox("CreateAssetPartialCounty", "")
+                <div id="CreateAssetPartialCountyValidate" style="color: red; display: none;"></div>
+                <br />
+                @Html.Label("Tax Parcel Number")
+                @Html.TextBox("CreateAssetPartialTaxParcelNumber", "", new { @class = "CreateAssetPartialParcelNumber" })
+                <div id="CreateAssetPartialTaxParcelNumberValidate" style="color: red; display: none;"></div>
+                <br />
+                @Html.CheckBox("CreateAssetPartialIsPaper") Is Paper Asset?
+                <br />
+                @Html.CheckBox("CreateAssetPartialIsPortfolio", new { @onclick = "createAssetPartialOnChangeCheckbox (this)" }) Is this Asset part of a Portfolio?
+                <div id="CreateAssetPartialPortfolioDiv" style="display: none">
+                    @Html.Label("Select from existing Portfolios")
+                    <select class="selectpicker" data-Style="select-white" data-val="true" id="CreateAssetPartialPortFolioName" name="CreateAssetPartialPortFolioName" tabindex="1"></select>
+                    <div id="CreateAssetPartialPortFolioNameValidate" style="color: red; display: none;"></div>
+                    <br />
+                    @Html.CheckBox("CreateAssetPartialIsNewPF", new { @onclick = "createAssetPartialOnChangeNewPF (this)" }) Create a new Portfolio?
+                    <div id="CreateAssetPartialNewPFDiv" style="display: none">
+                        @Html.Label("Portfolio Name")
+                        @Html.TextBox("CreateAssetPartialNewPfName", "")
+                        <div id="CreateAssetPartialNewPfNameValidate" style="color: red; display: none;"></div>
+                        <em id="CreateAssetPartialErrorMsg" style="display: none">This Portfolio already exists</em>
+                    </div>
+                </div>
+
+            </div>
+                <div class="modal-footer">
+                    <button id="CreateAssetPartialCancelCreation" onclick="cancelAssetPartial();" type="button" class="btn btn-warning" >Cancel</button>
+                    <button type="button" onclick="createAssetPartialVerify();" class="btn btn-primary">Create Asset</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function cancelAssetPartial() {
+        $(".CreateAssetPartialParcelNumber").val('');
+        $("#CreateAssetPartialAssetType").val('');
+        $("#CreateAssetPartialNewPfName").val('');
+        $("#CreateAssetPartialState").val('');
+        $("#CreateAssetPartialCounty").val('');
+        $("#CreateAssetPartialIsPortfolio").prop("checked", false);
+        $("#CreateAssetPartialIsPaper").prop("checked", false);
+        $("#CreateAssetPartialPortfolioDiv").hide();
+        $("#CreateAssetPartialTaxParcelNumberValidate").hide();
+        $("#CreateAssetPartialAssetTypeValidate").hide();
+        $("#CreateAssetPartialStateValidate").hide();
+        $("#CreateAssetPartialCountyValidate").hide();
+
+        $('#assetTypeModal').modal('hide');
+    }
+    function createAssetPartialVerify() {
+        var success = validate();
+        if (success) {
+            var tpn = $(".CreateAssetPartialParcelNumber").val();
+            var type = $("#CreateAssetPartialAssetType").val();
+            var newPF = $("#CreateAssetPartialNewPfName").val();
+            var state = $("#CreateAssetPartialState").val();
+            var county = $("#CreateAssetPartialCounty").val();
+
+            if (type.length > 0) {
+                if (tpn.length > 0) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Asset/CheckPropertyExists?assessorParcelNumber=" + tpn + "&state=" + state + "&county=" + county,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        async: false,
+                        cache: false,
+                        success: function (response) {
+                            if (response.IsClaimed == true) {
+                                alert('Tax Parcel Number already in use');
+                            }
+                            else {
+                                window.location = '/Admin/create?assetType=' + type +
+                                    '&portFolioName=' + escape($('#CreateAssetPartialPortFolioName').val()) +
+                                    '&isPaper=' + $('#CreateAssetPartialIsPaper').prop('checked') +
+                                    '&isPortfolio=' + $('#CreateAssetPartialIsPortfolio').prop('checked') +
+                                    '&isNewPF=' + $('#CreateAssetPartialIsNewPF').prop('checked') +
+                                    '&NewPfName=' + escape(newPF) +
+                                    '&taxParcelNumber=' + tpn +
+                                    '&state=' + state +
+                                    '&county=' + escape(county);
+                            }
+                        },
+                        error: function (jqXHR, exception) {
+                        },
+                        failure: function (response) {
+                        }
+                    });
+
+                    if (newPF.length > 0) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Admin/ValidatePortFolioName/",
+                            data: JSON.stringify({ newPF: newPF }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            async: false,
+                            cache: false,
+                            success: function (response) {
+                                if (response.Status == "True") {
+                                    alert('Portfolio Name already in use');
+                                    //$("#errorMsg").show();
+                                }
+                                else {
+                                    //document.getElementById('createAssetForm').submit();
+                                    $("#CreateAssetPartialErrorMsg").hide();
+                                }
+                            },
+                            error: function (jqXHR, exception) {
+                            },
+                            failure: function (response) {
+                            }
+                        });
+                    }
+                }
+                else {
+                    alert("Tax Parcel Number required");
+                }
+            }
+            else {
+                alert("You must select an asset type.");
+            }
+        }
+    }
+
+    function createAssetPartialOnChangeCheckbox(checkbox) {
+        if (checkbox.checked) {
+            $("#CreateAssetPartialPortfolioDiv").show();
+        }
+        else {
+            $("#CreateAssetPartialPortfolioDiv").hide();
+        }
+    }
+
+    function createAssetPartialOnChangeNewPF(checkbox) {
+        if (checkbox.checked) {
+            $("#CreateAssetPartialPortFolioName").val("0");
+            $("#CreateAssetPartialNewPFDiv").show();
+        }
+        else {
+            $("#CreateAssetPartialNewPFDiv").hide();
+        }
+    }
+
+    function validate() {
+        hideAll();
+        var tpn = $(".CreateAssetPartialParcelNumber").val();
+        var type = $("#CreateAssetPartialAssetType").val();
+        var newPF = $("#CreateAssetPartialNewPfName").val();
+        var state = $("#CreateAssetPartialState").val();
+        var county = $("#CreateAssetPartialCounty").val();
+        var success = true;
+        if (type === '') {
+            $("#CreateAssetPartialAssetTypeValidate").html('Asset Type required').show();
+            success = false;
+        }
+        if (state === '') {
+            $("#CreateAssetPartialStateValidate").html('State required').show();
+            success = false;
+        }
+        if (county === '') {
+            $("#CreateAssetPartialCountyValidate").html('County required').show();
+            success = false;
+        }
+        if (tpn === '') {
+            $("#CreateAssetPartialTaxParcelNumberValidate").html('Parcel number required').show();
+            success = false;
+        } else {
+            var n = new RegExp("[a-zA-Z0-9-.\s ]+");
+            if (tpn != "" && tpn != n.exec(tpn)) {
+                $("#CreateAssetPartialTaxParcelNumberValidate").html("Please use only letters (a-z), numbers, hyphens '-', and periods '.' .").show()
+                success = false;
+            }
+        }
+        if ($('#CreateAssetPartialIsPortfolio').prop('checked')) {
+            if ($('#CreateAssetPartialIsNewPF').prop('checked')) {
+                if (newPF === '') {
+                    $('#CreateAssetPartialNewPfNameValidate').html('New portfolio name required').show();
+                    success = false;
+                }
+            } else {
+                if ($('#CreateAssetPartialPortFolioName').val() === '') {
+                    $('#CreateAssetPartialPortFolioNameValidate').html('Portfolio name required').show();
+                    success = false;
+                }
+            }
+        }
+        return success;
+    }
+    function hideAll() {
+        $("#CreateAssetPartialAssetTypeValidate").hide();
+        $("#CreateAssetPartialStateValidate").hide();
+        $("#CreateAssetPartialCountyValidate").hide();
+        $("#CreateAssetPartialTaxParcelNumberValidate").hide();
+        $('#CreateAssetPartialNewPfNameValidate').hide();
+        $('#CreateAssetPartialPortFolioNameValidate').hide();
+    }
+
+    function createAssetPartialRemoveAllItem() {
+        var select = document.getElementById('CreateAssetPartialState');
+        for (i = 0; i < select.length; i++) {
+            if (select.options[i].text == 'All') {
+                select.remove(i);
+            }
+        }
+    }
+    $('#CreateAssetPartialCounty').keyup(validate)
+    $('.CreateAssetPartialParcelNumber').keyup(validate)
+    $('#CreateAssetPartialNewPfName').keyup(validate)
+    $(window).on('load', function () {
+        // populate DDLs after everything else has already loaded to keep things as fast as they are(slow). 
+        // Hopefully the users wont notice ever.
+        $.post('/Admin/GetCreateAssetPartialData', function (data) {
+            if (data) {
+                for (var i = 0; i < data.AssetTypeList.length; i++) $('#CreateAssetPartialAssetType').append('<option value="' + data.AssetTypeList[i].Value + '">' + data.AssetTypeList[i].Text +'</option>')
+                for (var i = 0; i < data.PortfolioList.length; i++) $('#CreateAssetPartialPortFolioName').append('<option value="' + data.PortfolioList[i].Value + '">' + data.PortfolioList[i].Text + '</option>')
+                for (var i = 0; i < data.StateList.length; i++) $('#CreateAssetPartialState').append('<option value="' + data.StateList[i].Value + '">' + data.StateList[i].Text + '</option>')
+            }
+        })
+    })
+</script>

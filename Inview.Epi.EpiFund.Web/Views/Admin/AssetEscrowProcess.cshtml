@@ -1,0 +1,15 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.AssetEscrowModel
+@{
+    ViewBag.Title = "Asset Escrow Process";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h3>Asset Escrow Process</h3>
+@using (Html.BeginForm("AssetEscrowProcess", "Admin"))
+{
+    @Html.EditorForModel()
+    <br />
+    <div class="input-group">
+        <input type="button" class="btn btn-warning" value="Cancel" style="margin-right: 20px;" onclick="location.href='@Url.Action("ManageAssets", "Admin")    '"  />
+        <input type="submit" class="btn btn-primary" value="Submit" onclick="fixNumbers()" />
+    </div> 
+}

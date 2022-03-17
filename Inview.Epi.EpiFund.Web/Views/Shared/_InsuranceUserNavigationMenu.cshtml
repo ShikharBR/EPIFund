@@ -1,0 +1,27 @@
+﻿@model System.Boolean
+@using Inview.Epi.EpiFund.Domain.Helpers
+<ul class="nav">
+    <li class="admin-sidebar">
+        <h3>Insurance Company User Links</h3>
+    </li>
+    @if (Model != null)
+    {
+        if (Model)
+        {
+            <li class="@Html.IsSelected(action: "Login")"><a href="@Url.Action("Logout", "Home")">Logout</a></li>
+            <li class="@Html.IsSelected(action: "MyUSCPage", controller: "Home")"><a href="@Url.Action("MyUSCPage", "Insurance")">My USC Page</a></li>
+            <li><a href="@Url.Action("ManageAssets", "Insurance")">Manage Assets</a></li>
+            <li><a href="@Url.Action("UpdateUser", "Insurance")">Edit Your Profile</a></li>
+            <li><a href="@Url.Action("ViewOrderHistory", "Insurance")">View Order History</a></li>
+            
+        }
+        else
+        {
+            <li class="@Html.IsSelected(action: "Login")"><a href="@Url.Action("Login", "Home")">Login</a></li>
+        }
+    }
+    else
+    {
+        <li class="@Html.IsSelected(action: "Login")"><a href="@Url.Action("Login", "Home")">Login</a></li>
+    }
+</ul>

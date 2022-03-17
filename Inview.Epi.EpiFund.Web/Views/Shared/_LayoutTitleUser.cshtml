@@ -1,0 +1,779 @@
+﻿@using Inview.Epi.EpiFund.Domain.Helpers
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>USCREonline.com : @ViewBag.Title</title>
+    <link rel="stylesheet" href="@Url.Content("~/content/bootstrap.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/content/css/ProgressBar.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/content/css/font-awesome.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/content/bootstrap-lightbox.min.css")" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @Styles.Render("~/bundles/css")
+    @Styles.Render("~/bundles/themes/base/css")
+    <link rel="stylesheet" href="@Url.Content("~/content/responsive.css")" />
+    @Scripts.Render("~/bundles/modernizr")
+    @if (IsSectionDefined("CaptchaCss"))
+    {
+        @RenderSection("CaptchaCss", required: false)
+    }
+    <script type="text/javascript">
+        var $buoop = {};
+        $buoop.ol = window.onload;
+        window.onload = function () {
+            try { if ($buoop.ol) $buoop.ol(); } catch (e) { }
+            var e = document.createElement("script");
+            e.setAttribute("type", "text/javascript");
+            e.setAttribute("src", "//browser-update.org/update.js");
+            document.body.appendChild(e);
+            setInterval(KeepSessionAlive, 10000);
+        }
+
+        function KeepSessionAlive() {
+            //$.post("/Shared/KeepSessionAlive.aspx", null, function () {
+            //});
+        }
+    </script>
+    <style type="text/css">
+        #eqcalc
+        {
+        }
+
+        .blueText
+        {
+            color: #369;
+            font-weight: bold;
+        }
+
+        .calculator
+        {
+            position: absolute;
+            top: 122px;
+            left: 396px;
+            background-color: white;
+            z-index: 100;
+            width: 400px;
+        }
+    </style>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="@Url.Content("/Scripts/bootstrap.js")"></script>
+    <script src="@Url.Content("/Scripts/jquery-guid.js")"></script>
+
+</head>
+
+<body style="position: relative;" class="admin-page @ViewBag.BodyClass">
+    @if (IsSectionDefined("CaptchaJs"))
+    {
+        @RenderSection("CaptchaJs", required: false)
+    }
+    <script type="text/javascript">
+        $(function () {
+            $('#mortgageCalculatorLink').click(function () {
+                $("#mrtgcalc").toggle();
+                $("#eqcalc").hide();
+                $("#capcalc").hide();
+            });
+            $('#equityCalculatorLink').click(function () {
+                $("#eqcalc").toggle();
+                $("#mrtgcalc").hide();
+                $("#capcalc").hide();
+            });
+            $('#capCalculatorLink').click(function () {
+                $("#capcalc").toggle();
+                $("#mrtgcalc").hide();
+                $("#eqcalc").hide();
+            });
+            if ($('#ddlRowCount')) {
+                if ('@TempData["RowCount"]'.length > 0) {
+                    $('#ddlRowCount').val('@TempData["RowCount"]');
+                }
+            }
+        });
+
+        function changeRowCount(link) {
+            var newCount = $('#ddlRowCount').val();
+            $.post('@Url.Action("SetPageNumber", "Admin")', { count: newCount }, function () {
+                location.href = link;
+                reload();
+            });
+        }
+
+        function setInvisible(idOfDiv) {
+            $(idOfDiv).toggle();
+        }
+
+        function computeField(input) {
+            if (input.value != null && input.value.length != 0)
+                input.value = "" + eval(input.value);
+            // computeForm(input.form);
+        }
+
+        function CapCalc(form) {
+            if (!checkNumber(form.allcashcost, 0, 10000000, "All Cash Acquisition Cost") ||
+                !checkNumber(form.pretaxcashflow, 0, 10000000, "Anticipated Pre-Tax Cash Flow")) {
+                form.caprate.value = "0";
+
+                return;
+            }
+            var allCashCost = getNumber(form.allcashcost);
+            var cashFlow = getNumber(form.pretaxcashflow);
+            //form.caprate.value = Math.round((cashFlow / allCashCost) * 100) + '%';
+            form.caprate.value = ((cashFlow / allCashCost) * 100).toFixed(2) + '%';
+        }
+
+        function EquityCalc(form) {
+            if (form.mtgpayoff1.value.length == 0) {
+                form.mtgpayoff1.value = 0;
+            }
+            if (form.mtgpayoff2.value.length == 0) {
+                form.mtgpayoff2.value = 0;
+            }
+            if (form.pdPropertyTax.value.length == 0) {
+                form.pdPropertyTax.value = 0;
+            }
+            if (!checkNumber(form.mvalprop, 10000, 10000000000, "Market Value of Asset") ||
+                !checkNumber(form.mtgpayoff1, 0, 10000000000, "1st Mtg Payoff") ||
+                !checkNumber(form.mtgpayoff2, 0, 10000000000, "2nd Mtg Payoff") ||
+                !checkNumber(form.pdPropertyTax, 0, 10000000000, "Past Due Property Tax") ||
+                !checkNumber(form.pdCorporateTax, 0, 10000000000, "Past Due Corporate Tax")) {
+                form.grosseqcalc.value = "0";
+                form.eqmvalperc.value = "0";
+                el = document.getElementById('eqmvalperc');
+                el.style.color = "";
+                return;
+            }
+
+            var sum1 = getNumber(form.mtgpayoff1);
+            sum1 += getNumber(form.mtgpayoff2);
+            sum1 += getNumber(form.pdPropertyTax);
+            sum1 += getNumber(form.pdCorporateTax);
+
+            var mv = getNumber(form.mvalprop);
+            var cge = form.grosseqcalc.value = Math.round(mv - sum1);
+            form.eqmvalperc.value = ((cge / mv) * 100).toFixed(2);
+
+            if (document.getElementById) {
+                el = document.getElementById('eqmvalperc');
+                if (form.eqmvalperc.value <= 83) {
+                    el.style.color = "green";
+                } else if (form.eqmvalperc.value > 84) {
+                    el.style.color = "red";
+                }
+                else if (form.eqmvalperc.value < 0) {
+                    el.style.color = "red";
+                }
+            }
+
+            form.eqmvalperc.value += '%';
+            toMoney(form.grosseqcalc, true);
+        }
+
+        function MortgageCalc(form) {
+            form.quarterlyPayment = 0;
+            form.monthlyPayment = 0;
+            form.annualPayment = 0;
+
+            var option = null;
+            for (var i = 0; i < form.option.length; i++) {
+                if (form.option[i].checked == true) {
+                    option = form.option[i].value;
+                    break;
+                }
+            }
+
+            if (option == null) { return; }
+
+            if (!checkNumber(form.principal, 100, 10000000, "Mortgage Amount") ||
+                !checkNumber(form.interest, .001, 99, "Interest Rate")) {
+                form.quarterlyPayment.value = "0";
+                form.monthlyPayment.value = "0";
+                form.annualPayment.value = "0";
+
+                return;
+            }
+
+            var irate = getNumber(form.interest);
+            if (irate > 1.0) {
+                irate /= 100;
+            }
+
+            var principal = getNumber(form.principal);
+            var payment = 0;
+
+            if (option == 'interest') {
+
+                payment = (principal * irate) / 12;
+                form.monthlyPayment.value = payment;
+                form.quarterlyPayment.value = payment * 3;
+                form.annualPayment.value = payment * 12;
+
+            } else {
+
+                irate /= 12;
+
+                payments = parseInt(option) * 12;
+
+                var p = 1.0;
+                for (var i = 0; i < payments; i++)
+                    p = p * (1 + irate);
+
+                payment = (principal * p * irate) / (p - 1);
+                form.monthlyPayment.value = payment;
+                form.quarterlyPayment.value = payment * 3;
+                form.annualPayment.value = payment * 12;
+            }
+
+            toMoney(form.monthlyPayment);
+            toMoney(form.quarterlyPayment);
+            toMoney(form.annualPayment);
+
+            //val = getNumber(form.taxes);
+            //if (val != null)
+            //    payment += (val / 12);
+
+            //val = getNumber(form.insurance);
+            //if (val != null)
+            //    payment += (val / 12);
+
+            //val = getNumber(form.hoadues);
+            //if (val != null)
+            //    payment += (val / 12);
+
+            //form.payment2.value = payment;
+
+        }
+
+        function checkNumber(fld, min, max, message) {
+            message = message + " field has invalid data: " + fld.value;
+
+            num = getNumber(fld);
+            if (num == null) {
+                //alert(message + " you must enter a value");
+                return false;
+            }
+
+            if (num < min || max < num) {
+                //alert(message + " is not in the range [" + min + ".." + max + "]");
+                return false;
+            }
+
+            return true;
+        }
+
+        function getNumber(fld) {
+            var str = fld.value;
+            var tmp = '';
+
+            if (fld.value.length == 0) {
+                return null;
+            }
+
+            for (var i = 0; i < str.length; i++) {
+                var ch = str.substring(i, i + 1);
+                if (ch == '$' || ch == ',' || ((ch < '0' || ch > '9') && ch != '.')) {
+                    continue;
+                }
+                tmp += ch;
+            }
+
+            if (tmp == '') {
+                return null;
+            }
+
+            var num = parseFloat(tmp)
+
+            return num;
+        }
+
+        function getNumberFromNonInput(element) {
+            var str = element.innerHTML;
+            var tmp = '';
+
+            if (element.innerHTML.length == 0) {
+                return null;
+            }
+
+            for (var i = 0; i < str.length; i++) {
+                var ch = str.substring(i, i + 1);
+                if (ch == '$' || ch == ',' || ((ch < '0' || ch > '9') && ch != '.')) {
+                    continue;
+                }
+                tmp += ch;
+            }
+
+            if (tmp == '') {
+                return null;
+            }
+
+            var num = parseFloat(tmp)
+
+            return num;
+        }
+
+        function getNumberFromValue(val) {
+            var tmp = '';
+
+            if (!val) {
+                return null;
+            }
+
+            for (var i = 0; i < val.length; i++) {
+                var ch = val.substring(i, i + 1);
+                if (ch == '$' || ch == ',' || ((ch < '0' || ch > '9') && ch != '.')) {
+                    continue;
+                }
+                tmp += ch;
+            }
+
+            if (tmp == '') {
+                return null;
+            }
+
+            var num = parseFloat(tmp)
+
+            return num;
+        }
+
+        function toMoney(input, addDollarSign) {
+            if (input.value != null && input.value.length != 0) {
+                var sign = (addDollarSign) ? '$' : '';
+                num = getNumber(input);
+                if (num == null) {
+                    return;
+                }
+
+                str = num.toString();
+                sig = str.split('.');
+
+                tmp = '';
+                len = sig[0].length;
+                for (var i = len, j = 1; i > 0; i--, j++) {
+                    var t = sig[0].substring(i, i - 1);
+                    tmp = t + tmp;
+                    if ((j % 3 == 0) && j != len) {
+                        tmp = ',' + tmp;
+                    }
+                }
+
+                if (sig.length > 1 && sig[1].length) {
+                    tmp += '.' + sig[1].substr(0, 1);
+                    var t = sig[1].substr(1, 1);
+                    if (t) {
+                        tmp += t;
+                    } else {
+                        tmp += '0';
+                    }
+                }
+                str = sign + tmp;
+
+                input.value = str;
+            }
+        }
+
+        function padCommas(element, addDollarSign) {
+            // asumming element is span, not input
+            if (element) {
+                if (element.innerHTML.length != 0 && element.innerHTML != null) {
+                    var sign = (addDollarSign) ? '$' : '';
+                    num = getNumberFromNonInput(element);
+                    if (num == null) {
+                        return;
+                    }
+
+                    str = num.toString();
+                    sig = str.split('.');
+
+                    tmp = '';
+                    len = sig[0].length;
+                    for (var i = len, j = 1; i > 0; i--, j++) {
+                        var t = sig[0].substring(i, i - 1);
+                        tmp = t + tmp;
+                        if ((j % 3 == 0) && j != len) {
+                            tmp = ',' + tmp;
+                        }
+                    }
+
+                    if (sig.length > 1 && sig[1].length) {
+                        tmp += '.' + sig[1].substr(0, 1);
+                        var t = sig[1].substr(1, 1);
+                        if (t) {
+                            tmp += t;
+                        } else {
+                            tmp += '0';
+                        }
+                    }
+                    str = sign + tmp;
+                    element.innerHTML = str;
+                }
+            }
+        }
+
+        function addCommasToInput(control) {
+            $(control).val(addCommas($(control).val(), false));
+        };
+
+        function addCommas(str, includeDecimals, addDollarSign, addPercentSign) {
+            str = str.replace(/,/g, "");
+            var isNegative = str.indexOf("-") > -1;
+            str = str.replace(/-/g, "");
+            var output = getNumberFromValue(str);
+            output = (str + "").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+            if (addDollarSign) {
+                output = "$" + output;
+            }
+            else if (addPercentSign) {
+                output = output + "%";
+            }
+            if (isNegative) {
+                output = "<" + output + ">";
+            }
+            return output;
+        }
+    </script>
+
+    <div id="logged-in">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <p class="container">Signed in as <a href="@Url.Action("EditProfile", "Home")" class="navbar-link" style="margin: 0 5px;">@User.Identity.Name</a> (@Html.ActionLink("Logout", "Logout", "Home"))</p>
+        }
+    </div>
+    <div class="modal fade" id="eqcalc" tabindex="-1" role="dialog" aria-labelledby="eqcalc-label" aria-hidden="true" data-backdrop="false">
+        <form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="eqcalc-label">Equity Calculator</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Market Value of Asset:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="mvalprop" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">1st Mtg. Payoff:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="mtgpayoff1" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">2nd Mtg. Payoff:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="mtgpayoff2" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Past Due Property Taxes:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="pdPropertyTax" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Past Due Corporate Taxes:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="pdCorporateTax" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 text-right" style="padding-top: 10px; padding-right: 90px;">
+                                <input name="Reset" type="reset" value="Reset" class="btn btn-default calc">
+                                <input name="Calculate" type="button" value="Calculate" onclick="EquityCalc(this.form)" class="btn btn-primary calc">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">Calculated Gross Equity:</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="text" name="grosseqcalc" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">As % of Market Value:</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="text" name="eqmvalperc" id="eqmvalperc" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="modal fade" id="capcalc" tabindex="-1" role="dialog" aria-labelledby="capcalc-label" aria-hidden="true" data-backdrop="false">
+        <form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="capcalc-label">Cap Rate Calculator</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">All Cash Acquisition Cost:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="allcashcost" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Anticipated Pre-Tax Cash Flow:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="pretaxcashflow" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 text-right" style="padding-top: 10px; padding-right: 90px;">
+                                <input name="Reset" type="reset" value="Reset" class="btn btn-default calc">
+                                <input name="Calculate" type="button" value="Calculate" onclick="CapCalc(this.form)" class="btn btn-primary calc">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">CAP Rate:</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="text" name="caprate" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="modal fade" id="mrtgcalc" tabindex="-1" role="dialog" aria-labelledby="mrtgcalc-label" aria-hidden="true" data-backdrop="false">
+        <form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="mrtgcalc-label">Mortgage Calculator</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-6">
+                                <div class="radio">
+                                    <input type="radio" name="option" value="interest">
+                                    Interest Only
+                                </div>
+                                <div class="radio">
+                                    <input type="radio" name="option" value="10year">
+                                    10 Year Term
+                                </div>
+                                <div class="radio">
+                                    <input type="radio" name="option" value="15year">
+                                    15 Year Term 
+                                </div>
+                                <div class="radio">
+                                    <input type="radio" name="option" value="20year">
+                                    20 Year Yerm
+                                </div>
+                                <div class="radio">
+                                    <input type="radio" name="option" value="25year">
+                                    25 Year Term
+                                </div>
+                                <div class="radio">
+                                    <input type="radio" name="option" value="30year">
+                                    30 Year Term 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Mortgage Amount $</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="TEXT" name="principal" onblur="toMoney(this, true)" maxlength="10">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Interest Rate %</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="TEXT" name="interest" onchange="computeField(this)" maxlength="6">
+                            </div>
+                        </div>
+                        @*<div class="row">   
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Annual Prop. Taxes</label>  
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="TEXT" name="taxes" onblur="toMoney(this, true)" class="calc" maxlength="6">
+                            </div>
+                        </div>*@
+                        @* <div class="row"> 
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Annual Hazard Ins.</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="TEXT" name="insurance" onblur="toMoney(this, true)" class="calc" maxlength="6">
+                            </div> 
+                        </div>*@
+                        @*   <div class="row">  
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Annual HOA Dues</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="TEXT" name="hoadues" onblur="toMoney(this, true)" class="calc" maxlength="6">
+                            </div>
+                        </div>  *@
+                        <div class="row">
+                            <div class="col-sm-12 text-right" style="padding-top: 10px; padding-right: 113px;">
+                                <input name="Reset" type="reset" value="Reset" class="btn btn-default calc">
+                                <input type="button" value="Calculate" onclick="MortgageCalc(this.form)" name="button" class="btn btn-primary calc">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">Monthly Payments $</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="TEXT" name="monthlyPayment" class="calc" maxlength="10" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">Quarterly Payments $</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="TEXT" name="quarterlyPayment" class="calc" maxlength="10" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">Annual Payments $</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="TEXT" name="annualPayment" class="calc" maxlength="10" value="">
+                            </div>
+                        </div>
+                        @* <div class="row">
+                            <div class="col-sm-6"> 
+                                <label class="control-label">Monthly PITI+HOA $</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="TEXT" name="payment2" class="calc" maxlength="10" value="">  
+                            </div>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="container" style="background-color: #ccc; padding: 10px;">
+        <nav class="navbar navbar-default" id="main-nav" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" id="logo" style="font-size: 29px; margin-right: 120px;" href="@Url.Action("Index", "Home")">USCRE</a>
+                    <a id="tagline" class="navbar-brand">United States Commercial Real Estate on Line</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                @{ Html.RenderPartial("_TopNavigation"); }
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+        <div class="row" style="min-height: 1280px;">
+            <div class="col-md-3 side-nav">
+                @{Html.RenderAction("TitleUserSideNavigationMenu", "Admin", new { Email = ViewBag.Email });}
+
+                @if(ViewContext.RouteData.Values["action"].ToString() != "ValidateManager")
+                {
+                    Html.RenderAction("CarouselPartialView", "Home", new { IsAdmin = false });
+                }
+            </div>
+            <div class="col-md-9">
+                <section>
+                    @{ Html.RenderPartial("_SubHeaderMenu"); }
+                    <div class="panel panel-default main-content">
+
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                @Html.ActionLink("Home", "Index", "Home")
+                                @if (ViewContext.RouteData.Values["controller"] != "Home" && ViewContext.RouteData.Values["action"] != "Index")
+                                {
+                                    if (ViewContext.RouteData.Values["controller"].ToString() == "DataPortal")
+                                    {
+                                    @:> @Html.ActionLink(ViewContext.RouteData.Values["controller"].ToString(), "DataPortal", ViewContext.RouteData.Values["controller"].ToString())
+                                    }
+                                    else if (ViewContext.RouteData.Values["controller"].ToString() == "Admin")
+                                    {
+                                    @:> @Html.ActionLink(ViewContext.RouteData.Values["controller"].ToString(), "MyUSCPage", "Home")
+                                    }
+                                    else
+                                    {
+                                    @:> @Html.ActionLink(ViewContext.RouteData.Values["controller"].ToString(), "Index", ViewContext.RouteData.Values["controller"].ToString())
+                                    }
+                                }
+
+                                > @ViewBag.Title
+                            </li>
+                        </ol>
+
+                        @{ Html.RenderPartial("_Messages"); }
+                        @RenderBody()
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <footer>
+                    @{ Html.RenderPartial("_FooterPartial"); }
+                </footer>
+            </div>
+        </div>
+    </div>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

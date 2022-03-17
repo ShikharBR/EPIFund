@@ -1,0 +1,21 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.AssetSearchCriteriaModel
+@{
+    ViewBag.Title = "Edit Investment Asset Search Criteria";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("EditInvestmentAssetSearchCriteria", "DataPortal"))
+{ 
+    <h3 class="page-header" id="topMost">CRE Available Inventory Questionnaire for End User Accredited Principals</h3>
+    <h4>THIS IS NOT A CONTRACT OR AGREEMENT OF ANY TYPE</h4>
+    <p>
+        Thank you for your interest in utilizing the <a href="www.USCREonline.com">USCREonline.com</a> <span style="color: #f00; font-weight: bold;">Free</span> <b>CRE Locator</b> service <b>(“USC”)</b>.  Your responses to this questionnaire will be utilized by USC to identify assets within your defined demographic, geographic, and investment parameters.  This document shall not be construed and or implied and or understood by any party hereto to be an employment contract of any kind.  There is no implied or otherwise obligation by any party to this questionnaire to perform any search task and or to acquire any asset that may be identified by USC resulting from the data provided by the named respondent herein.  Please review the Q&A at the end of this document for further details.
+    </p>
+    @Html.ValidationSummary()
+    @Html.EditorForModel()  
+    <br />
+    <div class="input-group">
+        <input type="submit" class="btn btn-primary" style="margin-right: 20px;" name="action:SaveSearchCriteria" onclick="fixNumbers()" value="Submit" />
+        <input type="submit" class="btn btn-warning" style="margin-right: 20px;" name="action:CreateNewSearchCriteria" value="Use this Form to Create New Search Criteria" />
+        <a href="#topMost" class="btn btn-default">Go to Top of Page</a>
+    </div> 
+}

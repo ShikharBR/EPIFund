@@ -1,0 +1,29 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.TitleOrderModel
+<fieldset id="pnlUserInformation">
+   @* <legend>Please fill the following</legend>*@
+    @Html.HiddenFor(x => Model.TitleCompanyId)
+    @Html.HiddenFor(x => Model.TitleOrderPaymentId)
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.Due, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">@Html.ValidationMessageFor(s => s.Due, "*")</span>
+                <div class="input-group">
+                    @Html.TextBoxFor(model => Model.Due)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.DatePaid, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">@Html.ValidationMessageFor(s => s.DatePaid, "*")</span>
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.DatePaid, new { @class = "datepicker" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</fieldset>

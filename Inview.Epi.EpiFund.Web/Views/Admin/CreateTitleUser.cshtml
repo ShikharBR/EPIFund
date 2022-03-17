@@ -1,0 +1,33 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.TitleCompanyUserModel
+@{
+    ViewBag.Title = "Create Title Company Manager";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3>Create Title Company User</h3>
+@using (Html.BeginForm("CreateTitleUser", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false)
+    <br />
+    @Html.EditorForModel()
+
+    <a  type ="submit"  style="margin-bottom:5px;" class="btn btn-warning" href="@Url.Action("CancelEditTitleUser", "Admin", new { titleId = @Model.TitleCompanyId })" title="Cancel">Cancel</a>
+    <input type="submit" class="btn btn-primary create-user-save" id="btnSave" name="btnSave" value="Save User" />
+    
+    
+}
+
+<script>
+    $(document).ready(function () {
+        toggleStates();
+    });
+
+    function toggleStates() {
+        if (!$("#IsManager").prop('checked')) {
+            $('.states').show();
+        } else {
+            $('.states').hide();
+        }
+    }
+</script>

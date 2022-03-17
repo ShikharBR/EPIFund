@@ -1,0 +1,18 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.MiscellaneousIncomeTemplateModel
+@{
+    ViewBag.Title = "Execute 1099";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Execute1099", "DataPortal"))
+{ 
+    <h3 class="page-header">Execute 1099</h3>
+    <p>Fill out fields below to execute the 1099 form.</p>
+    @Html.ValidationSummary()
+    @Html.EditorForModel()  
+    <br />
+    <div class="input-group">
+        <input type="submit" class="btn btn-primary" style="margin-right: 20px;" value="Submit" />
+    </div> 
+}
+
+

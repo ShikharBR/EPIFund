@@ -1,0 +1,22 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.JVAgreementTemplateModel
+@{
+    ViewBag.Title = "Execute JVMP Agreement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("ExecuteJVAgreement", "DataPortal"))
+{ 
+    <h3 class="page-header">Execute Joint Venture Marketing Agreement</h3>
+    <p>To download a sample Joint Venture Marketing Participation template, click <a href="@Url.Action("DownloadJVTemplate", "DataPortal")">here</a></p>
+    <p>Fill out the fields below that are blank to execute the JV Marketing Agreement.  Execution of the Agreement is completed electronically through the universally recognized DocuSign protocol.  Upon execution and submittal of the Agreement, DocuSign will email you to digitally sign document.  The process only takes minutes to complete and confirm.  Once your JVM Agreement has been signed and submitted by you, and received by USC, you will receive an automated email from USC with the signed document.  You can also view executed JVM Agreements through your "@Html.ActionLink("My USC Page", "MyUSCPage", "Home")".</p>
+    <p>Once you have completed the JVM Agreement process, and received confirmation of same from USC, you will need to “press the [F5] Key” on your keyboard to “refresh” your USC web page.  At this time your “My USC Page” will be updated and USC will be ready to receive the submittal of your [Network of Marketing Principals Spread Sheet].</p>
+    <p>Once you have submitted your joint venture marketing agreement and signed the document, you will be able to upload your network of marketing principals spread sheet from the provided link in the left panel or from your @Html.ActionLink("My USC page", "MyUSCPage", "Home")</p>
+    @Html.ValidationSummary()
+    @Html.EditorForModel()  
+    <br />
+    <div class="input-group">
+        <input type="submit" name="action:PreviewJVAgreementPdf" class="btn btn-default" style="margin-right: 20px;" value="Preview" />
+        <input type="submit" name="action:ExecuteJVAgreement" class="btn btn-primary" style="margin-right: 20px;" value="Submit" />
+        <input type="button" class="btn btn-warning" value="Cancel" onclick="location.href='@Url.Action("JointVentureMarketing", "Home")    '" />    
+    </div> 
+}

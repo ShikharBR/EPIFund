@@ -1,0 +1,46 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.MyUSCViewModel
+@{
+    ViewBag.Title = "My Admin USC Page";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@if (Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin)
+{
+    <p>Welcome to your personalized US CRE online.com web page.  This is where you will receive special documents and e mails from USC corporate, and be able to view all of your executed documents with USC.  My US CRE online.com will be continuously monitored and updated by USC.  We always welcome your comments for any changes or upgrades you would like to see to enhance your experience at US CRE online.com.  Please click @Html.ActionLink("Contact Us", "ContactUs", "Home") to provide such feedback at any time.</p>
+
+    <p>As a valued Independent Contractor Registrant of USC, you will have limited access to enter new Asset Data into the USC Admin Asset Inventory data base.  US CRE online appreciates your service to this cause and welcomes the opportunity to work with you into the future.  As to our Independent Contractor Agreement with you, we welcome your comments for any changes or upgrades that you would like to see to enhance your professional experience with US CRE online.com.  Please @Html.ActionLink("Contact Us", "ContactUs", "Home") to provide such feedback at any time.</p>
+
+    Html.RenderPartial("_AccountSettingsLinks");
+    <p>
+        Registrant Records:
+    </p>
+    <ul class="ul-styled">
+        @{ Html.RenderPartial("_UserRegistrantRecords", @Model.Files); }
+        @if (Model.HasOrderHistory)
+        {
+            <li>@Html.ActionLink("View Order History", "ViewOrderHistory", "DataPortal")</li>
+        }
+        <li>@Html.ActionLink("View My Asset Input History", "ManageAssets", "Admin")</li>
+    </ul>
+}
+else if (Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin || Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin2 || Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.SiteAdmin)
+{
+    <p>Welcome to your personalized US CRE online.com web page.</p>
+    
+    Html.RenderPartial("_AccountSettingsLinks");
+    
+    <p>
+        Registrant Records:
+    </p>
+    <ul class="ul-styled">
+        @{ Html.RenderPartial("_UserRegistrantRecords", @Model.Files); }
+        @if (Model.HasOrderHistory)
+        {
+            <li>@Html.ActionLink("View Order History", "ViewOrderHistory", "DataPortal")</li>
+        }
+        <li>@Html.ActionLink("Manage Principal Investors", "ManagePrincipalInvestorsReg", "Admin")</li>
+        <li>@Html.ActionLink("Manage Assets", "ManageAssets", "Admin")</li>
+        <li>@Html.ActionLink("Manage NAR Members", "ManageAssetNarMembers", "Admin")</li>
+        <li>@Html.ActionLink("Manage MBA Members", "ManageMBAMembersReg", "Admin")</li>
+        <li>@Html.ActionLink("IC Admin Accounting Report Display", "ICAccountingReportDisplay", "Admin")</li>
+    </ul>
+}

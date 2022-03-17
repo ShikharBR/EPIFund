@@ -1,0 +1,38 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.ViewAssetDisclosureModel
+
+@{
+    ViewBag.Title = "View Asset Disclosure";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("ViewAssetDisclosure", "DataPortal"))
+{ 
+    @Html.HiddenFor(s => s.AssetId)
+    @Html.HiddenFor(s=>s.UserId)
+    <h4>Asset Data View Mandatory Disclosure</h4>
+
+    <p>The material contained and presented at US CREonline.com is presented solely for the purpose of a US CRE online.com Registered Principal Investor considering the acquisition of the property herein and is not to be used for any other purpose.  This information should not, under any circumstances, be photocopied or duplicated or disclosed to any third party without the written consent of US CREonline.com and or the List Agent itself (see file attachment labeled “Marketing Brochure”) or the assets Owner, or used for any purpose whatsoever other than to evaluate the possible acquisition of the Property.</p>
+
+    <p>As disclosed in the assets Marketing Brochure, the only party authorized to represent the Property Owner (“Owner”) in connection with the sale of the property is the List Agent therein defined, and no other person is authorized by the Owner to provide any information or to make any representations other than as contained in the Investment Marketing (aka Offering) Brochure.  The data on the Asset presented herein has been accumulated solely from the marketing brochure so defined and or from commonly known public information depositories.</p>
+
+    <p>Neither US CRE online.com, the List Agent Advisor, nor the Owner make any representation or warranty, express or implied, as to the accuracy or completeness of the information contained herein, and nothing contained herein is or shall be relied upon as a promise or representation as to the future performance of the Property. Specific to the Marketing (aka Offering) Brochure, it may include certain statements and estimates by the List Agent with respect to the projected future performance of the Property. These Assumptions may or may not be proven to be correct, and there can be no assurance that such estimates will be achieved. Further, US CREonline.com, the List Agent Advisor, and the Owner disclaim any and all liability for representations or warranties, expressed or implied, contained in or omitted from the information presented herein, or any other written or oral communication transmitted or made available to the recipient. The recipient shall be entitled to rely solely on those representations and warranties that may be made to it in any final, fully executed and delivered Commercial Real Estate Purchase Agreement between it and Owner.</p>
+
+    <p>The information contained herein is subject to change without notice and the recipient of these materials shall not look to US CREonline.com, Owner or the List Agent Advisor nor any of their officers, employees, representatives, independent contractors or affiliates, for the accuracy or completeness thereof. Recipients of the information presented herein and or any of its support data file attachments are advised and encouraged to conduct their own comprehensive review and analysis of the Property.</p>
+
+    <p>This data presented herein is solely to be construed as a solicitation of interest and is not to be construed as an offer to sell the Property. As more directly disclosed in the List Agent Marketing Brochure, the Owner expressly reserves the right, at its sole discretion, to reject any or all expressions of interest to purchase the Property and expressly reserves the right, at its sole discretion, to terminate negotiations with any entity, for any reason, at any time with or without notice. The Owner shall have no legal commitment or obligation to any entity reviewing the Marketing (aka Offering) Brochure or making an offer to purchase the Property unless and until the Owner executes and delivers a signed Commercial Real Estate Purchase Agreement on terms acceptable to Owner, in Owner’s sole discretion. By submitting an offer, a prospective purchaser will be deemed to have acknowledged the foregoing and agreed to release the Owner, its List Agent Advisor, and US CREonline.com from any liability with respect thereto.</p>
+
+    <p>To the extent US CREonline.com, Owner or any contracted agent of Owner corresponds with any prospective purchaser, any prospective purchaser should not rely on any such correspondence or statements as binding Owner. Only a fully executed Commercial Real Estate Purchase Agreement shall bind the property and each prospective purchaser proceeds at its own risk.</p>
+
+    <p>By [Confirm], as a Registered Principal of US CRE online.com, you hereby confirm and agree to the terms and conditions of this Asset Data View Mandatory Disclosure on this date and at the time herein. </p>
+    
+    @*<button class="btn btn-default" value="Cancel" type="button" onclick="location.href='@Url.Action("MyUSCPage", "Home")    '" >Cancel</button>
+    <button class="btn btn-default" value="Cancel" type="button" onclick="location.href='@Url.Action("AssetList", "DataPortal") '">Cancel</button>
+     issue#81*@
+    <button class="btn btn-default" value="Cancel" type="button" onclick="goBack();">Cancel</button>
+    <button class="btn btn-default" value="Confirm" type="submit">Confirm</button>
+}
+
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>

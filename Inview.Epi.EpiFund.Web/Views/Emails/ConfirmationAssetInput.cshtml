@@ -1,0 +1,48 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.ConfirmationAssetInputEmail
+To: @Model.Email
+From: USCREonline <info@uscreonline.com>
+Subject: Confirmation of Asset Input
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.Name,</p>
+    <h3>Confirmation of Asset Input:</h3>
+    <table class="table">
+        <tr>
+            <td>USC IC:</td>
+            <td>@Html.DisplayFor(s => s.USCIC)</td>
+        </tr>
+        <tr>
+            <td>Asset Temp ID:</td>
+            <td>@Html.DisplayFor(s => s.AssetNumber), @Html.DisplayFor(s => s.AssetDescription)</td>
+        </tr>
+        <tr>
+            <td>Property address:</td>
+            <td>@Html.DisplayFor(s=>s.PropertyAddress)</td>
+        </tr>
+        <tr>
+            <td>Date of Data Entry:</td>
+            <td>@Html.DisplayFor(s => s.DateOfEntry)</td>
+        </tr>
+        <tr>
+            <td>Did entry include Images:</td>
+            <td>@Html.DisplayFor(s => s.DidIncludePhotos)</td>
+        </tr>
+        <tr>
+            <td>Did entry include Documents:</td>
+            <td>@Html.DisplayFor(s => s.DidIncludeFiles)</td>
+        </tr>
+    </table>
+    <p>
+        The Professional Staff of US CRE Online formerly thanks you as a confirmed Independent Contractor for entering the new Asset captioned above.  
+        You will be notified by USC via e mail and text of any requested missing data.  You can view the complete inventory of all of your Asset 
+        Entries at http://www.uscreonline.com.  Simply log in and &#60;Click&#62; View My Asset Input History at your &#34;My USC Page&#34;.    </p>
+
+<p>As an Independent Contractor for Asset Data Input for US CRE Online we thank you for your services and look forward to 
+    continuing our relationship with you into the future.</p>
+
+<p>The Professional Staff</p>
+<p><b>US CRE Online, LLC</b></p>
+</body>
+</html>

@@ -1,0 +1,29 @@
+05/11
+	Added this plugin to transform service configs (name is 'SlowCheetah - XML Transforms')
+	https://visualstudiogallery.msdn.microsoft.com/69023d00-a4f9-4a34-a6cd-7e854ba318b5
+	http://www.hanselman.com/blog/SlowCheetahWebconfigTransformationSyntaxNowGeneralizedForAnyXMLConfigurationFile.aspx
+
+2015/05/21
+	started the removal of all AssetListingAgent references. created a method to transfer all valid asset listing agents to the new table AssetNARMembers.
+
+05/22
+	List of methods that access all 40K+ NARMembers
+	AdminController
+		GET POST EmailInvestmentAssetSearchCriteria (fix)
+		GET POST ManageNarMembersImported (this should be the only one)
+	
+	methods that access AssetListingAgents still
+		AssetManager
+			GetAssetDocumentOrderRequest
+			SaveRealEstateCommercial
+		UserManager
+			DeleteAssetListingAgent
+		AdminController
+			DeleteNarMemberLA (calls DeleteAssetListingAgent)
+6/02
+	Added table ContractFeePayout. Its the same as ICAdminContractFeePayout but can accept other types of payouts, including ic admin. not going to transfer that
+	data today. Transfered it today. Not deleting the table like im keeping AssetListingAgents until we are sure we dont need it anymore.
+
+
+At the moment we have 4 different layouts. The only difference between _LayoutAdmin, _LayoutInsuranceUser and _LayoutTitleUser should be the content 
+inside the div of class 'class="col-md-3 side-nav"'. With this methodology we will continue to duplicate layouts just because of the sidenav

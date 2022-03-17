@@ -1,0 +1,1209 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.PersonalFinancialStatementTemplateModel
+
+<script>
+    $(function () {
+        $(".datepicker").datepicker(
+        {
+            onSelect: function () {
+                this.focus();
+            }
+        });
+        calculateTotalAssets();
+        calculateTotalLiabilities();
+        calculateContingentLiabilities();
+        calculateShares(1);
+        calculateShares(2);
+        calculateShares(3);
+        calculateShares(4);
+        calculateFinalTotalLiabilities();
+    });
+
+    function calculateFinalTotalLiabilities() {
+        var total = 0;
+        $("input.total-liability").each(function (index) {
+            if ($(this).val().length > 0) {
+                try {
+                    var text = $(this).val().replace(/,/g, "");
+                    total += parseFloat(text);
+                }
+                catch (ex) {
+                    total += parseFloat($(this).val());
+                }
+            }
+        });
+        $("#LiabilitiesTotalDisplay").val(addCommas(total.toString()));
+        $("#LiabilitiesTotal").val(addCommas(total.toString()));
+    }
+    function calculateTotalAssets() {
+        var total = 0;
+        $("input.asset").each(function (index) {
+            if ($(this).val().length > 0) {
+                try {
+                    var text = $(this).val().replace(/,/g, "");
+                    total += parseFloat(text);
+                }
+                catch (ex) {
+                    total += parseFloat($(this).val());
+                }
+            }
+        });
+        $("#netTotalOfAllAssets").val(addCommas(total.toString()));
+        $("#AssetsTotal").val(addCommas(total.toString()));
+        calculateNetWorth();
+    };
+    function calculateTotalLiabilities() {
+        var total = 0;
+        var totalTotal = 0;
+        $("input.liability").each(function (index) {
+            if ($(this).val().length > 0) {
+                try {
+                    var text = $(this).val().replace(/,/g, "");
+                    total += parseFloat(text);
+                }
+                catch (ex) {
+                    total += parseFloat($(this).val());
+                }
+            }
+        });
+        $("input.total-liability").each(function (index) {
+            if ($(this).val().length > 0) {
+                try {
+                    var text = $(this).val().replace(/,/g, "");
+                    totalTotal += parseFloat(text);
+                }
+                catch (ex) {
+                    totalTotal += parseFloat($(this).val());
+                }
+            }
+        });
+
+        $("#LiabilitiesTotalLiabilitiesDisplay").val(addCommas(total.toString()));
+        $("#LiabilitiesTotalLiabilities").val(addCommas(total.toString()));
+
+        $("#LiabilitiesTotalDisplay").val(addCommas(totalTotal.toString()));
+        $("#LiabilitiesTotal").val(addCommas(totalTotal.toString()));
+        calculateNetWorth();
+    };
+    function calculateContingentLiabilities() {
+        var total = 0;
+        $("input.contingent").each(function (index) {
+            if ($(this).val().length > 0) {
+                try {
+                    var text = $(this).val().replace(/,/g, "");
+                    total += parseFloat(text);
+                }
+                catch (ex) {
+                    total += parseFloat($(this).val());
+                }
+            }
+        });
+        $("#contingentTotalLiabilities").val(addCommas(total.toString()));
+        calculateNetWorth();
+    };
+    function calculateNetWorth() {
+        var total = 0;
+        if ($("#netTotalOfAllAssets").val().replace(/,/g, "")) {
+            total += parseFloat($("#netTotalOfAllAssets").val().replace(/,/g, ""));
+        }
+        if ($("#LiabilitiesTotalLiabilities").val().replace(/,/g, "") != '') {
+            total -= parseFloat($("#LiabilitiesTotalLiabilities").val().replace(/,/g, ""));
+        }
+        if ($("#contingentTotalLiabilities").val().replace(/,/g, "") != '') {
+            total -= parseFloat($("#contingentTotalLiabilities").val().replace(/,/g, ""));
+        }
+        $("#NetWorthDisplay").val(addCommas(total.toString()));
+        $("#NetWorth").val(addCommas(total.toString()));
+    }
+    function calculateShares(number) {
+        var count = 0;
+        var cost = 0;
+        if ($("#StocksAndBondsNumberOfShares" + number).val() != '') {
+            count = parseFloat($("#StocksAndBondsNumberOfShares" + number).val());
+        }
+        if ($("#StocksAndBondsMarketValue" + number).val() != '') {
+            cost = parseFloat($("#StocksAndBondsMarketValue" + number).val());
+        }
+        $("#StocksAndBondsTotalValueDisplay" + number).val(addCommas((count * cost).toFixed(2).toString()));
+        $("#StocksAndBondsTotalValue" + number).val(addCommas((count * cost).toFixed(2).toString()));
+    }
+    function addCommas(str) {
+        var parts = (str + "").split("."),
+            main = parts[0],
+            len = main.length,
+            output = "",
+            i = len - 1;
+
+        while (i >= 0) {
+            output = main.charAt(i) + output;
+            if ((len - i) % 3 === 0 && i > 0) {
+                output = "," + output;
+            }
+            --i;
+        }
+        // put decimal part back
+        if (parts.length > 1) {
+            output += "." + parts[1];
+        }
+        return output;
+    }
+</script>
+
+
+@Html.HiddenFor(s => s.PersonalFinancialStatementId)
+@Html.HiddenFor(s => s.UserId)
+<div class="personal-financial-statement">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Month, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.DisplayFor(s => s.Month, new { @class = "control-label" })
+                @Html.HiddenFor(s => s.Month)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Day, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.DisplayFor(s => s.Day, new { @class = "control-label" })
+                @Html.HiddenFor(s => s.Day)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Year, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.DisplayFor(s => s.Year, new { @class = "control-label" })
+                @Html.HiddenFor(s => s.Year)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.UserFirstName, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.UserFirstName, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.UserFirstName, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.UserLastName, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.UserLastName, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.UserLastName, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Email, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.Email, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.Email, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.ResidentialAddress, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.ResidentialAddress, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.ResidentialAddress, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.City, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.City, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.City, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.State, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.State, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.DropDownListFor(s => s.State, @Model.States, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Zip, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.Zip, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.Zip, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.ResidentialPhone, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.ResidentialPhone, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.ResidentialPhone, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.BusinessPhone, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.BusinessPhone, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.BusinessName, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.BusinessName, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.BusinessName, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h3>Assets</h3>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.CashOnHand, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.CashOnHand, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.CashOnHand, new { @class = "form-control resetable width-132 asset", onchange = "calculateTotalAssets()", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.SavingsAccount, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.SavingsAccount, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.SavingsAccount, new { onchange = "calculateTotalAssets()", @class = "form-control resetable width-132 asset", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.OtherRetirementOrIraAccount, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.OtherRetirementOrIraAccount, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.OtherRetirementOrIraAccount, new { onchange = "calculateTotalAssets()", @class = "form-control resetable width-132 asset", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.AccountsRecievable, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.AccountsRecievable, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.AccountsRecievable, new { onchange = "calculateTotalAssets()", @class = "form-control resetable width-132 asset", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.LifeInsurance, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.LifeInsurance, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.LifeInsurance, new { onchange = "calculateTotalAssets()", @class = "form-control resetable width-132 asset", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.StocksAndBonds, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.StocksAndBonds, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.StocksAndBonds, new { onchange = "calculateTotalAssets()", @class = "asset form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.RealEstate, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.RealEstate, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.RealEstate, new { onchange = "calculateTotalAssets()", @class = "form-control resetable width-132 asset", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Automobiles, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.Automobiles, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.Automobiles, new { onchange = "calculateTotalAssets()", @class = "form-control resetable width-132 asset", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.OtherProperty, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.OtherProperty, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.OtherProperty, new { onchange = "calculateTotalAssets()", @class = "form-control resetable width-132 asset", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.OtherAssets, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.OtherAssets, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.OtherAssets, new { onchange = "calculateTotalAssets()", @class = "form-control resetable width-132 asset", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <label class="control-label">Net Total of all Assets</label>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input id="netTotalOfAllAssets" disabled="disabled" type="text" class="form-control resetable width-132" style="text-align: right;" />
+                @Html.HiddenFor(s => s.AssetsTotal)
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h3>Liabilities</h3>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.AccountsPayable, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.AccountsPayable, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.AccountsPayable, new { onchange = "calculateTotalLiabilities()", @class = "liability total-liability form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.NotesPayableToOthers, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.NotesPayableToOthers, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.NotesPayableToOthers, new { onchange = "calculateTotalLiabilities()", @class = "liability total-liability form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.InstallmentAccountAuto, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.InstallmentAccountAuto, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.InstallmentAccountAuto, new { onchange = "calculateTotalLiabilities()", @class = "liability total-liability form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.InstallmentAccountAutoMonthlyPayment, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.InstallmentAccountAutoMonthlyPayment, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.InstallmentAccountAutoMonthlyPayment, new { @class = "form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.InstallmentAccountOther, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.InstallmentAccountOther, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.InstallmentAccountOther, new { onchange = "calculateTotalLiabilities()", @class = "liability total-liability form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.InstallmentAccountOtherMonthlyPayment, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.InstallmentAccountOtherMonthlyPayment, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.InstallmentAccountOtherMonthlyPayment, new { @class = "form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.LifeInsuranceLoan, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.LifeInsuranceLoan, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.LifeInsuranceLoan, new { onchange = "calculateTotalLiabilities()", @class = "liability total-liability form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.RealEstateMortgage, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.RealEstateMortgage, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.RealEstateMortgage, new { onchange = "calculateTotalLiabilities()", @class = "liability total-liability form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.LiabilitiesUnpaidTaxes, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.LiabilitiesUnpaidTaxes, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.LiabilitiesUnpaidTaxes, new { onchange = "calculateTotalLiabilities()", @class = "liability total-liability form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.LiabilitiesOtherLiabilities, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.LiabilitiesOtherLiabilities, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.LiabilitiesOtherLiabilities, new { onchange = "calculateTotalLiabilities()", @class = "liability total-liability form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.LiabilitiesTotalLiabilities, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.LiabilitiesTotalLiabilities, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input id="LiabilitiesTotalLiabilitiesDisplay" disabled="disabled" type="text" class="form-control resetable width-132  total-liability" style="text-align: right;" />
+                @Html.HiddenFor(s => s.LiabilitiesTotalLiabilities)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.NetWorth, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.NetWorth, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input id="NetWorthDisplay" disabled="disabled" type="text" class="form-control resetable width-132  total-liability" style="text-align: right;" />
+                @Html.HiddenFor(s => s.NetWorth)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.LiabilitiesTotal, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.LiabilitiesTotal, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input id="LiabilitiesTotalDisplay" disabled="disabled" type="text" class="form-control resetable width-132" style="text-align: right;" />
+                @Html.HiddenFor(s => s.LiabilitiesTotal)
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h3>Contigent Liabilities</h3>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.EndorserOrCoMaker, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.EndorserOrCoMaker, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.EndorserOrCoMaker, new { @class = "contingent form-control resetable width-132", onchange = "calculateContingentLiabilities()", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.LegalClaimsOrJudgments, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.LiabilitiesTotalLiabilities, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.LegalClaimsOrJudgments, new { @class = "contingent form-control resetable width-132", onchange = "calculateContingentLiabilities()", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.FederalIncomeTax, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.FederalIncomeTax, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.FederalIncomeTax, new { @class = "contingent form-control resetable width-132", onchange = "calculateContingentLiabilities()", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.OtherSpecialDebt, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.OtherSpecialDebt, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.OtherSpecialDebt, new { @class = "contingent form-control resetable width-132", onchange = "calculateContingentLiabilities()", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <label>Total Contingent Liabilities</label>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input type="text" disabled="disabled" id="contingentTotalLiabilities" class="form-control resetable width-132" style="text-align: right;" onblur="toMoney(this, false)" />
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h3>Source of Income</h3>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+
+                @Html.LabelFor(s => s.Salary, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.NetInvestmentIncome, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.Salary, new { @class = "form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+
+                @Html.LabelFor(s => s.NetInvestmentIncome, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.NetInvestmentIncome, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.NetInvestmentIncome, new { @class = "form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.RealEstateIncome, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.RealEstateIncome, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.RealEstateIncome, new { @class = "form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.OtherIncome, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.OtherIncome, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.OtherIncome, new { @class = "form-control resetable width-132", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h3>Description of Other Income</h3>
+    <div style="width: 100%;">
+        @Html.TextAreaFor(s => s.OtherIncomeDescription1, new { @class = "control-label resetable", @rows = "4", @cols = "95" })
+    </div>
+    <div style="width: 100%;">
+        @Html.TextAreaFor(s => s.OtherIncomeDescription2, new { @class = "control-label resetable", @rows = "4", @cols = "95" })
+    </div>
+    <div style="width: 100%;">
+        @Html.TextAreaFor(s => s.OtherIncomeDescription3, new { @class = "control-label resetable", @rows = "4", @cols = "95" })
+    </div>
+    <hr />
+    <h3>Notes Payable to Banks and Others</h3>
+    <div class="overflow">
+        <table class="table table-striped table-condensed">
+            <tr>
+                <th style="text-align: center;">Name and Address of Noteholder(s)
+                </th>
+                <th style="text-align: center;">Original<br />
+                    Balance
+                </th>
+                <th style="text-align: center;">Current<br />
+                    Balance</th>
+                <th style="text-align: center;">Payment
+                    Amount
+                </th>
+                <th style="text-align: center;">Frequency
+                </th>
+                <th style="text-align: center;">How Secured or Endorsed<br />
+                    Type of Collateral
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(s => s.NameAndAddressOfNoteholders1, new { @class = "cell resetable resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.OriginalBalance1, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.CurrentBalance1, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PaymentAmount1, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(s => s.Frequency1, @Model.Frequencies, new { @class = "cell resetable resetable", style = "width: 100px; " })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.TypeOfCollateral1, new { @class = "cell resetable resetable" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(s => s.NameAndAddressOfNoteholders2, new { @class = "cell resetable resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.OriginalBalance2, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.CurrentBalance2, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PaymentAmount2, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(s => s.Frequency2, @Model.Frequencies, new { @class = "cell resetable resetable", style = "width: 100px;" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.TypeOfCollateral2, new { @class = "cell resetable resetable" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(s => s.NameAndAddressOfNoteholders3, new { @class = "cell resetable resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.OriginalBalance3, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.CurrentBalance3, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PaymentAmount3, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(s => s.Frequency3, @Model.Frequencies, new { @class = "cell resetable resetable", style = "width: 100px;" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.TypeOfCollateral3, new { @class = "cell resetable resetable" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(s => s.NameAndAddressOfNoteholders4, new { @class = "cell resetable resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.OriginalBalance4, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.CurrentBalance4, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PaymentAmount4, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(s => s.Frequency4, @Model.Frequencies, new { @class = "cell resetable resetable", style = "width: 100px;" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.TypeOfCollateral4, new { @class = "cell resetable resetable" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(s => s.NameAndAddressOfNoteholders5, new { @class = "cell resetable resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.OriginalBalance5, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.CurrentBalance5, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PaymentAmount5, new { @class = "cell resetable resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(s => s.Frequency5, @Model.Frequencies, new { @class = "cell resetable resetable", style = "width: 100px;" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.TypeOfCollateral5, new { @class = "cell resetable resetable" })
+                </td>
+            </tr>
+        </table>
+    </div>
+    <hr />
+    <h3>Stocks and Bonds</h3>
+    <div class="overflow">
+        <table class="table table-striped table-condensed">
+            <tr>
+                <th>Number of Shares
+                </th>
+                <th>Name of Securities
+                </th>
+                <th>Cost
+                </th>
+                <th>Market Value
+                    Quotation/Exchange
+                </th>
+                <th>Date of
+                    Quotation/Exchange
+                </th>
+                <th>Total Value
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsNumberOfShares1, new { @class = "cell resetable resetable", style = "width: 50px;", onchange = "calculateShares(1)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsNameOfSecurities1, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsCost1, new { @class = "cell resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsMarketValue1, new { @class = "cell resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)", onchange = "calculateShares(1)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsDateOfExchange1, new { @class = "cell, resetable datepicker", style = "width: 100px;" }) <em>MM/dd/yyyy</em>
+                </td>
+                <td>
+                    <input type="text" disabled="disabled" id="StocksAndBondsTotalValueDisplay1" class="form-control resetable width-132" style="text-align: right;" />
+                    @Html.HiddenFor(s => s.StocksAndBondsTotalValue1)
+                </td>
+            </tr>
+            <tr> 
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsNumberOfShares2, new { @class = "cell resetable", style = "width: 50px;", onchange = "calculateShares(2)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsNameOfSecurities2, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsCost2, new { @class = "cell resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsMarketValue2, new { @class = "cell resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)", onchange = "calculateShares(2)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsDateOfExchange2, new { @class = "cell, resetable datepicker", style = "width: 100px;" }) <em>MM/dd/yyyy</em>
+                </td>
+                <td>
+                    <input type="text" disabled="disabled" id="StocksAndBondsTotalValueDisplay2" class="form-control resetable width-132" style="text-align: right;" />
+                    @Html.HiddenFor(s => s.StocksAndBondsTotalValue2)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsNumberOfShares3, new { @class = "cell resetable", style = "width: 50px;", onchange = "calculateShares(3)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsNameOfSecurities3, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsCost3, new { @class = "cell resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsMarketValue3, new { @class = "cell resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)", onchange = "calculateShares(3)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsDateOfExchange3, new { @class = "cell, resetable datepicker", style = "width: 100px;" }) <em>MM/dd/yyyy</em>
+                </td>
+                <td>
+                    <input type="text" disabled="disabled" id="StocksAndBondsTotalValueDisplay3" class="form-control resetable width-132" style="text-align: right;" />
+                    @Html.HiddenFor(s => s.StocksAndBondsTotalValue3)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsNumberOfShares4, new { @class = "cell resetable", style = "width: 50px;", onchange = "calculateShares(4)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsNameOfSecurities4, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsCost4, new { @class = "cell resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsMarketValue4, new { @class = "cell resetable", style = "width: 100px; text-align: right;", onblur = "toMoney(this, false)", onchange = "calculateShares(4)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.StocksAndBondsDateOfExchange4, new { @class = "cell resetable datepicker", style = "width: 100px;" }) <em>MM/dd/yyyy</em>
+                </td>
+                <td>
+                    <input type="text" disabled="disabled" id="StocksAndBondsTotalValueDisplay4" class="form-control resetable width-132" style="text-align: right;" />
+                    @Html.HiddenFor(s => s.StocksAndBondsTotalValue4)
+                </td>
+            </tr>
+        </table>
+    </div>
+    <hr />
+    <h3>Real Estate Owned</h3>
+    <div class="overflow short">
+        <table class="table table-striped table-condensed">
+            <tr>
+                <th>&nbsp;
+                </th>
+                <th>Property A
+                </th>
+                <th>Property B
+                </th>
+                <th>Property C
+                </th>
+            </tr>
+            <tr>
+                <td>Type of Real Estate (e.g. Primary
+                    Residence, Other Residence, Rental
+                    Property, Land, etc.)
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyATypeOfRealEstate, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyBTypeOfRealEstate, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyCTypeOfRealEstate, new { @class = "cell resetable" })
+                </td>
+            </tr>
+            <tr>
+                <td>Address
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyAAddress, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyBAddress, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyCAddress, new { @class = "cell resetable" })
+                </td>
+            </tr>
+            <tr>
+                <td>Date Purchased<br />
+                    (e.g. mm/dd/yyyy)
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyADatePurchased, new { @class = "cell resetable datepicker" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyBDatePurchased, new { @class = "cell resetable datepicker" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyCDatePurchased, new { @class = "cell resetable datepicker" })
+                </td>
+            </tr>
+            <tr>
+                <td>Original Cost
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyAOriginalCost, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyBOriginalCost, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyCOriginalCost, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+            </tr
+            <tr>
+                <td>Present Market Value
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyAPresentMarketValue, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyBPresentMarketValue, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyCPresentMarketValue, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+            </tr>
+            <tr>
+                <td>Name &
+                    Address of Mortgage Holder
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyANameAndAddressOfMortgageHolder, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyBNameAndAddressOfMortgageHolder, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyCNameAndAddressOfMortgageHolder, new { @class = "cell resetable" })
+                </td>
+            </tr>
+            <tr>
+                <td>Mortgage Account Number
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyAMortgageAccountNumber, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyBMortgageAccountNumber, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyCMortgageAccountNumber, new { @class = "cell resetable" })
+                </td>
+            </tr>
+            <tr>
+                <td>Mortgage Balance
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyAMortgageBalance, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyBMortgageBalance, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyCMortgageBalance, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+            </tr>
+            <tr>
+                <td>Amount of Payment
+                    per Month/Year
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyAAmountOfPaymentRecurring, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyBAmountOfPaymentRecurring, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(s => s.PropertyCAmountOfPaymentRecurring, new { @class = "cell resetable", style = "text-align: right;", onblur = "toMoney(this, false)" })
+                </td>
+            </tr>
+            <tr>
+                <td>Status of Mortgage
+                </td>
+                <td>
+                    @Html.DropDownListFor(s => s.PropertyAMortgageStatus, @Model.RealEstateOwnedOptions, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(s => s.PropertyBMortgageStatus, @Model.RealEstateOwnedOptions, new { @class = "cell resetable" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(s => s.PropertyCMortgageStatus, @Model.RealEstateOwnedOptions, new { @class = "cell resetable" })
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.OtherPropertyAssets, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.OtherPropertyAssets, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextAreaFor(s => s.OtherPropertyAssets, new { @class = "form-control resetable", @rows = "4", @cols = "95" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.UnpaidTaxes, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.UnpaidTaxes, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextAreaFor(s => s.UnpaidTaxes, new { @class = "form-control resetable", @rows = "4", @cols = "95" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.OtherLiabilities, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.OtherLiabilities, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextAreaFor(s => s.OtherLiabilities, new { @class = "form-control resetable", @rows = "4", @cols = "95" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.LifeInsuranceHeld, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.LifeInsuranceHeld, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextAreaFor(s => s.LifeInsuranceHeld, new { @class = "form-control resetable", @rows = "4", @cols = "95" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.SocialSecurityNumber, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.SocialSecurityNumber, "*")</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.SocialSecurityNumber, new { @class = "control-label resetable" })
+            </div>
+        </div>
+    </div>
+</div>

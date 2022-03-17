@@ -1,0 +1,25 @@
+﻿@model  Inview.Epi.EpiFund.Domain.ViewModel.LoginModel
+@{
+    ViewBag.Title = "Access Asset";
+    Layout = "~/Views/Shared/_LayoutInsuranceUser.cshtml";
+
+}
+
+@using (Html.BeginForm("ManageAssets", "Insurance", FormMethod.Post, new { id = "assetCform" }))
+{
+    <h3>Hello !</h3>
+
+    <p>Please enter the Asset Number number below: </p>
+
+    <div class="input-group">
+        @Html.LabelFor(s => s.AssetNumber, new { @class = "control-label", style = "font-weight:bold;" })
+        <br />
+       
+        <div class="controls">
+            @Html.TextBoxFor(s => s.AssetNumber, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <input type="submit" class="btn btn-primary" id="btnEnter" name="btnSave" value="Find Asset" />
+    
+}

@@ -1,0 +1,88 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.RegistrationModel
+@{
+    ViewBag.Title = "Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @section CaptchaCss {
+        <link href="@Url.Content("~/Content/QapTcha.jquery.css")" rel="stylesheet" type="text/css" />
+        }
+    @section CaptchaJs {
+        <script src="@Url.Content("/Scripts/QapTcha.jquery.js")"></script>
+        }
+}
+
+@using (Html.BeginForm("Registration", "Home"))
+{
+    <div class="panel-header">
+        <h3 style="text-align: center;">New User Registration</h3>
+    </div>
+
+    <p style="margin: 10px 0">
+        US CRE Online is a totally automated – <b>Commercial Real Estate State-of-the-Art Data Portal</b> – that serves Vested Principals as well as all Industry Professionals and Participants of the United States CRE Community.  The sole task of US CRE Online is to maintain its technology 24/7/365… and to meet the site technology, data base, and automated informational communication and marketing needs and requests of its participating CRE Community.
+    </p>
+    <p style="margin: 10px 0">
+        To register as a US CRE Online Accredited Principal Investor, CRE Asset Owner, <a title="National Association of Realtors">NAR</a> Member, and or as a US CRE Industry Participant (including CRE Mortgage Banker/Broker @Html.ActionLink("JVM", "JointVentureMarketing", "Home", new { title = "Joint Venture Marketing" }) Participant), please complete the form below.
+    </p>
+    <p style="margin: 10px 0">
+        Registration at US CRE Online bears NO COST to its Users.  Website engagement and authorization agreements specific to each Registrants intended use (e.g., Principal Investor, CRE Asset Owner, <a title="National Association of Realtors">NAR</a> Member) are available for review throughout the Site.   
+    </p>
+    <p style="margin: 10px 0">
+        If you have any questions about the registration process please go to @Html.ActionLink("Contact Us", "ContactUs", "Home").  You may also e-mail customer service at <a href="mailto:info@uscreonline.com">info@uscreonline.com</a> 24/7.
+    </p>
+
+    <p style="margin: 10px 0"><span style="color: red;">Note:</span> the e-mail address you provide must be valid, as your registration documentation, account approval information, and Fee Simple Asset information, and or Asset Search Criteria Results will be e-mailed there.  At any time you may amend your selections through your “My USC Page”.  Thank you for your Registration.</p>
+    
+    
+    <p class="red">ALL FIELDS MARKED WITH AN * ARE REQUIRED, AND MUST BE FILLED IN PRIOR TO SUBMISSION. </p>
+    <div class="registration-form">
+        @Html.ValidationSummary()
+        @Html.EditorForModel()
+    </div>
+    <input type="submit" name="SubmitRegistration" class="btn btn-primary" value="Preview Completed NCND" />
+    <em>Before you can click on the preview button, you must slide the control</em>
+    <br />
+    <div class="QapTcha"></div>
+    <br />
+    <em>
+        After you have submitted your Registration, you will be logged in as a Registrant of US CRE Online.com. You can begin entering your CRE Portfolio information (e.g., Start a New Data File), and or begin creating your CRE Search Criteria data by going to your “My USC Page” at the website Directory.
+    </em>
+    <br />
+    <input type="submit" name="SubmitRegistration" class="btn btn-primary proceed" value="Submit Registration" />
+}
+<script type="text/javascript">
+    $(function () {
+        $('.QapTcha').QapTcha({
+            txtLock: 'Slide bar to the right to submit',
+            txtUnlock: 'Form can be submitted'
+        });
+    });
+
+    $(window).bind("load", function () {
+        if ("@TempData["NewICAdmin"]") {
+            if ("@TempData["NewICAdmin"]" == "true") {
+                $('#newICAdminModal').modal('show');
+            }
+        }
+
+    });
+
+</script>
+
+<div class="modal fade" id="newICAdminModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>IC Admin</h5>
+			</div>
+			<div class="modal-body text-center">
+				<p>
+                    Thank you for Registering as a new Independent Contractor applicant for US CRE Online LLC. 
+                    To complete your Registration process please click @Html.ActionLink("here", "ExecuteICAgreement", "DataPortal") to be taken to the Employment
+                    Opportunities page for USC.  You will be prompted to scroll down the page to the “Execute IC Agreement” button. 
+                    Once you have fully executed the USC standard Independent Contractor 
+                    Agreement… which is completed on line through the nationally recognized DocuSign service… and takes only minutes to complete… USC will receive your fully executed Agreement and 
+                    commence its due diligence to determine if you would be a good fit as an IC Admin for US CRE Online LLC.  Thank you.
+				</p>
+			</div>
+		</div>
+	</div>
+</div>

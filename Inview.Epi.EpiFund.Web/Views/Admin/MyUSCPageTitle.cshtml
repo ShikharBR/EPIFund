@@ -1,0 +1,33 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.MyUSCViewModel
+@{
+    ViewBag.Title = "My USC Page";
+    Layout = "~/Views/Shared/_LayoutTitleUser.cshtml";
+}
+<h3>Hello @Model.FullName!</h3>
+
+@if (Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.TitleCompManager )
+{
+    <p>Welcome to your personalized US CRE online.com web page.  This is where you will have the ability to manage your title company: <b>@Model.TitleCompanyName</b> and its users </p>
+
+    
+}
+else if (Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.TitleCompUser)
+{
+    
+    
+    <p>Welcome to your personalized US CRE online.com web page relating to the <b>@Model.TitleCompanyName</b>'s records. You can edit your profile and go through the features of the website available for you.</p>
+
+    
+}
+
+
+
+<script>
+    $(window).bind("load", function () {
+        if ("@TempData["rejected"]") {
+            if ("@TempData["rejected"]" == "true") {
+                $('#rejectedICAdminModal').modal('show');
+            }
+        }
+    });
+</script>

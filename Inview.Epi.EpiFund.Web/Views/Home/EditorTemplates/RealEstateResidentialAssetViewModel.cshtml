@@ -1,0 +1,2205 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.RealEstateResidentialAssetViewModel
+@using MVCVideo
+
+<div class="real-estate-residential-asset">
+
+    @using (Html.BeginForm("EpiFundBuysRealEstateR", "Home", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.NameOfPrincipal, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.NameOfPrincipal, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.NameOfPrincipal)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.NameOfCoPrincipal, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.NameOfCoPrincipal, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.NameOfCoPrincipal)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.CorporateName, new { @class = "control-label" })
+                    <i>This data field is for the Corporate Entity Name of Record that holds title to the Asset.  Please include the type of incorporation to the name (e.g., ABC Holdings LLC).</i>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CorporateName, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.CorporateName)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SelectedCorporateEntityType, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.SelectedCorporateEntityType, Model.CorporateEntityTypes as IEnumerable<SelectListItem>, "---")
+                    @Html.ValidationMessageFor(model => model.SelectedCorporateEntityType)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.CorporateTitle, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.CorporateTitle, Model.CorporateTitles as IEnumerable<SelectListItem>, "---")
+                    @Html.ValidationMessageFor(model => model.CorporateTitle)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.AcroynmForCorporateEntity, new { @class = "control-label" })
+                    <i>Example: Acronym for US CRE online LLC is USC</i>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.AcroynmForCorporateEntity, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.AcroynmForCorporateEntity)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.StateOfOriginCorporateEntity, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.StateOfOriginCorporateEntity, Model.States as IEnumerable<SelectListItem>, "---")
+                    @Html.ValidationMessageFor(model => model.StateOfOriginCorporateEntity)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.IsCertificateOfGoodStandingAvailable, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.IsCertificateOfGoodStandingAvailable, "true") Yes
+                    @Html.RadioButtonFor(s => s.IsCertificateOfGoodStandingAvailable, "false") No
+                    @Html.ValidationMessageFor(model => model.IsCertificateOfGoodStandingAvailable)
+                </div>
+            </div>
+        </div>
+        
+          <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.CorporateOwnershipAddress)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.EditorFor(model => model.CorporateOwnershipAddress)
+                 </div>
+            </div> 
+        </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group"> 
+                    @Html.LabelFor(model => model.CorporateOwnershipOfficer)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.EditorFor(model => model.CorporateOwnershipOfficer)
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.CorporateAddress1, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CorporateAddress1, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.CorporateAddress1)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.CorporateAddress2, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CorporateAddress2, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.City, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.City, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.City)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SelectedState, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.SelectedState, Model.States as IEnumerable<SelectListItem>, "---")
+                    @Html.ValidationMessageFor(model => model.SelectedState)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.Zip, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.Zip, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.Zip)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.WorkPhone, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.WorkPhone, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.WorkPhone)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.CellPhone, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CellPhone, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.CellPhone)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.Fax, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.Fax, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.EmailAddress, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.EmailAddress, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.EmailAddress)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SelectedPreferredMethods, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.ListBoxFor(model => model.SelectedPreferredMethods, Model.PreferredMethods as IEnumerable<SelectListItem>)
+                    @Html.ValidationMessageFor(model => model.SelectedPreferredMethods)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SelectedPreferredContactTime, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.SelectedPreferredContactTime, Model.PreferredContactTimes as IEnumerable<SelectListItem>, "---")
+                    @Html.ValidationMessageFor(model => model.SelectedPreferredContactTime)
+                </div>
+            </div>
+        </div>
+    
+        <hr />
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.TypeOfProperty, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.TypeOfProperty, Model.PropertyTypes as IEnumerable<SelectListItem>, "---")
+                    @Html.ValidationMessageFor(model => model.TypeOfProperty)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.PropertyCounty, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.PropertyCounty, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.PropertyCounty)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.TaxAssessorNumber, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.TaxAssessorNumber, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.TaxAssessorNumber)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.TaxAssessorNumberOther, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.TaxAssessorNumberOther, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.TaxAssessorNumberOther)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.PropertyAddress, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.PropertyAddress, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.PropertyAddress)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.PropertyCity, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.PropertyCity, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.PropertyCity)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.PropertyState, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.PropertyState, Model.States as IEnumerable<SelectListItem>, "---")
+                    @Html.ValidationMessageFor(model => model.PropertyState)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.PropertyZip, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.PropertyZip, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.PropertyZip)
+                </div>
+            </div>
+        </div>
+
+         <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.PropHoldType, new { @class = "control-label" })
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.TextBoxFor(s => s.PropHoldType, new { @class = "control-label" })
+                    </div>
+                </div>
+            </div>
+           <div class="row">
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.PropLastUpdated)
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.PropLastUpdated)
+                    </div>
+                </div>
+            </div>          
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.MajorCrossStreets, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.MajorCrossStreets, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.PropertyInsuranceCarrier, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.PropertyInsuranceCarrier, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.PolicyNumber, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.PolicyNumber, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.InsuranceAgentName, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.InsuranceAgentName, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.InsuranceAgentPhone, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.InsuranceAgentPhone, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.PropertyInHOA, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.PropertyInHOA, "true") Yes
+                @Html.RadioButtonFor(s => s.PropertyInHOA, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.HOADues, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.HOADues, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.HOADueTime, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.HOADueTime, Model.HOADueTimes as IEnumerable<SelectListItem>, "---")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.HOALiensOnProperty, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.HOALiensOnProperty, "true") Yes
+                @Html.RadioButtonFor(s => s.HOALiensOnProperty, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.HOALiens, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.HOALiens, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.Language, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.Language, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.DateOfBirth, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.DateOfBirth, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SSN, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SSN, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.PropertyListedForSale, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.PropertyListedForSale, "true") Yes
+                @Html.RadioButtonFor(s => s.PropertyListedForSale, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.AgentName, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.AgentName, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.AgentNumber, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.AgentNumber, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.HasPositionMortgage, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.HasPositionMortgage, "Yes") Yes
+                    @Html.RadioButtonFor(s => s.HasPositionMortgage, "No") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.MortgageLienType, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.MortgageLienType, Inview.Epi.EpiFund.Domain.Enum.MortgageLienType.Recourse) Recourse
+                    @Html.RadioButtonFor(s => s.MortgageLienType, Inview.Epi.EpiFund.Domain.Enum.MortgageLienType.NonRecourse) Non-Recourse
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.MortgageLienAssumable, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.MortgageLienAssumable, "Yes") Yes
+                    @Html.RadioButtonFor(s => s.MortgageLienAssumable, "No") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMortgageCompany, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMortgageCompany, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.FirstMortgageCompany)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCAddress, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCAddress, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.FirstMCAddress)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCCity, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCCity, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.FirstMCCity)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCState, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.FirstMCState, Model.States as IEnumerable<SelectListItem>, "---")
+                    @Html.ValidationMessageFor(model => model.FirstMCState)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCZip, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCZip, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.FirstMCZip)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCLenderPhone, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCLenderPhone, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(model => model.FirstMCLenderPhone)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCLenderPhoneOther, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCLenderPhoneOther, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCAccountNumber, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCAccountNumber, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+@*<div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCTypeOfMortgage, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.FirstMCTypeOfMortgage, "FHA") FHA
+                @Html.RadioButtonFor(s => s.FirstMCTypeOfMortgage, "VA") VA
+                @Html.RadioButtonFor(s => s.FirstMCTypeOfMortgage, "Conv") Conv
+                @Html.RadioButtonFor(s => s.FirstMCTypeOfMortgage, "Priv") Priv
+                </div>
+            </div>
+        </div>*@
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCIsMortgageAnARM, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.FirstMCIsMortgageAnARM, "true") Yes
+                @Html.RadioButtonFor(s => s.FirstMCIsMortgageAnARM, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCMortgageHasPPP, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.FirstMCMortgageHasPPP, "true") Yes
+                @Html.RadioButtonFor(s => s.FirstMCMortgageHasPPP, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCPPPExpireDate, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCPPPExpireDate, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCMonthlyPayment, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCMonthlyPayment, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCPaymentIncludes, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.FirstMCPaymentIncludes, Model.PaymentTypes as IEnumerable<SelectListItem>, "---")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCLastPaymentDate, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCLastPaymentDate, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCWasLastPaymentForThatMonth, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.FirstMCWasLastPaymentForThatMonth, "true") Yes
+                @Html.RadioButtonFor(s => s.FirstMCWasLastPaymentForThatMonth, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCNumberOfMissedPayments, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCNumberOfMissedPayments, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCCurrentMortgageBalance, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCCurrentMortgageBalance, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCHasForclosureStarted, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.FirstMCHasForclosureStarted, "true") Yes
+                @Html.RadioButtonFor(s => s.FirstMCHasForclosureStarted, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FirstMCForclosureSaleDate, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstMCForclosureSaleDate, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMortgageCompany, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMortgageCompany, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCAddress, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCAddress, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCCity, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCCity, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCState, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCState, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCZip, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCZip, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCLenderPhone, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCLenderPhone, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCLenderPhoneOther, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCLenderPhoneOther, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCAccountNumber, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCAccountNumber, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+@*<div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCTypeOfMortgage, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.SecondMCTypeOfMortgage, "FHA") FHA
+                @Html.RadioButtonFor(s => s.SecondMCTypeOfMortgage, "VA") VA
+                @Html.RadioButtonFor(s => s.SecondMCTypeOfMortgage, "Conv") Conv
+                @Html.RadioButtonFor(s => s.SecondMCTypeOfMortgage, "Priv") Priv
+                </div>
+            </div>
+        </div>*@
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCIsMortgageAnARM, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.SecondMCIsMortgageAnARM, "true") Yes
+                @Html.RadioButtonFor(s => s.SecondMCIsMortgageAnARM, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCMortgageHasPPP, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.SecondMCMortgageHasPPP, "true") Yes
+                @Html.RadioButtonFor(s => s.SecondMCMortgageHasPPP, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCPPPExpireDate, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCPPPExpireDate, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCMonthlyPayment, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCMonthlyPayment, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCPaymentIncludes, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.SecondMCPaymentIncludes, Model.PaymentTypes as IEnumerable<SelectListItem>, "---")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCLastPaymentDate, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCLastPaymentDate, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCWasLastPaymentForThatMonth, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.SecondMCWasLastPaymentForThatMonth, "true") Yes
+                @Html.RadioButtonFor(s => s.SecondMCWasLastPaymentForThatMonth, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCNumberOfMissedPayments, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCNumberOfMissedPayments, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCCurrentMortgageBalance, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCCurrentMortgageBalance, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCHasForclosureStarted, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.SecondMCHasForclosureStarted, "true") Yes
+                @Html.RadioButtonFor(s => s.SecondMCHasForclosureStarted, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecondMCForclosureSaleDate, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.SecondMCForclosureSaleDate, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.PaymentsFallBehindReason, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.PaymentsFallBehindReason, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FormOfResidence, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.FormOfResidence, "Own") Own
+                @Html.RadioButtonFor(s => s.FormOfResidence, "Lease") Lease
+                @Html.RadioButtonFor(s => s.FormOfResidence, "Lease Op.") Lease Op.
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.NumberOfYears, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.NumberOfYears, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.MaritalStatus, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.MaritalStatus, "Married") Married
+                @Html.RadioButtonFor(s => s.MaritalStatus, "Seperated") Seperated
+                @Html.RadioButtonFor(s => s.MaritalStatus, "Unmarried") Unmarried
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.Dependants, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.Dependants, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.Bedrooms, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.Bedrooms, Model.BedroomCount as IEnumerable<SelectListItem>)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.Garage, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.Garage, Model.GarageTypes as IEnumerable<SelectListItem>)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.Carport, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.Carport, Model.CarportTypes as IEnumerable<SelectListItem>)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.Pool, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.Pool, Model.PoolTypes as IEnumerable<SelectListItem>)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.Spa, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.Spa, Model.SpaTypes as IEnumerable<SelectListItem>)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.BuildingStyle, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.BuildingStyle, Model.BuildingStyles as IEnumerable<SelectListItem>)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.Architecture, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.Architecture, Model.ArchitectureTypes as IEnumerable<SelectListItem>)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.HOA, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.HOA, "true") Yes
+                @Html.RadioButtonFor(s => s.HOA, "false") No
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.RecentUpgradeOrRemodel, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.RecentUpgradeOrRemodel, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.DefferedMaintenance, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.DefferedMaintenance, new { @class = "control-label" })
+                </div>
+            </div>
+        </div>
+        <div id="maintainance">
+            <h3>Deferred Maintenance</h3>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.HasDeferredMaintenance)
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.RadioButtonFor(model => model.HasDeferredMaintenance, "true", new { style = "margin-top: 10px;", onclick = "toggleDeferredMaintenanceDetails(true)" }) Yes
+                            @Html.RadioButtonFor(model => model.HasDeferredMaintenance, "false", new { style = "margin-top: 10px;", onclick = "toggleDeferredMaintenanceDetails(false)" }) No
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.ValidationMessageFor(model => model.HasDeferredMaintenance)
+                    </div>
+                </div>
+            </div>
+            <div id="deferredMaintenanaceDetails" style="display: none;">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            @Html.LabelFor(s => s.AverageAdjustmentToBaseRentalIncomePerUnitAfterRenovations)
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            @Html.TextBoxFor(s => s.AverageAdjustmentToBaseRentalIncomePerUnitAfterRenovations, new { @class = "formatNumber" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            @Html.LabelFor(model => model.EstDeferredMaintenance)
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            @Html.TextBoxFor(s => s.EstDeferredMaintenance, new { @class = "formatNumber" })
+                            @*<input type="text" name="EstDeferredMaintenance" id="EstDeferredMaintenance" class="formatNumber" value="@((Model as MultiFamilyAssetViewModel).EstDeferredMaintenance)" readonly />*@
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                        </div>
+                    </div>
+                </div>
+                @for (int i = 0; i < Model.DeferredMaintenanceItems.Count; i++)
+                {
+                    <div class="document-item">
+                        <div class="row">
+                            <div class="col-lg-5">
+                                @Html.CheckBoxFor(s => Model.DeferredMaintenanceItems[i].Selected, new { onchange = "calculateEstimatedDeferredMaintenance()" })
+                                <label>@Model.DeferredMaintenanceItems[i].ItemTitle</label>
+                            </div>
+                            <div class="col-lg-7" style="text-align: right;">
+                                <label>Unit Cost:</label>
+                                @Html.TextBoxFor(s => Model.DeferredMaintenanceItems[i].UnitCost, new { @class = "formatMaint", style = "width: 60px; margin-right:5px;", onchange = "addCommasToInputAndCalculate(this)" })
+                                @if (Model.DeferredMaintenanceItems[i].UnitTypeLabel != null)
+                                {
+                                    <label>Number of @Model.DeferredMaintenanceItems[i].UnitTypeLabel:</label>
+                                    @Html.TextBoxFor(s => Model.DeferredMaintenanceItems[i].NumberOfUnits, new { @class = "formatMaint", style = "margin-left: 5px; width: 60px;", onchange = "addCommasToInputAndCalculate(this)" })
+                                }
+                            </div>
+                        </div>
+                        @Html.HiddenFor(s => Model.DeferredMaintenanceItems[i].MaintenanceDetail)
+                        @Html.HiddenFor(s => Model.DeferredMaintenanceItems[i].UnitCost)
+                        @Html.HiddenFor(s => Model.DeferredMaintenanceItems[i].UnitTypeLabel)
+                        @Html.HiddenFor(s => Model.DeferredMaintenanceItems[i].NumberOfUnits)
+                        @Html.HiddenFor(s => Model.DeferredMaintenanceItems[i].ItemTitle)
+                    </div>
+                }
+            </div>
+        </div>
+        <hr />
+        <h3>Images</h3>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="imgUploader">Upload Image:</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="file" name="file" id="imgUploader" style="width: 100%;" />
+            </div>
+            <hr />
+        </div>
+
+        <div id="imgsPreviewer" data-imgcount="@Model.Images.Count">
+            @for (int item = 0; item < Model.Images.Count; item++)
+            {       
+                <div class="imgPreviewDiv" style="display: inline-block;">
+                    <div class="imgPreviewImg" style="background-image: url('@Url.Action("GetImageSource", "Admin", new { fileName = Model.Images[item].FileName, assetId = Model.GuidId, contentType = Model.Images[item].ContentType })');"></div>
+                    <br />
+                    @Html.HiddenFor(s => Model.Images[item].TempAssetImageId)
+                    @Html.HiddenFor(s => Model.Images[item].ContentType)
+                    @Html.HiddenFor(s => Model.Images[item].FileName, new { @class = "imgName" })
+                    @Html.HiddenFor(s => Model.Images[item].GuidId)
+                    <input type='button' class='deleteImgUpload' value='Delete' data-button="@Model.Images[item].FileName" onclick='imgDelete(this)'/>
+                </div>
+            }
+        </div>
+        <br />
+        <hr />
+        <div class="tab-pane" id="documents">
+            <h3>Documents</h3>
+            <div id="docManager" data-doccount="@Model.Documents.Count">
+                <div class="document-item">
+                    <span style="width: 40%; float: left;">Current Rent Roll:</span>
+                    @Html.RadioButtonFor(s => s.availablecurrentRentRoll, "false", new { onchange = "hide('currentRentRoll')" })
+                    Not Available without LOI
+                    @Html.RadioButtonFor(s => s.availablecurrentRentRoll, "true", new { onchange = "show('currentRentRoll')" })
+                    Available
+                    @if (Model.availablecurrentRentRoll)
+                    {
+                        <a onclick="show('currentRentRoll')" style="margin-left: 15px;">View Document(s)</a>
+                    }
+                    <div id="currentRentRoll" style="display: none;" class="document-item-expanded">
+                        <div class="docSetup" style="width: 100%">
+                            <a onclick="hide('currentRentRoll')" style="text-align: right; margin-left: 550px;"><span class="glyphicon glyphicon-remove"></span></a>
+                            <h4 style="margin-top: 0px;">Upload New Document</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Title</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" id="rentRollTitle" value="Current Rent Roll" />
+                                </div>
+                                <div class="col-lg-12">
+                                    <label>Description</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea cols="10" rows="4" id="rentRollDescription"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file" data-type="@((int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.CurrentRentRoll)" id="rentRoll" />
+                                </div>
+                            </div>
+                        </div>
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.CurrentRentRoll)
+                            {
+                            <div class="docPreviewDiv">
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.GuidId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">Click here to download file</a>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Title</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(s => Model.Documents[item].Title)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Description</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextAreaFor(s => Model.Documents[item].Description, 4, 10, null)
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(s => Model.Documents[item].TempAssetDocumentId)
+                                @Html.HiddenFor(s => Model.Documents[item].Size)
+                                @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                @Html.HiddenFor(s => Model.Documents[item].GuidId)
+                                @Html.HiddenFor(s => Model.Documents[item].Type)
+                                @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                <input type='button' class='deleteDocUpload' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this)'/>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="document-item">
+                    <span style="width: 40%; float: left;">Current Operating Report:</span>
+                    @Html.RadioButtonFor(s => s.availablecurrentOperatingReport, "false", new { onchange = "hide('currentOperatingReport')" })
+                    Not Available without LOI
+                    @Html.RadioButtonFor(s => s.availablecurrentOperatingReport, "true", new { onchange = "show('currentOperatingReport')" })
+                    Available
+                    @if (Model.availablecurrentOperatingReport)
+                    {
+                        <a onclick="show('currentOperatingReport')" style="margin-left: 15px;">View Document(s)</a>
+                    }
+                    <div id="currentOperatingReport" style="display: none;" class="document-item-expanded">
+                        <div class="docSetup" style="width: 100%">
+                            <a onclick="hide('currentOperatingReport')" style="text-align: right; margin-left: 550px;"><span class="glyphicon glyphicon-remove"></span></a>
+                            <h4 style="margin-top: 0px;">Upload New Document</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Title</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" id="corTitle" value="Current Operating Report" />
+                                </div>
+                                <div class="col-lg-12">
+                                    <label>Description</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea cols="10" rows="4" id="corDescription"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file" data-type="@((int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.CurrentOperatingReport)" id="cor" />
+                                </div>
+                            </div>
+                        </div>
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.CurrentOperatingReport)
+                            {
+                            <div class="docPreviewDiv">
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.GuidId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">Click here to download file</a>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Title</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(s => Model.Documents[item].Title)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Description</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextAreaFor(s => Model.Documents[item].Description, 4, 10, null)
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(s => Model.Documents[item].Type)
+                                @Html.HiddenFor(s => Model.Documents[item].TempAssetDocumentId)
+                                @Html.HiddenFor(s => Model.Documents[item].Size)
+                                @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                @Html.HiddenFor(s => Model.Documents[item].GuidId)
+                                @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                <input type='button' class='deleteDocUpload' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this)'/>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="document-item">
+                    <span style="width: 40%; float: left;">Prior Fiscal Year Oper Report:</span>
+                    @Html.RadioButtonFor(s => s.availablepriorFiscalYearOperReport, "false", new { onchange = "hide('priorFiscalYearOperReport')" })
+                    Not Available without LOI
+                    @Html.RadioButtonFor(s => s.availablepriorFiscalYearOperReport, "true", new { onchange = "show('priorFiscalYearOperReport')" })
+                    Available
+                    @if (Model.availablepriorFiscalYearOperReport)
+                    {
+                        <a onclick="show('priorFiscalYearOperReport')" style="margin-left: 15px;">View Document(s)</a>
+                    }
+                    <div id="priorFiscalYearOperReport" style="display: none;" class="document-item-expanded">
+                        <div class="docSetup" style="width: 100%">
+                            <a onclick="hide('priorFiscalYearOperReport')" style="text-align: right; margin-left: 550px;"><span class="glyphicon glyphicon-remove"></span></a>
+                            <h4 style="margin-top: 0px;">Upload New Document</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Title</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" id="pfyorTitle" value="Prior Fiscal Year Oper Report" />
+                                </div>
+                                <div class="col-lg-12">
+                                    <label>Description</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea cols="10" rows="4" id="pfyorDescription"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file" data-type="@((int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.PriorFiscalYearOperReport)" id="pfyor" />
+                                </div>
+                            </div>
+                        </div>
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.PriorFiscalYearOperReport)
+                            {
+                            <div class="docPreviewDiv">
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.GuidId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">Click here to download file</a>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Title</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(s => Model.Documents[item].Title)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Description</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextAreaFor(s => Model.Documents[item].Description, 4, 10, null)
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(s => Model.Documents[item].Type)
+                                @Html.HiddenFor(s => Model.Documents[item].TempAssetDocumentId)
+                                @Html.HiddenFor(s => Model.Documents[item].Size)
+                                @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                @Html.HiddenFor(s => Model.Documents[item].GuidId)
+                                @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                <input type='button' class='deleteDocUpload' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this)'/>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="document-item">
+                    <span style="width: 40%; float: left;">Preliminary Title Report:</span>
+                    @Html.RadioButtonFor(s => s.availablepreliminaryTitleReport, "false", new { onchange = "hide('preliminaryTitleReport')" })
+                    Not Available without LOI
+                    @Html.RadioButtonFor(s => s.availablepreliminaryTitleReport, "true", new { onchange = "show('preliminaryTitleReport')" })
+                    Available
+                    @if (Model.availablepreliminaryTitleReport)
+                    {
+                        <a onclick="show('preliminaryTitleReport')" style="margin-left: 15px;">View Document(s)</a>
+                    }
+                    <div id="preliminaryTitleReport" style="display: none;" class="document-item-expanded">
+                        <div class="docSetup" style="width: 100%">
+                            <a onclick="hide('preliminaryTitleReport')" style="text-align: right; margin-left: 550px;"><span class="glyphicon glyphicon-remove"></span></a>
+                            <h4 style="margin-top: 0px;">Upload New Document</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Title</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" id="ptrTitle" value="Preliminary Title Report" />
+                                </div>
+                                <div class="col-lg-12">
+                                    <label>Description</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea cols="10" rows="4" id="ptrDescription"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file" data-type="@((int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.PreliminaryTitleReport)" id="ptr" />
+                                </div>
+                            </div>
+                        </div>
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.PreliminaryTitleReport)
+                            {
+                            <div class="docPreviewDiv">
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.GuidId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">Click here to download file</a>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Title</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(s => Model.Documents[item].Title)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Description</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextAreaFor(s => Model.Documents[item].Description, 4, 10, null)
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(s => Model.Documents[item].Type)
+                                @Html.HiddenFor(s => Model.Documents[item].TempAssetDocumentId)
+                                @Html.HiddenFor(s => Model.Documents[item].Size)
+                                @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                @Html.HiddenFor(s => Model.Documents[item].GuidId)
+                                @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                <input type='button' class='deleteDocUpload' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this)'/>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="document-item">
+                    <span style="width: 40%; float: left;">Plat Map:</span>
+                    @Html.RadioButtonFor(s => s.availableplatMap, "false", new { onchange = "hide('platMap')" })
+                    Not Available without LOI
+                    @Html.RadioButtonFor(s => s.availableplatMap, "true", new { onchange = "show('platMap')" })
+                    Available
+                    @if (Model.availableplatMap)
+                    {
+                        <a onclick="show('platMap')" style="margin-left: 15px;">View Document(s)</a>
+                    }
+                    <div id="platMap" style="display: none;" class="document-item-expanded">
+                        <div class="docSetup" style="width: 100%">
+                            <a onclick="hide('platMap')" style="text-align: right; margin-left: 550px;"><span class="glyphicon glyphicon-remove"></span></a>
+                            <h4 style="margin-top: 0px;">Upload New Document</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Title</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" id="pmTitle" value="Plat Map" />
+                                </div>
+                                <div class="col-lg-12">
+                                    <label>Description</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea cols="10" rows="4" id="pmDescription"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file" data-type="@((int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.PlatMap)" id="pm" />
+                                </div>
+                            </div>
+                        </div>
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.PlatMap)
+                            {
+                            <div class="docPreviewDiv">
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.GuidId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">Click here to download file</a>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Title</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(s => Model.Documents[item].Title)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Description</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextAreaFor(s => Model.Documents[item].Description, 4, 10, null)
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(s => Model.Documents[item].Type)
+                                @Html.HiddenFor(s => Model.Documents[item].TempAssetDocumentId)
+                                @Html.HiddenFor(s => Model.Documents[item].Size)
+                                @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                @Html.HiddenFor(s => Model.Documents[item].GuidId)
+                                @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                <input type='button' class='deleteDocUpload' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this)'/>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="document-item">
+                    <span style="width: 40%; float: left;">Aerial Map:</span>
+                    @Html.RadioButtonFor(s => s.availablearialMap, "false", new { onchange = "hide('arialMap')" })
+                    Not Available without LOI
+                    @Html.RadioButtonFor(s => s.availablearialMap, "true", new { onchange = "show('arialMap')" })
+                    Available
+                    @if (Model.availablearialMap)
+                    {
+                        <a onclick="show('arialMap')" style="margin-left: 15px;">View Document(s)</a>
+                    }
+                    <div id="arialMap" style="display: none;" class="document-item-expanded">
+                        <div class="docSetup" style="width: 100%">
+                            <a onclick="hide('arialMap')" style="text-align: right; margin-left: 550px;"><span class="glyphicon glyphicon-remove"></span></a>
+                            <h4 style="margin-top: 0px;">Upload New Document</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Title</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" id="amTitle" value="Aerial Map" />
+                                </div>
+                                <div class="col-lg-12">
+                                    <label>Description</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea cols="10" rows="4" id="amDescription"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file" data-type="@((int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.ArialMap)" id="am" />
+                                </div>
+                            </div>
+                        </div>
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.ArialMap)
+                            {
+                            <div class="docPreviewDiv">
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.GuidId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">Click here to download file</a>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Title</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(s => Model.Documents[item].Title)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Description</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextAreaFor(s => Model.Documents[item].Description, 4, 10, null)
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(s => Model.Documents[item].Type)
+                                @Html.HiddenFor(s => Model.Documents[item].TempAssetDocumentId)
+                                @Html.HiddenFor(s => Model.Documents[item].Size)
+                                @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                @Html.HiddenFor(s => Model.Documents[item].GuidId)
+                                @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                <input type='button' class='deleteDocUpload' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this)'/>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="document-item">
+                    <span style="width: 40%; float: left;">Original Appraisal:</span>
+                    @Html.RadioButtonFor(s => s.availableoriginalAppraisal, "false", new { onchange = "hide('originalAppraisal')" })
+                    Not Available without LOI
+                    @Html.RadioButtonFor(s => s.availableoriginalAppraisal, "true", new { onchange = "show('originalAppraisal')" })
+                    Available
+                    @if (Model.availableoriginalAppraisal)
+                    {
+                        <a onclick="show('originalAppraisal')" style="margin-left: 15px;">View Document(s)</a>
+                    }
+                    <div id="originalAppraisal" style="display: none;" class="document-item-expanded">
+                        <div class="docSetup" style="width: 100%">
+                            <a onclick="hide('originalAppraisal')" style="text-align: right; margin-left: 550px;"><span class="glyphicon glyphicon-remove"></span></a>
+                            <h4 style="margin-top: 0px;">Upload New Document</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Title</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" id="oaTitle" value="Original Appraisal" />
+                                </div>
+                                <div class="col-lg-12">
+                                    <label>Description</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea cols="10" rows="4" id="oaDescription"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file" data-type="@((int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.OriginalAppraisal)" id="oa" />
+                                </div>
+                            </div>
+                        </div>
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.OriginalAppraisal)
+                            {
+                            <div class="docPreviewDiv">
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.GuidId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">Click here to download file</a>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Title</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(s => Model.Documents[item].Title)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Description</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextAreaFor(s => Model.Documents[item].Description, 4, 10, null)
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(s => Model.Documents[item].Type)
+                                @Html.HiddenFor(s => Model.Documents[item].TempAssetDocumentId)
+                                @Html.HiddenFor(s => Model.Documents[item].Size)
+                                @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                @Html.HiddenFor(s => Model.Documents[item].GuidId)
+                                @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                <input type='button' class='deleteDocUpload' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this)'/>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="document-item">
+                    <span style="width: 40%; float: left;">Current Appraisal:</span>
+                    @Html.RadioButtonFor(s => s.availablecurrentAppraisal, "false", new { onchange = "hide('currentAppraisal')" })
+                    Not Available without LOI
+                    @Html.RadioButtonFor(s => s.availablecurrentAppraisal, "true", new { onchange = "show('currentAppraisal')" })
+                    Available
+                    @if (Model.availablecurrentAppraisal)
+                    {
+                        <a onclick="show('currentAppraisal')" style="margin-left: 15px;">View Document(s)</a>
+                    }
+                    <div id="currentAppraisal" style="display: none;" class="document-item-expanded">
+                        <div class="docSetup" style="width: 100%">
+                            <a onclick="hide('currentAppraisal')" style="text-align: right; margin-left: 550px;"><span class="glyphicon glyphicon-remove"></span></a>
+                            <h4 style="margin-top: 0px;">Upload New Document</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Title</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" id="caTitle" value="Current Appraisal" />
+                                </div>
+                                <div class="col-lg-12">
+                                    <label>Description</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea cols="10" rows="4" id="caDescription"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file" data-type="@((int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.CurrentAppraisal)" id="ca" />
+                                </div>
+                            </div>
+                        </div>
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.CurrentAppraisal)
+                            {
+                            <div class="docPreviewDiv">
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.GuidId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">Click here to download file</a>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Title</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(s => Model.Documents[item].Title)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Description</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextAreaFor(s => Model.Documents[item].Description, 4, 10, null)
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(s => Model.Documents[item].Type)
+                                @Html.HiddenFor(s => Model.Documents[item].TempAssetDocumentId)
+                                @Html.HiddenFor(s => Model.Documents[item].Size)
+                                @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                @Html.HiddenFor(s => Model.Documents[item].GuidId)
+                                @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                <input type='button' class='deleteDocUpload' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this)'/>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="document-item">
+                    <span style="width: 40%; float: left;">Marketing Brochure:</span>
+                    @Html.RadioButtonFor(s => s.availableListingAgentMarketingBrochure, "false", new { onchange = "hide('marketingBrochure')" })
+                    Not Available without LOI
+                    @Html.RadioButtonFor(s => s.availableListingAgentMarketingBrochure, "true", new { onchange = "show('marketingBrochure')" })
+                    Available
+                    @if (Model.availableListingAgentMarketingBrochure)
+                    {
+                        <a onclick="show('marketingBrochure')" style="margin-left: 15px;">View Document(s)</a>
+                    }
+                    <div id="marketingBrochure" style="display: none;" class="document-item-expanded">
+                        <div class="docSetup" style="width: 100%">
+                            <a onclick="hide('currentAppraisal')" style="text-align: right; margin-left: 550px;"><span class="glyphicon glyphicon-remove"></span></a>
+                            <h4 style="margin-top: 0px;">Upload New Document</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Title</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" id="mbTitle" value="Listing Agent Marketing Brochure" />
+                                </div>
+                                <div class="col-lg-12">
+                                    <label>Description</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea cols="10" rows="4" id="mbDescription"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file" data-type="@((int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.ListingAgentMarketingBrochure)" id="mb" />
+                                </div>
+                            </div>
+                        </div>
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.ListingAgentMarketingBrochure)
+                            {
+                            <div class="docPreviewDiv">
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.GuidId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">Click here to download file</a>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Title</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(s => Model.Documents[item].Title)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Description</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextAreaFor(s => Model.Documents[item].Description, 4, 10, null)
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(s => Model.Documents[item].Type)
+                                @Html.HiddenFor(s => Model.Documents[item].TempAssetDocumentId)
+                                @Html.HiddenFor(s => Model.Documents[item].Size)
+                                @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                @Html.HiddenFor(s => Model.Documents[item].GuidId)
+                                @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                <input type='button' class='deleteDocUpload' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this)'/>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="document-item">
+                    <span style="width: 40%; float: left;">Other:</span>
+                    @Html.RadioButtonFor(s => s.availableOtherDocument, "false", new { onchange = "hide('otherDocuments')" })
+                    Not Available without LOI
+                    @Html.RadioButtonFor(s => s.availableOtherDocument, "true", new { onchange = "show('otherDocuments')" })
+                    Available
+                    @if (Model.availableOtherDocument)
+                    {
+                        <a onclick="show('otherDocuments')" style="margin-left: 15px;">View Document(s)</a>
+                    }
+                    <div id="otherDocuments" style="display: none;" class="document-item-expanded">
+                        <div class="docSetup" style="width: 100%">
+                            <a onclick="hide('currentAppraisal')" style="text-align: right; margin-left: 550px;"><span class="glyphicon glyphicon-remove"></span></a>
+                            <h4 style="margin-top: 0px;">Upload New Document</h4>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label>Title</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" id="odTitle" value="Other Document" />
+                                </div>
+                                <div class="col-lg-12">
+                                    <label>Description</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea cols="10" rows="4" id="odDescription"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file" data-type="@((int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.Other)" id="od" />
+                                </div>
+                            </div>
+                        </div>
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.Other)
+                            {
+                            <div class="docPreviewDiv">
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.GuidId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">Click here to download file</a>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Title</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(s => Model.Documents[item].Title)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label style="font-weight: bold;">Description</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Html.TextAreaFor(s => Model.Documents[item].Description, 4, 10, null)
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(s => Model.Documents[item].Type)
+                                @Html.HiddenFor(s => Model.Documents[item].TempAssetDocumentId)
+                                @Html.HiddenFor(s => Model.Documents[item].Size)
+                                @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                @Html.HiddenFor(s => Model.Documents[item].GuidId)
+                                @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                <input type='button' class='deleteDocUpload' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this)'/>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <h3>Videos</h3>
+        <div class="row">
+            <div class="col-lg-12">
+                <label for="videoUploader">Upload Video:</label>
+                <br />
+                <em>Video must be in .mp4 format and must not exceed 100MB in size. Note: Only browsers with Internet Explorer 9+, Chrome 6+, Safari 5+ will be able to view these videos.</em>
+                <br />
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="file" name="videoFile" id="videoUploader" style="width: 100%;" />
+            </div>
+            <hr />
+        </div>
+        <br />
+        <div id="videosPreviewer" data-videocount="@Model.Videos.Count">
+            @for (int item = 0; item < Model.Videos.Count; item++)
+            {       
+                <div class="videoPreviewDiv" style="display: inline-block;">
+                    @Html.Video(new VideoOptions()
+               {
+                   Mp4Url = @Url.Action("GetVideo", new { id = Model.Videos[item].GuidId, filepath = Model.Videos[item].FilePath }),
+                   HasPoster = false,
+                   HasDownloadLink = true,
+                   VideoNotSupported = "<p>No video playback capabilities, please download the video below</p>",
+                   TrackEnable = false
+               }, new { @class = "video-responsive", id = "video" + item })
+                    @Html.HiddenFor(s => Model.Videos[item].FilePath, new { @class = "videoName" })
+                    @Html.HiddenFor(s => Model.Videos[item].GuidId)
+                    <input type='button' class='deleteImgUpload' value='Delete' data-button="@Model.Videos[item].FilePath" onclick='videoDelete(this)'/>
+                </div>
+                <hr />
+                <br />
+            }
+            <br />
+        </div>
+        <hr />
+    
+        <input type="submit" class="btn btn-primary" value="Submit">
+        @Html.DropDownListFor(s => s.PagePropertyTypes, Model.PagePropertyTypes as IEnumerable<SelectListItem>, new { style = "display:none;" })
+        <input type="hidden" value="@(Model.GuidId)" data-asset="@(Model.GuidId)" id="GuidId" name="GuidId"/>
+    }
+</div>
+
+@Html.Partial("_NoteJavascript")
+
+<script>
+    $(document).ready(function () {
+        $("input.formatNumber").each(function (index) {
+            $(this).val(addCommas($(this).val(), true));
+            $(this).on("input", null, null, function () {
+                $(this).val(addCommas($(this).val(), true));
+            });
+        });
+
+        if (!$("#HasDeferredMaintenance").prop('checked')) {
+            toggleDeferredMaintenanceDetails(false);
+        } else {
+            toggleDeferredMaintenanceDetails(true);
+        }
+    });
+
+    function toggleDeferredMaintenanceDetails(show) {
+        if (show) {
+            $("#deferredMaintenanaceDetails").show();
+        } else {
+            $("#deferredMaintenanaceDetails").hide();
+        }
+    }
+
+    function addCommasToInputAndCalculate(control, index) {
+        $(control).val(addCommas($(control).val(), false));
+        calculateEstimatedDeferredMaintenance(index);
+    };
+
+    function calculateEstimatedDeferredMaintenance() {
+        var total = 0;
+        for (var i = 0; i < 15; i++) {
+            var unitCost = getNumberFromValue($("#DeferredMaintenanceItems_" + i + "__UnitCost").val());
+            var units = getNumberFromValue($("#DeferredMaintenanceItems_" + i + "__NumberOfUnits").val());
+            if (!units) {
+                units = 1;
+            }
+            if ($("#DeferredMaintenanceItems_" + i + "__Selected").is(':checked')) {
+                total += (unitCost * units);
+            }
+        }
+        if (total > 0) {
+            $("#EstDeferredMaintenance").val(addCommas(total.toString(), false));
+        } else {
+            $("#EstDeferredMaintenance").val(0);
+        }
+    }
+
+</script>

@@ -1,0 +1,27 @@
+﻿@using Postal
+@model Inview.Epi.EpiFund.Web.Models.Emails.CompanyUserWelcomeEmailAutoActivatedEmail
+To: @Model.Email
+From: USCREonline <info@uscreonline.com>
+Subject: Welcome to USCREOnline!
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+<br />
+
+<p>Dear @Model.To,</p>
+
+<p>Congratulations! You have been activated as a US CRE Online @Model.RegistrationType by @Model.ActivatedByCorpAdmin.</p>
+    
+    <p>Username: @Model.Email</p>
+    <p>Password: @Model.TempPassword</p>
+
+<p>You may login in anytime at <a href="http://www.uscreonline.com">http://www.uscreonline.com</a> to access your authorized pages. </p>
+
+
+<p>Thank you for being a valued Registrant of United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+<span>The Professional Staff</span><br />
+<span><b style="color:darkgoldenrod"><i>US CRE Online, LLC</i></b></span>
+</body>
+</html>

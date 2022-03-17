@@ -1,0 +1,23 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.TitleOrderModel
+@{
+    ViewBag.Title = "Edit Title Order Payment";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using (Html.BeginForm("EditTitleOrderPayment", "Admin", FormMethod.Post))
+{
+    <h3>Edit Title Order Payment</h3>
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false)
+    <br />
+    @Html.EditorForModel()
+
+    <a  type ="submit" style="margin-bottom:5px" class="btn btn-warning" href="@Url.Action("RecordTitleCoOrderPayment", "Admin", new { TitleCoId = Model.TitleCompanyId })" title="Cancel">Cancel</a>
+    <input type="submit"  class="btn btn-primary" id="btnSave" name="btnSave" value="Save Title Order Payment" />
+}
+
+<script>
+    $(function () {
+        $('.datepicker').datepicker();
+    });
+</script>

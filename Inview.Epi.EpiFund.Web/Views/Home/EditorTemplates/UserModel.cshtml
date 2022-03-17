@@ -1,0 +1,305 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.UserModel
+<fieldset id="pnlUserInformation">
+    <legend>Principal Information</legend>
+
+    @Html.HiddenFor(m => m.UserId)
+    @Html.HiddenFor(m => m.UserType)
+    @Html.HiddenFor(s => s.IsActive)
+    @Html.HiddenFor(s => s.Username)
+    @Html.HiddenFor(s => s.ICStatus)
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="control-group">
+                @Html.LabelFor(s => s.FirstName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.FirstName)@Html.ValidationMessageFor(s => s.FirstName, "")
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.LastName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.LastName)@Html.ValidationMessageFor(s => s.LastName, "")
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.ICStatus == Inview.Epi.EpiFund.Domain.Enum.ICStatus.Rejected)
+    {
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="control-group">
+                    @Html.LabelFor(s => s.SelectedUserType, new { @class = "control-label", style = "font-weight:bold; width:130px;" })<span class="red">*</span>
+                    <div class="controls">
+                        @Html.DropDownListFor(s => s.SelectedUserType, @TempData["UserTypes"] as List<SelectListItem>)
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="control-group">
+                    <em>(<b>CRE</b>: Commercial Real Estate)</em>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.CompanyName, new { @class = "control-label", style = "font-weight:bold; width: 96px;" })<span class="red">*</span>
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.CompanyName)
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <em>This data field is for the Corporate Entity Name that you anticipate vesting title into any prospective asset acquisition. If you do not have a corporate entity, enter your full name instead.</em>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="control-group">
+                @Html.LabelFor(s => s.SelectedCorporateEntityType, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+                <div class="controls">
+                    @Html.DropDownListFor(s => s.SelectedCorporateEntityType, @Model.CorporateEntityTypes)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.CorporateTitle, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="controls">
+                    @Html.DropDownListFor(s => s.CorporateTitle, @Model.CorporateTitles)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.AcroynmForCorporateEntity, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.AcroynmForCorporateEntity)
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <em>Example. Acronym for US CRE online, LLC is USC</em>
+        </div>
+    </div>
+    @*<div class="row">
+        <div class="col-lg-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.EIN, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.EIN)
+                </div>
+            </div>
+        </div>
+    </div>*@
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="control-group">
+                @Html.LabelFor(s => s.StateOfOriginCorporateEntity, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="controls">
+                    @Html.DropDownListFor(s => s.StateOfOriginCorporateEntity, @Model.States)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.IsCertificateOfGoodStandingAvailable, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="controls">
+                    @Html.RadioButtonFor(model => model.IsCertificateOfGoodStandingAvailable, "true", new { @class = "no-left-margin" }) Yes
+                    @Html.RadioButtonFor(model => model.IsCertificateOfGoodStandingAvailable, "false") No            
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.AddressLine1, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.AddressLine1)@Html.ValidationMessageFor(s => s.AddressLine1, "")
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.AddressLine2, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.AddressLine2)@Html.ValidationMessageFor(s => s.AddressLine2, "")
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.City, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.City)@Html.ValidationMessageFor(s => s.City, "")
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.SelectedState, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="controls">
+                    @Html.DropDownListFor(s => s.SelectedState, @Model.States)@Html.ValidationMessageFor(s => s.SelectedState, "")
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.Zip, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.Zip)@Html.ValidationMessageFor(s => s.Zip, "")
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.WorkNumber, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.WorkNumber)@Html.ValidationMessageFor(s => s.WorkNumber, "")
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.CellNumber, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.CellNumber)@Html.ValidationMessageFor(s => s.CellNumber, "")
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.FaxNumber, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.FaxNumber)@Html.ValidationMessageFor(s => s.FaxNumber, "")
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.SelectedPreferredMethods, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+                <i>To make multiple selections hold down your CONTROL key as you click a selection.</i>
+                <div class="controls">
+                    @Html.ListBoxFor(s => s.SelectedPreferredMethods, @Model.PreferredMethods, new { style = "width: 140px; height: 110px;" })
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.SelectedPreferredContactTime, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+                <div class="controls">
+                    @Html.ListBoxFor(s => s.SelectedPreferredContactTime, @Model.PreferredContactTimes)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.CorporateTIN, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.CorporateTIN)@Html.ValidationMessageFor(s => s.CorporateTIN, "")
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.LicenseDesc, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.LicenseDesc)@Html.ValidationMessageFor(s => s.LicenseDesc, "")
+                </div>
+                <div class="col-lg-6">
+                    <div class="control-group">
+                        <em>Mortgage broker/banker, real estate license, contractor, etc</em>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="control-group">
+                        @Html.LabelFor(s => s.StateLicenseHeld, new { @class = "control-label", style = "font-weight:bold;" })
+                        <div class="controls">
+                            @Html.DropDownListFor(s => s.StateLicenseHeld, @Model.States)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.LicenseNumber, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.LicenseNumber)@Html.ValidationMessageFor(s => s.LicenseNumber, "")
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+<fieldset>
+    <legend>Asset/Property Updates</legend>
+    <p>
+        US CRE online will be frequently updating the assets and properties available through this website, and you will be receiving these updates weekly.
+    </p>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.MultiFamilyInterest)@Html.LabelFor(s => s.MultiFamilyInterest)
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.RetailTenantPropertyInterest)@Html.LabelFor(s => s.RetailTenantPropertyInterest)
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.OfficeTenantPropertyInterest)@Html.LabelFor(s => s.OfficeTenantPropertyInterest)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.FuelServicePropertyInterest)@Html.LabelFor(s => s.FuelServicePropertyInterest)
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.MedicalTenantPropertyInterest)@Html.LabelFor(s => s.MedicalTenantPropertyInterest)
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.IndustryTenantPropertyInterest)@Html.LabelFor(s => s.IndustryTenantPropertyInterest)
+            </div>
+        </div>
+    </div>
+    <div class="row"> 
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.MHPInterest)@Html.LabelFor(s => s.MHPInterest)
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.SingleTenantRetailPortfoliosInterest)@Html.LabelFor(s => s.SingleTenantRetailPortfoliosInterest)
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.MixedUseCommercialPropertyInterest)@Html.LabelFor(s => s.MixedUseCommercialPropertyInterest)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.FracturedCondoPortfoliosInterest)@Html.LabelFor(s => s.FracturedCondoPortfoliosInterest)
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.MiniStoragePropertyInterest)@Html.LabelFor(s => s.MiniStoragePropertyInterest)
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.ResortHotelMotelPropertyInterest)@Html.LabelFor(s => s.ResortHotelMotelPropertyInterest)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.GorvernmentTenantPropertyInterest)@Html.LabelFor(s => s.GorvernmentTenantPropertyInterest)
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.ParkingGaragePropertyInterest)@Html.LabelFor(s => s.ParkingGaragePropertyInterest)
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.CheckBoxFor(s => s.NonCompletedDevelopmentsInterest)@Html.LabelFor(s => s.NonCompletedDevelopmentsInterest)
+            </div>
+        </div>
+    </div>
+    <br />
+    <span>If you are not interested in receiving an update regarding one of the asset/property categories above, simply uncheck the box.</span>
+    <br />
+</fieldset>

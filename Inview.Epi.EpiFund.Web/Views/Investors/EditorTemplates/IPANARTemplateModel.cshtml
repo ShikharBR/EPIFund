@@ -1,0 +1,247 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.IPANARTemplateModel
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Month, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DisplayFor(s => s.Month, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Day, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DisplayFor(s => s.Day, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Year, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DisplayFor(s => s.Year, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.UserFirstName, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.UserFirstName, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.UserFirstName, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.UserLastName, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.UserLastName, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.UserLastName, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.UserAddressLine1, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.UserAddressLine1, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.UserAddressLine1, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.UserAddressLine2, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.UserAddressLine2, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.City, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.City, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.City, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.State, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.State, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DropDownListFor(s => s.State, @Model.States, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Email, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.Email, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Email, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Phone, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.Phone, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Phone, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Fax, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.Fax, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Fax, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.CorpTitle, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.CorpTitle, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.CorpTitle, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.CompanyName, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.CompanyName, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.CompanyName, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.FirstNameOfCorporateEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.FirstNameOfCorporateEntity, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.FirstNameOfCorporateEntity, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+@*<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.LastNameOfCorporateEntity, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.LastNameOfCorporateEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.LastNameOfCorporateEntity, "*")</span>
+        </div>
+    </div>
+</div>*@
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.TypeOfCorporateEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.TypeOfCorporateEntity, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DropDownListFor(s => s.TypeOfCorporateEntity, @Model.TypesOfCorporateEntity, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.StateOfOriginOfCorporateEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.TypeOfCorporateEntity, "*")</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DropDownListFor(s => s.StateOfOriginOfCorporateEntity, @Model.States, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<h4>Assets</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td style="visibility: collapse;">ID</td>
+            <td>Asset Number</td>
+            <td>Asset Description</td>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Assets.Count; i++)
+        {
+            <tr>
+                <td style="visibility: collapse;">@Html.HiddenFor(s => s.Assets[i].AssetId)@Html.HiddenFor(s => s.Assets[i].AssetNumber)@Html.HiddenFor(s => s.Assets[i].Description)</td>
+                <td>@Model.Assets[i].AssetNumber</td>
+                <td>@Model.Assets[i].Description</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.HiddenFor(a => a.PropertyAddress1)
+@Html.HiddenFor(a => a.PropertyAddress2)
+@Html.HiddenFor(a => a.PropertyCity)
+@Html.HiddenFor(a => a.PropertyState)
+@Html.HiddenFor(a => a.PropertyZip)
+@Html.HiddenFor(a => a.PropertyApns)
+@Html.HiddenFor(a=>a.PropertyCounty)
+@Html.HiddenFor(a=>a.PropertyName)
+@Html.HiddenFor(a=>a.PropertyType)
+@Html.HiddenFor(a=>a.DateAccepted)

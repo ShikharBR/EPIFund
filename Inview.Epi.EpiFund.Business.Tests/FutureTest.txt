@@ -1,0 +1,2 @@
+﻿• When an IC admin submitted an asset to corp admin, the bool IsSubmitted wasnt set
+• SmtpServer stopped working because the config settings was null (Business class)

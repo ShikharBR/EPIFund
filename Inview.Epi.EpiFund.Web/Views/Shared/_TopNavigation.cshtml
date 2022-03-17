@@ -1,0 +1,106 @@
+﻿@using Inview.Epi.EpiFund.Domain.Helpers
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-right: 0;">
+    <ul class="nav navbar-nav">
+        <li class="@Html.IsSelected(action: "Index", controller: "Home")"><a href="@Url.Action("Index", "Home")" style=" font-size:11px">Home</a></li>
+        <li class="@Html.IsSelected(controller: "DataPortal", action: "DataPortal")"><a href="@Url.Action("DataPortal", "DataPortal")">CRE Data Portal</a></li>
+        <li class="@Html.IsSelected(controller: "DataPortal", action: "AssetList")"><a href="@Url.Action("InvestorOpportunities", "Home")">CRE Asset Search</a></li>
+        @*"@Html.IsSelected(action: "InvestorOpportunities")"*@
+        <li class="@Html.IsSelected(action: "JointVentureMarketing")"><a href="@Url.Action("JointVentureMarketing", "Home")">MBA JV Marketing Ops</a></li>
+        <li class="@Html.IsSelected(action: "EmploymentOpportunities")"><a href="@Url.Action("EmploymentOpportunities", "Home")">Growth Opportunities</a></li>
+        <li class="@Html.IsSelected(action: "CreateCREAsset")"><a id="createCREAssetLinkTop" data-toggle="modal" data-target="#assetDialogTop" style="cursor: pointer">Create New CRE Asset File</a></li>
+    </ul>
+</div>
+
+<div class="modal fade" id="assetDialogTop" tabindex="-1" role="dialog" aria-labelledby="assetDiag-label" aria-hidden="true" data-backdrop="false">
+    <form>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="assetDiag-label">Create Asset File</h4>
+                </div>
+                <div class="modal-body">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="row" id="isLogged1">
+                            <ul>
+                                <li class="@Html.IsSelected(action: "EpiFundBuysRealEstate")"><a style="background-color: Highlight; color:blue" href="@Url.Action("EpiFundBuysRealEstate", "Home")">Create New Fee Simple CRE Asset File</a></li>
+                                <li class="@Html.IsSelected(action: "EpiFundBuysPaper")"><a style="background-color: Highlight; color:blue" href="@Url.Action("EpiFundBuysPaper", "Home")">Create New CRE Note Asset File</a></li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row" id="notLogged1">
+                            <div class="col-sm-12" style="padding-top: 10px; padding-right: 113px;">
+                                <span class="text">Are you an Asset's Principal Owner or a U.S. <a title="National Association of Realtors" style="background-color: HighlightText; color: black">NAR</a> Member Listing Agent?</span>
+                                <br />
+                                <button class="yesText1" type="button" id="yesButton" name="yesButton" title="Yes">Yes</button>
+                                <button class="noText1" type="button" id="noButton" name="noButton" title="No">No</button>
+                            </div>
+                        </div>
+                        <div class="row" id="allowDiv1" style="display: none">
+                            <ul>
+                                <li class="@Html.IsSelected(action: "EpiFundBuysRealEstate")"><a style="background-color: Highlight; color:blue" href="@Url.Action("EpiFundBuysRealEstate", "Home")">Create New Fee Simple CRE Asset File</a></li>
+                                <li class="@Html.IsSelected(action: "EpiFundBuysPaper")"><a style="background-color: Highlight; color:blue" href="@Url.Action("EpiFundBuysPaper", "Home")">Create New CRE Note Asset File</a></li>
+                            </ul>
+                        </div>
+                        <div class="row" id="disallowDiv1" style="display: none">
+                            <label>You are not allowed to view these links </label>
+                        </div>
+                    }
+
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $('#createCREAssetLinkTop').click(function () {
+        $("#assetDialogTop").toggle();
+        $("#capcalc").hide();
+        $("#mrtgcalc").hide();
+        $("#eqcalc").hide();
+        $('#notLogged1').show();
+        $('#allowDiv1').hide();
+        $('#disallowDiv1').hide();
+    });
+
+    //$(document).on("click", "a.yesText1", function () {
+    $("#yesButton").click(function () {
+        $('#notLogged1').hide();
+        $('#allowDiv1').show();
+    });
+
+    $("#noButton").click(function () {
+        $('#notLogged1').hide();
+        $('#disallowDiv1').show();
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Home/ValidateUser/",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            cache: false,
+            success: function (response) {
+                if (response.Status == "True") {
+                    $('#isLogged1').show();
+                }
+                else {
+                    $('#isLogged1').hide();
+                }
+            },
+            error: function (jqXHR, exception) {
+            },
+            failure: function (response) {
+            }
+        });
+
+    });
+</script>

@@ -1,0 +1,140 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.PortfolioQuickListViewModel>
+@{
+    bool showCreatedBy = false;   
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var checkboxes = $("input[type='checkbox']");
+
+        checkboxes.click(function () {
+            if (checkboxes.is(":checked")) {
+                $("#notifyRegistrant").removeClass("hide", !checkboxes.is(":checked"));
+            } else {
+                $("#notifyRegistrant").addClass("hide", !checkboxes.is(":checked"));
+            }
+        });
+    });
+</script>
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+    </div>
+    @if (Model.Count > 0)
+    {
+        <div class="overflow short-xs">
+            <table class="table table-striped" id="tbAssets" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+                <thead>
+                    <tr>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.NameSortParm')">Portfolio Name</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.NumberSortParm')"># Assets</a></b>
+                        </td>
+                        <td colspan="3"> <b><a style="cursor: pointer" ></a></b></td>
+                        <td colspan="5"></td>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < @Model.Count; i++)
+                    {
+                    <tr id="@Model[i].PortfolioId">
+                        <td style="width: 150px;">
+                            @Model[i].PortfolioName
+                        </td>
+                        <td style="width: 50px;">
+                            @Model[i].PortfolioAssets.Count
+                        </td>
+                        @if (@Model[i].isActive)
+                        {
+                        <td style="width:50px">
+                            <a href="@Url.Action("ViewPortfolioSummary", "Portfolio", new { id = @Model[i].PortfolioId })">View</a>
+                        </td>
+                        }
+                        else
+                        {
+                        <td style="width:50px"><a>Deactivated</a></td>
+                        }
+                        @if (@Model[i].isActive)
+                        {
+                        <td style="text-align: center; width:50px">
+                            <a href="@Url.Action("UpdatePortfolio", "Portfolio", new { id = @Model[i].PortfolioId })" style="cursor:pointer" title="Edit">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                        </td>
+                        }
+                        else
+                        {
+                        <td style="text-align: center; width:50px">
+                            <span title="inaccessible" class="glyphicon glyphicon-ban-circle"></span>
+                        </td>
+                        }
+                        <td style="text-align: center; width:50px">
+                            <a href="@Url.Action("DeactivatePortfolio", "Portfolio", new { id = @Model[i].PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove the Asset from this Portfolio?');">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                        </td>
+                        <td colspan="5">
+                            <table class="table table-striped" id="tbInner" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+
+                                <tr class="header"> <td colspan="5"><label style="color:#428bca">Asset Details</label><a style="float:right;color:#428bca;font-size:medium">-</a> <a style="float:right;color:#428bca;font-size:medium">/</a> <a style="float:right; color:#428bca;font-size:medium">+</a></td></tr>
+                                <tr style="display:none">
+                                    <td>
+                                        <b><a style="cursor: pointer">Asset Name</a></b>
+                                    </td>
+                                    <td>
+                                        <b><a style="cursor: pointer">Asset Type</a></b>
+                                    </td>
+                                    <td>
+                                        <b><a style="cursor: pointer">Address</a></b>
+                                    </td>
+                                    <td>
+                                        <b><a style="cursor: pointer">City</a></b>
+                                    </td>
+                                    <td>
+                                        <b><a style="cursor: pointer">State</a></b>
+                                    </td>
+                                </tr>
+                                @for (int j = 0; j < @Model[i].PortfolioAssets.Count; j++)
+                                {
+                                    <tr style="display:none" id="@Model[i].PortfolioAssets[j].AssetId">
+                                        <td style="width: 200px;">
+                                            @Model[i].PortfolioAssets[j].AssetName
+                                        </td>
+                                        <td style="width: 200px;">
+                                            @Model[i].PortfolioAssets[j].Type
+                                        </td>
+                                        <td style="width: 200px;">
+                                            @Model[i].PortfolioAssets[j].AddressLine1
+                                        </td>
+                                        <td style="width: 100px;">
+                                            @Model[i].PortfolioAssets[j].City
+                                        </td>
+                                        <td style="width: 100px;">
+                                            @Model[i].PortfolioAssets[j].State
+                                        </td>
+                                    </tr>
+                                }
+                                <tr class="header"></tr>
+                            </table>
+
+                        </td>
+
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+       
+    }
+</div>
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ManagePortfolios",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

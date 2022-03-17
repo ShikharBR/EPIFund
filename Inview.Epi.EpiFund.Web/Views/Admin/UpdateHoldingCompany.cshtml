@@ -1,0 +1,16 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.HoldingCompanyViewModel
+@{
+    ViewBag.Title = "Update Holding Company";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Update Holding Company</h2>
+@using (Html.BeginForm("UpdateHoldingCompany", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false)
+    <br />
+    @Html.EditorForModel()
+
+    <input type="submit" class="btn btn-primary" id="btnSave" name="btnSave" value="Save Holding Company" />
+}

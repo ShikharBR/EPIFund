@@ -1,0 +1,75 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.EmailPersonalFinancialStatementModel
+@{
+    ViewBag.Title = "Email Personal Financial Statement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .field-validation-error
+    {
+        color:red;
+    }
+</style>
+<h3 class="page-header">Send Personal Financial Statement</h3>
+@using (Html.BeginForm("SendPFSToMortgageLenderBroker", "DataPortal", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="lg-col-12">
+            <div class="control-group">
+                <span class="control-label">
+                    <label>Company Name</label></span>
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.CompanyName)
+                    @Html.ValidationMessageFor(model => model.CompanyName)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="lg-col-12">
+            <div class="control-group">
+                <span class="control-label">
+                    <label>Officer Name</label></span>
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.OfficerName)
+                    @Html.ValidationMessageFor(model => model.OfficerName)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="lg-col-12">
+            <div class="control-group">
+                <span class="control-label">
+                    <label>Email Address</label></span>
+                <div class="controls">
+                    @Html.TextBoxFor(s => s.ForwardEmailAddress)
+                    @Html.ValidationMessageFor(model => model.ForwardEmailAddress)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="documents">
+        <h3>Attachments</h3>
+        <em>This is where you will attach your Corporate Resume, POF Confirmation Letter, and Corporate Registration and Certificate of Good Standing documents. These attachments will ONLY be delivered to the CRE Mortgage Lender/Broker’s you have identified, and will be saved at your My USC Page.</em>
+        <br />
+        <br />
+        <input type="button" value="Add Attachment" onclick="addAttachmentDiv()" />
+        <br />
+        <br />
+        <div id="uploadDiv">
+        </div>
+        @*<input type="file" name="Documents" multiple /><br />*@
+    </div>
+    <input type="submit" class="btn btn-primary" value="Send Email" />
+}
+
+<script>
+    $(document).ready(function () {
+        docCount = 0;
+    });
+
+    function addAttachmentDiv() {
+        $("#uploadDiv").append("<input type='file' name='Documents[" + docCount + "]' /><br/>");
+        docCount++;
+    }
+</script>

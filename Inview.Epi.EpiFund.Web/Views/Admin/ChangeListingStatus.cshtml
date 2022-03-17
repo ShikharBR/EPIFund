@@ -1,0 +1,33 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.ChangeListingStatusModel
+@{
+    ViewBag.Title = "Change Listing Status";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@using (Html.BeginForm("Login", "Home", new { returnUrl = Request.QueryString["returnUrl"] ?? "" }))
+{ 
+    @Html.HiddenFor(s=>s.AssetId)
+    @Html.HiddenFor(s=>s.OldStatus)
+    <div class="panel-header">
+        <h3 style="text-align: center;">Change Asset Listing Status</h3>
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(s => s.AssetNumber, new { @class = "control-label", style = "font-weight:bold;" })
+        <div class="controls">
+            @Html.DisplayFor(s => s.AssetNumber)
+        </div>
+    </div>
+    <div class="control-group">
+        @Html.LabelFor(s => s.AssetDescription, new { @class = "control-label", style = "font-weight:bold;" })
+        <div class="controls">
+            @Html.DisplayFor(s => s.AssetDescription)
+        </div>
+    </div>
+    <div class="control-group">
+        @Html.LabelFor(s => s.NewStatus, new { @class = "control-label", style = "font-weight:bold;" })
+        <div class="controls">
+            @Html.DropDownListFor(s => s.NewStatus, @Model.StatusList)
+        </div>
+    </div>
+    <input class="btn btn-default" type="submit" value="Save" />
+}

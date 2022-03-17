@@ -1,0 +1,38 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.NotifyRegistrantOfMatchingAssetsModel
+@{
+    ViewBag.Title = "Notify Registrant";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3 class="page-header">Notify Registrant of Matching Assets</h3>
+<p>By clicking on [Send Notification To Registrant], you are effectively holding this asset for 7 days for the registrant you're selecting. If after 7 days, the registrant has not acted on this asset, it will automatically be published for the general public to see.</p>
+@using (Html.BeginForm("NotifyRegistrant", "Admin", FormMethod.Post))
+{
+    if (Model != null)
+    {
+        if (Model.AssetNumbers != null)
+        {
+            for (int i = 0; i < Model.AssetNumbers.Count; i++)
+            {
+    @Html.HiddenFor(s => Model.AssetNumbers[i])
+            }
+        }
+    <div class="row">
+        <div class="lg-col-12">
+            <div class="control-group">
+                <span class="control-label">Select the search criteria form you'd like to respond to:</span>
+                <br />
+                <div class="controls">
+                    @Html.DropDownListFor(s => s.AssetSearchId, @Model.Searches)
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="button" class="btn btn-warning" value="Cancel" onclick="location.href='@Url.Action("ManageAssets", "Admin")    '" />    
+    <input type="submit" class="btn btn-primary" value="Send Notification To Registrant" />
+    }
+    else
+    {
+    <input type="button" class="btn btn-default" value="Go Back" onclick="location.href='@Url.Action("ManageAssets", "Admin")    '" />    
+    }
+}

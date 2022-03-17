@@ -1,0 +1,34 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.AssetStatusChangeReportEmail
+To: @Model.RecipientEmail
+From: USCREonline <info@uscreonline.com>
+Subject: Asset Status Change
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+<p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+
+<p>Dear @Model.RecipientName,</p>
+<p>Welcome to US CRE Online: the #1 [Principal to Principal] Commercial Real Estate Data & Communications Portal in the World.  The following CRE Assets at USC were Published within minutes of this e mail notification by their respective controlling interests for formal expressions of acquisition interest from the Global CRE Investment Community… with the following <span style="color: red; font-weight:bold;">LIST STATUS UPDATES</span>:</p>
+      @foreach (var asset in @Model.AssetChanges)
+    {
+        <p>Asset ID # @asset.AssetId, @asset.AssetDescription has changed its status from @asset.OriginalStatus to @asset.NewStatus.</p>
+    }
+    <p>You are sent this automated e mail because you had previously posted specific [CRE Search Criteria] and had been notified by USC that the above captioned CRE Assets matched your respective search criteria.</p>
+    <p>If you have/had a working interest in any of the above captioned CRE Assets, please update your file and joint venture participants accordingly.  We encourage you to communicate any continuing interest to the respective vested principals and or applicable listing brokers.  As applicable, listing broker information is provided in the Asset View display at USCREonline.com. </p>
+    <p>Review of all CRE Asset Files at USC bears no registration nor recurring cost.  To view any CRE Asset File at USC please follow these simple instructions:</p>
+    <ol>
+        <li>Go to www.uscreonline.com and log in.  You may enter any of the Asset ID #'s captioned above as part of your log in to be taken directly to the respective CRE Asset View page.</li>
+        <li>Select [Investor Opportunities] from the Directory, &#60;click&#62; the [Asset Search Questionnaire] at the top or bottom of the page, and enter the Asset ID #'s captioned above.</li>
+        <li>All Asset ID #'s selected for all searches will be retained at your ["My USC Page"] [Assets of Interest] Tab.</li>
+        <li>If you have not already done so, you will be required to approve a onetime IPA to view unlimited Asset Files going forward (Internet Portal Agreement).</li>
+    </ol>
+    <p><span style="color:red; font-weight:bold;">Note</span>: when your visit at USC is complete, please [Log Out].  This will ensure the site is refreshed at each new session [Log In].</p>
+    <p>A requisite of any formal interest (LOI) to CRE investment is Proof of Funds (both equity and debt).  If the Asset Ownership is represented by an NAR Member, we encourage you to follow up with the List Agent to arrange for exchange of data and to inspect the respective property.  It is part of US CRE Online protocol to notify each respective List Agent of all principal's referred by US CRE Online to their respective listed assets.  Thus, you may receive follow up by said List Agent inquiring as to your level of interest in each said Asset.</p>
+    <p>We hope that you will find the data provided at US CRE Online as a valuable tool for your commercial real estate ventures... creating viable, immediately available foundations for joint ventures between your debt and equity capital relationships.  </p>
+    <p>Thank you for being a valued Registrant of United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+<p>
+The Professional Staff
+US CRE Online, LLC</p>
+    </body>
+</html>

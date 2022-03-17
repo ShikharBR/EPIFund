@@ -1,0 +1,2450 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.AssetViewModel
+@using MVCVideo
+@using Inview.Epi.EpiFund.Domain.ViewModel
+@using Inview.Epi.EpiFund.Domain.Helpers
+@{
+    ViewBag.Title = "Paper Asset View";
+    Layout = ViewBag.Layout;
+    ViewBag.IsAssetView = true;
+    List<MVCVideo.VideoOptions> videoOptions = ViewBag.Videos as List<MVCVideo.VideoOptions>;
+
+    MultiFamilyAssetViewModel mfAsset = new MultiFamilyAssetViewModel();
+    CommercialAssetViewModel cAsset = new CommercialAssetViewModel();
+    double proformaSGI = new double();
+    double proformaNOI = new double();
+    double listPricePerSqFt = new double();
+    double listPricePerUnit = new double();
+    double appraisalPerUnit = new double();
+    double appraisalPerSqFt = new double();
+    double percentOfPropLeased = new double();
+    double capRate = new double();
+    double defCapRate = new double();
+    double defProformaSGI = new double();
+    double defProformaNOI = new double();
+    double defTotalListing = new double();
+    double defAnnualRevenueAdjustment = new double();
+    double bpoRate = new double();
+
+    double noteBalLTV = new double();
+    double notePricePerUnit = new double();
+    double notePricePerSqFt = new double();
+
+    double currentNotePrincipal = new double();
+    double originalNotePrincipal = new double();
+    double noteInterestRate = new double();
+    double paymentAmount = new double();
+    double sellerCarryNotePrice = new double();
+    double sellerCarryNoteCashDown = new double();
+    double bpoOfProperty = new double();
+    double proformaCam = new double();
+    double sgiPerSqFt = new double();
+    double proformaAOEAsSGI = 0;
+    string securedPosition = string.Empty;
+    currentNotePrincipal = Model.CurrentNotePrincipal != null ? (double)Model.CurrentNotePrincipal : 0;
+    originalNotePrincipal = Model.NotePrincipal != null ? (double)Model.NotePrincipal : 0;
+    noteInterestRate = Model.NoteInterestRate != null ? (double)Model.NoteInterestRate : 0;
+    paymentAmount = Model.PaymentAmount != null ? (double)Model.PaymentAmount : 0;
+    sellerCarryNotePrice = Model.SellerCarryNotePrice != null ? (double)Model.SellerCarryNotePrice : 0;
+    sellerCarryNoteCashDown = Model.SellerCarryNoteCashDown != null ? (double)Model.SellerCarryNoteCashDown : 0;
+    //bpoOfProperty = Model.BPOOfProperty != null ? (double)Model.BPOOfProperty : 0;
+    bpoOfProperty = Model.CurrentBpo != null ? (double)Model.CurrentBpo : 0;
+    listPricePerSqFt = 0;
+    listPricePerUnit = 0;
+    appraisalPerSqFt = 0;
+    appraisalPerUnit = 0;
+    defCapRate = 0;
+    defProformaNOI = 0;
+    defProformaSGI = 0;
+    defAnnualRevenueAdjustment = 0;
+    noteBalLTV = 0;
+    notePricePerSqFt = 0;
+    notePricePerUnit = 0;
+
+    if (!string.IsNullOrEmpty(Model.TypeOfNote))
+    {
+        string noteType = Model.TypeOfNote;
+        if (noteType != null && noteType.Length > 0)
+        {
+           securedPosition = noteType;
+
+        }
+        else
+        {
+            securedPosition = "Other";
+        }
+    }
+    if (Model.SquareFeet > 0)
+    {
+        listPricePerSqFt = Model.AskingPrice / Model.SquareFeet;
+        appraisalPerSqFt = Model.CurrentBpo / Model.SquareFeet;
+        notePricePerSqFt = Model.CurrentBpo / Model.SquareFeet;
+    }
+    if (Model.ProformaAnnualIncome > 0 && Model.ProformaMiscIncome > 0)
+    {
+        proformaAOEAsSGI = Model.ProformaAnnualOperExpenses / (Model.ProformaAnnualIncome + Model.ProformaMiscIncome);
+    }
+    if (Model.GetType() == typeof(MultiFamilyAssetViewModel))
+    {
+        mfAsset = (Model as MultiFamilyAssetViewModel);
+        listPricePerUnit = Model.AskingPrice / mfAsset.TotalUnits;
+        appraisalPerUnit = Model.CurrentBpo / mfAsset.TotalUnits;
+        noteBalLTV = currentNotePrincipal / Model.CurrentBpo;
+        notePricePerUnit = Model.CurrentBpo / mfAsset.TotalUnits;
+
+        var aoe = Model.ProformaAnnualOperExpenses;
+        var pagi = Model.ProformaAnnualIncome;
+        var pami = Model.ProformaMiscIncome;
+        proformaSGI = 0;
+        proformaNOI = 0;
+        defTotalListing = 0;
+        defTotalListing = Model.AskingPrice == 0 ? Model.CurrentBpo + mfAsset.EstDeferredMaintenance : Model.AskingPrice + mfAsset.EstDeferredMaintenance;
+
+
+        //if (pami > 0 && pagi > 0)
+        if (true)
+        {
+            //o   Formula:  [((P:SGI + P:AMI) – P:VF) – P:AOE] = P:NOI (Pre-Tax)
+            //o   Numerical application of Formula: [(($1,307,760 + $53,618) - $245,048*) - $733,230] = $383,100 (correct amount)
+            //§  *P:VF is 18% per data in the Asset file.  18% of ($1,307,760 + $53,618) = $245,048
+
+            var totalIncome = pagi + pami;
+            if (totalIncome > 0)
+            {
+                proformaSGI = ((aoe / totalIncome) * 100);
+            }
+            var pvf = (Model.ProformaVacancyFac / 100) * totalIncome;
+            proformaNOI = Math.Round((totalIncome - pvf) - aoe);
+            var pretax = totalIncome - pvf - aoe;
+            capRate = ((pretax / Model.AskingPrice) * 100);
+            bpoRate = ((pretax / Model.CurrentBpo));
+            defAnnualRevenueAdjustment = mfAsset.EstDeferredMaintenance == 0 ? 0 : (Model.AverageAdjustmentToBaseRentalIncomePerUnitAfterRenovations.GetValueOrDefault(0) * mfAsset.TotalUnits * 12);
+            defProformaSGI = mfAsset.EstDeferredMaintenance == 0 ? Model.ProformaAnnualIncome : Model.ProformaAnnualIncome + defAnnualRevenueAdjustment + pami;
+
+            var adjDefPvf = (Model.ProformaVacancyFac / 100) * defProformaSGI;
+            //[{(Proforma SGI + Annualized Revenue Adjustment to Proforma SGI after Renovation + Proforma AMI) – Proforma VF} – Proforma AOE]
+            defProformaNOI = mfAsset.EstDeferredMaintenance == 0 ? proformaNOI : Math.Round(defProformaSGI - adjDefPvf - aoe);
+            if (Model.AskingPrice + mfAsset.EstDeferredMaintenance > 0)
+            {
+                defCapRate = ((defProformaNOI / defTotalListing) * 100);
+            }
+            else
+            {
+                defCapRate = Convert.ToDouble(bpoRate.ToString("P2").Replace('%', ' '));
+            }
+        }
+        if (Model.GetType() == typeof(CommercialAssetViewModel))
+        {
+            cAsset = (Model as CommercialAssetViewModel);
+        }
+        if (mfAsset.EstDeferredMaintenance == 0)
+        {
+            defProformaSGI = Model.ProformaAnnualIncome;
+        }
+    }
+    if (Model.GetType() == typeof(CommercialAssetViewModel))
+    {
+        cAsset = (Model as CommercialAssetViewModel);
+        //listPricePerUnit = Model.AskingPrice / mfAsset.TotalUnits;
+        //appraisalPerUnit = Model.CurrentBpo / mfAsset.TotalUnits;
+        noteBalLTV = currentNotePrincipal / Model.CurrentBpo;
+        //notePricePerUnit = Model.CurrentBpo / mfAsset.TotalUnits;
+
+        var aoe = Model.ProformaAnnualOperExpenses;
+        var pagi = Model.ProformaAnnualIncome;
+        var pami = Model.ProformaMiscIncome;
+        proformaSGI = 0;
+        proformaNOI = 0;
+        defTotalListing = 0;
+        proformaCam = 0;
+        sgiPerSqFt = 0;
+        percentOfPropLeased = 0;
+        defTotalListing = cAsset.AskingPrice == 0 ? cAsset.CurrentBpo + cAsset.EstDeferredMaintenance : cAsset.AskingPrice + cAsset.EstDeferredMaintenance;
+        //if (pami > 0 && pagi > 0)
+        if (true)
+        {
+            //o   Formula:  [((P:SGI + P:AMI) – P:VF) – P:AOE] = P:NOI (Pre-Tax)
+            //o   Numerical application of Formula: [(($1,307,760 + $53,618) - $245,048*) - $733,230] = $383,100 (correct amount)
+            //§  *P:VF is 18% per data in the Asset file.  18% of ($1,307,760 + $53,618) = $245,048
+
+            var totalIncome = pagi + pami;
+            if (totalIncome > 0)
+            {
+                proformaSGI = ((aoe / totalIncome) * 100);
+            }
+            if (cAsset.SquareFeet > 0)
+            {
+                proformaCam = pami / cAsset.SquareFeet;
+                sgiPerSqFt = pagi / cAsset.SquareFeet;
+                if (cAsset.LeasedSquareFootageByMajorTenant > 0)
+                {
+                    percentOfPropLeased = Math.Round((Math.Round((double)((double)cAsset.LeasedSquareFootageByMajorTenant / (double)cAsset.SquareFeet), 4) * 100), 2);
+                }
+            }
+            var pvf = (Model.ProformaVacancyFac / 100) * totalIncome;
+            proformaNOI = Math.Round((totalIncome - pvf) - aoe);
+            var pretax = totalIncome - pvf - aoe;
+            capRate = ((pretax / Model.AskingPrice) * 100);
+            bpoRate = ((pretax / Model.CurrentBpo));
+            defAnnualRevenueAdjustment = cAsset.EstDeferredMaintenance == 0 ? 0 : (Model.AverageAdjustmentToBaseRentalIncomePerUnitAfterRenovations.GetValueOrDefault(0) * mfAsset.TotalUnits * 12);
+            defProformaSGI = cAsset.EstDeferredMaintenance == 0 ? Model.ProformaAnnualIncome : Model.ProformaAnnualIncome + defAnnualRevenueAdjustment + pami;
+
+            var adjDefPvf = (Model.ProformaVacancyFac / 100) * defProformaSGI;
+            //[{(Proforma SGI + Annualized Revenue Adjustment to Proforma SGI after Renovation + Proforma AMI) – Proforma VF} – Proforma AOE]
+            defProformaNOI = mfAsset.EstDeferredMaintenance == 0 ? proformaNOI : Math.Round(defProformaSGI - adjDefPvf - aoe);
+            if (Model.AskingPrice + mfAsset.EstDeferredMaintenance > 0)
+            {
+                defCapRate = ((defProformaNOI / defTotalListing) * 100);
+            }
+            else
+            {
+                defCapRate = Convert.ToDouble(bpoRate.ToString("P2").Replace('%', ' '));
+            }
+        }
+    }
+}
+@*<link rel="stylesheet" href="/resources/demos/style.css">*@
+
+<div class="modal fade" id="requestInsDocsModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Request Insurance Documents</h2>
+            </div>
+            <div class="alert alert-info main-alert" id="divRequestInsMessage" style="display: none;">
+            </div>
+            @using (Html.BeginForm("RequestInsuranceDocuments", "DataPortal", FormMethod.Post, new { @id = "insDocForm" }))
+            {
+                <div class="modal-body text-center">
+                    <h5> 
+                        Select an insurance company 
+                    </h5>
+                    @Html.Hidden("AssetId", Model.AssetId)
+                    @Html.DropDownList("InsuranceCompany", Model.InsuranceCompanies as IEnumerable<SelectListItem>, "---")
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="return submitInsuranceCompany()">Submit</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="orderDocumentsModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Recorded Documents</h2>
+            </div>
+            <div class="alert alert-info main-alert" id="divOrderDocumentsMessage" style="display: none;">
+            </div>
+            @using (Html.BeginForm("OrderDocuments", "DataPortal", FormMethod.Post, new { @id = "docForm" }))
+            {
+                <div class="modal-body text-center">
+                    <h5>Select a title company
+                    </h5>
+                    @Html.Hidden("AssetId", Model.AssetId)
+                    @Html.DropDownList("TitleCompany", Model.TitleCompanies as IEnumerable<SelectListItem>, "---")
+                    <br />
+                    <div id="secondary-list" style="display: none">
+                        <h5>Select a region</h5>
+                        <select id="titleCompanyRegion">
+                            <option value="">---</option>
+                            <option value="6">General</option>
+                            <option value="5">location 1</option>
+                            <option value="7">location 2</option>
+                            <option value="8">location 3</option>
+                            <option value="9">location 4</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="return submitTitleCompany()">Submit</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+@if (!ViewBag.IsSampleAsset)
+{
+    <div style="width: 100%; float: left;">
+        <div style="width: 30%; display: inline-block;">
+
+            @if (Model.OrderStatus != Inview.Epi.EpiFund.Domain.Enum.OrderStatus.Completed)
+            {
+                if (Model.OrderStatus == Inview.Epi.EpiFund.Domain.Enum.OrderStatus.Unknown)
+                {
+                <a data-toggle="modal" data-target="#orderDocumentsModal" class="btn btn-primary" style="cursor: pointer; float: left; margin-bottom: 30px;">Order Recorded Documents</a>
+                }
+                else
+                {
+                <a class="btn btn-primary" style="cursor: pointer; float: left; margin-bottom: 30px;" onclick="addUserOrder()">Order Recorded Documents</a>
+                }
+            }
+        </div>
+        <div style="width: 35%; display: inline-block;">
+            @if (Model.PCInsuranceOrderStatus != Inview.Epi.EpiFund.Domain.Enum.OrderStatus.Completed)
+            {
+                if (Model.PCInsuranceOrderStatus == Inview.Epi.EpiFund.Domain.Enum.OrderStatus.Unknown)
+                {
+                <a data-toggle="modal" data-target="#requestInsDocsModal" class="btn btn-primary" style="cursor: pointer; float: left; margin-bottom: 30px;">Request Insurance Documents</a>
+                }
+                else
+                {
+
+                }
+            }
+        </div>
+        <div style="width: 33%; display: inline-block;">
+            @if (Model.ListingStatus != Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldAndClosed)
+            {
+                <div class="col-sm-12">
+                    @Html.ActionLink("Complete and Send Binding LOI", "ExecuteLOI", new { id = Model.AssetId }, new { @class = "btn btn-primary", style = "float:right;margin-bottom:30px;" })
+                </div>
+            }
+        </div>
+    </div>
+}
+<h3>United States Commercial Real Estate Online, LLC</h3>
+
+<h4 style="text-align: center;">@Model.ProjectName</h4>
+<div class="col-md-12">
+
+    @if (Model.PortfolioNames != null)
+    {
+        if (Model.PortfolioNames.Length > 0)
+        {
+            <div style="float: left">
+                <b>Included in Portfolios: @Model.PortfolioNames </b>
+            </div>
+        }
+    }
+    <br />
+    @if (Model.GetType() == typeof(MultiFamilyAssetViewModel))
+    {
+        <b>Asset Details: Note - Secured by @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(Model.AssetType) Property</b><br /> }
+    else
+    { <b>Asset Details: Note - Secured by @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(Model.AssetType) </b><br />}
+
+    @if (Model.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Available)
+    {
+        <span style="text-align: center;" class="asset-available">This property is @Html.DisplayFor(s => s.ListingStatus)</span>
+    }
+    else if (Model.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Pending)
+    {
+        <span style="text-align: center;" class="asset-pending">This property is @Html.DisplayFor(s => s.ListingStatus)</span>
+    }
+    else
+    {
+        <span style="text-align: center;" class="asset-sold">This property is @Html.DisplayFor(s => s.ListingStatus)</span>
+    }
+
+</div>
+<br />
+<br />
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#pics" data-toggle="tab">Images</a></li>
+    <li><a href="#videos" data-toggle="tab">Videos</a></li>
+</ul>
+<div class="tab-content" style="padding-left: 40px; padding-right: 40px;">
+    <div class="tab-pane active" id="pics">
+        @if (Model.Images != null)
+        {
+            <div id="asset-carousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+
+                <!-- Slides -->
+                <div class="carousel-inner">
+                    @for (int item = 0; item < Model.Images.Count; item++)
+                    {
+
+                        if (item == 0)
+                        {   
+                        <div class="item active" style="background-image: url('@Url.Action("GetImageSource", "Admin", new { fileName = Model.Images[item].FileName, assetId = Model.AssetId, contentType = Model.Images[item].ContentType })')">
+                        </div>
+                        }
+                        else
+                        {
+                        <div class="item" style="background-image: url('@Url.Action("GetImageSource", "Admin", new { fileName = Model.Images[item].FileName, assetId = Model.AssetId, contentType = Model.Images[item].ContentType })')">
+                        </div>
+                        }
+                    }
+                </div>
+
+                <!-- Controls -->
+                <a class="left carousel-control" href="#asset-carousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#asset-carousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                @for (int item = 0; item < Model.Images.Count; item++)
+                {
+                    if (item == 0)
+                    {
+                    <li data-target="#asset-carousel" data-slide-to="@item" class="active" style="background-image: url('@Url.Action("GetImageSource", "Admin", new { fileName = Model.Images[item].FileName, assetId = Model.AssetId, contentType = Model.Images[item].ContentType })')"></li>
+                    }
+                    else
+                    {
+                    <li data-target="#asset-carousel" data-slide-to="@item" style="background-image: url('@Url.Action("GetImageSource", "Admin", new { fileName = Model.Images[item].FileName, assetId = Model.AssetId, contentType = Model.Images[item].ContentType })')"></li>
+                    }
+                }
+            </ol>
+        
+        
+            <div class="input-group text-center" style="display: block; margin-top: -10px">
+                <button class="btn btn-default btn-xs" id="carousel-pause">
+                    <span class="glyphicon glyphicon-pause"></span>
+                </button>
+                <button class="btn btn-default btn-xs" id="carousel-play">
+                    <span class="glyphicon glyphicon-play"></span>
+                </button>
+            </div>
+        }
+    </div>
+    <div class="tab-pane" id="videos">
+        <em>You must have Internet Explorer 9+, Safari 5+, or Chrome 6+ in order to view these videos. If you do not have these supported browsers, you may use the option to download the video and view in your own media player.</em>
+        <br />
+        <br />
+        @if (videoOptions != null)
+        {
+            for (int item = 0; item < videoOptions.Count; item++)
+            {
+            @Html.Video(videoOptions[item], new { @class = "video-responsive", id = "video" + item })
+            <br />
+            }
+        }
+    </div>
+</div>
+
+
+@if (Model.GetType() == typeof(CommercialAssetViewModel))
+{
+    <h4>Property Proforma Details</h4>
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>Recorded Secured Position of Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@securedPosition</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Type of Mortgage Instrument:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.TypeOfMTGInstrument</span>
+                            @if (Model.TypeOfMTGInstrument == "Other")
+                            {
+                                <em>@Model.InstrumentOther</em>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Current Principal Balance of Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@currentNotePrincipal.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Original Principal Balance of Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@originalNotePrincipal.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Date of Origination of Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.NoteOrigination.HasValue ? Model.NoteOrigination.Value.ToString("MM/dd/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Interest Rate on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@noteInterestRate %</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Payment Amount on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@paymentAmount.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Frequency of Payment Amount on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.PaymentFrequency</span>
+                            @if (Model.PaymentFrequency == "Other")
+                            {
+                                <em>@Model.FrequencyOther</em>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Original Note Amortization Schedule:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.AmortType</span>
+                            @if (Model.AmortType == "Other")
+                            {
+                                <em>@Model.AmortOther</em>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of Payments Made on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.PaymentsMadeOnNote</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of Payments Remaining on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.PaymentsRemainingOnNote</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Balloon Date for Payoff of Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.BalloonDateForPayoffOfNote.HasValue ? Model.BalloonDateForPayoffOfNote.Value.ToString("MM/dd/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Date of Last Payment Received:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.LastPaymentRecievedOnNote.HasValue ? Model.LastPaymentRecievedOnNote.Value.ToString("MM/dd/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Next Payment Due on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.NextPaymentOnNote.HasValue ? Model.NextPaymentOnNote.Value.ToString("MM/dd/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Is Note Current</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.IsNoteCurrent.GetValueOrDefault(false) ? "Yes" : "No")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>What is the Payment History of the Note Maker:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @Model.PaymentHistory
+                            @if (Model.PaymentHistory == "Other")
+                            {
+                                <em>@Model.PayHistoryOther</em>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Date Payor Originally Acquired the Property:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.SellerCarryNoteSalesDate.HasValue ? Model.SellerCarryNoteSalesDate.Value.ToString("MM/dd/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Original Purchase Price of Property by Payor:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@sellerCarryNotePrice.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Original Purchase Cash Down Payment by Payor:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@sellerCarryNoteCashDown.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Property Appraisal at time of note origination?</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.HasCopyOfAppraisal</span>
+                            
+                        </td>
+                    </tr>
+                    @*<tr>
+                        <td>
+                            <label>Method of Appraisal (if available)</label>
+                        </td>
+                        @if (Model.MethodOfAppraisal != null)
+                        {
+                            <td style="text-align: right;">
+                                <span>@Model.MethodOfAppraisal</span>
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[1].FileName, assetId = Model.AssetId, contentType = Model.Documents[1].ContentType, title = Model.Documents[1].Title })">@(Model.Documents[1].Title)</a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td style="text-align: right;">
+                                <span></span>
+                            </td>
+                        }
+                    </tr>*@
+                    @if (Model.PositionMortgage != null &&
+                        Model.MortgageLienAssumable == Inview.Epi.EpiFund.Domain.Enum.MortgageLienAssumable.Yes)
+                    {
+                        <tr>
+                            <td colspan="2">
+                                <em>This Property may have existing assumable financing. Details on the existing debt structure are available for your review in the Listing Agent’s Marketing Brochure located in the Asset Documents Section below.</em>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label style="font-weight: bold;">Asking Price for Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @if (!Model.IsTBDMarket || Model.AskingPrice > 0)
+                            {
+                                <span class="padmoney" id="AskingPrice">@Model.AskingPrice.ToString("C0")</span>
+                            }
+                            else
+                            {
+                                <a title="Per Professional Listing, Pricing to be determined by Market Conditions and highest and best offer submitted">TBD</a>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Asking Price of Note/Unit:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @if (!Model.IsTBDMarket || Model.AskingPrice > 0)
+                            {
+                                <span class="padmoney">@listPricePerUnit.ToString("C")</span>
+                            }
+                            else
+                            {
+                                <a title="Per Professional Listing, Pricing to be determined by Market Conditions and highest and best offer submitted">TBD</a>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Asking Price of Note/Sq.Ft.:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @if (!Model.IsTBDMarket || Model.AskingPrice > 0)
+                            {
+                                <span class="padmoney">@listPricePerSqFt.ToString("C")</span>
+                            }
+                            else
+                            {
+                                <a title="Per Professional Listing, Pricing to be determined by Market Conditions and highest and best offer submitted">TBD</a>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Annualized Scheduled Gross Income">SGI</a> (Annual)</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@Model.ProformaAnnualIncome.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Annualized Scheduled Gross Income">SGI</a> Avg Monthly Unit Rent</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@((Model.ProformaAnnualIncome / @cAsset.NumberofSuites) / 12).ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma Annual Misc Income</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@Model.ProformaMiscIncome.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Vacancy Factor">VF</a></label>
+                        </td>
+                        <td style="text-align: right;">
+                            @((Model.ProformaVacancyFac / 100).ToString("P"))
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Annual Operating Expense">AOE</a></label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@Model.ProformaAnnualOperExpenses</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Annual Miscellaneous Income">AMI</a></label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@Model.ProformaMiscIncome</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Annual Operating Expense">AOE</a> as % of <a title="Scheduled Gross Income">SGI</a></label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="pad">@Model.ProformaAoeFactorAsPerOfSGI</span>%
+                            @Html.HiddenFor(s => s.ProformaAoeFactorAsPerOfSGI)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma Pre Tax <a title="Annualized Net Operating Income">NOI</a></label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@proformaNOI</span>
+                            <input type="hidden" value="@proformaNOI" id="hdnProformaNOI" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Note Asking Price <a title="Annual Capitalization Rate">CAP</a> Rate</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @((Model.CashInvestmentApy / 100).ToString("P2"))
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(s => s.MethodOfAppraisal, new { @class = "control-label" })
+                            @if (Model.DocumentNumberOriAppr > -1)
+                            {
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[Model.DocumentNumberOriAppr].FileName, assetId = Model.AssetId, contentType = Model.Documents[Model.DocumentNumberOriAppr].ContentType, title = Model.Documents[Model.DocumentNumberOriAppr].Title })">@(Model.Documents[Model.DocumentNumberOriAppr].Title)</a>
+                            }
+                        </td>
+                        @if (Model.MethodOfAppraisal != null)
+                        {
+
+                        <td style="text-align: right;">
+                            <span>@Model.MethodOfAppraisal</span>
+                            @if (Model.MethodOfAppraisal == "Other")
+                            {
+                                <em>@Model.AppraisalOther</em>
+                            }
+                            
+                        </td>
+                        }
+                        else
+                        {
+                        <td style="text-align: right;">
+                            <span></span>
+                            
+                        </td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Calculated Market Value (<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a>)</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@bpoOfProperty.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Note Balance <a title="Loan to Value">LTV</a> to Appraisal/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a>:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @((noteBalLTV).ToString("P2"))
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Calculated Market Value/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a> Price/Unit:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @notePricePerUnit.ToString("C0")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Calculated Market Value/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a> Price/Sq.Ft.</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @notePricePerSqFt.ToString("C0")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Is Property Currently Producing Income:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.HasIncome ? "Yes" : "No")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Last Reported Occupancy</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(((100 - Model.CurrentVacancyFac) / 100).ToString("P"))
+                            <br />@(Model.LastReportedOccupancyDate.HasValue ? Model.LastReportedOccupancyDate.Value.ToString("MM/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Est Def Maintenance</label>
+                            <a data-toggle="modal" data-target="#loginwarning" style="margin-left: 10px;">(View list)</a>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@cAsset.EstDeferredMaintenance.ToString("C")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Is Note Professionally Serviced:</label>
+                            <em>(If Yes, Servicing Agent info will be provided upon acceptance of non-binding LOI from PI-B)</em>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.NoteServicedByAgent.GetValueOrDefault(false) ? "Yes" : "No")
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+        </div>
+        </div>
+    
+    <hr />
+    <h4>Preferred CAP Rate Analysis Calculator to Proforma Operating Data</h4>
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td style="line-height: 32px">
+                            <label>Enter Desired CAP Rate</label></td>
+                        <td style="line-height: 32px">
+                            <input type="text" id="txtBoxDesiredCapRate" style="width: 60px; text-align: right; margin-right: 5px; margin-bottom: 0" value="0.00%" /></td>
+                    </tr>
+                    <tr>
+                    <tr>
+                        <td>
+                            <label>Comparative % to Listed Pricing/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a></label></td>
+                        <td style="text-align: right;"><span id="CompPercPerCapRate">0.00%</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>Calculated value at your selected <a title="Annual Capitalization Rate">CAP</a></label></td>
+                        <td style="text-align: right;"><span id="CalculatedPricePerCapRate">$0.00</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>New <a title="Annual Capitalization Rate">CAP</a> Pricing Per Sq.Ft</label></td>
+                        <td style="text-align: right;"><span id="PricePerFootPerCapRate">$0.00</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Equity Adjustment to selected <a title="Annual Capitalization Rate">CAP</a></label></td>
+                        <td style="text-align: right;"><span id="EquityAdjPerCapRate">$0.00</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-12" style="text-align: center">
+            <input type="button" id="BtnCapRateCalc" value="Calculate" />
+        </div>
+    </div>
+ 
+    <hr />
+    <h4>Securing Property Data</h4>
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>Property Type</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(Model.AssetType)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of Rentable Suites</label>@Html.HiddenFor(s => cAsset.NumberofSuites)
+                        </td>
+                        <td style="text-align: right;">
+                            @cAsset.NumberofSuites
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Gross Rentable Sq. Ft.</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="pad">@cAsset.SquareFeet</span>
+                            <input id="mfAsset_SquareFeet" value="@cAsset.SquareFeet" style="display:none" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Securing Property Address</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @Html.DisplayFor(s => s.PropertyAddress, new { @class = "control-label" })
+                            <a href="http://maps.google.com/maps?q=@Model.PropertyAddress @Model.City @Model.State">Click Here For Map</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>City, State, Zip</label>
+                        </td>
+                        <td style="text-align: right;">@(string.Format("{0}, {1} {2}", Model.City, Model.State, Model.Zip))</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>County where Property Located:</label>
+                        </td>
+                        <td style="text-align: right;">@Model.County</td>
+                    </tr>
+                    <tr>
+                        <td style="width:50%;">
+                            <label>Tax Assessor Number(s)</label>
+                        <td style="width: 50%; text-align: right;">
+                            @foreach (var tpn in Model.AssetTaxParcelNumbers)
+                            {
+                                <span>@tpn.TaxParcelNumber</span> <br />
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(s => s.YearBuilt)
+                        </td>
+                        <td style="text-align: right;">@Model.YearBuilt</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Total Lot Size of Property</label>
+                        </td>
+                        <td style="text-align: right;">@Model.LotSize acres</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>@Html.LabelFor(s => s.BuildingsCount)</label>
+                        </td>
+                        <td style="text-align: right;">@Model.BuildingsCount</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of Parking Spaces</label>
+                        </td>
+                        <td style="text-align: right;"><span class="pad">@cAsset.ParkingSpaces</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of Covered Parking Spaces</label>
+                        </td>
+                        <td style="text-align: right;"><span class="pad">@cAsset.CoveredParkingSpaces</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Property Operating Status</label>
+                        </td>
+                        <td style="text-align: right;">@Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(Model.OperatingStatus)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>List Agent Grade Classification of Prop:</label>
+                        </td>
+                        <td style="text-align: right;">@Model.GradeClassification</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.LabelFor(s => s.PropertyCondition)</td>
+                        <td style="text-align: right;">@Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(Model.PropertyCondition)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(s => s.RenovatedByOwner)
+                        </td>
+                        @if (Model.RenovatedByOwner != null && (bool)Model.RenovatedByOwner == true)
+                        {
+                            <td style="text-align: right;">Yes</td>
+                        }
+                        else
+                        {
+                            <td style="text-align: right;">No</td>
+                        }
+
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(s => s.PropHoldTypeId)
+                        </td>
+                        <td style="text-align: right;">@Model.PropHoldType</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Are there any Environmental Issues w/Property:</label>
+                            @if (Model.DocumentNumberEnvi > -1)
+                            {
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[Model.DocumentNumberEnvi].FileName, assetId = Model.AssetId, contentType = Model.Documents[Model.DocumentNumberEnvi].ContentType, title = Model.Documents[Model.DocumentNumberEnvi].Title })">@(Model.Documents[Model.DocumentNumberEnvi].Title)</a>
+                            }
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.HasEnvironmentalIssues.GetValueOrDefault(false) ? "Yes" : "No")
+                            
+                        </td>
+                    </tr>
+                </tbody>
+        </table>
+    </div>
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <label>Does Property have a Major Tenant ?</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @(cAsset.HasAAARatedMajorTenant ? "Yes" : "No")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Name of Major Tenant (if applicable)</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @cAsset.NameOfAAARatedMajorTenant
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Is the Major Tenant a Publically Traded Company?</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @(cAsset.IsMajorTenantAAARated ? "Yes" : "No")
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label>Leased Square Footage of Major Tenant</label>
+                    </td>
+                    <td style="text-align: right;">
+                        <span class="pad">@cAsset.LeasedSquareFootageByMajorTenant.ToString("N0")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Percentage of Property Leased by Major Tenant</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @percentOfPropLeased %
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Major Tenant's Base Rent per Sq.Ft</label>
+                    </td>
+                    <td style="text-align: right;">
+                        <span class="padmoney">@cAsset.BaseRentPerSqFtMajorTenant.ToString("C2")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Total Number of Tenants Currently Occ Prop</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @cAsset.NumberOfTenants
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Current Market Rents per Sq.Ft</label>
+                    </td>
+                    <td style="text-align: right;">
+                        <span class="padmoney">@cAsset.CurrentMarkerRentPerSqFt.ToString("C2")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Current Number of Vacant Suites for the Property</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @cAsset.NumberOfRentableSuites
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Define Vacancy Suite Build Out Status of Property</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(cAsset.VacantSuites)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Is Property in a Pending Foreclosure/Bankruptcy</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @(cAsset.isPendingForeclosure ? "Yes" : "No")
+                    </td>
+                </tr>
+                @if (cAsset.isPendingForeclosure)
+                {
+                    <tr>
+                        <td>
+                            <label>Pending Foreclosure Sale Date</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(cAsset.ForeclosureSaleDate.HasValue ? @cAsset.ForeclosureSaleDate.Value.ToString("MM/dd/yy") : "N/A")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Foreclosure File Recordation Number</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @cAsset.ForeclosureRecordNumber
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Foreclosing Lender of Record</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @cAsset.ForeclosureLender
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Mortgage Position for Lender of Record</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(cAsset.ForeclosurePosition)
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td>
+                        <label>Complete Rent Roll/Tenant Lease Summary</label>
+                    </td>
+                    <td style="text-align: right;">
+                        @*@(Model.availablecurrentRentRoll ? "Yes" : "No")*@
+                        @(Model.CompleteRentRoll == true ? "Yes" : "No")
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <hr />
+    
+    <h4>Adjusted Proforma Analysis: Deferred Maintenance Inclusion</h4>
+    
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>List Price/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a> + Est Def Maintenance</label></td>
+                        <td style="text-align: right;"><span class="padmoney">@(cAsset.AskingPrice == 0 ? cAsset.CurrentBpo + cAsset.EstDeferredMaintenance : cAsset.AskingPrice + cAsset.EstDeferredMaintenance)</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Base Monthly Rental Income Adjustment per Unit after Renovations</label></td>
+                        <td style="text-align: right;"><span class="padmoney">@(cAsset.EstDeferredMaintenance == 0 ? 0 : Model.AverageAdjustmentToBaseRentalIncomePerUnitAfterRenovations)</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Annualized Revenue Adjustment to Proforma SGI after Renovations</label></td>
+                        <td style="text-align: right;"><span class="padmoney">@defAnnualRevenueAdjustment</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>Adjusted <a title="Annualized Scheduled Gross Income">SGI</a> after Deferred Maintenance</label></td>
+                        <td style="text-align: right;">@defProformaSGI.ToString("C0")</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Adjusted Proforma Pre Tax NOI</label></td>
+                        <td style="text-align: right;"><span class="padmoney">@defProformaNOI.ToString("C0")</span><input type="hidden" value="@defProformaNOI" id="hdnDefProformaNOI" /><input type="hidden" value="@defTotalListing" id="hdnDefTotalListing" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Adjusted CAP Rate Calculation</label></td>
+                        <td style="text-align: right;"><span class="pad">@defCapRate</span>%</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <em>“The comparative pricing analysis computes the differentials between the adjusted price points of [List Price + Deferred Maintenance Budget] and calculated Operating & Value Proforma subsequent Deferred Maintenance implementation.”</em>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+      
+    
+                            //if (mfAsset.EstDeferredMaintenance > 0)
+                            //{
+    <hr />
+    <h4>Adjusted Preferred Cap Rate Analysis Calculator: Deferred Maintenance Inclusion</h4>
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td style="line-height: 32px">
+                            <label>Enter Desired CAP Rate</label></td>
+                        <td style="line-height: 32px; text-align: right;">
+                            <input type="text" id="defTxtBoxDesiredCapRate" style="width: 60px; text-align: right; margin-right: 5px; margin-bottom: 0" value="0.00%" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Calculated Price at your selected CAP</label></td>
+                        <td style="text-align: right;"><span id="defCalculatedPricePerCapRate">$0.00</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>New CAP Pricing Per Unit</label></td>
+                        <td style="text-align: right;"><span id="defPricePerUnitPerCapRate">$0.00</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>New CAP Pricing Per Square Foot</label></td>
+                        <td style="text-align: right;"><span id="defPricePerFootPerCapRate">$0.00</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Comparative to Listed Price + Deferred Maintenance Budget</label></td>
+                        <td style="text-align: right;"><span id="defCompPercPerCapRate">0.00%</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Equity Adjustment to Selected CAP</label></td>
+                        <td style="text-align: right;"><span id="defEquityAdjPerCapRate">$0.00</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-12" style="text-align: center">
+            <input type="button" id="defBtnCapRateCalc" value="Calculate" />
+        </div>
+    </div>
+    
+    <div class="modal fade" id="loginwarning" tabindex="-1" role="dialog" aria-labelledby="loginwarning-label" aria-hidden="true" data-backdrop="false">
+        <form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="loginwarning-label">Estimated Tenant Improvement Items</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="tabled table-striped" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <td style="width: 160px;">
+                                        <label>Item</label></td>
+                                    <td style="text-align: center;">
+                                        <label>Unit Per Cost</label></td>
+                                    <td style="text-align: center;">
+                                        <label>Number of Items</label></td>
+                                    <td style="text-align: right;">
+                                        <label>Total Item Cost</label></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.DeferredMaintenanceItems)
+                                {
+                                    if (item.Selected)
+                                    {
+                                    <tr>
+                                        <td style="text-align: center;">@item.ItemTitle</td>
+                                        <td style="text-align: right;">@item.UnitCost.ToString("C0")</td>
+                                        <td style="text-align: center;">@(string.Format("{0} {1}", item.NumberOfUnits, item.UnitTypeLabel))</td>
+                                        <td style="text-align: right;">@((item.NumberOfUnits * item.UnitCost).ToString("C0"))</td>
+                                    </tr>
+                                    }
+                                }
+                                <br />
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">
+                                        <label>Total Cost: </label>@cAsset.EstDeferredMaintenance.ToString("C0")</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn" value="Close" data-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+@if (Model.GetType() == typeof(MultiFamilyAssetViewModel))
+{
+    <hr />
+    <h4>Note & Property Proforma Details</h4>
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>Recorded Secured Position of Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@securedPosition</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Type of Mortgage Instrument:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.TypeOfMTGInstrument</span>
+                            @if (Model.TypeOfMTGInstrument == "Other")
+                            {
+                                <em>@Model.InstrumentOther</em>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Current Principal Balance of Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@currentNotePrincipal.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Original Principal Balance of Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@originalNotePrincipal.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Date of Origination of Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.NoteOrigination.HasValue ? Model.NoteOrigination.Value.ToString("MM/dd/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Interest Rate on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@noteInterestRate %</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Payment Amount on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@paymentAmount.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Frequency of Payment Amount on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.PaymentFrequency</span>
+                            @if (Model.PaymentFrequency == "Other")
+                            {
+                                <em>@Model.FrequencyOther</em>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Original Note Amortization Schedule:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.AmortType</span>
+                            @if (Model.AmortType == "Other")
+                            {
+                                <em>@Model.AmortOther</em>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of Payments Made on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.PaymentsMadeOnNote</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of Payments Remaining on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.PaymentsRemainingOnNote</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Balloon Date for Payoff of Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.BalloonDateForPayoffOfNote.HasValue ? Model.BalloonDateForPayoffOfNote.Value.ToString("MM/dd/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Date of Last Payment Received:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.LastPaymentRecievedOnNote.HasValue ? Model.LastPaymentRecievedOnNote.Value.ToString("MM/dd/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Next Payment Due on Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.NextPaymentOnNote.HasValue ? Model.NextPaymentOnNote.Value.ToString("MM/dd/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Is Note Current</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.IsNoteCurrent.GetValueOrDefault(false) ? "Yes" : "No")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>What is the Payment History of the Note Maker:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @Model.PaymentHistory
+                            @if (Model.PaymentHistory == "Other")
+                            {
+                                <em>@Model.PayHistoryOther</em>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Date Payor Originally Acquired the Property:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.SellerCarryNoteSalesDate.HasValue ? Model.SellerCarryNoteSalesDate.Value.ToString("MM/dd/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Original Purchase Price of Property by Payor:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@sellerCarryNotePrice.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Original Purchase Cash Down Payment by Payor:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@sellerCarryNoteCashDown.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Property Appraisal at time of note origination?</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.HasCopyOfAppraisal</span>
+                            
+                        </td>
+                    </tr>
+                    @*<tr>
+                        <td>
+                            <label>Method of Appraisal (if available)</label>
+                        </td>
+                        @if (Model.MethodOfAppraisal != null)
+                        {
+                            <td style="text-align: right;">
+                                <span>@Model.MethodOfAppraisal</span>
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[1].FileName, assetId = Model.AssetId, contentType = Model.Documents[1].ContentType, title = Model.Documents[1].Title })">@(Model.Documents[1].Title)</a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td style="text-align: right;">
+                                <span></span>
+                            </td>
+                        }
+                    </tr>*@
+                    @if (Model.PositionMortgage != null &&
+    Model.MortgageLienAssumable == Inview.Epi.EpiFund.Domain.Enum.MortgageLienAssumable.Yes)
+                    {
+                        <tr>
+                            <td colspan="2">
+                                <em>This Property may have existing assumable financing. Details on the existing debt structure are available for your review in the Listing Agent’s Marketing Brochure located in the Asset Documents Section below.</em>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+
+                    <tr>
+                        <td>
+                            <label style="font-weight: bold;">Asking Price for Note:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @if (!Model.IsTBDMarket || Model.AskingPrice > 0)
+                            {
+                                <span class="padmoney" id="AskingPrice">@Model.AskingPrice.ToString("C0")</span>
+                            }
+                            else
+                            {
+                                <a title="Per Professional Listing, Pricing to be determined by Market Conditions and highest and best offer submitted">TBD</a>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Asking Price of Note/Unit:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @if (!Model.IsTBDMarket || Model.AskingPrice > 0)
+                            {
+                                <span class="padmoney">@listPricePerUnit.ToString("C")</span>
+                            }
+                            else
+                            {
+                                <a title="Per Professional Listing, Pricing to be determined by Market Conditions and highest and best offer submitted">TBD</a>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Asking Price of Note/Sq.Ft.:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @if (!Model.IsTBDMarket || Model.AskingPrice > 0)
+                            {
+                                <span class="padmoney">@listPricePerSqFt.ToString("C")</span>
+                            }
+                            else
+                            {
+                                <a title="Per Professional Listing, Pricing to be determined by Market Conditions and highest and best offer submitted">TBD</a>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Annualized Scheduled Gross Income">SGI</a> (Annual)</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@Model.ProformaAnnualIncome.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Annualized Scheduled Gross Income">SGI</a> Avg Monthly Unit Rent</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@((Model.ProformaAnnualIncome / @mfAsset.TotalUnits) / 12).ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma Annual Misc Income</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@Model.ProformaMiscIncome.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Vacancy Factor">VF</a></label>
+                        </td>
+                        <td style="text-align: right;">
+                            @((Model.ProformaVacancyFac / 100).ToString("P"))
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Annual Operating Expense">AOE</a></label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@Model.ProformaAnnualOperExpenses</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Annual Miscellaneous Income">AMI</a></label>
+                         </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@Model.ProformaMiscIncome</span>
+                        </td>
+                   </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma <a title="Annual Operating Expense">AOE</a> as % of <a title="Scheduled Gross Income">SGI</a></label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="pad">@Model.ProformaAoeFactorAsPerOfSGI</span>%
+                            @Html.HiddenFor(s => s.ProformaAoeFactorAsPerOfSGI)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Proforma Pre Tax <a title="Annualized Net Operating Income">NOI</a></label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@proformaNOI</span>
+                            <input type="hidden" value="@proformaNOI" id="hdnProformaNOI" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Note Asking Price <a title="Annual Capitalization Rate">CAP</a> Rate</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @((Model.CashInvestmentApy / 100).ToString("P2"))
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(s => s.MethodOfAppraisal, new { @class = "control-label" })
+                            @if (Model.DocumentNumberOriAppr > -1)
+                            {
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[Model.DocumentNumberOriAppr].FileName, assetId = Model.AssetId, contentType = Model.Documents[Model.DocumentNumberOriAppr].ContentType, title = Model.Documents[Model.DocumentNumberOriAppr].Title })">@(Model.Documents[Model.DocumentNumberOriAppr].Title)</a>
+                            }
+                        </td>
+                        <td style="text-align: right;">
+                            <span>@Model.MethodOfAppraisal</span>
+                            @if (Model.MethodOfAppraisal == "Other")
+                            {
+                                <em>@Model.AppraisalOther</em>
+                            }
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Calculated Market Value (<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a>)</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@bpoOfProperty.ToString("C0")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Note Balance <a title="Loan to Value">LTV</a> to Appraisal/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a>:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @((noteBalLTV).ToString("P2"))
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Calculated Market Value/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a> Price/Unit:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @notePricePerUnit.ToString("C0")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Calculated Market Value/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a> Price/Sq.Ft.</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @notePricePerSqFt.ToString("C0")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Is Property Currently Producing Income:</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.HasIncome ? "Yes" : "No")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Last Reported Occupancy</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @(((100 - Model.CurrentVacancyFac) / 100).ToString("P"))
+                            <br />@(Model.LastReportedOccupancyDate.HasValue ? Model.LastReportedOccupancyDate.Value.ToString("MM/yyyy") : "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Est Def Maintenance</label>
+                            <a data-toggle="modal" data-target="#loginwarning" style="margin-left: 10px;">(View list)</a>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="padmoney">@mfAsset.EstDeferredMaintenance.ToString("C")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Is Note Professionally Serviced:</label>
+                            <em>(If Yes, Servicing Agent info will be provided upon acceptance of non-binding LOI from PI-B)</em>
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.NoteServicedByAgent.GetValueOrDefault(false) ? "Yes" : "No")
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <hr />
+    <h4>Preferred Cap Rate Analysis Calculator</h4>
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td style="line-height: 32px">
+                            <label>Enter Desired CAP Rate</label></td>
+                        <td style="line-height: 32px">
+                            <input type="text" id="txtBoxDesiredCapRate" style="width: 60px; text-align: right; margin-right: 5px; margin-bottom: 0" value="0.00%" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Calculated Price at your selected <a title="Annual Capitalization Rate">CAP</a></label></td>
+                        <td style="text-align: right;"><span id="CalculatedPricePerCapRate">$0.00</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>New <a title="Annual Capitalization Rate">CAP</a> Pricing Per Unit</label></td>
+                        <td style="text-align: right;"><span id="PricePerUnitPerCapRate">$0.00</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>New <a title="Annual Capitalization Rate">CAP</a> Pricing Per Square Foot</label></td>
+                        <td style="text-align: right;"><span id="PricePerFootPerCapRate">$0.00</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Comparative % to Listed Pricing/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a></label></td>
+                        <td style="text-align: right;"><span id="CompPercPerCapRate">0.00%</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Equity Adjustment to selected <a title="Annual Capitalization Rate">CAP</a></label></td>
+                        <td style="text-align: right;"><span id="EquityAdjPerCapRate">$0.00</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-12" style="text-align: center">
+            <input type="button" id="BtnCapRateCalc" value="Calculate" />
+        </div>
+    </div>
+
+    <hr />
+    <h4>Securing Property Data</h4>
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>Property Type</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(Model.AssetType)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of Units</label>@Html.HiddenFor(s => mfAsset.TotalUnits)
+                        </td>
+                        <td style="text-align: right;">
+                            @mfAsset.TotalUnits
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Gross Rentable Sq. Ft.</label>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="pad">@mfAsset.SquareFeet</span>
+                            <input id="mfAsset_SquareFeet" value="@mfAsset.SquareFeet" style="display:none" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Securing Property Address</label>
+                        </td>
+                        <td style="text-align: right;">
+                            @Html.DisplayFor(s => s.PropertyAddress, new { @class = "control-label" })
+                            <a href="http://maps.google.com/maps?q=@Model.PropertyAddress @Model.City @Model.State">Click Here For Map</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>City, State, Zip</label>
+                        </td>
+                        <td style="text-align: right;">@(string.Format("{0}, {1} {2}", Model.City, Model.State, Model.Zip))</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>County where Property Located:</label>
+                        </td>
+                        <td style="text-align: right;">@Model.County</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%;">
+                            <label>Tax Assessor Number(s)</label>
+                        <td style="width: 50%; text-align: right;">
+                            @foreach (var tpn in Model.AssetTaxParcelNumbers)
+                            {
+                                <span>@tpn.TaxParcelNumber</span> <br />
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(s => s.YearBuilt)
+                        </td>
+                        <td style="text-align: right;">@Model.YearBuilt</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Total Lot Size of Property</label>
+                        </td>
+                        <td style="text-align: right;">@Model.LotSize acres</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>@Html.LabelFor(s => s.BuildingsCount)</label>
+                        </td>
+                        <td style="text-align: right;">@Model.BuildingsCount</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Electric Utility Metering</label>
+                        </td>
+                        <td style="text-align: right;">@Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(@mfAsset.ElectricMeterMethod)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Gas Utility Metering</label>
+                        </td>
+                        <td style="text-align: right;">@Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(@mfAsset.GasMeterMethod)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of Parking Spaces</label>
+                        </td>
+                        <td style="text-align: right;"><span class="pad">@mfAsset.ParkingSpaces</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of Covered Parking Spaces</label>
+                        </td>
+                        <td style="text-align: right;"><span class="pad">@mfAsset.CoveredParkingSpaces</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Property Operating Status</label>
+                        </td>
+                        <td style="text-align: right;">@Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(Model.OperatingStatus)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Seller's Grade Classification of Prop:</label>
+                        </td>
+                        <td style="text-align: right;">@Model.GradeClassification</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.LabelFor(s => s.PropertyCondition)</td>
+                        <td style="text-align: right;">@Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(Model.PropertyCondition)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Are there any Environmental Issues w/Property:</label>
+                            @if (Model.DocumentNumberEnvi > -1)
+                            {
+                                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[Model.DocumentNumberEnvi].FileName, assetId = Model.AssetId, contentType = Model.Documents[Model.DocumentNumberEnvi].ContentType, title = Model.Documents[Model.DocumentNumberEnvi].Title })">@(Model.Documents[Model.DocumentNumberEnvi].Title)</a>
+                            }
+                        </td>
+                        <td style="text-align: right;">
+                            @(Model.HasEnvironmentalIssues.GetValueOrDefault(false) ? "Yes" : "No")
+                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        @if (Model.AssetType != AssetType.MHP)
+        {
+            @Html.DisplayFor(s => mfAsset.UnitSpecifications, "UnitSpecDisplayTemplate")}
+        else
+        {
+            @Html.DisplayFor(s => mfAsset.MHPUnitSpecifications, "MHPUnitSpecDisplayTemplate")}
+    </div>
+
+    <hr />
+    
+    <h4>Adjusted Proforma Analysis: Deferred Maintenance Inclusion</h4>
+    
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>List Price/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a> + Est Def Maintenance</label></td>
+                        <td style="text-align: right;"><span class="padmoney">@(mfAsset.AskingPrice == 0 ? mfAsset.CurrentBpo + mfAsset.EstDeferredMaintenance : mfAsset.AskingPrice + mfAsset.EstDeferredMaintenance)</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Adjusted Unit Cost with Def Maint</label></td>
+                        @if (mfAsset.AskingPrice > 0)
+                        {
+                            <td style="text-align: right;"><span class="padmoney">@(((((mfAsset.AskingPrice + mfAsset.EstDeferredMaintenance) != 0 && mfAsset.TotalUnits != 0) ? Math.Round(((mfAsset.AskingPrice + mfAsset.EstDeferredMaintenance) / mfAsset.TotalUnits)) : 0)))</span></td>
+                        }
+                        else
+                        {
+                            <td style="text-align: right;"><span class="padmoney">@(((((mfAsset.CurrentBpo + mfAsset.EstDeferredMaintenance) != 0 && mfAsset.TotalUnits != 0) ? Math.Round(((mfAsset.CurrentBpo + mfAsset.EstDeferredMaintenance) / mfAsset.TotalUnits)) : 0)))</span></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Base Monthly Rental Income Adjustment per Unit after Renovations</label></td>
+                        <td style="text-align: right;"><span class="padmoney">@(mfAsset.EstDeferredMaintenance == 0 ? 0 : Model.AverageAdjustmentToBaseRentalIncomePerUnitAfterRenovations)</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Annualized Revenue Adjustment to Proforma SGI after Renovations</label></td>
+                        <td style="text-align: right;"><span class="padmoney">@defAnnualRevenueAdjustment</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>Adjusted <a title="Annualized Scheduled Gross Income">SGI</a> after Deferred Maintenance</label></td>
+                        <td style="text-align: right;">@defProformaSGI.ToString("C0")</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Adjusted Proforma Pre Tax NOI</label></td>
+                        <td style="text-align: right;"><span class="padmoney">@defProformaNOI</span><input type="hidden" value="@defProformaNOI" id="hdnDefProformaNOI" /><input type="hidden" value="@defTotalListing" id="hdnDefTotalListing" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Adjusted CAP Rate Calculation</label></td>
+                        <td style="text-align: right;"><span class="pad">@defCapRate</span>%</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <em>“The comparative pricing analysis computes the differentials between the adjusted price points of [List Price + Deferred Maintenance Budget] and calculated Operating & Value Proforma subsequent Deferred Maintenance implementation.”</em>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+      
+    
+                        //if (mfAsset.EstDeferredMaintenance > 0)
+                        //{
+    <hr />
+    <h4>Adjusted Preferred Cap Rate Analysis Calculator: Deferred Maintenance Inclusion</h4>
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td style="line-height: 32px">
+                            <label>Enter Desired CAP Rate</label></td>
+                        <td style="line-height: 32px; text-align: right;">
+                            <input type="text" id="defTxtBoxDesiredCapRate" style="width: 60px; text-align: right; margin-right: 5px; margin-bottom: 0" value="0.00%" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Calculated Price at your selected CAP</label></td>
+                        <td style="text-align: right;"><span id="defCalculatedPricePerCapRate">$0.00</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>New CAP Pricing Per Unit</label></td>
+                        <td style="text-align: right;"><span id="defPricePerUnitPerCapRate">$0.00</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-lg-6">
+            <table class="table table-striped asset-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>New CAP Pricing Per Square Foot</label></td>
+                        <td style="text-align: right;"><span id="defPricePerFootPerCapRate">$0.00</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Comparative to Listed Price + Deferred Maintenance Budget</label></td>
+                        <td style="text-align: right;"><span id="defCompPercPerCapRate">0.00%</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Equity Adjustment to Selected CAP</label></td>
+                        <td style="text-align: right;"><span id="defEquityAdjPerCapRate">$0.00</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-12" style="text-align: center">
+            <input type="button" id="defBtnCapRateCalc" value="Calculate" />
+        </div>
+    </div>
+                        //}
+    <div class="modal fade" id="loginwarning" tabindex="-1" role="dialog" aria-labelledby="loginwarning-label" aria-hidden="true" data-backdrop="false">
+        <form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="loginwarning-label">Estimated Deferred Maintenance Items</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="tabled table-striped" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <td style="width: 160px;">
+                                        <label>Item</label></td>
+                                    <td style="text-align: center;">
+                                        <label>Unit Per Cost</label></td>
+                                    <td style="text-align: center;">
+                                        <label>Number of Items</label></td>
+                                    <td style="text-align: right;">
+                                        <label>Total Item Cost</label></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.DeferredMaintenanceItems)
+                                {
+                                    if (item.Selected)
+                                    {
+                                    <tr>
+                                        <td style="text-align: center;">@item.ItemTitle</td>
+                                        <td style="text-align: right;">@item.UnitCost.ToString("C0")</td>
+                                        <td style="text-align: center;">@(string.Format("{0} {1}", item.NumberOfUnits, item.UnitTypeLabel))</td>
+                                        <td style="text-align: right;">@((item.NumberOfUnits * item.UnitCost).ToString("C0"))</td>
+                                    </tr>
+                                    }
+                                }
+                                <br />
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">
+                                        <label>Total Cost: </label>@mfAsset.EstDeferredMaintenance.ToString("C0")</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn" value="Close" data-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+<hr />
+<h4>Property Features</h4>
+@if (Model.GetType() == typeof(MultiFamilyAssetViewModel))
+{
+    @Html.DisplayFor(s => mfAsset.MFDetails, "MFPropertyDetailsDisplayTemplate")
+}
+
+@if (Model.GetType() == typeof(CommercialAssetViewModel))
+{
+    @Html.DisplayFor(s => cAsset.PropertyDetails, "CPropertyDetailsDisplayTemplate") 
+}
+<hr />
+<h4>Asset Due Diligence Documents</h4>
+<ol>
+    @for (int item = 0; item < Model.Documents.Count; item++)
+    {
+        if (Model.Documents[item].Viewable.HasValue)
+        {
+            if (Model.Documents[item].Viewable.Value)
+            {
+        <li>
+            <div class="docPreviewDiv">
+                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@(Model.Documents[item].Title)</a>
+            </div>
+        </li>   
+            }
+        }
+        else
+        {
+        <li>
+            <div class="docPreviewDiv">
+                <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@(Model.Documents[item].Title)</a>
+            </div>
+        </li>   
+        }
+    }
+</ol>
+<br />
+@if (!ViewBag.IsSampleAsset)
+{
+    <div style="width: 100%; float: left;">
+        <div style="width: 30%; display: inline-block;">
+
+            @if (Model.OrderStatus != Inview.Epi.EpiFund.Domain.Enum.OrderStatus.Completed)
+            {
+                if (Model.OrderStatus == Inview.Epi.EpiFund.Domain.Enum.OrderStatus.Unknown)
+                {
+                <a data-toggle="modal" data-target="#orderDocumentsModal" class="btn btn-primary" style="cursor: pointer; float: left; margin-bottom: 30px;">Order Recorded Documents</a>
+                }
+                else
+                {
+                <a class="btn btn-primary" style="cursor: pointer; float: left; margin-bottom: 30px;" onclick="addUserOrder()">Order Recorded Documents</a>
+                }
+            }
+        </div>
+        <div style="width: 35%; display: inline-block;">
+            @if (Model.PCInsuranceOrderStatus != Inview.Epi.EpiFund.Domain.Enum.OrderStatus.Completed)
+            {
+                if (Model.PCInsuranceOrderStatus == Inview.Epi.EpiFund.Domain.Enum.OrderStatus.Unknown)
+                {
+                <a data-toggle="modal" data-target="#requestInsDocsModal" class="btn btn-primary" style="cursor: pointer; float: left; margin-bottom: 30px;">Request Insurance Documents</a>
+                }
+                else
+                {
+
+                }
+            }
+        </div>
+        <div style="width: 33%; display: inline-block;">
+            @if (Model.ListingStatus != Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldAndClosed)
+            {
+                <div class="col-sm-12">
+                    @Html.ActionLink("Complete and Send Binding LOI", "ExecuteLOI", new { id = Model.AssetId }, new { @class = "btn btn-primary", style = "float:right;margin-bottom:30px;" })
+                </div>
+            }
+        </div>
+    </div>
+}
+
+
+<script>
+    function submitTitleCompany() {
+        var selection = $("#TitleCompany").val();
+        if (typeof selection !== typeof undefined && selection !== false) {
+            if (selection.length > 0) {
+                $("#docForm").submit();
+                return true;
+            }
+        }
+        $("#divOrderDocumentsMessage").html("<span>Please select a Title Company.</span>");
+        $("#divOrderDocumentsMessage").show();
+        return false;
+    }
+    $('#TitleCompany').change(function () {
+        var selection = $(this).val();
+        if (typeof selection !== typeof undefined && selection !== false) {
+            if (selection.length > 0) {
+                $("#secondary-list").show();
+            }
+            else {
+                $("#secondary-list").hide();
+            }
+        }
+        else {
+            $("#secondary-list").hide();
+        }
+    });
+
+    function submitInsuranceCompany() {
+        var selection = $("#InsuranceCompany").val();
+        if (typeof selection !== typeof undefined && selection !== false) {
+            if (selection.length > 0) {
+                $("#insDocForm").submit();
+                return true;
+            }
+        }
+        $("#divRequestInsMessage").html("<span>Please select an insurance Company.</span>");
+        $("#divRequestInsMessage").show();
+        return false;
+    }
+
+    function addUserOrder() {
+        var id = $("#AssetId").val();
+        $.post("/DataPortal/AddUserOrder", { assetId: id })
+        .done(function (data) {
+            if (data["result"] == true) {
+                alert("Recorded documents have already been ordered. You will receive an automatic email when documents have been uploaded.");
+            }
+            else {
+                alert("There was an error processing your request.");
+            }
+        })
+        .fail(function () {
+            alert("There was an error processing your request.");
+        });
+    }
+    function addUserOrderInsurance() {
+        var id = $("#AssetId").val();
+        $.post("/DataPortal/AddUserOrderInsurance", { assetId: id })
+        .done(function (data) {
+            if (data["result"] == true) {
+                alert("Recorded documents have already been ordered. You will receive an automatic email when documents have been uploaded.");
+            }
+            else {
+                alert("There was an error processing your request.");
+            }
+        })
+        .fail(function () {
+            alert("There was an error processing your request.");
+        });
+    }
+    $("#txtBoxDesiredCapRate").on('mouseup', function () { $(this).select(); });
+    $("#defTxtBoxDesiredCapRate").on('mouseup', function () { $(this).select(); });
+    $('#BtnCapRateCalc').click(function () {
+        var capRate = parseFloat($('#txtBoxDesiredCapRate').val());
+        if (capRate > 0) {
+            $('#txtBoxDesiredCapRate').val(addCommas(capRate.toFixed(2).toString(), true, false, true));
+            var calculatedPrice = Math.round(parseFloat($("#hdnProformaNOI").val()) / (capRate / 100));
+            $('#CalculatedPricePerCapRate').html(addCommas(Math.round(calculatedPrice).toFixed(0), false, true, false));
+            var totalUnits = $('#mfAsset_TotalUnits').val();
+            if (totalUnits == undefined || totalUnits == 0) {
+                $('#PricePerUnitPerCapRate').html(addCommas("0.00", false, true, false));
+            }
+            else {
+                $('#PricePerUnitPerCapRate').html(addCommas(Math.round((calculatedPrice / totalUnits).toFixed(2)).toString(), false, true, false));
+            }
+            var sqFeet = $('#mfAsset_SquareFeet').val();
+            if (sqFeet == undefined || sqFeet == 0) {
+                $('#PricePerFootPerCapRate').html(addCommas("0.00", true, true, false));
+            } else {
+                $('#PricePerFootPerCapRate').html(addCommas((calculatedPrice / sqFeet).toFixed(2).toString(), true, true, false));
+            }
+            var listPrice = getNumberFromValue($('#AskingPrice').text());
+            if (listPrice == undefined || listPrice == 0) {
+                // check appraisal/BPO
+                var bpo = getNumberFromValue($('#bpo').text());
+                $('#CompPercPerCapRate').html(addCommas(((calculatedPrice / bpo) * 100).toFixed(2).toString(), true, false, true));
+                var equity = Math.round(((calculatedPrice - bpo)));
+                $('#EquityAdjPerCapRate').html(addCommas(equity.toFixed(0).toString(), false, true, false));
+            }
+            else {
+                $('#CompPercPerCapRate').html(addCommas(((calculatedPrice / listPrice) * 100).toFixed(2).toString(), true, false, true));
+                var equity = Math.round(((calculatedPrice - listPrice)));
+                $('#EquityAdjPerCapRate').html(addCommas(equity.toFixed(0).toString(), false, true, false));
+            }
+            $("#EquityAdjPerCapRate").removeAttr('class');
+            if (equity < 0) {
+                $('#EquityAdjPerCapRate').addClass('asset-sold').css("font-weight", "normal");
+            } else {
+                $('#EquityAdjPerCapRate').addClass('asset-available').css("font-weight", "normal");
+            }
+        }
+        else {
+            alert("You must enter a value greater than 0.");
+            $('#CalculatedPricePerCapRate').html(addCommas("0", false, true, false));
+            $('#PricePerUnitPerCapRate').html(addCommas("0.00", false, true, false));
+            $('#PricePerFootPerCapRate').html(addCommas("0.00", true, true, false));
+            $('#CompPercPerCapRate').html(addCommas("0.00", true, false, true));
+            $('#EquityAdjPerCapRate').html(addCommas("0", false, true, false));
+        }
+    });
+
+    //Implementation for Adjusted calculations based on deferred Maintenance
+    $('#defBtnCapRateCalc').click(function () {
+        if ($('#defTxtBoxDesiredCapRate').val() != '') {
+            var capRate = parseFloat($('#defTxtBoxDesiredCapRate').val());
+            if (capRate > 0) {
+                $('#defTxtBoxDesiredCapRate').val(addCommas(capRate.toFixed(2).toString(), true, false, true));
+                var calculatedPrice = Math.round(parseFloat($('#hdnDefProformaNOI').val()) / (capRate * .01));
+                $('#defCalculatedPricePerCapRate').html(addCommas(Math.round(calculatedPrice).toFixed(0), false, true, false));
+                var totalUnits = $("#mfAsset_TotalUnits").val();
+                var defPricePerUnit = 0;
+                if (totalUnits == undefined || totalUnits == 0) {
+                }
+                else {
+                    defPricePerUnit = Math.round((calculatedPrice / totalUnits).toFixed(2));
+                }
+                var defPricePerSqFt = 0;
+                var sqFeet = $("#mfAsset_SquareFeet").val();
+                if (sqFeet == undefined || sqFeet == 0) {
+                } else {
+                    var defPricePerSqFt = (calculatedPrice / sqFeet).toFixed(2);
+                }
+                var defTotalListing = $("#hdnDefTotalListing").val();
+                $('#defPricePerUnitPerCapRate').html(addCommas(defPricePerUnit.toString(), false, true, false));
+                $('#defPricePerFootPerCapRate').html(addCommas(defPricePerSqFt.toString(), true, true, false));
+                var defCompPercentage = ((calculatedPrice / defTotalListing) * 100).toFixed(2);
+                if (defCompPercentage == Infinity) {
+                    defCompPercentage = 0;
+                }
+                $('#defCompPercPerCapRate').html(addCommas(defCompPercentage.toString(), true, false, true));
+                var defEquityAdj = calculatedPrice - defTotalListing;
+                $('#defEquityAdjPerCapRate').html(addCommas(defEquityAdj.toString(), false, true, false));
+                $("#defEquityAdjPerCapRate").removeAttr('class');
+                if (defEquityAdj < 0) {
+                    $('#defEquityAdjPerCapRate').addClass('asset-sold').css("font-weight", "normal");
+                } else {
+                    $('#defEquityAdjPerCapRate').addClass('asset-available').css("font-weight", "normal");
+                }
+            }
+            else {
+                alert("You must enter a value greater than 0.");
+                $('#defTxtBoxDesiredCapRate').val(addCommas("0.00", true, false, true));
+                $('#defPricePerUnitPerCapRate').html(addCommas("0.00", false, true, false));
+                $('#defPricePerFootPerCapRate').html(addCommas("0.00", true, true, false));
+                $('#defCompPercPerCapRate').html(addCommas("0", true, false, true));
+                $('#defEquityAdjPerCapRate').html(addCommas("0", false, true, false));
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        $("#BtnCapRateCalc").attr("disabled", "true");
+        $("#txtBoxDesiredCapRate").on('input', function () {
+            if ($(this).val() != "") {
+                $("#BtnCapRateCalc").removeAttr("disabled");
+            } else {
+                $("#BtnCapRateCalc").attr("disabled", "true");
+            }
+        });
+        $('.pad').each(function (index) {
+            padCommas(this, false);
+        });
+        $('.padmoney').each(function (index) {
+            padCommas(this, true);
+        });
+    });
+
+    $(document).ready(function () {
+        $('#carousel-pause').click(function () {
+            $('#asset-carousel').carousel('pause');
+        })
+
+        $('#carousel-play').click(function () {
+            $('#asset-carousel').carousel('cycle');
+        })
+    });
+
+
+</script>

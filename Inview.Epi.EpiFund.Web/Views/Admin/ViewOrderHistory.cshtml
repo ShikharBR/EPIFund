@@ -1,0 +1,218 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.OrderSearchResultsModel
+
+@using System.Collections
+
+@{
+    ViewBag.Title = "View Order History";
+    Layout = "~/Views/Shared/_LayoutTitleUser.cshtml";
+}
+
+<br />
+@using (Html.BeginForm("ViewOrderHistory", "Admin", FormMethod.Post, new { id = "searchForm" }))
+{
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#searchbox">
+                        <button class="btn btn-default btn-xs" style="border: 1px solid #888">
+                                Search Assets
+                        </button>
+                    </a>
+                </h4>
+            </div>
+            <div id="searchbox" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.AssetNumber, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.AssetNumber)
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.SelectedAssetType, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.DropDownListFor(s => s.SelectedAssetType, @Model.AssetTypes, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.AssetName, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.AssetName)
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.City, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.City, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.State, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.DropDownListFor(s => s.State, @Model.States)
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.APN, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.APN, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateOrderedStartDate, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateOrderedStartDate, new { @style = "width: 100%", @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateOrderedEndDate, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateOrderedEndDate, new { @style = "width: 100%", @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateSubmittedStartDate, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateSubmittedStartDate, new { @style = "width: 100%", @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DateSubmittedEndDate, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DateSubmittedEndDate, new { @style = "width: 100%", @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DatePaidStartDate, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DatePaidStartDate, new { @style = "width: 100%", @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.DatePaidEndDate, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.DatePaidEndDate, new { @style = "width: 100%", @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row asset-list-form">
+
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <div class="input-group">
+                                @Html.HiddenFor(model => Model.Page)
+                                @Html.HiddenFor(model => Model.SortOrder)
+                                @Html.HiddenFor(model => Model.RowCount)
+                                <input type="submit" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto;" onclick="clearSearchValues()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<br />
+<div>
+    <select id="ddlRowCount" onchange="changeResults()">
+        <option value="25">25</option>
+        <option value="50" selected="selected">50</option>
+        <option value="75">75</option>
+        <option value="100">100</option>
+    </select>
+</div>
+<br />
+@{ Html.RenderPartial("_TitleOrderHistoryListView", Model.Orders); }
+
+<script>
+    $(function () {
+        $(".datepicker").datepicker();
+    });
+
+    $('.pagination li a').click(function () {
+        var href = $(this).attr('href');
+        if (typeof href !== typeof undefined && href !== false) {
+            var page = parseInt(getPageNumber(href));
+            $('#Page').val(page);
+            $('#searchForm').submit();
+            return false;
+        }
+    });
+    function postForm(order) {
+        $('#SortOrder').val(order);
+        $('#searchForm').submit();
+        return false;
+    }
+    function changeResults() {
+        $('#RowCount').val($('#ddlRowCount').val());
+        $('#searchForm').submit();
+    }
+</script>

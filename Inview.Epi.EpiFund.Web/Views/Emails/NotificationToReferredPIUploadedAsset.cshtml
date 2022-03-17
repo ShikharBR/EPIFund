@@ -1,0 +1,83 @@
+﻿@using Postal
+@model Inview.Epi.EpiFund.Web.Models.Emails.NotificationToReferredPIUploadedAssetEmail
+To: @Model.To
+From: USCREonline <info@uscreonline.com>
+Subject: Notification of Asset Upload
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+<p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <table style="width: 100%;">
+        <tr>
+            <td align="left">To @Model.PrincipalInvestorName,</td>
+            <td align="right">@Model.Date.ToString("MMMM d, yyyy")</td>
+        </tr>
+    </table>
+    <p>
+        You are receiving this e transmittal at the introduction and referral of @Model.ReferrerName,
+         who, as a Member of the United States Mortgage Bankers Association, is a contributor to the many services provided at <b style="color:darkgoldenrod"><i>US CRE Online</i></b>. 
+    </p>
+    <p>
+        Welcome to <b style="color:darkgoldenrod"><i>US CRE Online</i></b>: the &#35;1 <b>&#91;Principal to Principal&#93; Commercial Real Estate Data & Communications Portal</b> in the World. The following <b>CRE</b> Assets have been uploaded at <b style="color:darkgoldenrod"><i>USC</i></b>... within minutes of your receipt of this e transmittal... and have been &#34;<u>Published</u>&#34; by their respective controlling interests for formal expressions of acquisition interest from the <b style="color:blue">Global CRE Investment Community</b>:
+    </p>
+    @Html.Raw(@Model.UploadedAssets)
+    <p>
+        <b>Review of all CRE Asset Files at</b> <i style="color:darkgoldenrod">USC</i> <b>bears no registration nor recurring cost.</b> To view any CRE Asset File at USC please follow these simple instructions:
+    </p>
+    <ul>
+        <li>
+            Go To <b style="color:blue"><u>www.uscreonline.com</u></b> and &#60;Click&#62; &#91;<b style="color:blue">New Visitor Registration</b>&#93; at the Directory.
+        </li>
+        <li>
+            Please take a minute to review the introduction information, then &#60;Click&#62; the &#91;<b style="color:blue">Proceed with Registration</b>&#93; tab at the page bottom.
+        </li>
+        <li>
+            Upon electronically acknowledging the <b style="color:darkgoldenrod"><i>USC</i></b> <b>&#91;NCND&#93;</b>, and submitting your Registration page, you will be automatically approved and automatically logged in.
+        </li>
+        <li>
+            Select <b>&#91;Investor Opportunities&#93;</b> from Directory, and enter any of the Asset ID #s from the above captioned list.
+        </li>
+        <li>
+            You will be required to approve a onetime <b>IPA</b> to view unlimited Asset File going forward (<b>Internet Portal Agreement</b>)
+        </li>
+    </ul>
+    <table>
+        <tr>
+            <td width="20"></td>
+            <td>
+                <p>
+                    <b style="color:red;">Note</b>: when your visit at <b style="color:darkgoldenrod"><i>USC</i></b> is complete, please &#91;<b>Log Out</b>&#93;. 
+                    This will ensure the site is refreshed at each new session &#91;<b>Log In</b>&#93;.
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <b style="color:darkgoldenrod"><i>USC</i></b> provides a full complement of real time, auto verified Commercial Real Estate for Sale in the United States in all value ranges and operating
+        conditions: <b>Multi-Family</b>, <b>Fractured Bulk Condo's</b>, <b>Mobile Home Parks</b>, <b>Office Buildings</b>, <b>Retail Centers</b>, <b>Medical Office</b>, <b>Industrial Buildings</b>, <b>Service and Fuel Retail</b>,  and <b>Mixed Use Properties</b>.
+    </p>
+    <p>
+        <b><u>CRE Asset Views</u></b> are 2nd to none at <b style="color:darkgoldenrod"><i>USC</i></b>: effectively we provide a &#91;24/7&#93; Offering Memorandum, with instantly adjustable CAP Rate & Cash
+        Flow Analyzer's, Debt Funding Participation Analyzer's, Adjustable Deferred Maintenance Calculators, and selectable Market Comparable
+        Mapping.  And <b style="color:darkgoldenrod"><i>USC</i></b> Asset View Reports utilize a common template that allows for multiple Asset Views of different Asset types... in minutes!
+    </p>
+    <p>
+        <b style="color:red;">Note</b>: you are welcomed (and encouraged!) to complete the <b style="color:darkgoldenrod"><i>USC</i></b> &#91;<b style="color:blue">Advanced Investment Asset Search Criteria</b>&#93;
+        after your Registration. Your secured and encrypted general criteria is logged into the <b style="color:darkgoldenrod"><i>USC</i></b> communications module... which, while preserving your contact data, notifies
+        Principals, and or their representatives, of your Detailed CRE requisites and investment parameters.
+    </p>
+    <p>
+        As a registered Principal Investor at <b style="color:darkgoldenrod"><i>USC</i></b>, you will be able to present editable, auto prepared, binding, qualified LOI's on any CRE Asset published at
+        <b style="color:darkgoldenrod"><i>USC</i></b> from their respective Asset View window... in seconds to minutes... and re-submit updated versions thereof at any time from your
+        &#91;"<b style="color:blue">My USC Page</b>"&#93;... just that fast!
+    </p>
+    <p>
+        <b style="color:darkgoldenrod"><i>US CRE Online</i></b> the #1 &#91;<b>Principal to Principal</b>&#93; <b>Commercial Real Estate Data & Communications Portal</b> in the World, is the online CRE
+        Investment Community for the future.  We welcome you to join our rapidly expanding community at <b style="color:darkgoldenrod"><i>United States Commercial Real Estate Online, LLC.</i></b>.
+        It is our honor and privilege to provide the defined CRE data services to the investment community.
+    </p>
+    <span>The Professional Staff</span><br />
+    <span><b style="color:darkgoldenrod"><i>US CRE Online, LLC</i></b></span>
+</body>
+</html>

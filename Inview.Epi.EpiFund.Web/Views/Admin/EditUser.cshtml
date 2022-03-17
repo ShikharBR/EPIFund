@@ -1,0 +1,27 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.UserModel
+@{
+    ViewBag.Title = "Edit User";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using (Html.BeginForm("EditUser", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false)
+    <br />
+    @Html.EditorForModel()
+    <br />
+    <input type="submit" class="btn btn-primary" id="btnSave" name="btnSave" value="Save User" />
+ 
+}
+<script>
+    function downloadUserFile(id) {
+        $.get('/Admin/DoesUserFileExist/' + id, function (data) {
+            if (data.success === true) {
+                window.location.href = '/Admin/DownloadUserFile/' + id;
+            } else {
+                alert('File does not exist');
+            }
+        })
+    }
+</script>

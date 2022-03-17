@@ -1,0 +1,171 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.MyUSCViewModel
+@{
+    ViewBag.Title = "My USC Page";
+}
+<h3>Hello @Model.FullName!</h3>
+
+@if (Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CREBroker || Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CRELender)
+{
+    <p>Welcome to your personalized US CRE online.com web page.  This is where you will receive special documents and e mails from USC corporate, and be able to view all of your executed documents with USC.  My US CRE online.com will be continuously monitored and updated by USC.  We always welcome your comments for any changes or upgrades you would like to see to enhance your experience at US CRE online.com.  Please click @Html.ActionLink("Contact Us", "ContactUs", "Home") to provide such feedback at any time.</p>
+
+    <p>As a valued CRE Private Mortgage Lender-Broker Registrant of USC, you will receive e Flyers of new Asset Inventory as they are uploaded (either daily or weekly).  All uploaded new inventory is 100% certified as available for acquisition.  USC encourages you to share all e Flyers with your   contingent of Principals that you market to so as to provide them with opportunity for acquisition inventory.  <b>Should you have an interest in learning more about the US CRE online FREE Joint Venture Marketing Program we welcome you to click the button immediately below.</b></p>
+
+    <h4 style="text-align: center;">@Html.ActionLink("CRE Private Mortgage Lender-Broker JV Marketing", "JointVentureMarketing", "Home")</h4>
+
+    <p>Utilizing the US CRE online [Joint Venture Marketing Program] is simple and highly effective.  It enables you to register your contingent of Principals with US CRE online which provides you with exclusivity with each such individual.  US CRE online then forwards its e Flyers directly to each such individual represented as being on invitation from your firm. We encourage loyal patronage by each such individual with your firm with the aim of effecting your transactional pipeline.</p>
+
+    <p>Our Program is FREE.  We do all the work.  Signing up is very simple and only takes minutes.  You can anticipate follow up from US CRE online within 24-48 business hours.</p>
+
+    
+    Html.RenderPartial("_AccountSettingsLinks");
+    
+    if (!string.IsNullOrEmpty(Model.JVMarketerAgreementLocation))
+    {
+    <ul class="ul-styled">
+        <li><a href="@Url.Action("ImportPrincipalInvestors", "DataPortal")">Import Users Marketing Network of Principal Investors</a></li>
+    </ul>
+    }
+    <ul class="ul-styled">
+        <li><a href="@Url.Action("ViewNetworkUploadInventory", "DataPortal")">Inventory of Marketing Network Uploads</a></li>
+    </ul>
+    
+    <p>
+        Registrant Records:
+    </p>
+    <ul class="ul-styled">
+        @{ Html.RenderPartial("_UserRegistrantRecords", @Model.Files); }
+        <li>@Html.ActionLink("Search for Assets", "AssetList", "DataPortal", new { filter = "test" }, new { })</li>
+        @if (Model.HasOrderHistory)
+        {
+            <li>@Html.ActionLink("View Order History", "ViewOrderHistory", "DataPortal")</li>
+        }
+    </ul>
+}
+else if (Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.Investor)
+{   
+    <p>Welcome to your personalized US CRE online.com web page.  This is where you will receive special documents and e mails from USC corporate, and be able to view all of your executed documents with USC.  My US CRE online.com will be continuously monitored and updated by USC.  We always welcome your comments for any changes or upgrades you would like to see to enhance your experience at US CRE online.com.  Please click @Html.ActionLink("Contact Us", "ContactUs", "Home") to provide such feedback at any time.</p>
+
+    <p>As a valued Registrant of USC, you will receive e Flyers of new Asset Inventory as they are uploaded (either daily or weekly).  All uploaded new inventory is 100% certified as available for acquisition.    <b>Should you have an interest in certain available CRE inventory under your specific demographic and geographic criteria we welcome you to click the button below to submit your Asset Search Criteria.</b></p>
+
+    <p style="text-align: center">
+        <input type="button" id="proceed" class="btn btn-default proceed" value="Proceed to Investment Asset Search Criteria" onclick="location.href='@Url.Action("InvestmentAssetSearchCriteria", "DataPortal")    '" />
+    </p>
+
+    <p>Utilizing the US CRE online [Asset Search Criteria] technology and network enables our Principal Investor Registrant’s timely access to quality, immediately available, and primarily FIRST ON THE MARKET inventory for priority review and consideration for new transactional commitments.</p>
+
+    <p>
+        Should you have an interest to establish a CRE purchase money debt and or equity funding relationship, and you are not already working with a Direct Mortgage Lender and or Mortgage Broker, we welcome you to
+        Click the button below to submit your purchase money funding qualification documentation.  The process only takes minutes.  You can anticipate follow up from the CRE Mortgage contingents   
+    </p>
+    
+    <input type="button" class="btn btn-default proceed" value="Proceed to CRE/Debt Equity Funding Page" onclick="location.href='@Url.Action("SecureDebtEquityPartner", "Investors")    '" />
+    
+    Html.RenderPartial("_AccountSettingsLinks");
+    <p>
+        Registrant Records:
+    </p>
+    <ul class="ul-styled">
+        @{ Html.RenderPartial("_UserRegistrantRecords", @Model.Files); }
+        @if (Model.HasOrderHistory)
+        {
+            <li>@Html.ActionLink("View Order History", "ViewOrderHistory", "DataPortal")</li>
+        }
+        <li>@Html.ActionLink("Search for Assets", "AssetList", "DataPortal", new { filter = "test" }, new { })</li>
+    </ul>
+}
+else
+{
+    <p>Welcome to your personalized US CRE online.com web page.  This is where you will receive special documents and e mails from <b>USC</b> corporate, and be able to view all of your executed documents with USC.  My US CRE online.com will be continuously monitored and updated by USC.  We always welcome your comments for any changes or upgrades you would like to see to enhance your experience at US CRE online.com.  Please click @Html.ActionLink("Contact Us", "ContactUs", "Home") to provide such feedback at any time.</p>
+
+    <p>As a valued CRE Private Mortgage Lender-Broker Registrant of USC, you will receive e Flyers of new Asset Inventory as they are uploaded (either daily or weekly).  All uploaded new inventory is 100% certified as available for acquisition.  USC encourages you to share all e Flyers with your   contingent of Principals that you market to so as to provide them with opportunity for acquisition inventory.  <b>Should you have an interest in learning more about the US CRE online FREE Joint Venture Marketing Program we welcome you to click the button immediately below.</b></p>
+
+    <h3 style="text-align: center;">@Html.ActionLink("CRE Private Mortgage Lender-Broker JV Marketing", "JointVentureMarketing", "Home")</h3>
+
+
+    <p>Utilizing the US CRE online [Joint Venture Marketing Program] is simple and highly effective.  It enables you to register your contingent of Principals with US CRE online which provides you with exclusivity with each such individual.  US CRE online then forwards its e Flyers directly to each such individual represented as being on invitation from your firm. We encourage loyal patronage by each such individual with your firm with the aim of effecting your transactional pipeline.</p>
+
+    <p>Our Program is FREE.  We do all the work.  Signing up is very simple and only takes minutes.  You can anticipate follow up from US CRE online within 24-48 business hours.</p>
+
+    Html.RenderPartial("_AccountSettingsLinks"); 
+    
+    <p>
+        Registrant Records:
+    </p>
+    <ul class="ul-styled">
+        @{ Html.RenderPartial("_UserRegistrantRecords", @Model.Files); }
+        @if (Model.HasOrderHistory)
+        {
+            <li>@Html.ActionLink("View Order History", "ViewOrderHistory", "DataPortal")</li>
+        }
+        <li>@Html.ActionLink("Search for Assets", "AssetList", "DataPortal", new { filter = "test" }, new { })</li>
+    </ul>
+}
+
+
+@*@Html.RenderPartial("_SearchCriteriaListView", @Model.Searches);*@
+
+@if (Model.Searches.Count > 0)
+{
+    <p>Your Search Criteria Forms:</p>    
+    Html.RenderPartial("_SearchCriteriaListView", @Model.Searches);
+
+}
+@if (Model.PersonalFinancialStatementId.HasValue)
+{
+    <p>Your Personal Financial Statement:</p>
+    @Html.ActionLink("Personal Financial Statement ID#" + Model.PersonalFinancialStatementId.Value, "EditPersonalFinancialStatement", "DataPortal", new { id = Model.UserId }, new { })
+    <a href="@Url.Action("ExecutePersonalFinancialStatement", "DataPortal")" title="re-execute">
+        <span class="glyphicon glyphicon-upload"></span></a>
+}
+@if (Model.IsASeller)
+{
+    <p>Seller Actions:</p>
+    <ul class="ul-styled">
+        <li>@Html.ActionLink("Manage Assets", "SellerManageAssets", "Investors")</li>
+        <li>@Html.ActionLink("Summary Report of Received IPA's", "SummaryReportOfIPAs", "Investors")</li>
+        <li>
+            @if (Model.UnreadLOICount == 1)
+            {
+                <b><a href="..\Investors\SummaryReportOfLOIs">Summary Report of LOIs <span class="badge">@Model.UnreadLOICount unread LOI</span></a></b>
+            }
+            else if(Model.UnreadLOICount > 1)
+            {
+                <b><a href="..\Investors\SummaryReportOfLOIs">Summary Report of LOIs <span class="badge">@Model.UnreadLOICount unread LOI's</span></a></b>
+            }
+            else
+            {
+                <a href="..\Investors\SummaryReportOfLOIs">Summary Report of LOIs</a>
+            }
+        </li>
+    </ul>
+}
+@if (Model.AssetMDAs.Count > 0)
+{
+    <p>Your Assets Under IPA:</p>
+    Html.RenderPartial("_IPARecords", @Model.AssetMDAs);
+}
+<div class="modal fade" id="rejectedICAdminModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <p>
+                    You are currently Registered at US CRE Online as an IC Admin Applicant.  Your application was not accepted.  
+                    Because of the inherent conflict of interest, IC Admin’s may not utilize any of the services at the site.  
+                    If you wish to amend your Registration at US CRE Online from an IC Admin to an alternative registration so that you may utilize the services of the website, 
+                    simply go to your @Html.ActionLink("My USC Page", "MyUSCPage", "Home") and change your Registration type.  Please note that once you have registered as a user type other than IC Admin, 
+                    you can never again register nor apply for IC Admin consideration. Thank you for your continued interest in US CRE Online.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(window).bind("load", function () {
+        if ("@TempData["rejected"]") {
+            if ("@TempData["rejected"]" == "true") {
+                $('#rejectedICAdminModal').modal('show');
+            }
+        }
+    });
+</script>

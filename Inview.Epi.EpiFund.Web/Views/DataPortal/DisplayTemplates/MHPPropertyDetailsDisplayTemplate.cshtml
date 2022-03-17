@@ -1,0 +1,131 @@
+﻿@model List<MobileHomePropertyDetails>
+
+@using Inview.Epi.EpiFund.Domain.Helpers
+@using Inview.Epi.EpiFund.Domain.Enum
+
+@{
+    List<Tuple<string, string>> groups = new List<Tuple<string,string>>();
+    foreach (var detail in Model)
+    {
+        var desc = Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(detail);
+        var group = desc.Split('~');
+        groups.Add(new Tuple<string, string>(group.First(), group.Last()));
+    }
+       int sectionCount = 0;
+       Dictionary<string, List<MobileHomePropertyDetails>> resultSet = new Dictionary<string, List<MobileHomePropertyDetails>>();
+       List<MobileHomePropertyDetails> sections = new List<MobileHomePropertyDetails>();
+            var ArchiList = Model.Where(x => x.ToString().ToLower().Contains("arch_")).ToList();
+            if (ArchiList.Count() > 0)
+             {   resultSet.Add("Architecture",ArchiList);}
+            var ComplexList = Model.Where(x => x.ToString().ToLower().Contains("complex_")).ToList();
+            if (ComplexList.Count() > 0) 
+             {   resultSet.Add("Complex Features", ComplexList); }
+            var GeneralList = Model.Where(x => x.ToString().ToLower().Contains("genfeatures")).ToList(); 
+            if (GeneralList.Count() > 0)
+             {   resultSet.Add("General Features", GeneralList);}
+            var SecurityList = Model.Where(x => x.ToString().ToLower().Contains("security_")).ToList();
+            if (SecurityList.Count() > 0)
+             {   resultSet.Add("Security Features", SecurityList);}
+            var ParkingList = Model.Where(x => x.ToString().ToLower().Contains("park_")).ToList();
+            if (ParkingList.Count() > 0)
+             {   resultSet.Add("Parking Features", ParkingList); }
+            var ConstructionList = Model.Where(x => x.ToString().ToLower().Contains("const_")).ToList();
+            if (ConstructionList.Count() > 0)
+             {   resultSet.Add("Construction", ConstructionList);} 
+            var HVACList = Model.Where(x => x.ToString().ToLower().Contains("cool_") || x.ToString().ToLower().Contains("heat_")).ToList();
+            if (HVACList.Count() > 0)
+             {   resultSet.Add("HVAC", HVACList);}
+            var PropertyList = Model.Where(x => x.ToString().ToLower().Contains("unitext_") || x.ToString().ToLower().Contains("unitint_")).ToList();
+            if (PropertyList.Count() > 0)
+             {   resultSet.Add("Property Updates", PropertyList);}
+            var RoofingList = Model.Where(x => x.ToString().ToLower().Contains("roof_")).ToList();
+            if (RoofingList.Count() > 0)
+             {   resultSet.Add("Roofing", RoofingList);}  
+            var MFUnitList = Model.Where(x => x.ToString().ToLower().Contains("intfeatures_")).ToList();
+            if (MFUnitList.Count() > 0)
+             {   resultSet.Add("Unit Detail", MFUnitList);}
+            var KitchenList = Model.Where(x => x.ToString().ToLower().Contains("kitchamen")).ToList();
+            if (KitchenList.Count() > 0)
+             {   resultSet.Add("Kitchen Features", KitchenList);}
+            var InteriorList = Model.Where(x => x.ToString().ToLower().Contains("upgrades_")).ToList();
+            if (InteriorList.Count() > 0)
+             {   resultSet.Add("Interior Upgrades", InteriorList);}
+            var ExteriorList = Model.Where(x => x.ToString().ToLower().Contains("upgradesext_")).ToList();
+            if (ExteriorList.Count() > 0)
+             {   resultSet.Add("Exterior Upgrades", ExteriorList);}
+            var TechList = Model.Where(x => x.ToString().ToLower().Contains("techfeat_")).ToList();
+            if (TechList.Count() > 0)
+             {   resultSet.Add("Tech Features", TechList);}
+            var MFArchList = Model.Where(x => x.ToString().ToLower().Contains("mfarch_")).ToList();
+            if (MFArchList.Count() > 0)
+             {   resultSet.Add("MF Architecture", MFArchList);}
+            var MHPList = Model.Where(x => x.ToString().ToLower().Contains("mhp_")).ToList();
+            if (MHPList.Count() > 0)
+             {   resultSet.Add("MHP", MHPList);}
+            
+        sectionCount = resultSet.Count();
+        if (sectionCount % 2 == 1)
+        { 
+            sectionCount--;
+        }
+}
+
+
+@for (int i = 0; i < (resultSet.Count-1); i = i + 2)
+{
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="input-group">
+                <label>@resultSet.ElementAt(i).Key.ToString()</label>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <ul>
+                    @foreach (var j in resultSet.ElementAt(i).Value)
+                    {
+                        <li class="property-feature">@Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(@j)</li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <label>@resultSet.ElementAt(i+1).Key.ToString()</label>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <ul>
+                    @foreach (var j in resultSet.ElementAt(i+1).Value)
+                    {
+                        <li class="property-feature">@Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(@j)</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+@*@if (sectionCount % 2 == 1)*@
+@if (resultSet.Count() % 2 ==1)
+    {
+
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="input-group">
+                <label>@resultSet.Last().Key.ToString()</label>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <ul>
+                    @foreach (var j in resultSet.Last().Value)
+                    {
+                        <li class="property-feature">@Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(@j)</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+

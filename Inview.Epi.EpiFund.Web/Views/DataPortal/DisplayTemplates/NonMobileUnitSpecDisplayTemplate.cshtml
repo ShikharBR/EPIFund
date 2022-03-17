@@ -1,0 +1,37 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.Entity.AssetUnitSpecification>
+
+@foreach (var spec in Model.OrderByDescending(m => m.BedCount).ThenByDescending(m => m.BathCount))
+{
+    if (spec.CountOfUnits > 0)
+    {
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <label>Number of non-mobile home rentable units</label></td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.CountOfUnits)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.BedCount, new { @class = "control-label" })</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.BedCount, "BedCount")</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.BathCount, new { @class = "control-label" })</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.BathCount, "BathCount")</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.UnitSquareFeet, new { @class = "control-label" })</td>
+                    <td style="text-align: right;"><span class="pad">@Html.DisplayFor(s => spec.UnitSquareFeet)</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Current Unit Base Rent</label></td>
+                    <td style="text-align: right;"><span class="padmoney">@Html.DisplayFor(s => spec.UnitBaseRent)</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    }
+
+}

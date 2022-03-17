@@ -1,0 +1,79 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.TitleCompanyModel
+
+<fieldset id="pnlUserInformation">
+   @* <legend>Please fill the following</legend>*@
+
+    @Html.HiddenFor(m => m.TitleCompanyId)
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.TitleCompName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">@Html.ValidationMessageFor(s => s.TitleCompName, "*")</span>
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.TitleCompName)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.TitleCompURL, new { @class = "control-label", style = "font-weight:bold;" })@*<span class="red">@Html.ValidationMessageFor(s => s.TitleCompURL, "*")</span>*@
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.TitleCompURL)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.TitleCompAddress, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.TitleCompAddress)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.TitleCompPhone, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.TitleCompPhone)
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.CurrentRate, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CurrentRate)
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="control-group">
+            <div class="col-sm-6">
+                @{
+                    
+                    @Html.LabelFor(s => s.SelectedIncludedStates, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">@Html.ValidationMessageFor(s => s.SelectedIncludedStates, "*")</span>
+                    <i>To make multiple selections hold down your CONTROL key as you click a selection.</i>
+                    <div class="input-group">
+                        @Html.ListBoxFor(s => s.SelectedIncludedStates, @Model.IncludedStates, new { style = "width:200px; height: 110px;" })
+                    </div>
+                   
+                }
+            </div>
+        </div>
+    </div>
+
+
+</fieldset>
+
+
+

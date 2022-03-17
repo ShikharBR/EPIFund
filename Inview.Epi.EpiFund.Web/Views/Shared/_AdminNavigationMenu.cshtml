@@ -1,0 +1,57 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.UserModel
+@using Inview.Epi.EpiFund.Domain.Helpers
+<ul class="nav">
+    <li class="admin-sidebar">
+        <h3>Admin Links</h3>
+    </li>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li class="@Html.IsSelected(action: "Login")"><a href="@Url.Action("Logout", "Home")">Logout</a></li>
+        <li class="@Html.IsSelected(action: "MyUSCPage", controller: "Home")"><a href="@Url.Action("MyUSCPage", "Home")">My USC Page</a></li>
+    }
+    else
+    {
+        <li class="@Html.IsSelected(action: "RegistrationIntro")"><a href="@Url.Action("RegistrationIntro", "Home")">New Visitor Registration</a></li>
+        <li class="@Html.IsSelected(action: "Login")"><a href="@Url.Action("Login", "Home")">Login</a></li>
+    }
+    @if (Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin)
+    {
+        if (Model.ICStatus.HasValue)
+        {
+            if (Model.ICStatus == Inview.Epi.EpiFund.Domain.Enum.ICStatus.Approved)
+            {
+                <li><a href="@Url.Action("ICACache", "ICA")">ICA Cache</a></li>
+                <li><a href="@Url.Action("SearchAssets", "ICA")">Search Master Asset DB</a></li>
+                <li><a href="@Url.Action("ManagePortfolios", "Portfolio")">Manage Portfolios</a></li>
+                <li><a href="@Url.Action("ExtractImagesFromBrochure", "Admin")">Extract Images From Brochure</a></li>
+                <li><a href="@Url.Action("ICAccountingReportDisplay", "Admin")">Accounting Report</a></li>
+                <li><a id="createAssetLink" style="cursor:pointer;" data-toggle="modal" data-target="#assetTypeModal">Create Asset</a></li>
+            }
+            if (Model.ICStatus == Inview.Epi.EpiFund.Domain.Enum.ICStatus.Rejected)
+            {
+
+            }
+        }
+    }
+    else if (Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin || Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.SiteAdmin || Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin2)
+    {
+        <li><a href="@Url.Action("ManageAssets", "Admin")">Manage Assets</a></li>
+        <li><a href="@Url.Action("ManagePortfolios", "Portfolio")">Manage Portfolios</a></li>
+        <li><a href="@Url.Action("ManagePrincipalInvestorsReg", "Admin")">Manage Principal Investors</a></li>
+
+        @*<li><a href="@Url.Action("ManageHoldingCompanies", "Admin")">Manage Holding Companies</a></li>*@
+        <li><a href="@Url.Action("ManageHoldingCompany", "Admin")">Manage Holding Companies</a></li>
+
+        <li><a href="@Url.Action("ManageAssetNarMembers", "Admin")">Manage NAR Members</a></li>
+        <li><a href="@Url.Action("ManageMBAMembersReg", "Admin")">Manage MBA Members</a></li>
+        <li><a href="@Url.Action("ManageJVMAParticipants", "Admin")">Manage JVMA Participants</a></li>
+        <li><a href="@Url.Action("ManageICAdmins", "Admin")">Manage IC Admins</a></li>
+        <li><a href="@Url.Action("ManageTitleCompanies", "Admin")">Manage Title Companies</a></li>
+        <li><a href="@Url.Action("ManageInsuranceCompanies", "Insurance")">Manage Insurance Companies</a></li>
+        <li><a href="@Url.Action("ExtractImagesFromBrochure", "Admin")">Extract Images From Brochure</a></li>
+        <li><a href="@Url.Action("ImportMBAUsers", "DataPortal")">Import MBA Members</a></li>
+        <li><a href="@Url.Action("ImportNARMembers", "DataPortal")">Import NAR Members</a></li>
+        <li><a href="@Url.Action("ImportPrincipalInvestors", "DataPortal")">Import Principal Investors</a></li>
+    }
+
+</ul>

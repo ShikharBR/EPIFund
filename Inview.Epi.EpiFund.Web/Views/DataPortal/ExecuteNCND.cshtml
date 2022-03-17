@@ -1,0 +1,18 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.NCNDTemplateModel
+@{
+    ViewBag.Title = "Execute NCND";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("ExecuteNCND", "DataPortal"))
+{ 
+    <h3 class="page-header">Execute NCND</h3>
+    <p>To download a sample NCND template, click <a href="@Url.Action("DownloadNCNDTemplate", "DataPortal")">here</a></p>
+    <p>Fill out fields below to execute NCND. DocuSign will email you to digitally sign document. Once document has been signed and received by USC. You will receive an email from USC with the signed document. You can also view executed NCND through My USC Page.</p>
+    @Html.ValidationSummary()
+    @Html.EditorForModel()  
+    <br />
+    <div class="input-group">
+        <input type="submit" class="btn btn-primary" style="margin-right: 20px;" value="Submit" />
+    </div> 
+}
+

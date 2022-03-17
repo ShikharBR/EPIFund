@@ -1,0 +1,100 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.ContactUsModel
+@{
+    ViewBag.Title = "Contact Us";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @section CaptchaCss {
+        <link href="@Url.Content("~/Content/QapTcha.jquery.css")" rel="stylesheet" type="text/css" />
+        }
+    @section CaptchaJs {
+        <script src="@Url.Content("/Scripts/QapTcha.jquery.js")"></script>
+        }
+}
+<script type="text/javascript">
+    function clear_form_elements(ele) {
+
+        $(ele).find(':input').each(function () {
+            switch (this.type) {
+                //case 'password':
+                //case 'select-multiple':
+                //case 'select-one':
+                //case 'text':
+                case 'textarea':
+                    $(this).val('');
+                    $("#charcounter").text("0 characters");
+                    break;
+                    //case 'checkbox':
+                    //case 'radio':
+                    //    this.checked = false;
+            }
+        });
+
+    };
+    function countChar(val) {
+        var len = val.value.length;
+        $("#charcounter").text(len + " characters");
+    };
+</script>
+
+<div class="main-img"></div>
+
+@using (Html.BeginForm("ContactUs", "Home"))
+{ 
+    @Html.ValidationSummary()
+    <div class="panel-header">
+        <h3>Contact US CRE online</h3>
+        <p><b>Please use the following form to submit your requests and comments to US CRE online Corporate. Thank you.</b></p>
+    </div>
+    <div class="input-group">
+        @Html.LabelFor(s => s.Name, new { @class = "control-label", style = "font-weight:bold;" })
+        <div class="controls">
+            @Html.EditorFor(s => s.Name, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="input-group">
+        @Html.LabelFor(s => s.ContactNumber, new { @class = "control-label", style = "font-weight:bold;" })
+        <div class="controls">
+            @Html.EditorFor(s => s.ContactNumber, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="input-group">
+        @Html.LabelFor(s => s.EmailAddress, new { @class = "control-label", style = "font-weight:bold;" })
+        <div class="controls">
+            @Html.EditorFor(s => s.EmailAddress, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="input-group">
+        @Html.LabelFor(s => s.SelectedTopics, new { @class = "control-label", style = "font-weight:bold;" }) <br />
+        <i>To make multiple selections hold down your CONTROL key as you click a selection.</i>
+        <div class="controls">
+            @Html.ListBoxFor(s => s.SelectedTopics, @Model.Topics,
+              new { @class = "form-control", style = "margin-bottom: 20px;" })
+        </div>
+    </div>
+    <div class="input-group">
+        @Html.LabelFor(s => s.QuestionsComments, new { @class = "control-label", style = "font-weight:bold;" })
+        <div class="controls questions-comments">
+            <i>*Maximum limit 500 characters</i>
+            <br />
+            <label id="charcounter">0 characters</label>
+            @Html.TextAreaFor(s => s.QuestionsComments, 10, 100, new { @class = "form-control", style = "resize:none;", onkeyup = "countChar(this);", maxlength="500" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="QapTcha"></div>
+    </div>
+    <br />
+    <div class="input-group">
+        <input type="button" class="btn btn-default" style="margin-right: 20px;" value="Reset" onclick="if (confirm('Are you sure you want to delete your question/comment?')) clear_form_elements(this.form)" />
+        <input type="submit" class="btn btn-primary" value="Submit" />
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $('.QapTcha').QapTcha({
+            txtLock: 'Slide bar to the right to submit',
+            txtUnlock: 'Form can be submitted'
+        });
+    });
+</script>
+

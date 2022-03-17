@@ -1,0 +1,33 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.ConfirmationClosingEscrowSpecificEmail
+To: @Model.LenderEmail
+From: USCREonline <info@uscreonline.com>
+Subject: Asset Closed Escrow
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.LenderBrokerName</p>
+
+<p>Notification:  a valued Principal Investor Registrant... who was referred by you through our Joint Venture Marketing Agreement Program at US CRE Online.com... has successful closed on a CRE Escrow directly resulting from website community participant activities.</p>
+
+<p>Name of Referred Principal Investor:	@Model.ReferredRegistrantName</p>
+
+<p>Contact Data of Principal Investor:	Phone:  @Model.ReferredPhoneNumber	e mail:  @Model.ReferredEmail</p>
+
+<p>Asset ID # @Model.AssetNumber, @Model.AssetDescription</p>
+
+<p>Closing Price of Asset:		@Model.ClosingPrice.ToString("C0")</p>
+    
+<p>Closing Date of Escrow:      @Model.EscrowCloseDate.ToString("MM/dd/yyyy")</p>
+
+<p>If you have/had a working interest in subject property, please update your file and joint venture participants accordingly.  As a Participant in the USC Joint Venture Marketing Agreement Program, and as a result of the above defined successful closing, in strict accord with the terms and conditions of the JVMA, you may be due a referral fee from US CRE Online LLC.  You will be contacted in a separate writing by USC Corporate with a complete accounting thereto.  We thank you for your participation and look forward to many years of successful closings with your approved principal referrals.</p>
+
+<p>As a JVMA Participant, you are part of the Registered Community at USC.  We welcome you to log in and review your updated &#91;Inventory of Referred Principals&#93; through your &#91;&#34;My USC Page&#34;&#93;.</p>
+
+<p>We thank all USC Registrants for their participation at our Portal, and welcome all vested interests in US Commercial Real Estate to join our rapidly expanding community at United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+
+    <p>The Professional Staff</p>
+    <p><b>US CRE Online, LLC</b></p>
+</body>
+</html>

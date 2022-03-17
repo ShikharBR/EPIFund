@@ -1,0 +1,83 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.SignedMDAQuickViewModel>
+@{
+    ViewBag.Title = "Signed IPA List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3>Signed IPA List</h3>
+@using (Html.BeginForm("SignedMDAList", "Records", FormMethod.Get))
+{
+    <p>
+        Filter: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </p>
+}
+<br />
+<table class="table table-striped" id="tbassets" cellpadding="5" cellspacing="5" style="padding: 5px; vertical-align: middle;">
+    <thead>
+        <tr>
+            <td>
+                <b>@Html.ActionLink("Date Signed", "SignedMDAList", new { sortOrder = ViewBag.DateSignedSortParm, currentFilter = ViewBag.CurrentFilter })</b>
+            </td>
+            <td>
+                <b>@Html.ActionLink("Asset Number", "SignedMDAList", new { sortOrder = ViewBag.AssetNumberSortParm, currentFilter = ViewBag.CurrentFilter })</b>
+            </td>
+            <td>
+                <b>@Html.ActionLink("Address", "SignedMDAList", new { sortOrder = ViewBag.AddressSortParm, currentFilter = ViewBag.CurrentFilter })</b>
+            </td>
+            <td>
+                <b>@Html.ActionLink("City", "SignedMDAList", new { sortOrder = ViewBag.CitySortParm, currentFilter = ViewBag.CurrentFilter })</b>
+            </td>
+            <td>
+                <b>@Html.ActionLink("State", "SignedMDAList", new { sortOrder = ViewBag.StateSortParm, currentFilter = ViewBag.CurrentFilter })</b>
+            </td>
+            <td>
+                <b>@Html.ActionLink("Property Type", "SignedMDAList", new { sortOrder = ViewBag.PropertyTypeParm, currentFilter = ViewBag.CurrentFilter })</b>
+            </td>
+            <td>
+                <b>@Html.ActionLink("Unit Description", "SignedMDAList", new { sortOrder = ViewBag.DescSortParm, currentFilter = ViewBag.CurrentFilter })</b>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in @Model)
+        {
+            <tr id="@item.AssetId">
+                <td style="width: 200px;">
+                    @item.DateSigned.ToString("MM/dd/yyyy")
+                </td>
+                <td style="width: 200px;">
+                    @Html.ActionLink(item.AssetNumber.ToString(), "ViewAsset", "DataPortal", new { id = item.AssetId }, null)
+                </td>
+                <td style="width: 200px;">
+                    @item.AssetAddressLine1
+                </td>
+                <td style="width: 100px;">
+                    @item.AssetCity
+                </td>
+                <td style="width: 100px;">
+                    @item.AssetState
+                </td>
+                <td style="width: 100px;">
+                    @item.PropertyType
+                </td>
+                <td style="width: 100px;">
+                    @item.UnitDescription
+                </td>
+                <td style="text-align: center;">
+                    <a href="@Url.Action("DownloadSignedMDA", "Records", new { id = @item.AssetUserMDAId })" title="download">
+                        <span class="glyphicon glyphicon-download"></span></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("SignedMDAList",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+

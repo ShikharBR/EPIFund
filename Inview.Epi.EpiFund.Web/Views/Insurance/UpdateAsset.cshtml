@@ -1,0 +1,18 @@
+﻿@model AssetViewModel
+
+@using Inview.Epi.EpiFund.Domain.Helpers
+@using Inview.Epi.EpiFund.Domain.Entity
+@using Inview.Epi.EpiFund.Domain.ViewModel
+@{    
+    ViewBag.Title = "Add Insurance Documents";
+    Layout = "~/Views/Shared/_LayoutInsuranceUser.cshtml";
+}
+<h2>Complete Asset: @Model.PropertyAddress</h2>
+
+@using (Html.BeginForm("UpdateAsset", "Insurance", FormMethod.Post, new { id = "assetCform" }))
+{
+    @Html.ValidationSummary()
+    <br />
+    @Html.EditorFor(model => model, "AssetEditorTemplate")
+    <label id="saveDate"></label>    
+}

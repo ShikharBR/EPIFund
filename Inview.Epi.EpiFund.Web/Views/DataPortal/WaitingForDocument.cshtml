@@ -1,0 +1,11 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.WaitingForDocumentModel
+@{
+    ViewBag.Title = "Waiting For Document";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Waiting For Document</h3>
+<p>It appears that you've already filled out this form. We're currently waiting from Docusign for your signed document. Please check your email to make sure you've electronically signed this document. Thank you for your patience.</p>
+
+<p>Do you want to fill out the @Model.DocumentTitle again?</p>
+<input type="button" class="btn btn-default" value="Submit Form Again" onclick="location.href='@Url.Action(@Model.Action, "DataPortal", new { bypass = true })    '" />

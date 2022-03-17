@@ -1,0 +1,24 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.ImportMbaModel
+@{
+    ViewBag.Title = "Import MBA Members";
+    Layout = ViewBag.Layout;
+}
+
+<h3 class="page-header">Import MBA Members</h3>
+<p>
+    Upload excel spreadsheet of MBA Members. Download template <a href="../MBAImportTemplate.xlsx">here</a>.
+</p>
+@using (Html.BeginForm("ImportMBAUsers", "DataPortal", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.TextBoxFor(s => s.File, new { type = "file" })
+    <br />
+    if (Model.ShowCheckbox)
+    {
+    @Html.CheckBoxFor(s => s.CheckAgainstNARMembers)<span> Check against NAR members?</span>
+    @Html.CheckBoxFor(s => s.CheckAgainstPrincipalInvestors)<span> Check against Principal Investors?</span>
+@Html.CheckBoxFor(s => s.AreReferredUsers)<span> Do you want to set these users as referred by you?</span>
+    <br />
+    <br />
+    }
+    <input type="submit" value="Import MBA Members" class="btn btn-primary" />
+}

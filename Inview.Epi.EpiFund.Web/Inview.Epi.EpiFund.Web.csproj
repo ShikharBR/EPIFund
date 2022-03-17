@@ -1,0 +1,1010 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{317845A4-237D-481A-8815-10A8E747A265}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Inview.Epi.EpiFund.Web</RootNamespace>
+    <AssemblyName>Inview.Epi.EpiFund.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ABCpdf, Version=10.0.0.0, Culture=neutral, PublicKeyToken=a7a0b3f5184f2169, processorArchitecture=MSIL">
+      <HintPath>..\packages\ABCpdf.10.0.0.0\lib\net40\ABCpdf.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc">
+      <HintPath>..\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Flurl, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Flurl.1.0.7\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Flurl.Http, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Flurl.Http.0.6.0\lib\net45\Flurl.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mandrill, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mandrill.2.0.3.0\lib\net45\Mandrill.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.WebHelpers.3.2.3\lib\net45\Microsoft.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="MvcCheckBoxList">
+      <HintPath>..\packages\MvcCheckBoxList.1.4.4.5\lib\net45\MvcCheckBoxList.dll</HintPath>
+    </Reference>
+    <Reference Include="MVCVideo">
+      <HintPath>..\packages\MVC4.Video.2.0.0\lib\net40\MVCVideo.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common">
+      <HintPath>..\packages\Ninject.Web.Common.3.2.1.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc">
+      <HintPath>..\packages\Ninject.Web.Mvc2.3.2.1.0\lib\net40-full\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Postal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45719375b8b4d528, processorArchitecture=MSIL">
+      <HintPath>..\packages\Postal.Mvc5.1.2.0\lib\net45\Postal.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RazorEngine, Version=3.7.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RazorEngine.3.7.0\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Providers">
+      <HintPath>..\packages\Microsoft.AspNet.Providers.Core.1.2\lib\net40\System.Web.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.3.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.3.2.3\lib\net45\WebMatrix.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.3.2.3\lib\net45\WebMatrix.WebData.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionFilters\LayoutActionFilter.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\NinjectDependencyResolver.cs" />
+    <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="AttributeHelper.cs" />
+    <Compile Include="Binders\AssetViewModelBinder.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AssetController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\DataPortalController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ICAController.cs" />
+    <Compile Include="Controllers\InsuranceController.cs" />
+    <Compile Include="Controllers\InvestorsController.cs" />
+    <Compile Include="Controllers\PortfolioController.cs" />
+    <Compile Include="Controllers\RecordsController.cs" />
+    <Compile Include="Models\AdminPortfolioResultsModel.cs" />
+    <Compile Include="Models\AssetAssignmentModel.cs" />
+    <Compile Include="Models\BaseSearchResultsModel.cs" />
+    <Compile Include="Models\Emails\AssetChangeStatusModel.cs" />
+    <Compile Include="Models\Emails\AutoConfirmationMDAUpdatedEmail.cs" />
+    <Compile Include="Models\Emails\AutoConfirmationMDAUpdatedMultipleAssets.cs" />
+    <Compile Include="Models\Emails\ClaimAssetNotifyCorpAdminEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationFundingPackageSubmittalMBAEmail.cs" />
+    <Compile Include="Models\Emails\CompanyUserWelcomeEmailAutoActivatedEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationPISellerAssetIsPublishedEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationPISellerAssetIsUnPublishedEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationToAdminSearchCriteriaSubmitted.cs" />
+    <Compile Include="Models\Emails\ConfirmationToBuyerInsQuoteOrderedEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationToUSCInsQuoteOrderedEmail.cs" />
+    <Compile Include="Models\Emails\InsuranceCompanyEmails.cs" />
+    <Compile Include="Models\Emails\NotificationToBuyerInsQuoteDocsUploadCompleteEmail.cs" />
+    <Compile Include="Models\Emails\NotificationToInsCoDocsOrderedEmail.cs" />
+    <Compile Include="Models\Emails\NotificationToInsCoUploadCompleteEmail.cs" />
+    <Compile Include="Models\Emails\NotificationToUSCInsQuoteDocsUploadCompleteEmail.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationDeliverToBuyer.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationDeliverToListingAgent.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationDeliverToPISeller.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationDeliverToUSCBuyer.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationDeliverToUSCListingAgent.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationDeliverToUSCPISeller.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationOrderToBuyer.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationOrderToListingAgent.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationOrderToPISeller.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationOrderToTitleCoBuyer.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationOrderToTitleCoListingAgent.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationOrderToTitleCoPISeller.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationOrderToUSCBuyer.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationOrderToUSCPISeller.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationUploadToTitleCoBuyer.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationUploadToTitleCoListingAgent.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationUploadToTitleCoPISeller.cs" />
+    <Compile Include="Models\HoldingCompanySearchResultsModel.cs" />
+    <Compile Include="Models\OperatingCompanySearchResultsModel.cs" />
+    <Compile Include="Models\SellerAssetSearchResultsModel.cs" />
+    <Compile Include="Models\Emails\CompanyUserWelcomeEmail.cs" />
+    <Compile Include="Models\Emails\NotificationToReferredPIUploadedAssetEmail.cs" />
+    <Compile Include="Models\Emails\PrelimConfirmationModel.cs" />
+    <Compile Include="Models\Emails\UserReferralSubmittedEmail.cs" />
+    <Compile Include="Models\Emails\UserWelcomeEmail.cs" />
+    <Compile Include="Models\InsuranceCompanyUserSearchResultsModel.cs" />
+    <Compile Include="Models\JVMANetUpSearchResultsModel.cs" />
+    <Compile Include="Models\JVMAUserMDASearchResultsModel.cs" />
+    <Compile Include="Models\ListingAgentSearchResultsModel.cs" />
+    <Compile Include="Models\MBAMemberImpSearchResultsModel.cs" />
+    <Compile Include="Models\NarMemberSearchResultsModel.cs" />
+    <Compile Include="Models\NarMemberRegSearchResultsModel.cs" />
+    <Compile Include="Models\OrderHistorySearchResultsModel.cs" />
+    <Compile Include="Models\InsuranceCompanySearchResultsModel.cs" />
+    <Compile Include="Models\PrincipalInvestorSearchResultsModel.cs" />
+    <Compile Include="Models\OrderSearchResultsModel.cs" />
+    <Compile Include="Models\TitleUserSearchResultsModel.cs" />
+    <Compile Include="Models\TitleSearchResultsModel.cs" />
+    <Compile Include="Models\UserReferralModel.cs" />
+    <Compile Include="ProgressHelper.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\ConcreteDataModule.cs" />
+    <Compile Include="Infrastructure\FormsAuthProvider.cs" />
+    <Compile Include="Infrastructure\NinjectControllerFactory.cs" />
+    <Compile Include="Infrastructure\PDFResult.cs" />
+    <Compile Include="Models\AssetSearchResultsModel.cs" />
+    <Compile Include="Models\AdminAssetSearchResultsModel.cs" />
+    <Compile Include="Models\DateCustomValidation.cs" />
+    <Compile Include="Models\Emails\AuthenticateComputerEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationImportPrincipalInvestorsEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationLOISubmittalEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationNotifyReferringMtgLenderBrokerOfPrincipalRegistrationEmail.cs" />
+    <Compile Include="Models\Emails\ICAdminWelcome.cs" />
+    <Compile Include="Models\Emails\ICAdminChangeStatusEmail.cs" />
+    <Compile Include="Models\Emails\NotificationForCorpAdminPaperOrRealEstateCreated.cs" />
+    <Compile Include="Models\Emails\NotificationToListingAgentBindingLOISubmittalEmail.cs" />
+    <Compile Include="Models\Emails\NotificationToReferringCREMtgLBRegistrantSignedUp.cs" />
+    <Compile Include="Models\MbaSearchResultsModel.cs" />
+    <Compile Include="Models\Emails\ConfirmationImportNARMembersEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationImportMBAsEmail.cs" />
+    <Compile Include="Models\Emails\AutoRegistrationAutoWelcomeEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationCRNoteSellerFormSubmittalEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationCRSellerFormSubmittalEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationBindingEscrowGeneralEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationBindingEscrowSpecificEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationClosingEscrowSpecificEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationClosingEscrowGeneralEmail.cs" />
+    <Compile Include="Models\Emails\ForwardPFSEmail.cs" />
+    <Compile Include="Models\Emails\NotificationForRegistrantOfMatchingAssetsEmail.cs" />
+    <Compile Include="Models\Emails\NotificationForCorpAdminAssetInputEmail.cs" />
+    <Compile Include="Models\Emails\SendSearchCriteriaEmail.cs" />
+    <Compile Include="Models\UserDataModel.cs" />
+    <Compile Include="Models\UserSearchResultsModel.cs" />
+    <Compile Include="Models\Emails\AssetStatusChangeReportEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationReceiptContactUsEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationSearchCriteriaSubmittedEmail.cs" />
+    <Compile Include="Models\Emails\ContactUsForwardEmail.cs" />
+    <Compile Include="Models\Emails\ConfirmationAssetInputEmail.cs" />
+    <Compile Include="Models\Emails\ProfileUpdatedEmail.cs" />
+    <Compile Include="Models\Emails\RegistrationAutoWelcomeEmail.cs" />
+    <Compile Include="Models\Emails\ResetPasswordEmail.cs" />
+    <Compile Include="Models\MessageViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Providers\EPIMembershipProvider.cs" />
+    <Compile Include="Providers\EPIRoleProvider.cs" />
+    <Compile Include="Providers\FileUploadJsonResult.cs" />
+    <Compile Include="Providers\NinjectMembershipProvider.cs" />
+    <Compile Include="Providers\NinjectRoleProvider.cs" />
+    <Compile Include="Views\Shared\KeepSessionAlive.aspx.cs">
+      <DependentUpon>KeepSessionAlive.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Shared\KeepSessionAlive.aspx.designer.cs">
+      <DependentUpon>KeepSessionAlive.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\packages\ABCpdf.10.0.0.0\bin\ABCpdf10-32.dll">
+      <Link>ABCpdf10-32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\ABCpdf.10.0.0.0\bin\ABCpdf10-64.dll">
+      <Link>ABCpdf10-64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\ABCpdf.10.0.0.0\bin\PrintHook32.dll">
+      <Link>PrintHook32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\ABCpdf.10.0.0.0\bin\PrintHook64.dll">
+      <Link>PrintHook64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\bootstrap-lightbox.min.css" />
+    <Content Include="Content\bootstrap-lightbox.min.js" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\basic.css" />
+    <Content Include="Content\css\dropzone.css" />
+    <Content Include="Content\css\font-awesome.css" />
+    <Content Include="Content\css\font-awesome.min.css" />
+    <Content Include="Content\css\jcarousel.connected-carousels.css" />
+    <Content Include="Content\css\ProgressBar.css" />
+    <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\Icons\documents.png" />
+    <Content Include="Content\Icons\triangle.png" />
+    <Content Include="Content\images\01.png" />
+    <Content Include="Content\images\acrp.jpg" />
+    <Content Include="Content\images\airea.jpg" />
+    <Content Include="Content\images\aresnet.png" />
+    <Content Include="Content\images\bg_draggable_qaptcha.jpg" />
+    <Content Include="Content\images\boma.png" />
+    <Content Include="Content\images\bus.png" />
+    <Content Include="Content\images\ccim.jpg" />
+    <Content Include="Content\images\chicagotitle.png" />
+    <Content Include="Content\images\dummyphoto.gif" />
+    <Content Include="Content\images\fileUploadPlaceholder.GIF" />
+    <Content Include="Content\images\irem.jpg" />
+    <Content Include="Content\images\iscs.png" />
+    <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\mbaa.png" />
+    <Content Include="Content\images\memberize.jpg" />
+    <Content Include="Content\images\naahq.jpg" />
+    <Content Include="Content\images\naiop.png" />
+    <Content Include="Content\images\nareim.png" />
+    <Content Include="Content\images\nationalreia.jpg" />
+    <Content Include="Content\images\ncreif_logo.jpg" />
+    <Content Include="Content\images\nmhc.png" />
+    <Content Include="Content\images\realestateroundtable.jpg" />
+    <Content Include="Content\images\realtor.png" />
+    <Content Include="Content\images\reit.png" />
+    <Content Include="Content\images\sior.png" />
+    <Content Include="Content\images\tringle.png" />
+    <Content Include="Content\images\uscrelogo.png" />
+    <Content Include="Content\images\uscrelogowithbg.PNG" />
+    <Content Include="Content\images\vimeoVideoLinkExample.jpg" />
+    <Content Include="Content\images\youTubeVideoLinkExample.jpg" />
+    <Content Include="Content\PagedList.css" />
+    <Content Include="Content\QapTcha.jquery.css" />
+    <Content Include="Content\responsive.css" />
+    <Content Include="Content\sass\stylesheets\ie.css" />
+    <Content Include="Content\sass\stylesheets\print.css" />
+    <Content Include="Content\sass\stylesheets\screen.css" />
+    <Content Include="Content\stylesheets\sass\ie.css" />
+    <Content Include="Content\stylesheets\sass\print.css" />
+    <Content Include="Content\stylesheets\sass\screen.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.menu.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\FontAwesome.otf" />
+    <Content Include="Content\.sass-cache\2b74030caa61013c78bfa0096bd5818721b121ae\_reset.scssc" />
+    <Content Include="Content\.sass-cache\90d0acf85f0c35555eca2025a545c0bad158bb60\ie.scssc" />
+    <Content Include="Content\.sass-cache\90d0acf85f0c35555eca2025a545c0bad158bb60\print.scssc" />
+    <Content Include="Content\.sass-cache\90d0acf85f0c35555eca2025a545c0bad158bb60\screen.scssc" />
+    <Content Include="Content\.sass-cache\e5d3bf9e89c6177fb7271ad2d4d1c20df5f0995a\_utilities.scssc" />
+    <Content Include="Content\sass\.sass-cache\2b74030caa61013c78bfa0096bd5818721b121ae\_reset.scssc" />
+    <Content Include="Content\sass\.sass-cache\90d0acf85f0c35555eca2025a545c0bad158bb60\ie.scssc" />
+    <Content Include="Content\sass\.sass-cache\90d0acf85f0c35555eca2025a545c0bad158bb60\print.scssc" />
+    <Content Include="Content\sass\.sass-cache\90d0acf85f0c35555eca2025a545c0bad158bb60\screen.scssc" />
+    <Content Include="Content\sass\.sass-cache\e5d3bf9e89c6177fb7271ad2d4d1c20df5f0995a\_utilities.scssc" />
+    <Content Include="Content\sass\config.rb" />
+    <Content Include="Content\sass\sass\ie.scss" />
+    <Content Include="Content\sass\sass\print.scss" />
+    <Content Include="Content\sass\sass\screen.scss" />
+    <Content Include="Content\style.scss" />
+    <Content Include="NARMemberImportTemplate.xlsx" />
+    <Content Include="MBAImportTemplate.xlsx" />
+    <Content Include="Content\responsive.scss" />
+    <Content Include="PrincipalInvestorImportTemplate.xlsx" />
+    <None Include="Properties\PublishProfiles\DEVELOPMENT.pubxml" />
+    <None Include="Properties\PublishProfiles\MYBOX.pubxml" />
+    <None Include="Properties\PublishProfiles\PRODUCTION.pubxml" />
+    <Content Include="Resources\ICAgreementTemplate.pdf" />
+    <Content Include="Resources\ICAgreementTemplateWOSig.pdf" />
+    <Content Include="Resources\IPABuyerWOSig.pdf" />
+    <Content Include="Resources\IPABuyerWSig.pdf" />
+    <Content Include="Resources\IPANARWOSig.pdf" />
+    <Content Include="Resources\IPANARWSig.pdf" />
+    <Content Include="Resources\IPASellerWOSig.pdf" />
+    <Content Include="Resources\IPASellerWSig.pdf" />
+    <Content Include="Resources\JVTemplate.pdf" />
+    <Content Include="Resources\JVTemplateWOSig.pdf" />
+    <Content Include="Resources\MDATemplateV1.pdf" />
+    <Content Include="Resources\MDATemplateV1WOSig.pdf" />
+    <Content Include="Resources\MDATemplateV2.pdf" />
+    <Content Include="Resources\MDATemplateV2WOSig.pdf" />
+    <Content Include="Resources\Misc1099.pdf" />
+    <Content Include="Resources\NCNDTemplate.pdf" />
+    <Content Include="Resources\NCNDTemplateWOSig.pdf" />
+    <Content Include="Resources\PersonalFinancialStatementTemplate.pdf" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\dropzone.min.js" />
+    <Content Include="Scripts\dropzone\app.js" />
+    <Content Include="Scripts\dropzone\Home.js" />
+    <Content Include="Scripts\global.js" />
+    <Content Include="Scripts\dropzone\basic.css" />
+    <Content Include="Scripts\dropzone\basic.min.css" />
+    <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
+    <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />
+    <Content Include="Scripts\dropzone\dropzone.css" />
+    <Content Include="Scripts\dropzone\dropzone.js" />
+    <Content Include="Scripts\dropzone\dropzone.min.css" />
+    <Content Include="Scripts\dropzone\dropzone.min.js" />
+    <Content Include="Scripts\jcarousel.connected-carousels.js" />
+    <Content Include="Scripts\jquery-2.1.1.min.map" />
+    <Content Include="Resources\BindingContingentTemplate.pdf" />
+    <Content Include="Resources\BindingContingentTemplateWOFields.pdf" />
+    <None Include="Resources\BindingContingentTemplateWOFields.pdf" />
+    <Content Include="Resources\LOITemplate.pdf" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.1.js" />
+    <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <Content Include="Scripts\jquery-guid.js" />
+    <Content Include="Scripts\jquery-ui-1.10.4.js" />
+    <Content Include="Scripts\jquery-ui-1.10.4.min.js" />
+    <Content Include="Scripts\jquery.jcarousel.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout-2.2.0.debug.js" />
+    <Content Include="Scripts\knockout-2.2.0.js" />
+    <Content Include="Scripts\knockout-3.1.0.debug.js" />
+    <Content Include="Scripts\knockout-3.1.0.js" />
+    <Content Include="Scripts\modernizr-2.7.2.js" />
+    <Content Include="Scripts\QapTcha.jquery.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Admin\UpdateTitleCompanyUser.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Shared\KeepSessionAlive.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_Messages.cshtml" />
+    <Content Include="Views\Shared\_FooterPartial.cshtml" />
+    <Content Include="Views\Investors\SecureDebtEquityPartner.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\ForgotPassword.cshtml" />
+    <Content Include="Views\Home\MyUSCPage.cshtml" />
+    <Content Include="Views\Home\EditProfile.cshtml" />
+    <Content Include="Views\Home\EditorTemplates\UserModel.cshtml" />
+    <Content Include="Views\Shared\_AccountSettingsLinks.cshtml" />
+    <Content Include="Views\DataPortal\DataPortal.cshtml" />
+    <Content Include="Views\Shared\_SubHeaderMenu.cshtml" />
+    <Content Include="Views\Home\ContactUs.cshtml" />
+    <Content Include="Views\Home\ContactUsReceipt.cshtml" />
+    <Content Include="Views\Home\Registration.cshtml" />
+    <Content Include="Views\Home\EditorTemplates\RegistrationModel.cshtml" />
+    <Content Include="Views\Home\AboutUs.cshtml" />
+    <Content Include="Views\Home\RegistrationIntro.cshtml" />
+    <Content Include="Views\Home\PrivacyPolicy.cshtml" />
+    <Content Include="Views\DataPortal\InvestmentAssetSearchCriteria.cshtml" />
+    <Content Include="Views\Home\InvestorOpportunities.cshtml" />
+    <Content Include="Views\Home\EpiFundBuysCommercialRealEstate.cshtml" />
+    <Content Include="Views\Home\EpiFundBuysCommercialPaper.cshtml" />
+    <Content Include="Views\Home\EpiFundBuysResidentialRealEstate.cshtml" />
+    <Content Include="Views\Home\EpiFundBuysResidentialPaper.cshtml" />
+    <Content Include="Views\Emails\AssetStatusChangeReportGeneralPopulation.cshtml" />
+    <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\Emails\AssetStatusChangeReportSpecificPrincipal.cshtml" />
+    <Content Include="Views\Emails\ConfirmationReceiptContactUs.cshtml" />
+    <Content Include="Views\Emails\RegistrationAutoWelcome.cshtml" />
+    <Content Include="Views\Emails\ResetPassword.cshtml" />
+    <Content Include="Views\Emails\Web.config" />
+    <Content Include="Views\Admin\RecordPayment.cshtml" />
+    <Content Include="Views\Admin\RecordCommissionPayment.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\UnitSpecifcationTemplate.cshtml" />
+    <Content Include="Views\DataPortal\EditorTemplates\AssetSearchCriteriaModel.cshtml" />
+    <Content Include="Views\DataPortal\EditInvestmentAssetSearchCriteria.cshtml" />
+    <Content Include="Views\Admin\ChangeListingStatus.cshtml" />
+    <Content Include="Views\DataPortal\EditorTemplates\GeographicParameterInterestModel.cshtml" />
+    <Content Include="Views\Admin\UserManagement.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\UserModel.cshtml" />
+    <Content Include="Views\DataPortal\EditorTemplates\DueDiligenceCheckListModel.cshtml" />
+    <Content Include="Views\DataPortal\ExecuteNCND.cshtml" />
+    <Content Include="Views\DataPortal\ExecuteMDA.cshtml" />
+    <Content Include="Views\DataPortal\EditorTemplates\IPABuyerTemplateModel.cshtml" />
+    <Content Include="Views\DataPortal\EditorTemplates\NCNDTemplateModel.cshtml" />
+    <Content Include="Views\DataPortal\AssetList.cshtml" />
+    <Content Include="Views\Home\EmploymentOpportunities.cshtml" />
+    <Content Include="Views\Records\SignedMDAList.cshtml" />
+    <Content Include="Views\Emails\ConfirmationSearchCriteriaSubmitted.cshtml" />
+    <Content Include="Views\DataPortal\EditorTemplates\ICAgreementTemplateModel.cshtml" />
+    <Content Include="Views\DataPortal\ExecuteICAgreement.cshtml" />
+    <Content Include="Views\Emails\ContactUsForward.cshtml" />
+    <Content Include="Views\Emails\ProfileUpdated.cshtml" />
+    <Content Include="Views\DataPortal\ViewAsset.cshtml" />
+    <Content Include="Views\Emails\ConfirmationAssetInput.cshtml" />
+    <Content Include="Views\Home\JointVentureMarketing.cshtml" />
+    <Content Include="Views\DataPortal\_AssetListView.cshtml" />
+    <Content Include="Views\Admin\_UserListView.cshtml" />
+    <Content Include="Views\Admin\UpdateAsset.cshtml" />
+    <Content Include="Views\Admin\UploadUserFile.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\UserNoteModel.cshtml" />
+    <Content Include="Views\Admin\CreateUserNote.cshtml" />
+    <Content Include="Views\Admin\EditUserNote.cshtml" />
+    <Content Include="Views\DataPortal\EditorTemplates\PersonalFinancialStatementTemplateModel.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Views\DataPortal\ExecutePersonalFinancialStatement.cshtml" />
+    <Content Include="Views\Emails\AutoRegistrationAutoWelcome.cshtml" />
+    <Content Include="Views\DataPortal\DisplayTemplates\AssetSearchCriteriaModel.cshtml" />
+    <Content Include="Views\DataPortal\ViewInvestmentAssetSearchCriteria.cshtml" />
+    <Content Include="Views\Emails\SendSearchCriteria.cshtml" />
+    <Content Include="Views\Admin\EmailInvestmentAssetSearchCriteria.cshtml" />
+    <Content Include="Views\DataPortal\DisplayTemplates\UnitSpecDisplayTemplate.cshtml" />
+    <Content Include="Views\DataPortal\DisplayTemplates\BedCount.cshtml" />
+    <Content Include="Views\DataPortal\DisplayTemplates\BathCount.cshtml" />
+    <Content Include="Views\DataPortal\DisplayTemplates\MFPropertyDetailsDisplayTemplate.cshtml" />
+    <Content Include="Views\Home\ChangePassword.cshtml" />
+    <Content Include="Views\Emails\ConfirmationCRNoteSellerFormSubmittal.cshtml" />
+    <Content Include="Views\Emails\ConfirmationCRSellerFormSubmittal.cshtml" />
+    <Content Include="Views\DataPortal\DisplayTemplates\CPropertyDetailsDisplayTemplate.cshtml" />
+    <Content Include="Views\DataPortal\DisplayTemplates\BoolToYesNo.cshtml" />
+    <Content Include="Views\Emails\ConfirmationBindingEscrowGeneral.cshtml" />
+    <Content Include="Views\Emails\ConfirmationBindingEscrowSpecific.cshtml" />
+    <Content Include="Views\Emails\ConfirmationClosingEscrowSpecific.cshtml" />
+    <Content Include="Views\Emails\ConfirmationClosingEscrowGeneral.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\AssetEditorTemplate.cshtml" />
+    <Content Include="Views\DataPortal\ViewAssetDisclosure.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\DeferredMaintenanceEditorTemplate.cshtml" />
+    <Content Include="Views\Home\SignDocsInformation.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Admin\_AdminAssetListViewold.cshtml" />
+    <Content Include="Views\DataPortal\EditorTemplates\JVAgreementTemplateModel.cshtml" />
+    <Content Include="Views\DataPortal\ExecuteJVAgreement.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\AssetEscrowModel.cshtml" />
+    <Content Include="Views\Admin\AssetEscrowProcess.cshtml" />
+    <Content Include="Views\Home\_SearchCriteriaListView.cshtml" />
+    <Content Include="Views\Admin\UserSearchList.cshtml" />
+    <Content Include="Views\DataPortal\WaitingForDocument.cshtml" />
+    <Content Include="Views\DataPortal\EditPersonalFinancialStatement.cshtml" />
+    <Content Include="Views\Emails\NotificationForCorpAdminAssetInput.cshtml" />
+    <Content Include="Views\Admin\ManageAssetsold.cshtml" />
+    <Content Include="Views\Admin\NotifyRegistrant.cshtml" />
+    <Content Include="Views\Emails\NotificationForRegistrantOfMatchingAssets.cshtml" />
+    <Content Include="Views\Emails\ConfirmationToAdminSearchCriteriaSubmitted.cshtml" />
+    <Content Include="Views\Home\_UserRegistrantRecords.cshtml" />
+    <Content Include="Views\Admin\CreateUser.cshtml" />
+    <Content Include="Views\DataPortal\EditorTemplates\MiscellaneousIncomeTemplateModel.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\RegistrationModel.cshtml" />
+    <Content Include="Views\DataPortal\DocusignProcess.cshtml" />
+    <Content Include="Views\DataPortal\Execute1099.cshtml" />
+    <Content Include="Views\DataPortal\EditorTemplates\MiscellaneousIncomeTemplateModel.cshtml" />
+    <Content Include="Views\Shared\_CarouselPartialView.cshtml" />
+    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
+    <Content Include="Views\Admin\MyUSCPageAdmin.cshtml" />
+    <Content Include="Views\DataPortal\ImportNarMembers.cshtml" />
+    <Content Include="Views\Admin\ManageNarMembers.cshtml" />
+    <Content Include="Views\Home\EditorTemplates\PaperCommercialAssetViewModel.cshtml" />
+    <Content Include="Views\Home\EditorTemplates\RealEstateCommercialAssetViewModel.cshtml" />
+    <Content Include="Views\Admin\_NarMembersListView.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\NarMemberQuickViewModel.cshtml" />
+    <Content Include="Views\Admin\CreateNarMember.cshtml" />
+    <Content Include="Views\Admin\UpdateNARMember.cshtml" />
+    <Content Include="Views\DataPortal\SendPFSToMortgageLenderBroker.cshtml" />
+    <Content Include="Views\Emails\ForwardPFS.cshtml" />
+    <Content Include="Views\Emails\ConfirmationImportNARMembers.cshtml" />
+    <Content Include="Views\Admin\ExtractImagesFromBrochure.cshtml" />
+    <Content Include="Views\Admin\ViewExtractedImages.cshtml" />
+    <Content Include="Views\Emails\ConfirmationImportMBAs.cshtml" />
+    <Content Include="Views\DataPortal\ImportMBAUsers.cshtml" />
+    <Content Include="Views\Admin\ManageMBAUsers.cshtml" />
+    <Content Include="Views\Admin\_MbasListView.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\MbaViewModel.cshtml" />
+    <Content Include="Views\Admin\CreateMba.cshtml" />
+    <Content Include="Views\Admin\UpdateMba.cshtml" />
+    <Content Include="Views\Shared\_AdminNavigationMenu.cshtml" />
+    <Content Include="Views\Home\DisplayTemplates\PaperCommercialAssetViewModel.cshtml" />
+    <Content Include="Views\Home\DisplayTemplates\PaperResidentialAssetViewModel.cshtml" />
+    <Content Include="Views\Home\DisplayTemplates\RealEstateCommercialAssetViewModel.cshtml" />
+    <Content Include="Views\Home\DisplayTemplates\RealEstateResidentialAssetViewModel.cshtml" />
+    <Content Include="Views\Home\ShowCommercialPaper.cshtml" />
+    <Content Include="Views\Home\ShowCommercialRealEstate.cshtml" />
+    <Content Include="Views\Home\ShowResidentialPaper.cshtml" />
+    <Content Include="Views\Home\ShowResidentialRealEstate.cshtml" />
+    <Content Include="Views\Home\Null.cshtml" />
+    <Content Include="Views\Emails\NotificationForCorpAdminPaperOrRealEstateCreated.cshtml" />
+    <Content Include="Views\Shared\_ViewAssetCarouselPartialView.cshtml" />
+    <Content Include="Views\Shared\_NoteJavascript.cshtml" />
+    <Content Include="Views\Records\AdminUserSignedMDAList.cshtml" />
+    <Content Include="Views\DataPortal\AcceptNCND.cshtml" />
+    <Content Include="Views\Home\TestSecurity.cshtml" />
+    <Content Include="Views\Home\NewMachine.cshtml" />
+    <Content Include="Views\Emails\AuthenticateComputer.cshtml" />
+    <Content Include="Views\Home\Affiliations.cshtml" />
+    <Content Include="Views\DataPortal\ExecuteLOI.cshtml" />
+    <Content Include="Views\Emails\ConfirmationNotifyReferringMtgLenderBrokerOfPrincipalRegistration.cshtml" />
+    <Content Include="Views\Emails\ICAdminRejected.cshtml" />
+    <Content Include="Views\Admin\AccountingReportDisplay.cshtml" />
+    <Content Include="Views\Home\EditorTemplates\TempUnitSpecificationTemplate.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\BindingContingentTemplateModel.cs.cshtml" />
+    <Content Include="Views\Admin\BindingContingent.cshtml" />
+    <Content Include="Views\Admin\_AccountingReportTable.cshtml" />
+    <Content Include="Views\Admin\RecordContractPayment.cshtml" />
+    <Content Include="Views\Emails\NotificationToReferringCREMtgLBRegistrantSignedUp.cshtml" />
+    <Content Include="Views\DataPortal\EditorTemplates\BindingContingentTemplateModel.cshtml" />
+    <Content Include="Views\Emails\ICAdminApproved.cshtml" />
+    <Content Include="Views\Emails\ICAdminWelcome.cshtml" />
+    <Content Include="Views\Admin\ManageICAdmins.cshtml" />
+    <Content Include="Views\Emails\ConfirmationLOISubmittal.cshtml" />
+    <Content Include="Views\Emails\NotificationToListingAgentBindingLOISubmittal.cshtml" />
+    <Content Include="Views\Shared\_CreateAssetPartial.cshtml" />
+    <Content Include="Views\Admin\_ICAdminListView.cshtml" />
+    <Content Include="Views\Emails\ConfirmationImportPrincipalInvestors.cshtml" />
+    <Content Include="Views\DataPortal\ImportPrincipalInvestors.cshtml" />
+    <Content Include="Views\Admin\_PrincipalInvestorListView.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\PrincipalInvestorQuickViewModel.cshtml" />
+    <Content Include="Views\Admin\CreatePrincipalInvestor.cshtml" />
+    <Content Include="Views\Admin\UpdatePrincipalInvestor.cshtml" />
+    <Content Include="Views\Admin\_MBAUserListView.cshtml" />
+    <Content Include="Views\DataPortal\ViewPaperAsset.cshtml" />
+    <Content Include="Views\Admin\_AssetSellerListView.cshtml" />
+    <Content Include="Views\Home\ICAdminFillOutAgreement.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Admin\ExtractedImagesView.cshtml" />
+    <Content Include="Views\Home\TestWrite.cshtml" />
+    <Content Include="Views\Admin\ManageTitleCompanies.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\TitleCompanyModel.cshtml" />
+    <Content Include="Views\Admin\CreateTitleCompany.cshtml" />
+    <Content Include="Views\Admin\_TitleCompListView.cshtml" />
+    <Content Include="Views\Admin\EditTitleCompany.cshtml" />
+    <Content Include="Views\Admin\CreateTitleUser.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\TitleCompanyUserModel.cshtml" />
+    <Content Include="Views\Admin\ManageTitleCompanyUsers.cshtml" />
+    <Content Include="Views\Admin\_TitleUsersListView.cshtml" />
+    <Content Include="Views\Admin\EditTitleCompanyUser.cshtml" />
+    <Content Include="Views\Admin\ValidateManager.cshtml" />
+    <Content Include="Views\Shared\_LayoutTitleUser.cshtml" />
+    <Content Include="Views\Shared\_TitleUserNavigationMenu.cshtml" />
+    <Content Include="Views\Admin\ManagerTitleUsersPage.cshtml" />
+    <Content Include="Views\Admin\_ManagerTitleUsersList.cshtml" />
+    <Content Include="Views\Admin\CreateTitleUserbyManager.cshtml" />
+    <Content Include="Views\Admin\ValidateUser.cshtml" />
+    <Content Include="Views\Admin\MyUSCPageTitle.cshtml" />
+    <Content Include="Views\Admin\TitleCompanyPage.cshtml" />
+    <Content Include="Views\Admin\CompleteAsset.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\AssetCompletingTemplate.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationDeliverToUSCListingAgent.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationDeliverToUSCPISeller.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationDeliverToListingAgent.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationDeliverToPISeller.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationOrderToListingAgent.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationOrderToPISeller.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationOrderToUSCListingAgent.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationOrderToUSCPISeller.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationOrderToTitleCoListingAgent.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationOrderToTitleCoPISeller.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationUploadToTitleCoListingAgent.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationUploadToTitleCoPISeller.cshtml" />
+    <Content Include="Views\Admin\AccessAsset.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\TitleCompUserManageModel.cshtml" />
+    <Content Include="Views\Admin\AssetAssignment.cshtml" />
+    <Content Include="Views\Admin\_AssignAssetsListView.cshtml" />
+    <Content Include="Views\Home\OrderHistory.cshtml" />
+    <Content Include="Views\DataPortal\ViewOrderHistory.cshtml" />
+    <Content Include="Views\DataPortal\_OrderHistoryListView.cshtml" />
+    <Content Include="Views\DataPortal\_OrderHistoryListView.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationDeliverToBuyer.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationDeliverToUSCBuyer.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationOrderToBuyer.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationOrderToUSCBuyer.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationOrderToTitleCoBuyer.cshtml" />
+    <Content Include="Views\Emails\PrelimConfirmationUploadToTitleCoBuyer.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Admin\EditorTemplates\TitleCompanyUserUpdateModel.cshtml" />
+    <Content Include="Views\Emails\NotificationForALLNARMembersLOISubmittal.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\AssetEditorTemplateDev.cshtml" />
+    <Content Include="Views\Admin\ImagesTest.cshtml" />
+    <Content Include="Views\Emails\AutoConfirmationMDAUpdated.cshtml" />
+    <Content Include="Views\Emails\ConfirmationFundingPackageSubmittalMBA.cshtml" />
+    <Content Include="Views\Admin\RecordTitleCoOrderPayment.cshtml" />
+    <Content Include="Views\Admin\_AdminPendingOrderHistoryListView.cshtml" />
+    <Content Include="Views\Admin\_TitleOrderHistoryListView.cshtml" />
+    <Content Include="Views\Admin\ViewOrderHistory.cshtml" />
+    <Content Include="Views\Admin\_AdminCompletedOrderHistoryListView.cshtml" />
+    <Content Include="Views\Admin\EditTitleOrderPayment.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\TitleOrderModel.cshtml" />
+    <Content Include="Views\Admin\ManageNarMembersImported.cshtml" />
+    <Content Include="Views\Admin\ManageNarMembersRegistered.cshtml" />
+    <Content Include="Views\Admin\ManageAssetNarMembers.cshtml" />
+    <Content Include="Views\Admin\_NarMembersAssetListingAgentListView.cshtml" />
+    <Content Include="Views\Admin\_NarUserListView.cshtml" />
+    <Content Include="Views\Admin\CreateRegisteredNarMember.cshtml" />
+    <Content Include="Views\Admin\ManagePrincipalInvestorsReg.cshtml" />
+    <Content Include="Views\Admin\ManagePrincipalInvestorsImport.cshtml" />
+    <Content Include="Views\Emails\UserWelcome.cshtml" />
+    <Content Include="Views\DataPortal\ViewNetworkUploadInventory.cshtml" />
+    <Content Include="Views\DataPortal\_JVMAUserNetworkUploadHistoryListView.cshtml" />
+    <Content Include="Views\Admin\ManageMBAMembersImported.cshtml" />
+    <Content Include="Views\Admin\ManageMBAMembersReg.cshtml" />
+    <Content Include="Views\DataPortal\ViewUserMDAHistory.cshtml" />
+    <Content Include="Views\DataPortal\_JVMAUserAssetMDAHistoryView.cshtml" />
+    <Content Include="Views\Admin\ManageJVMAParticipants.cshtml" />
+    <Content Include="Views\Admin\_MBAUserParticipantView.cshtml" />
+    <Content Include="Views\Shared\_TopNavigation.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\NarMemberViewModel.cshtml" />
+    <Content Include="Views\Emails\_ViewStart.cshtml" />
+    <Content Include="Views\Admin\ICAccountingReportDisplay.cshtml" />
+    <Content Include="Views\Admin\JVMAAccountingReportDisplay.cshtml" />
+    <Content Include="Views\Admin\RecordICContractPayment.cshtml" />
+    <Content Include="Views\Admin\RecordJVMAContractPayment.cshtml" />
+    <Content Include="Views\Admin\_ICAccountingReportTable.cshtml" />
+    <Content Include="Views\Admin\_JVMAAccountingReportTable.cshtml" />
+    <Content Include="Views\Home\ReferUser.cshtml" />
+    <Content Include="Views\Emails\UserReferralSubmitted.cshtml" />
+    <Content Include="Views\Admin\EditContractPayment.cshtml" />
+    <Content Include="Views\Emails\NotificationToReferredPIUploadedAsset.cshtml" />
+    <Content Include="Views\DataPortal\ProposedDebtFund.cshtml" />
+    <Content Include="Views\DataPortal\ExistingDebtFund.cshtml" />
+    <Content Include="Views\DataPortal\AddAssetToMDA.cshtml" />
+    <Content Include="Views\Home\_IPARecords.cshtml" />
+    <Content Include="Views\Shared\_CounterPartialView.cshtml" />
+    <Content Include="Views\Insurance\ManageInsuranceCompanies.cshtml" />
+    <Content Include="Views\Insurance\_InsuranceCompanyListView.cshtml" />
+    <Content Include="Views\Insurance\CreateInsuranceCompany.cshtml" />
+    <Content Include="Views\Insurance\EditorTemplates\InsuranceCompanyViewModel.cshtml" />
+    <Content Include="Views\Investors\SellerManageAssets.cshtml" />
+    <Content Include="Views\Investors\_SellerAssetListView.cshtml" />
+    <Content Include="Views\Investors\SummaryReportOfLOIs.cshtml" />
+    <Content Include="Views\Investors\SummaryReportOfIPAs.cshtml" />
+    <Content Include="Views\Insurance\InsuranceCompanyPage.cshtml" />
+    <Content Include="Views\Insurance\EditInsuranceCompany.cshtml" />
+    <Content Include="Views\Insurance\ManageInsuranceCompanyUsers.cshtml" />
+    <Content Include="Views\Insurance\_InsuranceCompanyUsersListView.cshtml" />
+    <Content Include="Views\Insurance\CreateInsuranceCompanyUser.cshtml" />
+    <Content Include="Views\Insurance\EditorTemplates\InsuranceCompanyUserViewModel.cshtml" />
+    <Content Include="Views\Shared\_InsuranceUserNavigationMenu.cshtml" />
+    <Content Include="Views\Shared\_LayoutInsuranceUser.cshtml" />
+    <Content Include="Views\Insurance\MyUSCPage.cshtml" />
+    <Content Include="Views\Insurance\ValidateUser.cshtml" />
+    <Content Include="Views\Insurance\Error.cshtml" />
+    <Content Include="Views\Insurance\UpdateUser.cshtml" />
+    <Content Include="Views\Insurance\ManageAssets.cshtml" />
+    <Content Include="Views\Insurance\EditorTemplates\AssetEditorTemplate.cshtml" />
+    <Content Include="Views\Insurance\EditInsuranceCompanyUser.cshtml" />
+    <Content Include="Views\Insurance\ViewOrderHistory.cshtml" />
+    <Content Include="Views\Insurance\_OrderHistoryListView.cshtml" />
+    <Content Include="Views\Emails\CompanyUserWelcome.cshtml" />
+    <Content Include="Views\Emails\CompanyUserWelcomeEmailAutoActivated.cshtml" />
+    <Content Include="Views\Insurance\EditorTemplates\UserViewInsuranceSide.cshtml" />
+    <Content Include="Views\Insurance\UpdateAsset.cshtml" />
+    <Content Include="Views\Emails\NotificationToInsCoDocsOrdered.cshtml" />
+    <Content Include="Views\Emails\ConfirmationToBuyerInsQuoteOrdered.cshtml" />
+    <Content Include="Views\Emails\NotificationToBuyerInsQuoteDocsUploadComplete.cshtml" />
+    <Content Include="Views\Emails\NotificationToUSCInsQuoteDocsUploadComplete.cshtml" />
+    <Content Include="Views\Emails\NotificationToInsCoUploadComplete.cshtml" />
+    <Content Include="Views\Emails\ConfirmationToUSCInsQuoteOrdered.cshtml" />
+    <Content Include="Views\DataPortal\DisplayTemplates\MHPUnitSpecDisplayTemplate.cshtml" />
+    <Content Include="Views\Emails\ConfirmationToPISellerAssetIsPublished.cshtml" />
+    <Content Include="Views\Investors\ExecuteNARMDA.cshtml" />
+    <Content Include="Views\Investors\ExecuteSellerMDA.cshtml" />
+    <Content Include="Views\Investors\EditorTemplates\IPASellerTemplateModel.cshtml" />
+    <Content Include="Views\Investors\EditorTemplates\IPANARTemplateModel.cshtml" />
+    <Content Include="Views\Emails\AutoConfirmationMDAUpdatedMultipleAssets.cshtml" />
+    <Content Include="Views\Emails\ConfirmationToPISellerAssetIsUnPublished.cshtml" />
+    <Content Include="Views\Portfolio\CreatePortfolio.cshtml" />
+    <Content Include="Views\Portfolio\EditorTemplates\PortfolioEditorTemplate.cshtml" />
+    <Content Include="Views\Portfolio\ExistingDebtFund.cshtml" />
+    <Content Include="Views\Portfolio\ManagePortfolios.cshtml" />
+    <Content Include="Views\Portfolio\ProposedDebtFund.cshtml" />
+    <Content Include="Views\Portfolio\UpdatePortfolio.cshtml" />
+    <Content Include="Views\Portfolio\ViewPortfolioSummary.cshtml" />
+    <Content Include="Views\Portfolio\_PortfolioListView.cshtml" />
+    <Content Include="Views\Portfolio\_SearchAssetListView.cshtml" />
+    <Content Include="Views\Admin\UpdateHoldingCompany.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\HoldingCompanyViewModel.cshtml" />
+    <Content Include="Views\Admin\EditorTemplates\OperatingCompanyViewModel.cshtml" />
+    <Content Include="Views\Admin\_OperatingCompanyListView.cshtml" />
+    <Content Include="Views\Admin\ManageOperatingCompanies.cshtml" />
+    <Content Include="Views\Admin\UpdateOperatingCompany.cshtml" />
+    <Content Include="Views\DataPortal\DisplayTemplates\MHPPropertyDetailsDisplayTemplate.cshtml" />
+    <Content Include="Views\Admin\_AdminPFAssetListView.cshtml" />
+    <Content Include="Views\Asset\ClaimAsset.cshtml" />
+    <Content Include="Views\Emails\ClaimAssetNotifyCorpAdminEmail.cshtml" />
+    <Content Include="Views\DataPortal\_AssetListPFView.cshtml" />
+    <Content Include="Views\ICA\SearchAssets.cshtml" />
+    <Content Include="Views\ICA\_ICAAssetListView.cshtml" />
+    <Content Include="Views\ICA\_ICAPFAssetListView.cshtml" />
+    <Content Include="Views\ICA\ICACache.cshtml" />
+    <Content Include="Views\Admin\ManageHoldingCompanies.cshtml" />
+    <Content Include="Views\Admin\ManageHoldingCompany.cshtml" />
+    <Content Include="Views\Admin\ManageAssets.cshtml" />
+    <Content Include="Views\Admin\_AdminAssetListView.cshtml" />
+    <Content Include="Views\Admin\_AssetPortfolioListView.cshtml" />
+    <Content Include="Views\Admin\_AssetViewPortfolio.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\.sass-cache\04517dcf1647d19b131cc7211d3283eb3a59f326\" />
+    <Folder Include="Views\Admin\DisplayTemplates\" />
+    <Folder Include="Views\Investors\DisplayTemplates\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Inview.Epi.EpiFund.CompositionRoot\Inview.Epi.EpiFund.CompositionRoot.csproj">
+      <Project>{e30e1e0b-7f5c-451f-946d-5cfb7f865f5f}</Project>
+      <Name>Inview.Epi.EpiFund.CompositionRoot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Inview.Epi.EpiFund.Domain\Inview.Epi.EpiFund.Domain.csproj">
+      <Project>{42aaa615-8135-4cf0-988e-516a4270ce62}</Project>
+      <Name>Inview.Epi.EpiFund.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>30337</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:58131/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

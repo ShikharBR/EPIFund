@@ -1,0 +1,101 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.JVMANetUpViewModel>
+
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+    </div>
+    @if (Model.Count > 0)
+    {
+        <div class="overflow short-xs">
+            <table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+                        <thead>
+                            <tr>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.FirstName')">First Name</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.LastName')">Last Name</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.City')">City</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.State')">ST</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DateOfUpload')">Date of<br /> Upload</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DateRefRegistered')">Date Ref<br /> Registered</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.UserType')">User<br /> Type</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.MDAs')"># IPA</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.AssetType')">Asset Type<br /> Interest</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DateOfDFSubmittal')">Date of <span title="test">DF</span><br /> Submittal</a></b></th>
+                                <th><b><a style="cursor: pointer" onclick="postForm('@ViewBag.DateOfLOISubmittal')">Date of<br /> LOI Sub</a></b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < @Model.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Model[i].FirstName
+                                    </td>
+                                    <td>
+                                        @Model[i].LastName
+                                    </td>
+                                    <td>
+                                        @Model[i].City
+                                    </td>
+                                    <td>
+                                        @Model[i].State
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DateOfUpload.HasValue)
+                                        {
+                                            <span>@Model[i].DateOfUpload.Value.ToString("MM/dd/yyyy")</span>   
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DateRefRegistered.HasValue)
+                                        {
+                                            <span>@Model[i].DateRefRegistered.Value.ToString("MM/dd/yyyy")</span>   
+                                        }
+                                    </td>
+                                    <td>
+                                        @Model[i].UserTypeString
+                                    </td>
+                                    <td>
+                                        @if (Model[i].MDAs.HasValue)
+                                        {
+                                            if (Model[i].MDAs.Value > 0)
+                                            {
+                                                <a target="_blank" href="/DataPortal/ViewUserMDAHistory/@Model[i].UserId">@Model[i].MDAs</a>     
+                                            }
+                                            else
+                                            {
+                                             <span>0</span>   
+                                            }
+                                        }
+                                        else
+                                        {
+                                         <span>0</span>   
+                                        }
+                                    </td>
+                                    <td>
+                                        @Model[i].AssetTypes
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DateOfDFSubmittal.HasValue)
+                                        {
+                                            <span>@Model[i].DateOfDFSubmittal.Value.ToString("MM/dd/yyyy")</span>   
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].DateOfLOISubmittal.HasValue)
+                                        {
+                                            <span>@Model[i].DateOfLOISubmittal.Value.ToString("MM/dd/yyyy")</span>   
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+        </div>
+    }
+</div>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ViewNetworkUploadInventory",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

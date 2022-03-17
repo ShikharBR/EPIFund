@@ -1,0 +1,90 @@
+﻿<script>
+    $(document).ready(function () {
+        $('.pad').each(function (index) {
+            padCommas(this, false);
+        });
+        $('.padNum').each(function (index) {
+            padCommas(this, true);
+        });
+    });
+</script>
+
+<div class="well home-main">
+    <div class="row">
+        <div class="col-sm-12 home-main-title">
+            <span>USCRE DATABASE INVENTORY</span>
+        </div>
+    </div>
+    <div class="row home-main-content-row">
+        <div class="col-sm-9 home-main-content-row-label">
+            Total LP/CMV of USCRE Asset db
+        </div>
+        <div class="col-sm-3 home-main-content-row-value t-a-v">
+            <span class="badge padNum">@ViewBag.TotalAssetValue.ToString("C0")</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9 home-main-content-row-label">
+            Total Number of USCRE Asset Files
+        </div>
+        <div class="col-sm-3 home-main-content-row-value t-a">
+            <span class="badge pad">@ViewBag.TotalAssets</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9 home-main-content-row-label">
+            Total Published USCRE Asset Files
+        </div>
+        <div class="col-sm-3 home-main-content-row-value t-p-a">
+            <span class="badge pad">@ViewBag.TotalPublishedAssets</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9 home-main-content-row-label">
+            Total Number of Multi-Family Units
+        </div>
+        <div class="col-sm-3 home-main-content-row-value t-m-f-u">
+            <span class="badge pad">@ViewBag.TotalMultiFamilyUnits</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9 home-main-content-row-label">
+            Total Commercial Property Sq.Ft.
+        </div>
+        <div class="col-sm-3 home-main-content-row-value t-s-c-p">
+            <span class="badge pad">@ViewBag.TotalSumCommercialPropertySqFt</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9 home-main-content-row-label">
+            Global USCRE Industry Participants
+        </div>
+        <div class="col-sm-3 home-main-content-row-value t-i-p">
+            <span class="badge pad">@(ViewBag.TotalIndustryParticipants + 676520)</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9 home-main-content-row-label">
+            Total MBA Industry Participants
+        </div>
+        <div class="col-sm-3 home-main-content-row-value t-m-c">
+            <span class="badge pad">@ViewBag.TotalMBACount</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9 home-main-content-row-label">
+            Total Marketing NAR Members
+        </div>
+        <div class="col-sm-2 home-main-content-row-value t-n-c">
+            <span class="badge pad">@ViewBag.TotalNARCount</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9 home-main-content-row-label">
+            USCRE Professional Community
+        </div>
+        <div class="col-sm-2 home-main-content-row-value p-c">
+            <span class="badge pad">676,520</span>
+        </div>
+    </div>
+</div>

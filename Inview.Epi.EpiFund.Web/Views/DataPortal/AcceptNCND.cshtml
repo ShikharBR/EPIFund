@@ -1,0 +1,226 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.NCNDTemplateModel
+@{
+    ViewBag.Title = "Accept NCND";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string fullName = string.Format("{0} {1}", Model.UserFirstName, Model.UserLastName);
+}
+
+@using (Html.BeginForm("AcceptNCND", "DataPortal"))
+{ 
+    @Html.HiddenFor(s => s.AcronymOfCorporateEntity)
+    @Html.HiddenFor(s => s.City)
+    @Html.HiddenFor(s => s.CompanyName)
+    @Html.HiddenFor(s => s.CompanyTypeDescription)
+    @Html.HiddenFor(s => s.CorpTitle)
+    @Html.HiddenFor(s => s.Day)
+    @Html.HiddenFor(s => s.DayWithSuffix)
+    @Html.HiddenFor(s => s.Email)
+    @Html.HiddenFor(s => s.Fax)
+    @Html.HiddenFor(s => s.Month)
+    @Html.HiddenFor(s => s.Phone)
+    @Html.HiddenFor(s => s.State)
+    @Html.HiddenFor(s => s.StateOfOriginOfCorporateEntity)
+    @Html.HiddenFor(s => s.TypeOfCorporateEntity)
+    @Html.HiddenFor(s => s.UserAddressLine1)
+    @Html.HiddenFor(s => s.UserAddressLine2)
+    @Html.HiddenFor(s => s.UserFirstName)
+    @Html.HiddenFor(s => s.UserLastName)
+    @Html.HiddenFor(s => s.Year)
+    @Html.HiddenFor(s => s.Zip)
+    <h2>Accept Terms of NCND</h2>
+    <p>Please review NCND terms below. Select checkbox to agree to the terms and click Submit.</p>
+    <div class="acceptNCND" style="background-color: white; padding: 10px; height: 500px; margin: 5px; overflow-y: scroll;">
+        <h4 style="text-align: center;">CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT</h4>
+
+        <p>THIS AGREEMENT, made this @Model.DayWithSuffix day of @Model.Month, @Model.Year, by and between @Model.CompanyName, a @Model.StateOfOriginOfCorporateEntity @Model.CompanyTypeDescription and any or all of its employees, officers, directors, agents and affiliates (hereinafter "@Model.AcronymOfCorporateEntity"), and @fullName, an individual, any or all of his employees, agents and affiliates (hereinafter  "@fullName”), and Executive Private Investment Co, LLC, a Nevada limited liability company and any or all of its employees, managers, members, officers, directors, agents and affiliates (hereinafter “EPI”).  Each of @fullName, @Model.AcronymOfCorporateEntity, and EPI may be referred to herein as a “party” or all together as the “parties”.</p>
+
+        <p>BACKGROUND</p>
+
+        <p>The parties wish to discuss and exchange certain items and information to each other (the "Confidential Information") related to the operations of each other’s business (the "Business") which the parties hereto consider highly confidential and proprietary.  The Confidential Information will be provided by the party disclosing the Confidential Information (the “Disclosing Party”) to the party receiving such Confidential Information (the “Receiving Party”) solely for the purpose of Receiving Party's use in evaluating and analyzing a potential financing or strategic transaction between the parties, or an Affiliate thereof (the "Purpose").</p>
+
+        <p>NOW THEREFORE, the parties hereto, intending to be legally bound in consideration of the mutual covenants and agreements set forth herein, hereby agree as follows:</p>
+
+        <p>AGREEMENT</p>
+
+        <p>1.   DEFINITIONS</p>
+
+        <p>1.1.  "Confidential Information" shall mean all information provided  by Disclosing Party with respect to the Business regardless of whether it is written, electronic, oral, or in the form of audio tapes, video tapes, still pictures, computer discs, machines, designs, specifications,  drawings, human or machine readable documents  or such other tangible or intangible form which may be transmitted to Receiving Party. Confidential Information shall also include all information  related to the Business provided  by  Disclosing  Party  to  Receiving  Party  prior  to  the  signing  of  this agreement.  Confidential Information shall not include any of the following:</p>
+
+        <p>(a) 		such information in the public domain at the time of the disclosure, or subsequently comes within the public domain without fault of the Receiving Party;</p>
+
+        <p>(b)   such information which was in the possession of Receiving Party at the time of disclosure that may be demonstrated by business records of Receiving Party and was not acquired, directly or indirectly, from Disclosing Party;</p>
+
+        <p>(c) 		such information which Receiving Party acquired after the time of disclosure from a third party who did not require Receiving  Party to hold the same in</p>
+
+        <p>confidence   and   who  did  not  acquire   such  technical   information   from</p>
+        <p>Disclosing Party; or</p>
+
+        <p>(d)   such information that is legally required to be disclosed by the Receiving Party pursuant to a situation covered by Section 4 below.</p>
+
+        <p>1.2. 	"Affiliate" shall mean an owner of Receiving Party or an entity that, directly or indirectly, through one or more intermediaries, is controlled by or is under common control of the Receiving Party, or any entity not under the Receiving Party's control that is made aware, by the Receiving Party or an Affiliate thereof, or makes known information of the Disclosing Party.</p>
+
+        <p>2. 	USE OF CONFIDENTIAL INFORMATION</p>
+
+        <p>The Receiving Party agrees to:</p>
+
+        <p>(a)  receive and maintain the Confidential Information in confidence;</p>
+
+        <p>(b)  not reproduce the Confidential  Information  or any part thereof  without  the express written consent of Disclosing Party;</p>
+
+        <p>(c) not, directly or indirectly, make known, divulge, publish or communicate the Confidential Information to any person, firm or corporation without the express written consent of Disclosing Party;</p>
+
+        <p>(d) limit the internal dissemination of the Confidential Information and the internal disclosure of the Confidential Information received from the Disclosing Party to those officers and employees, if any, of the Receiving Party who have a need to know and an obligation to protect it;</p>
+
+        <p>(e) use at least the same degree of care to protect the Confidential Information as they use to protect their own confidential information, which they do not wish to have published or disseminated.   However, in no event shall the Receiving Party or any Affiliate use less than a reasonable degree of care to protect such information.  In the event that the terms of this Agreement are breached by any Affiliate of the Receiving Party or any of their consultants or advisors, the Receiving Party hereby agrees to be responsible and liable for any such breach.</p>
+
+        <p>
+            (f) 	not use or utilize the Confidential Information, for any reason other than the
+Purpose, without the express written consent of Disclosing Party;
+        </p>
+
+        <p>(g) not use or utilize the Confidential Information in the commission of any illegal act, including but not limited to undertaking any activities that could violate Rule 10b5-1 promulgated under the Securities and Exchange Act of 1934;</p>
+
+
+
+        <p>
+            (h)  not use the Confidential  Information  or any part thereof as a basis for the
+formation, creation, investment in or purchase of any business or operation similar to Business referred to in the Confidential Information unless expressly authorized in writing by Disclosing Party; and
+        </p>
+
+        <p>
+            (i) 	utilize the  best efforts  possible  to protect  and  safeguard  the Confidential
+Information from loss, theft, destruction, or the like.
+        </p>
+
+        <p>3.    RETURN OF CONFIDENTIAL INFORMATION</p>
+
+        <p>All  information  provided  by  the  Disclosing  Party  shall  remain the  property  of  the Disclosing  Party.  Receiving Party agrees to return all Confidential Information to Disclosing Party within five (5) days of written demand by Disclosing Party.  When the Receiving Party has finished reviewing the information provided by the Disclosing Party and has made a decision as to whether or not to acquire the Business, Receiving Party shall return all information to the Disclosing Party without retaining any copies.</p>
+
+
+        <p>4.    NON-COMPETITION AND NON-CIRCUMVISION</p>
+
+        <p>The Parties hereby agree not to use any Confidential Information of the disclosing Party, divulged hereunder, to compete with the other Party. It is agreed that neither Party may use the other’s Confidential Information in any independent trade or business enterprise without the disclosing Party’s prior written consent. In addition, the Parties agree that the receiving Party will not circumvent the disclosing Party in dealing with contacts of the disclosing Party. The Parties agree to negotiate directly and solely with and through the other in regards to any new potential financing, joint venture, or other opportunity that may arise under information exchanged under this Agreement when dealing with contacts of and introduced to the other by the disclosing Party. These non-circumvention provisions are not intended to confer any exclusive representation or participation rights except with respect to each other’s respective contacts shared with the other for the term of this Agreement. Further, each Party shall specify the particular capital source and project details for any such venture or opportunity that arises under this Agreement. When a Party hereto introduces a contact to the other that they deem covered hereby, an email disclosing the third party should be sent evidencing that understanding within 3 business days of such disclosure or introduction. If the receiving Party has a prior relationship or has had prior communications with the third party and challenges them as a confidential contact of the disclosing Party, such objection and challenge MUST be made in writing within 5 days of receiving the email communication making such disclosure. Notwithstanding anything else herein to the contrary, the Parties agree to negotiate in good faith regarding fairly compensating the other, if possible according to all applicable laws and regulations, in a manner commensurate with the contribution of the introducing Party when the introducing Party has meaningfully helped facilitate a financially beneficial transaction and relationship for the other</p>
+
+        <p>5.   LEGAL PROCEEDINGS</p>
+
+        <p>In  the  event  that  the  Receiving  Party  or  an  Affiliate  is  requested  or  is  required  by deposition, interrogatories, requests for information, documents or admissions, subpoenas, civil investigative demands or similar process, to disclose any Confidential Information, it is agreed that the Receiving Party will provide the Disclosing Party with a notice of such request(s) promptly, so that the Disclosing Party may seek an appropriate protective order and/or waive the Receiving Party or Affiliate's obligation to comply with the requirements of Section l.l(d) hereof.  It is further agreed that if, in the absence of either a protective order or the receipt of a waiver hereunder, within two (2) business days prior to the time the Receiving Party or an Affiliate is required to disclose Confidential Information or else stand liable for contempt or suffer other censure or penalty, the Receiving Party or his Affiliate may disclose such Confidential Information without liability under Section 1.1(d). The Receiving Party, and/or Affiliate(s) thereof, will fully cooperate with the Disclosing Party in connection with the Disclosing Party's efforts to obtain any such order or other remedy.</p>
+
+        <p>6.   NON-ASSIGNABLE</p>
+
+        <p>This agreement shall be non-assignable by the Receiving Party unless prior written consent of the Disclosing Party is received.  If this Agreement is assigned or otherwise transferred, it shall be binding on all successors and assigns.</p>
+
+        <p>7.   GOVERNING LAW</p>
+
+        <p>This Agreement and all questions relating to its validity, interpretation, performance and enforcement (including, without limitation, provisions concerning limitations of actions), shall be governed by and construed in accordance with the laws of the State of Idaho, notwithstanding any conflict-of-laws doctrines of such state or other jurisdiction to the contrary, and without the aid of any canon, custom or rule of law requiring construction against the draftsman.</p>
+
+
+        <p>8. OWNERSHIP</p>
+
+        <p>The Disclosing Party warrants that it believes itself to be the owner of the Confidential Information.   The Disclosing Party makes no other warranty relating to the Confidential Information and the use to be made thereof by the receiving party and their Affiliates and disclaims all implied warranties.     Confidential Information   may be preliminary or incomplete and relate to products under development or that are planned for development. OTHER THAN AS EXPRESSLY SET FORTH HEREIN NO WARRANTIES ARE MADE BY THE DISCLOSING PARTY.   "CONFIDENTIAL INFORMATION" IS PROVIDED "AS IS".  THE DISCLOSING PARTY ACCEPTS NO RESPONSIBILITY FOR ANY EXPENSES, LOSSES OR ACTIONS INCURRED OR UNDERTAKEN BY THE RECEIVING PARTY AS A RESULT OF ITS USE OF CONFIDENTIAL INFORMATION.</p>
+
+        <p>9. EQUITABLE RELIEF</p>
+
+
+        <p>It is further understood and agreed that money damages would not be a sufficient remedy for any breach of this Agreement and that Disclosing Party shall be entitled to equitable relief without obligation to post bond, including injunction and specific performance, as a remedy for any such breach. Such remedies shall not be deemed the exclusive remedies for a breach of this Agreement but shall be in addition to all other remedies available at law or equity to Disclosing Party. In the event of litigation relating to, or arising out of, this Agreement, if a court of competent jurisdiction determines that this Agreement has been breached  then  the  Receiving  Party,  and/or  its  Affiliate(s)  shall  be  liable  and  pay  to Disclosing Party the reasonable legal fees incurred by Disclosing Party in connection with such litigation, including any appeal therefrom.</p>
+
+        <p>10.  TERM</p>
+
+        <p>This agreement is valid for five (5) years after the last disclosure of Confidential Information under this Agreement.</p>
+
+        <p>11.  NO LICENSE</p>
+
+        <p>Neither party does, by virtue of disclosure of the Confidential Information,  grant, either expressly or by implication, estoppel or otherwise, any right or license to any patent, trade secret, invention, trademark, copyright, or other intellectual property right.</p>
+
+        <p>12. PUBLICITY</p>
+
+        <p>Neither the Disclosing Party nor the Receiving Party shall be permitted to use the name of the other party, or any of the other party's Affiliates in any publicity, advertising, public announcement or third party disclosure concerning this Agreement or the subject matter hereof without the prior express written consent of the other party.</p>
+
+        <p>13. NOTICES</p>
+
+        <p>All notices, requests, demands and other communications under this Agreement shall be in writing, shall be deemed received three business days after the date postmarked if sent by domestic certified or registered mail, properly addressed, or if sent otherwise, when such notice shall actually be received, and shall be delivered by courier, personal delivery, certified or registered air mail, or by facsimile transmission.  Addresses for notice to either Party are:</p>
+        <br />
+        Disclosing Party: @fullName
+        <br />
+        <span style="margin-left: 96px;">@Model.UserAddressLine1</span>
+        <br />
+        @if (!string.IsNullOrEmpty(Model.UserAddressLine2))
+        {
+            <span style="margin-left: 96px;">@Model.UserAddressLine2</span>
+            <br />
+        }
+        <span style="margin-left: 96px;">@Model.City, @Model.State @Model.Zip</span>
+        <br />
+        <span style="margin-left: 96px;">E Mail:  @Model.Email</span>
+        <br />
+        <span style="margin-left: 96px;">Phone: @Model.Phone</span>
+        <br />
+        <span style="margin-left: 96px;">Fax #: @Model.Fax</span>
+        <br />
+        <br />
+        <br />
+        Disclosing Party:	EPI FUND, LLC
+    <br />
+        <span style="margin-left: 96px;">3870 E. Flamingo Road, Suite A2-145</span>
+        <br />
+        <span style="margin-left: 96px;">Las Vegas, NV  89121</span>
+        <br />
+        <span style="margin-left: 96px;">E Mail: admin@epifund.com</span>
+        <br />
+        <span style="margin-left: 96px;">Phone: 702-883-1927</span>
+        <br />
+        <span style="margin-left: 96px;">Fax #:  877-717-7506</span>
+
+        <p>13. BINDING NATURE OF AGREEMENT</p>
+
+        <p>This Agreement shall be binding upon and inure to the benefit of the parties hereto and their respective heirs, personal representatives, successors and assigns.</p>
+
+        <p>14.  PROVISIONS SEPARABLE</p>
+
+        <p>The provisions of this Agreement are independent of and separable from each other, and no provision shall be affected or rendered invalid or unenforceable by virtue of the fact that for any reason any other or others of them may be invalid or unenforceable in whole or in part.</p>
+
+        <p>15. WAIVER</p>
+
+        <p>The failure of either the Disclosing Party or the Receiving Party to insist upon strict performance of any provision of this Agreement or to exercise any right hereunder shall not constitute a waiver of that provision of or right under this Agreement or of any other provision of or right under this Agreement.</p>
+
+        <p>16.  INDEMNIFICATION</p>
+
+        <p>Receiving  Party  shall  indemnify,  forever  defend,  and  hold  Disclosing  Party  free  and harmless from any and all liabilities, assessments, obligations, debts, damages, fees, fines, penalties, interest, judgments, liens or other claims that may ever be claimed to exist against Disclosing Party as a result of Receiving Party's  unauthorized or illegal use   of the Confidential Information provided to Receiving Party pursuant to this Agreement.</p>
+
+        <p>17. ENTIRE AGREEMENT</p>
+        <p>This Agreement sets forth all of the covenants, promises, agreements, conditions and understandings between the parties and there are no covenants, promises, agreements or conditions, either oral or written, between them other than herein set forth.  No subsequent alteration, amendment, change or addition to this Agreement shall be binding upon either party unless reduced in writing and signed by them.</p>
+
+        <p>18.  ATTORNEYS' FEES AND COSTS</p>
+
+        <p>In the event of formal legal proceedings between the Parties concerning the enforcement or interpretation of this Agreement, the prevailing Party in such legal proceedings shall be entitled to receive reasonably incurred attorneys' fees and other costs and expenses incurred in such proceedings.</p>
+
+        <p>IN WITNESS OF THEIR AGREEMENT, the parties have set their hands to it below effective the day and year first written above.</p>
+
+
+
+        <p>@Model.CompanyName</p>
+
+        By:______________________________
+        <br>
+        Print Name:	@fullName
+        <br>
+        Corp Title:	@Model.CorpTitle
+        <br />
+        <br />
+        <br />
+        <p>EPI FUND, LLC</p>
+
+        By:______________________________
+        <br />
+        Print Name:	Kenneth Perkins
+        <br />
+        Corp Title:	Manager
+
+    </div>
+    <br />
+    @Html.CheckBoxFor(s => s.AgreeToTerms)<span style="font-weight: bold;"> I agree to the terms of this NCND. By checking this box, I am digitally signing this document.</span>
+    <br />
+    <br />
+    <input type="submit" name="action:PreviewNCNDAgreementPdf" class="btn btn-default" style="margin-right: 20px;" value="Preview" />
+    <input type="submit" name="action:AcceptNCND" class="btn btn-primary" style="margin-right: 20px;" value="Submit" />
+}
+

@@ -1,0 +1,150 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.AccountingRecordDisplayModel
+@{
+    var contractIndex = 0;
+    var contractFeeIndex = 0;
+    var mdaIndex = 1;
+    var total = Model.ContractFeeDetails.Sum(s => s.ContractPayment);
+}
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <table class="table table-striped" id="tbAssets" cellpadding="5" cellspacing="5" style="padding: 5px; font-size: 9px; vertical-align: middle;">
+        <thead>
+            <tr>
+                <td>
+                    <label></label>
+                </td>
+                <td style="text-align: center; width: 225px;">
+                    <label>Asset Inventory Address</label>
+                </td>
+                <td style="text-align: center;">
+                    <label>Asset ID</label></td>
+
+                <td style="text-align: center;">
+                    <label>User Name</label></td>
+
+                <td style="text-align: center;">
+                    <label>JVMA Contract Date</label></td>
+
+                <td style="text-align: center;">
+                    <label>Date of IPA</label></td>
+
+                <td style="text-align: center;">
+                    <label>Miscellaneous Notes</label></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.MDAHistoryItems.Count == 0)
+            {
+                foreach (var note in Model.MiscellaneousNotes)
+                {
+                    <tr>
+                        <td colspan="9">
+                            @note
+                            <br />
+                        </td>
+                    </tr>
+                }
+            }
+            @for (int i = 0; i < Model.MDAHistoryItems.Count; i++)
+            {
+                if (mdaIndex > 120)
+                {
+                    mdaIndex = 1;
+                }
+                <tr>
+                    <td>@mdaIndex.ToString()</td>
+                    <td>@Model.MDAHistoryItems[i].AssetDescription</td>
+                    <td style="text-align: center;">@Model.MDAHistoryItems[i].AssetNumber</td>
+                    <td style="text-align: center;" ><a title="@Model.MDAHistoryItems[i].Email">@Model.MDAHistoryItems[i].FullName</a></td>
+                    @*@if ((mdaIndex == 1 || mdaIndex % 120 == 0) && contractIndex < Model.ContractDates.Count)
+                    {
+                        <td style="text-align: center;">@Model.ContractDates[contractIndex].ToString("C0")</td>
+                        contractIndex++;
+                    }
+                    else
+                    {
+                        <td></td>
+                    }*@
+                    <td style="text-align: center;">@Model.DateOfCurrentSignedJVMAAgreement.ToString("MM/dd/yyyy")</td>
+                    <td style="text-align: center;">@Model.MDAHistoryItems[i].DateMDASigned.ToString("MM/dd/yyyy")</td>
+                    @if (i == 0)
+                    {
+                        <td rowspan="@Model.MDAHistoryItems.Count">
+                            @foreach (var note in Model.MiscellaneousNotes)
+                            {
+                                @note
+                                <br />
+                            }
+                        </td>
+                    }
+                </tr>
+                    mdaIndex++;
+            }
+            <tr style="background-color: darkgrey; height: 10px;">
+                <td colspan="9"></td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <label>Fiscal Operating Year: @Model.StartYear</label></td>
+                <td colspan="1">
+                    <label>Total Fees: </label>
+                </td>
+                <td colspan="1" style="text-align: center;">
+                    <label style="color: #3bc53b;">@total.ToString("C0")</label></td>
+                <td colspan="2"><input id="TotalPaidForFiscalYear" name="TotalPaidForFiscalYear" type="hidden" value="@total"></td>
+            </tr>
+            <tr style="background-color: darkgrey; height: 10px;">
+                <td colspan="9"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<br />
+
+<div class="col-md-6">
+    <h4>Payout Dates</h4>
+</div>
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <table class="table table-striped" cellpadding="5" cellspacing="5" style="padding: 5px; font-size: 9px; vertical-align: middle;">
+        <thead>
+            <tr>
+                <td><label>Date Fee Paid</label></td>
+                <td colspan="2"><label>Fee Amount</label></td>
+                <td colspan="2"><label>Payout Manage</label></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var payment in Model.ContractFeeDetails)
+            {
+                <tr>
+                    <td>@payment.DateFeePaid.ToString("MM/dd/yyyy")</td>
+                    <td colspan="2">@payment.ContractPayment.ToString("C0")</td>
+                    <td style="text-align: center;">
+                        <a href="@Url.Action("EditContractPayment", "Admin", new { id = @payment.ContractFeeDetailId, userId = Model.UserId, method = "JVMAAccountingReportDisplay", name = Model.Name })" title="edit">
+                            <span class="glyphicon glyphicon-pencil"></span></a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("DeleteContractPayment", "Admin", new { id = @payment.ContractFeeDetailId, userId = Model.UserId, method = "JVMAAccountingReportDisplay" })" title="delete" onclick = "return confirm('Are you sure you wish to delete this payment?');">
+                                        <span class="glyphicon glyphicon-remove"></span></a>
+                    </td>
+                </tr>
+            }
+            <tr style="background-color: darkgrey; height: 10px;">
+                <td colspan="5"></td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Fiscal Operating Year: @Model.StartYear</label></td>
+                <td colspan="2">
+                    <label>Total Fees: </label>
+                </td>
+                <td style="text-align: center;">
+                    <label style="color: #3bc53b;">@total.ToString("C0")</label>
+                </td>
+            </tr>
+            <tr style="background-color: darkgrey; height: 10px;">
+                <td colspan="5"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "Joint Venture Marketing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function proceedToJVA(){
+        $.post('/Home/IsLoggedIn/', function(result) {
+            if(result == "True") {
+                window.location.href ='/DataPortal/ExecuteJVAgreement';
+            }
+            else {
+                $("#loginwarning").toggle();
+            }
+        });
+    }
+</script>
+<div class="modal fade" id="loginwarning" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <form>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Must Be Logged In To Continue</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="margin: 0">You must be logged in to proceed to the JV Marketing Agreement. Click [continue] to be directed the <b>USC</b> Log In page.  If you have not Registered at <b>USC</b> click [Register] to be redirected to New Registration.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-warning" value="Cancel" data-dismiss="modal" />
+                    <input type="button" class="btn btn-default" value="Register" onclick="location.href='@Url.Action("Registration", "Home", new { rurl = "/Home/JointVentureMarketing" })    '" />
+                    <input type="button" class="btn btn-primary" value="Continue" onclick="location.href='@Url.Action("Login", "Home", new { rurl = "/Home/JointVentureMarketing" })    '" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="main-img"></div>
+<h4 class="page-header">Welcome all Members of the US Mortgage Bankers Association</h4>
+
+<p>
+    US CRE Online invites all members of the US MBA to participate in our Joint Venture Marketing venture:
+
+    <center><span style="margin-right:10px;">●	ZERO COST</span><span style="margin-right:10px;">●     Market Exposure to 2MM+ CRE Industry Participants</span><span style="margin-right:10px;">●     Profit Sharing</span><br /><br />
+      <span style="margin-right:10px;">●     Increase Transactional Pipelines</span><span style="margin-right:10px;">●     First in Line Underwriting Opportunities</span>
+    </center>
+</p>
+
+<p>USCRE Online database of United States Commercial Real Estate inventory is individually and wholly managed by <b>(1)</b> its vested CRE principals, and or <b>(2)</b> each respective Assets professional representative (NAR Community), and or <b>(3)</b> USC on its uploaded inventory of NAR Listed CRE inventory.  The vast majority of CRE acquisitions include some percentage of Debt/Equity Capital participations.  And for those new vestings that close without leveraged capitalization, the vast majority of them ultimately restructure their equity positioning with some percentage of Debt/Equity Capital.</p>
+<p><span style="color: red; font-weight: bold;">Note:</span> it is a fact that the vast majority of members of the CRE Lender/Broker Community actually [share] a large percentage of the same [marketing network database]!  As a contractual participant in the USC Joint Venture Marketing module, the MBA Member would register their unique Marketing Network Community.  Each accepted Network entry would be instantly assigned a unique referring code by USC that would identify them as your unique Community of Network Principals.  They will then automatically become a part of the USC Global Community of CRE Industry Participants.  When any of said unique community visits and registers at USC… the participating MBA Member would receive automated confirmation of the registration… and automated updates of all site activity of said individual.  Such protocol ensures full disclosure, complete operational transparency, and transactional pipeline protection to each and every participating MBA Member in the USC Joint Venture Marketing Module.</p>
+<h3>Share in the Transaction Activities of your Network... even if you are not participating!</h3>
+<b>How to become a participating member of the USC Joing Venture Marketing Module:</b>
+<ol>
+    <li>Complete your @Html.ActionLink("registration", "Registration", "Home") with USC as a Member of the US MBA (e.g., Mortgage Lender/Broker);</li>
+    <li>Preview the USC CRE MBA @Html.ActionLink("Joint Venture Marketing Agreement", "DownloadJVTemplate", "DataPortal");</li>
+    <li>Download the USC exclusive Marketing Network <a href="../PrincipalInvestorImportTemplate.xlsx"><b>Excel Spread Sheet</b></a> and transfer your Network of Unique Target Marketing Principals onto it.
+            <ul>
+                <li><span style="color: red; font-weight: bold;">Note:</span>  you cannot change any of headers or tabs in the Spread Sheet Template.  The mandatory data for each row of entries is <b>(1)</b> first name of individual, <b>(2)</b> last name of individual, and <b>(3)</b> e mail address of individual.</li>
+            </ul>
+    </li>
+    <li>Once your Spread Sheet is completed, login to USC, and from your @Html.ActionLink("My USC Page", "MyUscPage", "Home"), click the <b>[Import Principal Investor]</b> button to upload your list:
+        <ul>
+            <li>You will receive an automated confirmation of your upload with a display of the net entries accepted from your Network upload.</li>
+        </ul>
+    </li>
+    <li><span style="color: red; font-weight: bold;">Note:</span> time is of the essence.  If an entry has already been secured by USC or by a current MBA Participant, you will not be able to upload said entry into the USC Imported JVMA Participating database;</li>
+</ol>
+<input type="button" class="btn btn-default proceed" value="Preview CRE MBA Joint Venture Marketing Agreement" onclick="location.href='@Url.Action("DownloadJVTemplate", "DataPortal")    '" />
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>
+        As a registered user of USC, you will have full access to its CRE database.  In as much, you are encouraged to preview CRE Assets of geographic and economic interest.  As an MBA Registrant, you are able to underwrite CRE inventory and instantly issue advanced conditional funding commitments on any such asset to the USC Principal Investor and NAR Community.  Such proactive engagement increases the growth potential of your transactional pipeline while increasing the liquidity of our principal’s holdings.
+    </p>
+    <p>Referring your exclusive Marketing Network into the USC Global CRE Community will provide them with instant access to quality, immediately available, first position CRE Inventory in the United States… for their consideration for new transactional commitments.  We welcome all Member of the MBA Community to become part of the USC Family.</p>
+    <input type="button" class="btn btn-default proceed" value="Proceed to Processing Your Joint Venture Marketing Agreement" onclick="location.href='@Url.Action("ExecuteJVAgreement", "DataPortal")    '" />
+}
+else
+{
+    <input type="button" class="btn btn-default proceed" data-toggle="modal" data-target="#loginwarning" value="Proceed to Processing Your Joint Venture Marketing Agreement" />
+}
+
+

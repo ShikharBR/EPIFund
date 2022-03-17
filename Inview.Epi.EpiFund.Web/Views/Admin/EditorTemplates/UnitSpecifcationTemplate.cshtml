@@ -1,0 +1,49 @@
+﻿@model Inview.Epi.EpiFund.Domain.Entity.AssetUnitSpecification
+@using Inview.Epi.EpiFund.Domain.Enum
+@using Inview.Epi.EpiFund.Domain.Helpers
+
+
+<div>
+    @{
+        IEnumerable<BedroomCount> bedCount =
+                      Enum.GetValues(typeof(BedroomCount))
+                      .Cast<BedroomCount>();
+        var beds =
+          from bed in bedCount
+          select new SelectListItem
+          {
+              Text = Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(bed),
+              Value = bed.ToString(),
+          };
+
+        IEnumerable<BathroomCount> bathCount =
+                      Enum.GetValues(typeof(BathroomCount))
+                      .Cast<BathroomCount>();
+        var baths =
+          from bath in bathCount
+          select new SelectListItem
+          {
+              Text = Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(bath),
+              Value = bath.ToString(),
+          };
+        
+    
+    }
+
+    @Html.LabelFor(model => model.CountOfUnits)
+    @Html.EditorFor(model => model.CountOfUnits)
+
+    @Html.LabelFor(model => model.BedCount)
+    @Html.EnumDropDownList("UnitSpecifications.BedCount", Model.BedCount, "---")
+    
+    @Html.LabelFor(model => model.BathCount)
+    @Html.EnumDropDownList("UnitSpecifications.BathCount", Model.BathCount, "---")
+    
+    
+    @Html.LabelFor(model => model.UnitBaseRent)
+    @Html.EditorFor(model => model.UnitBaseRent, new { onchange = "addCommasToInput(this)" })
+    @Html.LabelFor(model => model.UnitSquareFeet)
+    @Html.EditorFor(model => model.UnitSquareFeet)
+
+</div>
+

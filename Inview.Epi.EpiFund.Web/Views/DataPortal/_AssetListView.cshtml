@@ -1,0 +1,233 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.AssetQuickListViewModel>
+
+<script>
+    $(document).ready(function () {
+        $('.pad').each(function (index) {
+            padCommas(this, false);
+        });
+    });
+</script>
+
+<link href="~/Content/css/animate.css" rel="stylesheet" />
+<div class="panel panel-default" id="asset-list-panel" style="border: 1px solid #B1A795">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var checkboxes = $("input[type='checkbox']");            
+            if (checkboxes.is(":checked")) {
+                $("#signMDA").removeClass("hide", !checkboxes.is(":checked"));
+            } else {
+                $("#signMDA").addClass("hide", !checkboxes.is(":checked"));
+            }
+
+
+
+            checkboxes.click(function () {
+                if (checkboxes.is(":checked")) {
+                    $("#signMDA").removeClass("hide", !checkboxes.is(":checked"));
+                } else {
+                    $("#signMDA").addClass("hide", !checkboxes.is(":checked"));
+                }
+            });
+
+            //checkboxes.click(showhidesignMDA(this));
+
+            var limit = 5;
+            $("input[type='checkbox']").on('change', function (evt) {
+                if ($("input[type='checkbox']:checked").length > limit) {
+                    this.checked = false;
+                }
+            });
+
+            $('head').append('<link rel="stylesheet" href="http://s.mlcdn.co/animate.css" type="text/css" />');
+
+
+        });
+
+
+        shownoassetmsg = function (ele) {
+            $(ele).hide();
+            $('input[type="checkbox"]').addClass('animated flash');
+
+            $(ele).after("<div class='noassetmsg' style='color:red'>No Asset Selected</div>");
+            //$(ele).after("<div class='noassetmsg' style='color:red'><a>[Authorize PI IPA]</a></div>");
+
+            $('.noassetmsg').addClass('animated swing');
+
+            setTimeout(function () {
+                $('input[type="checkbox"]').removeClass('animated').removeClass('flash');
+                $(ele).show();
+                $('.noassetmsg').remove();
+            }, 1000);
+        }
+    </script>
+    @if (Model.Count > 0)
+    {
+        string states = string.Empty;
+        foreach (var asset in Model)
+        {
+            if (!string.IsNullOrEmpty(asset.State))
+            {
+                try
+                {
+                    if (!states.Contains(asset.State))
+                    {
+                        states += asset.State + ", ";
+                    }
+                }
+                catch { }
+            }
+        }
+        if (states.Contains(", "))
+        {
+            states = states.Substring(0, states.Length - 2);
+        }
+        <h4 style="text-align: center;">CRE SEARCH CRITERIA Result Table Summary</h4>
+        <p style="text-align: center;">States: @states</p>
+        using (Html.BeginForm("ExecuteMDAs", "DataPortal", FormMethod.Post, new { id = "ipaForm" }))
+        {
+
+            <div class="overflow short-xs">
+                <table class="table-striped table" id="tbUsers" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th style="width:100px;"></th>
+                            <th>City/State</th>
+                            <th style="width: 95px;">#Units/Sq.Ft.</th>
+                            <th>Asset Type</th>
+                            <th style="width:100px;">Asset Name</th>
+                            <th style="width: 50px;">OCC%/Year</th>
+                            <th>SGI</th>
+                            <th style="width: 50px;">CAP</th>
+                            <th>Pricing/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a></th>
+                            <th>Status</th>
+                            <th style="text-align: center;">Image</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < @Model.Count; i++)
+                        {
+                            <tr>
+                                <td>@Html.CheckBoxFor(s => Model[i].IsSelected)@Html.HiddenFor(s => Model[i].AssetId) @Html.HiddenFor(s => Model[i].AssetNumber)</td>
+                                <td>
+                                    @if (Model[i].CanViewAssetName)
+                                    {
+                                        <a href="@Url.Action("ViewAsset", "DataPortal", new { id = Model[i].AssetId})">View</a>
+                                    }
+                                    else
+                                    {
+                                        @*#67                                       
+                                            <a href="@Url.Action("AddAssetToMda", "DataPortal", new { id = Model[i].AssetId})">View</a>*@
+                                        <a href="javascript:return;" onclick="if (!$('#signMDA').hasClass('hide')) { $('#ipaForm').attr('action', 'AddAssetToMda').submit(); } else { shownoassetmsg(this) };">View</a>
+                                    }                                    
+                                </td>
+                                <td>
+                                    @Model[i].City/@Model[i].State
+                                </td>
+                                <td>
+                                    @if (Model[i].Type == "MHP")
+                                    {
+                                        <span class="pad">@Model[i].NumberOfUnits</span><h8> Spaces</h8>
+                                    }
+                                    else if (Model[i].Type == "MF")
+                                    {
+                                        <span class="pad">@Model[i].NumberOfUnits</span><h8> Units</h8>
+                                    }
+                                    else
+                                    {
+                                        <span class="pad">@Model[i].SquareFeet</span><h8> Sq.Ft.</h8>
+                                    }
+                                </td>
+                                <td>
+                                    @Model[i].Type
+                                </td>
+                                <td>
+                                    @if (Model[i].CanViewAssetName)
+                                    {
+                                        @Model[i].AssetName
+                                    }
+                                    else
+                                    {
+                                        @*<a href="/DataPortal/AddAssetToMda/@Model[i].AssetId">[Authorize PI IPA]</a>*@
+                                        <a href="javascript:return;" onclick="if (!$('#signMDA').hasClass('hide')) { $('#signMDA').find('input').click() } else { shownoassetmsg(this)};">[Authorize PI IPA]</a>
+                                    }
+                                </td>
+                                <td>
+                                    @Model[i].OCC / @Model[i].Year
+                                </td>
+                                <td>
+                                    @Model[i].SGI
+                                </td>
+                                <td style="width: 150px;">
+                                    <span style="font-size: xx-small">@Model[i].CAP</span>
+                                </td>
+                                <td>
+                                    @Model[i].Pricing
+                                </td>
+                                @if (Model[i].Status == "Available")
+                                {
+                                    <td class="asset-available">
+                                        @Model[i].Status
+                                    </td>
+                                }
+                                else if (Model[i].Status == "Sold")
+                                {
+                                    <td class="asset-sold">
+                                        @Model[i].Status
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="asset-pending">
+                                        @Model[i].Status
+                                    </td>
+                                }
+                                <td>
+                                    <a data-toggle="modal" data-target="#lightbox-@i">
+                                        <img src="@Url.Action("GetMainImageSource", "Admin", new { assetId = Model[i].AssetId })" />
+                                    </a>
+                                    <div class="modal fade" id="lightbox-@i" tabindex="-1" role="dialog" aria-labelledby="mrtgcalc-label" aria-hidden="true" data-backdrop="false">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header" style="border-bottom: 0">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <img src="@Url.Action("GetMainImageSource", "Admin", new { assetId = Model[i].AssetId })" style="width: 560px;" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="signMDA" class="hide">
+                <p style="font-style: italic; text-align:center; padding: 0px 5px;">You may register up to five assets to your IPA per IPA approval protocol. Please repeat search protocol and identify the additional CRE Assets applying the same Protocol.</p>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <input type="submit" class="btn btn-default proceed" value="Sign IPA" style="width: 180px; margin-bottom: 30px;" />
+                }
+                else
+                {
+                    <input type="button" class="btn btn-default proceed" data-toggle="modal" data-target="#loginwarning" value="Sign IPA" style="width: 180px; margin-bottom: 30px;" />
+                }
+            </div>
+        }
+    }
+</div>
+<p class="text-center red" style="margin: 0 0 0 0; font-size: 12px">Click on any of the images to enlarge it.  Click on the enlarged image to return to the summary Table.</p>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("AssetList",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+

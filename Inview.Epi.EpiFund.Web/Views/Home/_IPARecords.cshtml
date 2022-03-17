@@ -1,0 +1,24 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.ViewModel.SignedMDAQuickViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Asset #</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Date Added to IPA</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.AssetNumber.ToString(), "ViewAsset", "DataPortal", new { id = item.AssetId }, null)
+            </td>
+            <td>@item.AssetDescription</td>
+            <td>@item.CurrentListingStatus</td>
+            <td>@item.DateSigned.ToString("MM/dd/yy")</td>
+        </tr>
+    }
+</table>
+

@@ -1,0 +1,94 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.ViewModel.HoldingCompanyViewModel>
+@{
+    ViewBag.Title = "Manage Holding Companies";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    @section JqueryDataTableCss {
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.2/r-2.2.2/datatables.min.css" />
+    }
+    @section JqueryDataTableJs {
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.2/r-2.2.2/datatables.min.js"></script>
+    }
+}
+<style>
+
+</style>
+
+<h2 style="text-align:center;padding-bottom:100px;">Manage Holding Companies</h2>
+
+<table id="holdingCompanyTable" class="display compact" style="width:100%">
+    <thead>
+        <tr>
+            <th>Company Name</th>
+            <th>Operating<br />Company</th>
+            <th>PI Name</th>
+            <th>City</th>
+            <th>ST</th>
+            <th>Date of<br />Registration</th>
+            <th>Register<br />Docs</th>
+            <th>Referred<br />by JVMP</th>
+            <th># of<br />Assets</th>
+            <th># of Pub<br />Assets</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+<script>
+    $(document).ready(function () {
+        var model = @Html.Raw(Json.Encode(Model));
+        var data = [];
+        for (var i = 0; i < model.length; i++) {
+            // get published asset count
+            var publishedAssets = 0;
+            for (var j = 0; j < model[i].Assets.length; j++) { if (model[i].Assets[j].Published) publishedAssets += 1; }
+            var item = {
+                id: model[i].HoldingCompanyId,
+                companyName: model[i].CompanyName,
+                piName: `${model[i].FirstName} ${model[i].LastName}`,
+                operatingCompanyName: 'N/A',
+                city: model[i].City,
+                state: model[i].State,
+                dateOfRegistration: 'N/A',
+                registeredDocs: 'N/A',
+                referredByJvmp: 'N/A',
+                assetCount: model[i].Assets.length,
+                publishedAssetCount: publishedAssets,
+            }
+            if (model[i].OperatingCompanies && model[i].OperatingCompanies.length > 0) {
+                // TODO: get the proper operating company from this array instead of the first?
+                var selectedOperatingCompany = model[i].OperatingCompanies[0];
+                item.operatingCompanyName = selectedOperatingCompany.CompanyName;
+                item.piName = `${selectedOperatingCompany.FirstName} ${selectedOperatingCompany.LastName}`;
+                item.dateOfRegistration = selectedOperatingCompany.DateOfRegistration;
+                if (selectedOperatingCompany.RegisteredDocs === true || selectedOperatingCompany.RegisteredDocs === false) item.registeredDocs = selectedOperatingCompany.RegisteredDocs ? 'yes' : 'no';
+                if (selectedOperatingCompany.ReferredByJvmp === true || selectedOperatingCompany.ReferredByJvmp === false) item.referredByJvmp = selectedOperatingCompany.ReferredByJvmp ? 'yes' : 'no';
+            }
+            data.push(item);
+        }
+        var table = $('#holdingCompanyTable').DataTable({
+            data: data,
+            columns: [
+                { data: 'companyName' },
+                { data: 'operatingCompanyName' },
+                { data: 'piName' },
+                { data: 'city' },
+                { data: 'state' },
+                { data: 'dateOfRegistration' },
+                { data: 'registeredDocs' },
+                { data: 'referredByJvmp' },
+                { data: 'assetCount' },
+                { data: 'publishedAssetCount' },
+                {
+                    targets: -1,
+                    data: null,
+                    orderable: false,
+                    defaultContent: '<button>Edit</button>'
+                }
+            ],
+            order: [[1, 'asc']]
+        })
+        $('#holdingCompanyTable tbody').on('click', 'button', function () {
+            var data = table.row($(this).parents('tr')).data();
+            window.location.href = `/Admin/UpdateHoldingCompany/${data.id}`;
+        })
+    })
+</script>

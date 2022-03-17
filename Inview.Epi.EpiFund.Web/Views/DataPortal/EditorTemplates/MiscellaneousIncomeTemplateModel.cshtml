@@ -1,0 +1,461 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.MiscellaneousIncomeTemplateModel
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.PayerName, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.PayerName, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.PayerAddress, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.PayerAddress, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.PayerCity, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.PayerCity, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.PayerState, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.PayerState, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.PayerCountry, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.PayerCountry, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.PayerZip, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.PayerZip, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.PayerTelephone, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.PayerTelephone, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.PayerFederalId, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.PayerFederalId, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.AccountNumber, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.AccountNumber, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.FactaFilingRequirement, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.RadioButtonFor(s => s.FactaFilingRequirement, "true") Yes
+            @Html.RadioButtonFor(s => s.FactaFilingRequirement, "false") No
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.SecondTIN, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.RadioButtonFor(s => s.SecondTIN, "true") Yes
+            @Html.RadioButtonFor(s => s.SecondTIN, "false") No
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.RecipientName, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.RecipientName, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.RecipientAddress, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.RecipientAddress, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.RecipientCity, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.RecipientCity, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.RecipientState, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.RecipientState, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.RecipientCountry, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.RecipientCountry, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.RecipientZip, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.RecipientZip, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.RecipientFederalId, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.RecipientFederalId, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Rents, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.Rents, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Royalties, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.Royalties, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.OtherIncome, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.OtherIncome, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.TaxWithheld, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.TaxWithheld, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.FishingBoatProceeds, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.FishingBoatProceeds, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.MedicalPayments, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.MedicalPayments, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.NonEmployeeCompensation, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.NonEmployeeCompensation, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.SubstitutePayments, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.SubstitutePayments, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.PayerExceededSales, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.RadioButtonFor(s=>s.PayerExceededSales, "true") Yes
+            @Html.RadioButtonFor(s=>s.PayerExceededSales, "false") No
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.CropInsuranceProceeds, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.CropInsuranceProceeds, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.ParachutePayments, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.ParachutePayments, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.AttorneyPayment, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.AttorneyPayment, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Deferrals, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.Deferrals, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Income, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.Income, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.TaxWithheld1, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.TaxWithheld1, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.TaxWithheld2, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.TaxWithheld2, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.StateNumber1, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.StateNumber1, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.StateNumber2, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.StateNumber2, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.StateIncome1, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.StateIncome1, new { @class = "control-label" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.StateIncome2, new { @class = "control-label" })
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s=>s.StateIncome2, new { @class = "control-label" })
+        </div>
+    </div>
+</div>

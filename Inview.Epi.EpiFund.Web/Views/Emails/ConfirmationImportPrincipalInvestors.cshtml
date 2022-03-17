@@ -1,0 +1,15 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.ConfirmationImportPrincipalInvestorsEmail
+To: @Model.EmailAddress
+From: USCREonline <info@uscreonline.com>
+Subject: Import Principal Investors Results
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.Name,</p>
+    <p>Thank you for importing principal investors into the USCRE online system. Below are your results: </p>
+    <p>@Html.Raw(Model.ResultString)</p>
+    <p>The Professional Staff</p>
+    <p><b>US CRE Online, LLC</b></p>
+</body>
+</html>

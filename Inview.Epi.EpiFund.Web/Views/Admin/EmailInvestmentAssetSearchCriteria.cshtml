@@ -1,0 +1,28 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.EmailInvestmentSearchCriteriaModel
+@{
+    ViewBag.Title = "Email Investment Asset Search Criteria";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h3 class="page-header">Send Investment Asset Search Criteria</h3>
+@using (Html.BeginForm("EmailInvestmentAssetSearchCriteria", "Admin", FormMethod.Post))
+{
+    @Html.HiddenFor(s => s.SearchCriteriaId)
+    <div class="row">
+        <div class="lg-col-6">
+            <div class="control-group">
+                <span class="control-label">Select one or more NAR Members to forward this search criteria form to.</span>
+                <br />
+                <br />
+                <div class="controls">
+                    @Html.ListBoxFor(s => s.SelectNarMemberIds, @Model.NARMembers, new { style = "width: 200px;" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="control-group">
+                <em>To make multiple selections hold down your CONTROL key as you click a selection.</em>
+            </div>
+        </div>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Send Email" />
+}

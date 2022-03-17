@@ -1,0 +1,1290 @@
+﻿@using Inview.Epi.EpiFund.Domain.Helpers
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-127063599-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-127063599-1');
+    </script>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>USCREonline.com : @ViewBag.Title</title>
+    <link rel="stylesheet" href="@Url.Content("~/content/css/ProgressBar.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/content/bootstrap.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/content/css/font-awesome.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/content/bootstrap-lightbox.min.css")" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @Styles.Render("~/bundles/css")
+    @Styles.Render("~/bundles/themes/base/css")
+    <link rel="stylesheet" href="@Url.Content("~/content/responsive.css")" />
+    @if (IsSectionDefined("DropzoneCss"))
+    {
+        @RenderSection("DropzoneCss", required: false)
+    }
+    @if (IsSectionDefined("CaptchaCss"))
+    {
+        @RenderSection("CaptchaCss", required: false)
+    }
+    @if (IsSectionDefined("JqueryConfirmCss"))
+    {
+        @RenderSection("JqueryConfirmCss");
+    }
+    @if (IsSectionDefined("JqueryDataTableCss"))
+    {
+        @RenderSection("JqueryDataTableCss");
+    }
+    <script type="text/javascript">
+        //var $buoop = {};
+        //$buoop.ol = window.onload;
+        //window.onload = function () {
+        //    try { if ($buoop.ol) $buoop.ol(); } catch (e) { }
+        //    var e = document.createElement("script");
+        //    e.setAttribute("type", "text/javascript");
+        //    e.setAttribute("src", "//browser-update.org/update.js");
+        //    document.body.appendChild(e);
+        //    setInterval(KeepSessionAlive, 30000);
+        //}
+
+        //function KeepSessionAlive() {
+        //    $.post("/Home/KeepSessionAlive", null, function () {
+        //    });
+        //}
+    </script>
+    <style type="text/css">
+        .blueText {
+            color: #369;
+            font-weight: bold;
+        }
+
+        #eqcalc {
+        }
+
+        .calculator {
+            position: absolute;
+            top: 122px;
+            left: 396px;
+            background-color: white;
+            z-index: 100;
+            width: 400px;
+        }
+
+        .home-main {
+            margin-top: 10px;
+            font-size: 9.5px;
+            padding: 5px 5px !important;
+        }
+
+        .home-main-title {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+            .home-main-title span {
+                text-align: center;
+                font-weight: bold;
+                font-size: 10px !important;
+            }
+
+        .home-main-content-row {
+        }
+
+        .home-main-content-row-label {
+        }
+
+        .home-main-content-row-value {
+        }
+
+            .home-main-content-row-value.t-a-v {
+                margin-left: -45px;
+            }
+
+            .home-main-content-row-value.t-m-f-u {
+                margin-left: -6px;
+            }
+
+            .home-main-content-row-value.t-s-c-p {
+                margin-left: -25px;
+            }
+
+            .home-main-content-row-value.t-i-p {
+                margin-left: -6px;
+            }
+
+            .home-main-content-row-value.p-c {
+                margin-left: -5px;
+            }
+
+            .home-main-content-row-value span {
+                text-align: right;
+                margin-bottom: 5px;
+                font-size: 10px !important;
+                color: #000 !important;
+                background-color: transparent !important;
+                min-width: 45px;
+            }
+
+        @@media screen and (max-width: 1199px) {
+            .home-main-content-row-label {
+                width: 100%;
+                text-align: center;
+            }
+
+            .home-main-content-row-value {
+                width: 100%;
+                text-align: center;
+            }
+
+                .home-main-content-row-value.t-a-v {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-m-f-u {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-s-c-p {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-i-p {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.p-c {
+                    margin: auto;
+                }
+        }
+
+        @@media screen and (max-width: 990px) {
+            .home-main-content-row-label {
+                width: 75%;
+                text-align: left;
+            }
+
+            .home-main-content-row-value {
+                width: 25%;
+                text-align: center;
+            }
+
+                .home-main-content-row-value.t-a-v {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-m-f-u {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-s-c-p {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-i-p {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.p-c {
+                    margin: auto;
+                }
+        }
+
+        @@media screen and (max-width: 768px) {
+            .home-main-content-row-label {
+                width: 100%;
+                text-align: left;
+            }
+
+            .home-main-content-row-value {
+                width: 100%;
+                text-align: center;
+            }
+
+                .home-main-content-row-value.t-a-v {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-m-f-u {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-s-c-p {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-i-p {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.p-c {
+                    margin: auto;
+                }
+        }
+
+        @@media screen and (max-width: 400px) {
+            .home-main-content-row-label {
+                width: 100%;
+                text-align: center;
+            }
+
+            .home-main-content-row-value {
+                width: 100%;
+                text-align: center;
+            }
+
+                .home-main-content-row-value.t-a-v {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-m-f-u {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-s-c-p {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.t-i-p {
+                    margin: auto;
+                }
+
+                .home-main-content-row-value.p-c {
+                    margin: auto;
+                }
+        }
+    </style>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+    @if (IsSectionDefined("DropzoneJs"))
+    {
+        @RenderSection("DropzoneJs");
+    }
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jqueryui")
+    @if (IsSectionDefined("JqueryConfirmJs"))
+    {
+        @RenderSection("JqueryConfirmJs");
+    }
+    <script src="@Url.Content("~/Scripts/bootstrap.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-guid.js")"></script>
+    @if (IsSectionDefined("JqueryDataTableJs"))
+    {
+        @RenderSection("JqueryDataTableJs");
+    }
+</head>
+
+<body style="position: relative;" class="@ViewBag.BodyClass">
+    @if (IsSectionDefined("CaptchaJs"))
+    {
+        @RenderSection("CaptchaJs", required: false)
+    }
+    <script type="text/javascript">
+        $(function () {
+            $('#mortgageCalculatorLink').click(function () {
+                $("#mrtgcalc").toggle();
+                $("#eqcalc").hide();
+                $("#capcalc").hide();
+                $("#assetDialog").hide();
+            });
+            $('#equityCalculatorLink').click(function () {
+                $("#eqcalc").toggle();
+                $("#mrtgcalc").hide();
+                $("#capcalc").hide();
+                $("#assetDialog").hide();
+            });
+            $('#capCalculatorLink').click(function () {
+                $("#capcalc").toggle();
+                $("#mrtgcalc").hide();
+                $("#eqcalc").hide();
+                $("#assetDialog").hide();
+            });
+            $('#createCREAssetLink').click(function () {
+                $("#assetDialog").toggle();
+                $("#capcalc").hide();
+                $("#mrtgcalc").hide();
+                $("#eqcalc").hide();
+                $('#notLogged').show();
+                $('#allowDiv').hide();
+                $('#disallowDiv').hide();
+            });
+            if ($('#ddlRowCount')) {
+                if ('@TempData["RowCount"]'.length > 0) {
+                    $('#ddlRowCount').val('@TempData["RowCount"]');
+                }
+            }
+        });
+
+        function changeRowCount(link) {
+            var newCount = $('#ddlRowCount').val();
+            $.post('@Url.Action("SetPageNumber", "Admin")', { count: newCount }, function () {
+                location.href = link;
+                reload();
+            });
+        }
+
+        function setInvisible(idOfDiv) {
+            $(idOfDiv).toggle();
+        }
+
+        function computeField(input) {
+            if (input.value != null && input.value.length != 0)
+                input.value = "" + eval(input.value);
+            // computeForm(input.form);
+        }
+
+        function CapCalc(form) {
+            if (!checkNumber(form.allcashcost, 0, 10000000, "All Cash Acquisition Cost") ||
+                !checkNumber(form.pretaxcashflow, 0, 10000000, "Anticipated Pre-Tax Cash Flow")) {
+                form.caprate.value = "0";
+
+                return;
+            }
+            var allCashCost = getNumber(form.allcashcost);
+            var cashFlow = getNumber(form.pretaxcashflow);
+            //form.caprate.value = Math.round((cashFlow / allCashCost) * 100) + '%';
+            form.caprate.value = ((cashFlow / allCashCost) * 100).toFixed(2) + '%';
+        }
+
+        function EquityCalc(form) {
+            if (form.mtgpayoff1.value.length == 0) {
+                form.mtgpayoff1.value = 0;
+            }
+            if (form.mtgpayoff2.value.length == 0) {
+                form.mtgpayoff2.value = 0;
+            }
+            if (form.pdPropertyTax.value.length == 0) {
+                form.pdPropertyTax.value = 0;
+            }
+            if (form.pdCorporateTax.value.length == 0) {
+                form.pdCorporateTax.value = 0;
+            }
+            if (!checkNumber(form.mvalprop, 10000, 10000000000, "Market Value of Asset") ||
+                !checkNumber(form.mtgpayoff1, 0, 10000000000, "1st Mtg Payoff") ||
+                !checkNumber(form.mtgpayoff2, 0, 10000000000, "2nd Mtg Payoff") ||
+                !checkNumber(form.pdPropertyTax, 0, 10000000000, "Past Due Property Tax") ||
+                !checkNumber(form.pdCorporateTax, 0, 10000000000, "Past Due Corporate Tax")) {
+                form.grosseqcalc.value = "0";
+                form.eqmvalperc.value = "0";
+                el = document.getElementById('eqmvalperc');
+                el.style.color = "";
+                return;
+            }
+
+            var sum1 = getNumber(form.mtgpayoff1);
+            sum1 += getNumber(form.mtgpayoff2);
+            sum1 += getNumber(form.pdPropertyTax);
+            sum1 += getNumber(form.pdCorporateTax);
+
+            var mv = getNumber(form.mvalprop);
+            var cge = form.grosseqcalc.value = Math.round(mv - sum1);
+            form.eqmvalperc.value = ((cge / mv) * 100).toFixed(2);//Math.round((cge / mv) * 100);
+            
+            if (document.getElementById) {
+                el = document.getElementById('eqmvalperc');
+                if (form.eqmvalperc.value <= 83) {
+                    el.style.color = "green";
+                } else if (form.eqmvalperc.value > 84) {
+                    el.style.color = "red";
+                }
+                else if (form.eqmvalperc.value < 0) {
+                    el.style.color = "red";
+                }
+            }
+
+            form.eqmvalperc.value += '%';
+            toMoney(form.grosseqcalc, true);
+        }
+
+        function MortgageCalc(form) {
+            form.quarterlyPayment = 0;
+            form.monthlyPayment = 0;
+            form.annualPayment = 0;
+
+            var option = null;
+            for (var i = 0; i < form.option.length; i++) {
+                if (form.option[i].checked == true) {
+                    option = form.option[i].value;
+                    break;
+                }
+            }
+
+            if (option == null) { return; }
+
+            if (!checkNumber(form.principal, 100, 10000000, "Mortgage Amount") ||
+                !checkNumber(form.interest, .001, 99, "Interest Rate")) {
+                form.quarterlyPayment.value = "0";
+                form.monthlyPayment.value = "0";
+                form.annualPayment.value = "0";
+
+                return;
+            }
+
+            var irate = getNumber(form.interest);
+            if (irate > 1.0) {
+                irate /= 100;
+            }
+
+            var principal = getNumber(form.principal);
+            var payment = 0;
+
+            if (option == 'interest') {
+
+                payment = (principal * irate) / 12;
+                form.monthlyPayment.value = payment;
+                form.quarterlyPayment.value = payment * 3;
+                form.annualPayment.value = payment * 12;
+
+            } else {
+
+                irate /= 12;
+
+                payments = parseInt(option) * 12;
+
+                var p = 1.0;
+                for (var i = 0; i < payments; i++)
+                    p = p * (1 + irate);
+
+                payment = (principal * p * irate) / (p - 1);
+                form.monthlyPayment.value = payment;
+                form.quarterlyPayment.value = payment * 3;
+                form.annualPayment.value = payment * 12;
+            }
+
+            toMoney(form.monthlyPayment);
+            toMoney(form.quarterlyPayment);
+            toMoney(form.annualPayment);
+
+            //val = getNumber(form.taxes);
+            //if (val != null)
+            //    payment += (val / 12);
+
+            //val = getNumber(form.insurance);
+            //if (val != null)
+            //    payment += (val / 12);
+
+            //val = getNumber(form.hoadues);
+            //if (val != null)
+            //    payment += (val / 12);
+
+            //form.payment2.value = payment;
+
+        }
+
+        function checkNumber(fld, min, max, message) {
+            message = message + " field has invalid data: " + fld.value;
+
+            num = getNumber(fld);
+            if (num == null) {
+                //alert(message + " you must enter a value");
+                return false;
+            }
+
+            if (num < min || max < num) {
+                //alert(message + " is not in the range [" + min + ".." + max + "]");
+                return false;
+            }
+
+            return true;
+        }
+
+        function getNumber(fld) {
+            var str = fld.value;
+            var tmp = '';
+
+            if (fld.value.length == 0) {
+                return null;
+            }
+
+            for (var i = 0; i < str.length; i++) {
+                var ch = str.substring(i, i + 1);
+                if (ch == '$' || ch == ',' || ((ch < '0' || ch > '9') && ch != '.')) {
+                    continue;
+                }
+                tmp += ch;
+            }
+
+            if (tmp == '') {
+                return null;
+            }
+
+            var num = parseFloat(tmp)
+
+            return num;
+        }
+
+        function getNumberFromNonInput(element) {
+            var str = element.innerHTML;
+            var tmp = '';
+
+            if (element.innerHTML.length == 0) {
+                return null;
+            }
+
+            for (var i = 0; i < str.length; i++) {
+                var ch = str.substring(i, i + 1);
+                if (ch == '$' || ch == ',' || ((ch < '0' || ch > '9') && ch != '.')) {
+                    continue;
+                }
+                tmp += ch;
+            }
+
+            if (tmp == '') {
+                return null;
+            }
+
+            var num = parseFloat(tmp)
+
+            return num;
+        }
+
+        function getNumberFromValue(val) {
+            var tmp = '';
+
+            if (!val) {
+                return null;
+            }
+
+            for (var i = 0; i < val.length; i++) {
+                var ch = val.substring(i, i + 1);
+                if (ch == '$' || ch == ',' || ((ch < '0' || ch > '9') && ch != '.')) {
+                    continue;
+                }
+                tmp += ch;
+            }
+
+            if (tmp == '') {
+                return null;
+            }
+
+            var num = parseFloat(tmp)
+
+            return num;
+        }
+
+        function toMoney(input, addDollarSign) {
+            if (input.value != null && input.value.length != 0) {
+                var sign = (addDollarSign) ? '$' : '';
+                num = getNumber(input);
+                if (num == null) {
+                    return;
+                }
+
+                str = num.toString();
+                sig = str.split('.');
+
+                tmp = '';
+                len = sig[0].length;
+                for (var i = len, j = 1; i > 0; i--, j++) {
+                    var t = sig[0].substring(i, i - 1);
+                    tmp = t + tmp;
+                    if ((j % 3 == 0) && j != len) {
+                        tmp = ',' + tmp;
+                    }
+                }
+
+                if (sig.length > 1 && sig[1].length) {
+                    tmp += '.' + sig[1].substr(0, 1);
+                    var t = sig[1].substr(1, 1);
+                    if (t) {
+                        tmp += t;
+                    } else {
+                        tmp += '0';
+                    }
+                }
+                str = sign + tmp;
+
+                input.value = str;
+            }
+        }
+
+        function padCommas(element, addDollarSign) {
+            // asumming element is span, not input
+            if (element) {
+                if (element.innerHTML.length != 0 && element.innerHTML != null) {
+                    var sign = (addDollarSign) ? '$' : '';
+                    num = getNumberFromNonInput(element);
+                    if (num == null) {
+                        return;
+                    }
+
+                    str = num.toString();
+                    sig = str.split('.');
+
+                    tmp = '';
+                    len = sig[0].length;
+                    for (var i = len, j = 1; i > 0; i--, j++) {
+                        var t = sig[0].substring(i, i - 1);
+                        tmp = t + tmp;
+                        if ((j % 3 == 0) && j != len) {
+                            tmp = ',' + tmp;
+                        }
+                    }
+
+                    if (sig.length > 1 && sig[1].length) {
+                        tmp += '.' + sig[1].substr(0, 1);
+                        var t = sig[1].substr(1, 1);
+                        if (t) {
+                            tmp += t;
+                        } else {
+                            tmp += '0';
+                        }
+                    }
+                    str = sign + tmp;
+                    element.innerHTML = str;
+                }
+            }
+        }
+
+        function addCommasToInput(control) {
+            $(control).val(addCommas($(control).val(), false));
+        };
+
+        function addCommas(str, includeDecimals, addDollarSign, addPercentSign) {
+            str = str.replace(/,/g, "");
+            var isNegative = str.indexOf("-") > -1;
+            str = str.replace(/-/g, "");
+            var output = getNumberFromValue(str);
+            output = (str + "").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+            if (addDollarSign) {
+                output = "$" + output;
+            }
+            else if (addPercentSign) {
+                output = output + "%";
+            }
+            if (isNegative) {
+                output = "<" + output + ">";
+            }
+            return output;
+        }
+
+        function resendEmail() {
+            $.post('@Url.Action("ResendEmail", "Home")');
+            alert('Email sent');
+        }
+
+        function submitCode() {
+            var code = $('#txtCode').val();
+            if (code.length == 6) {
+                var xhr = new XMLHttpRequest();
+                var fd = new FormData();
+                fd.append("code", code);
+                xhr.open("POST", "@Url.Action("NewMachine", "Home")", true);
+                xhr.send(fd);
+                xhr.addEventListener("load", function (event) {
+                    var response = JSON.parse(event.target.response);
+                    if (response["success"] == "true") {
+                        $('#newMachineModal').modal('hide');
+                    }
+                    else {
+                        $('#divNewMachineMessage').show();
+                        $('#divNewMachineMessage').text() = response["message"];
+                    }
+                }, false);
+            }
+            else {
+                $('#divNewMachineMessage').show();
+                $('#divNewMachineMessage').text() = 'Invalid code';
+            }
+        }
+
+        $(document).ajaxStop(function () {
+            // untested
+            var authenticated = '@User.Identity.IsAuthenticated.ToString()';
+            if (authenticated == 'true') {
+                // see if their machine is authenticated and if not,
+                // display popup requesting the code from their email
+            }
+        });
+
+        $(document).on("click", "a.yesText", function () {
+            $('#notLogged').hide();
+            $('#allowDiv').show();
+        });
+
+        $(document).on("click", "a.noText", function () {
+            $('#notLogged').hide();
+            $('#disallowDiv').show();
+        });
+
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Home/ValidateUser/",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                cache: false,
+                success: function (response) {
+                    if (response.Status == "True") {
+                        $('#isLogged').show();
+                    }
+                    else {
+                        $('#isLogged').hide();
+                    }
+                },
+                error: function (jqXHR, exception) {
+                },
+                failure: function (response) {
+                }
+            });
+
+        });
+
+    </script>
+
+    <div id="logged-in">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <p class="container">Signed in as <a href="@Url.Action("EditProfile", "Home")" class="navbar-link" style="margin: 0 5px;">@User.Identity.Name</a> (@Html.ActionLink("Logout", "Logout", "Home"))</p>
+        }
+    </div>
+    <div class="modal fade" id="newMachineModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>New Machine</h5>
+                </div>
+                <div class="alert alert-info main-alert" id="divNewMachineMessage" style="display: none;">
+                </div>
+                <div class="modal-body text-center">
+                    <p>
+                        We see you're logging in to the site from a new browser or a new computer.
+                        As an added security measure, you'll need to grant access to this machine by
+                        entering the special code we've just sent to your email address
+                    </p>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                Code
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input type="text" id="txtCode" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="submitCode()">Submit</button>
+                    <button type="button" class="btn btn-default" onclick="resendEmail()">Re-Send Email</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="eqcalc" tabindex="-1" role="dialog" aria-labelledby="eqcalc-label" aria-hidden="true" data-backdrop="false">
+        <form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="eqcalc-label">Equity Calculator</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Market Value of Asset:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="mvalprop" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">1st Mtg. Payoff:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="mtgpayoff1" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">2nd Mtg. Payoff:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="mtgpayoff2" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Past Due Property Taxes:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="pdPropertyTax" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Past Due Corporate Taxes:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="pdCorporateTax" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 text-right" style="padding-top: 10px; padding-right: 113px;">
+                                <input name="Reset" type="reset" value="Reset" class="btn btn-default calc">
+                                <input name="Calculate" type="button" value="Calculate" onclick="EquityCalc(this.form)" class="btn btn-primary calc">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">Calculated Gross Equity:</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="text" name="grosseqcalc" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">As % of Market Value:</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="text" name="eqmvalperc" id="eqmvalperc" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--<div id="eqcalc" style="display: none;" class="calculator">
+        <table class="table table-striped">
+            <form action="" class="calc">
+                        <input type="button" value="close" onclick="setInvisible('#eqcalc');">
+                <tr>
+                    <td colspan="2"><span class="blueText" style="font-weight: bold">Equity Calculator:</span> </td>
+                </tr>
+                <tr>
+                    <td>Market Value of Asset: </td>
+                    <td>
+                        <input name="mvalprop" type="text" onblur="toMoney(this, true)" size="10"></td>
+                </tr>
+                <tr>
+                    <td>1st Mtg. Payoff: </td>
+                    <td width="15">
+                        <input name="mtgpayoff1" type="text" onblur="toMoney(this, true)" size="10"></td>
+                </tr>
+                <tr>
+                    <td>2nd Mtg. Payoff: </td>
+                    <td width="15">
+                        <input name="mtgpayoff2" type="text" onblur="toMoney(this, true)" size="10"></td>
+                </tr>
+                <tr>
+                    <td>Past Due Property Taxes: </td>
+                    <td width="15">
+                        <input name="pdPropertyTax" type="text" onblur="toMoney(this, true)" size="10"></td>
+                </tr>
+                <tr>
+                    <td>Past Due Corporate Taxes: </td>
+                    <td width="15">
+                        <input name="pdCorporateTax" type="text" onblur="toMoney(this, true)" size="10"></td>
+                </tr>
+                <tr align="center">
+                    <td colspan="2" style="padding-bottom: 6px;">
+                        <input name="Reset" type="reset" value="Reset" class="calc">
+                        &nbsp;&nbsp;&nbsp; 
+                        <input name="Calculate" type="button" value="Calculate" onclick="EquityCalc(this.form)" class="calc">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Calculated Gross Equity: </td>
+                    <td width="15">
+                        <input type="text" name="grosseqcalc" size="10" value=""></td>
+                </tr>
+                <tr>
+                    <td>As % of Market Value: </td>
+                    <td width="15">
+                        <input type="text" name="eqmvalperc" id="eqmvalperc" size="10" value=""></td>
+                </tr>
+            </form>
+        </table>
+    </div>-->
+
+    <div class="modal fade" id="capcalc" tabindex="-1" role="dialog" aria-labelledby="capcalc-label" aria-hidden="true" data-backdrop="false">
+        <form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="capcalc-label">Cap Rate Calculator</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">All Cash Acquisition Cost:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="allcashcost" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Anticipated Pre-Tax Cash Flow:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="pretaxcashflow" type="text" onblur="toMoney(this, true)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 text-right" style="padding-top: 10px; padding-right: 113px;">
+                                <input name="Reset" type="reset" value="Reset" class="btn btn-default calc">
+                                <input name="Calculate" type="button" value="Calculate" onclick="CapCalc(this.form)" class="btn btn-primary calc">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">CAP Rate:</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="text" name="caprate" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="modal fade" id="assetDialog" tabindex="-1" role="dialog" aria-labelledby="assetDiag-label" aria-hidden="true" data-backdrop="false" style="position: absolute; top: 400px; left: 300px">
+        <form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="assetDiag-label">Create Asset File</h4>
+                    </div>
+                    <div class="modal-body">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="row" id="isLogged">
+
+                                <ul>
+                                    <li class="@Html.IsSelected(action: "EpiFundBuysRealEstate")"><a href="@Url.Action("EpiFundBuysRealEstate", "Home")">Create New Fee Simple CRE Asset File</a></li>
+                                    <li class="@Html.IsSelected(action: "EpiFundBuysPaper")"><a href="@Url.Action("EpiFundBuysPaper", "Home")">Create New CRE Note Asset File</a></li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row" id="notLogged">
+                                <div class="col-sm-12" style="padding-top: 10px; padding-right: 113px;">
+                                    <span class="text">Are you an Asset's Principal Owner or a U.S. <a title="National Association of Realtors">NAR</a> Member Listing Agent?</span>
+                                    <br />
+                                    <a href="#" class="yesText"><span class="delete-icon">Yes</span></a>
+                                    <a href="#" class="noText"><span class="delete-icon">No</span></a>
+                                </div>
+                            </div>
+                            <div class="row" id="allowDiv" style="display: none">
+                                <ul>
+                                    <li class="@Html.IsSelected(action: "EpiFundBuysRealEstate")"><a href="@Url.Action("EpiFundBuysRealEstate", "Home")">Create New Fee Simple CRE Asset File</a></li>
+                                    <li class="@Html.IsSelected(action: "EpiFundBuysPaper")"><a href="@Url.Action("EpiFundBuysPaper", "Home")">Create New CRE Note Asset File</a></li>
+                                </ul>
+                            </div>
+                            <div class="row" id="disallowDiv" style="display: none">
+                                <label>You are not allowed to view these links </label>
+                            </div>
+                        }
+
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--<div id="" style="display: none;" class="calculator">
+        <table width="100%" border="0" cellpadding="4" cellspacing="0" class="calc">
+            <form action="" class="calc">
+                <tr>
+                    <td colspan="2" align="right" bgcolor="#000000" style="text-align: right">
+                        <input type="button" value="close" onclick="setInvisible('#capcalc');"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><span class="blueText" style="font-weight: bold"></span> </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td>
+                        </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td width="15">
+                        </td>
+                </tr>
+                <tr align="center">
+                    <td colspan="2" style="padding-bottom: 6px;">
+                        <input name="Reset" type="reset" value="Reset" class="calc">
+                        &nbsp;&nbsp;&nbsp; 
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td width="15">
+                        </td>
+                </tr>
+            </form>
+        </table>
+    </div>-->
+
+    <div class="modal fade" id="mrtgcalc" tabindex="-1" role="dialog" aria-labelledby="mrtgcalc-label" aria-hidden="true" data-backdrop="false">
+        <form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="mrtgcalc-label">Mortgage Calculator</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-6">
+                                <div class="radio">
+                                    <input type="radio" name="option" value="interest">
+                                    Interest Only
+                                </div>
+                                <div class="radio">
+                                    <input type="radio" name="option" value="10year">
+                                    10 Year Term
+                                </div>
+                                <div class="radio">
+                                    <input type="radio" name="option" value="15year">
+                                    15 Year Term 
+                                </div>
+                                <div class="radio">
+                                    <input type="radio" name="option" value="20year">
+                                    20 Year Yerm
+                                </div>
+                                <div class="radio">
+                                    <input type="radio" name="option" value="25year">
+                                    25 Year Term
+                                </div>
+                                <div class="radio">
+                                    <input type="radio" name="option" value="30year">
+                                    30 Year Term 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Mortgage Amount $</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="TEXT" name="principal" onblur="toMoney(this, true)" maxlength="10">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Interest Rate %</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="TEXT" name="interest" onchange="computeField(this)" maxlength="6">
+                            </div>
+                        </div>
+                        @*<div class="row">   
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Annual Prop. Taxes</label>  
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="TEXT" name="taxes" onblur="toMoney(this, true)" class="calc" maxlength="6">
+                            </div>
+                        </div>*@
+                        @* <div class="row"> 
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Annual Hazard Ins.</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="TEXT" name="insurance" onblur="toMoney(this, true)" class="calc" maxlength="6">
+                            </div> 
+                        </div>*@
+                        @*   <div class="row">  
+                            <div class="col-sm-6 text-right">
+                                <label class="control-label">Annual HOA Dues</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="TEXT" name="hoadues" onblur="toMoney(this, true)" class="calc" maxlength="6">
+                            </div>
+                        </div>  *@
+                        <div class="row">
+                            <div class="col-sm-12 text-right" style="padding-top: 10px; padding-right: 113px;">
+                                <input name="Reset" type="reset" value="Reset" class="btn btn-default calc">
+                                <input type="button" value="Calculate" onclick="MortgageCalc(this.form)" name="button" class="btn btn-primary calc">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">Monthly Payments $</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="TEXT" name="monthlyPayment" class="calc" maxlength="10" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">Quarterly Payments $</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="TEXT" name="quarterlyPayment" class="calc" maxlength="10" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">Annual Payments $</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="TEXT" name="annualPayment" class="calc" maxlength="10" value="">
+                            </div>
+                        </div>
+                        @* <div class="row">
+                            <div class="col-sm-6"> 
+                                <label class="control-label">Monthly PITI+HOA $</label>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <input type="TEXT" name="payment2" class="calc" maxlength="10" value="">  
+                            </div>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container" style="background-color: #ccc; padding: 10px;">
+        <nav class="navbar navbar-default" id="main-nav" role="navigation">
+            <div class="container-fluid" style="padding-right: 0;">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header" style="padding-right: 15px;">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" id="logo" style="font-size: 29px; margin-right: 120px;" href="@Url.Action("Index", "Home")">USCRE</a>
+                    <a id="tagline" class="navbar-brand">United States Commercial Real Estate on Line</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                @{ Html.RenderPartial("_TopNavigation"); }
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+        <div class="row" style="min-height: 1070px;">
+            <div class="col-md-3 side-nav">
+                @{Html.RenderAction("CounterPartialView", "Home");}
+                <ul class="nav">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="@Html.IsSelected(action: "Login")"><a href="@Url.Action("Logout", "Home")">Logout</a></li>
+                        <li class="@Html.IsSelected(action: "MyUSCPage", controller: "Home")"><a href="@Url.Action("MyUSCPage", "Home")">My USC Page</a></li>
+                    }
+                    else
+                    {
+                        <li class="@Html.IsSelected(action: "RegistrationIntro")"><a href="@Url.Action("RegistrationIntro", "Home")">New Visitor Registration</a></li>
+                        <li class="@Html.IsSelected(action: "Login")"><a href="@Url.Action("Login", "Home")">Login</a></li>
+                    }
+                    <li class="@Html.IsSelected(controller: "DataPortal", action: "DataPortal")"><a href="@Url.Action("DataPortal", "DataPortal")">CRE Data Portal</a></li>
+                    
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (TempData["CanUserUploadMBA" + User.Identity.Name] != null)
+                        {
+                            try
+                            {
+                                if (TempData["CanUserUploadMBA" + User.Identity.Name].ToString() == "true")
+                                {
+                            <li><a href="@Url.Action("ImportMBAUsers", "DataPortal")">Import MBA Members</a></li>
+                                }
+                            }
+                            catch { }
+                        }
+                    }
+                    <li class="@Html.IsSelected(controller: "DataPortal", action: "AssetList")"><a href="@Url.Action("InvestorOpportunities", "Home")">CRE Asset Search</a></li>
+                    @*<li class="@Html.IsSelected(action: "EpiFundBuysRealEstate")"><a href="@Url.Action("EpiFundBuysRealEstate", "Home")">Create New Fee Simple CRE Asset File</a></li>
+                    <li class="@Html.IsSelected(action: "EpiFundBuysPaper")"><a href="@Url.Action("EpiFundBuysPaper", "Home")">Create New CRE Note Asset File</a></li>*@
+                    <li class="@Html.IsSelected(action: "CreateCREAsset")"><a id="createCREAssetLink" data-toggle="modal" data-target="#assetDialog" style="cursor: pointer">Create New CRE Asset File</a></li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (TempData["CanUserManagePortfolios" + User.Identity.Name] != null)
+                        {
+                            try
+                            {
+                                if (TempData["CanUserManagePortfolios" + User.Identity.Name].ToString() == "true")
+                                {
+                                    <li class="@Html.IsSelected(controller: "Portfolio", action: "ManagePortfolios")"><a href="@Url.Action("ManagePortfolios", "Portfolio")">Manage Portfolios</a></li>
+                                }
+                            }
+                            catch { }
+                        }
+                    }
+                    
+                    <li class="@Html.IsSelected(action: "JointVentureMarketing")"><a href="@Url.Action("JointVentureMarketing", "Home")">MBA - Joint Venture Marketing Program</a></li>
+                    <li class="@Html.IsSelected(action: "SecureDebtEquityPartner")"><a href="@Url.Action("SecureDebtEquityPartner", "Investors")">Secure Debt/Equity Funding Partner</a></li>
+                    <li class="@Html.IsSelected(action: "EmploymentOpportunities")"><a href="@Url.Action("EmploymentOpportunities", "Home")">US CRE Online Growth Opportunities</a></li>
+                    <li class="@Html.IsSelected(action: "Affiliations")"><a href="@Url.Action("Affiliations", "Home")">Industry Affiliations & Marketing Partners</a></li>
+                    <li class="@Html.IsSelected(action: "ContactUs")"><a href="@Url.Action("ContactUs", "Home")">Contact US CRE online</a></li>
+
+                </ul>
+
+                @{Html.RenderAction("CarouselPartialView", "Home");}
+            </div>
+            <div class="col-md-9 main-left-column">
+                <section style="min-height: 900px;">
+                    @{ Html.RenderPartial("_SubHeaderMenu"); }
+                    <div class="panel panel-default main-content" style="min-height: 900px; padding: 10px;">
+
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                @Html.ActionLink("Home", "Index", "Home")
+                                @*@if (ViewContext.RouteData.Values["controller"] != "Home" && ViewContext.RouteData.Values["action"] != "Index")
+                            {
+                                @:> @Html.ActionLink(ViewContext.RouteData.Values["controller"].ToString(), "Index", ViewContext.RouteData.Values["controller"].ToString())
+                            }*@
+
+                                > @ViewBag.Title
+                            </li>
+                        </ol>
+
+                        @{ Html.RenderPartial("_Messages"); }
+                        @RenderBody()
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <footer>
+                    @{ Html.RenderPartial("_FooterPartial"); }
+                </footer>
+            </div>
+        </div>
+    </div>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

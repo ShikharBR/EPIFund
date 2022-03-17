@@ -1,0 +1,16 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.NarMemberViewModel
+@{
+    ViewBag.Title = "Create NAR Member";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Create NAR Member</h2>
+@using (Html.BeginForm("CreateNarMember", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false)
+    <br />
+    @Html.EditorForModel()
+
+    <input type="submit" class="btn btn-primary" id="btnSave" name="btnSave" value="Save NAR Member" /> 
+}

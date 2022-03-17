@@ -1,0 +1,57 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.ViewModel.AssetDeferredItemViewModel>
+
+@using Inview.Epi.EpiFund.Domain.Helpers
+@using Inview.Epi.EpiFund.Domain.Enum
+
+@for (int i = 0; i < Model.Count; i++)
+{
+    <div class="document-item">
+        <div class="row">
+            <div class="col-lg-5">
+                @Html.CheckBoxFor(s => Model[i].Selected, new { onchange = "calculateEstimatedDeferredMaintenance()" })
+                <label>@Model[i].ItemTitle</label>
+            </div>
+            <div class="col-lg-7" style="text-align: right;">
+                <label>Unit Cost:</label>
+                @Html.TextBoxFor(s => Model[i].UnitCost, new { style = "width: 60px; margin-right:5px;", onchange = "addCommasToInputAndCalculate(this)" })
+                @if (Model[i].UnitTypeLabel != null)
+                {
+                    <label>Number of @Model[i].UnitTypeLabel:</label>
+                    @Html.TextBoxFor(s => Model[i].NumberOfUnits, new { style = "margin-left: 5px; width: 60px;", onchange = "addCommasToInputAndCalculate(this)" })
+                }
+            </div>
+        </div>
+        @Html.HiddenFor(s => Model[i].ItemTitle)
+        @Html.HiddenFor(s => Model[i].MaintenanceDetail)
+        @Html.HiddenFor(s => Model[i].NumberOfUnits)
+        @Html.HiddenFor(s => Model[i].Selected)
+        @Html.HiddenFor(s => Model[i].UnitCost)
+        @Html.HiddenFor(s => Model[i].UnitTypeLabel)
+    </div>
+}
+
+<script>
+    function addCommasToInputAndCalculate(control) {
+        calculateEstimatedDeferredMaintenance();
+        $(control).val(addCommas($(control).val(), false));
+    };
+
+    function calculateEstimatedDeferredMaintenance() {
+        var total = 0;
+        for (var i = 0; i < 15; i++) {
+            var unitCost = getNumberFromValue($("#DeferredMaintenanceItems_" + i + "__UnitCost").val());
+            var units = getNumberFromValue($("#DeferredMaintenanceItems_" + i + "__NumberOfUnits").val());
+            if (!units) {
+                units = 1;
+            }
+            if ($("#DeferredMaintenanceItems_" + i + "__Selected").is(':checked')) {
+                total += (unitCost * units);
+            }
+        }
+        if (total > 0) {
+            $("#EstDeferredMaintenance").val(addCommas(total.toString(), false));
+        } else {
+            $("#EstDeferredMaintenance").val(0);
+        }
+    }
+</script>

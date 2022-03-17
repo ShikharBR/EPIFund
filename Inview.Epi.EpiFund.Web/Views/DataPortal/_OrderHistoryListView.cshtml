@@ -1,0 +1,54 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.OrderHistoryQuickListViewModel>
+
+@if (Model.Count > 0)
+{
+    <table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+                <thead>
+                    <tr>
+                        <th>Order Date</th>
+                        <th>Project Name</th>
+                        <th>Asset Number</th>
+                        <th>Address</th>
+                        <th>APN</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < @Model.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Model[i].OrderDate.ToShortDateString()
+                            </td>
+                            <td>
+                                @Model[i].ProjectName
+                            </td>
+                            <td>
+                                @Model[i].AssetNumber
+                            </td>
+                            <td>
+                                @Model[i].Address
+                            </td>
+                            <td>
+                                @Model[i].TaxParcelNumber
+                            </td>
+                            <td>
+                                @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(@Model[i].Status)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+}
+else
+{
+ <div>
+     <p>No Order History</p>
+ </div>   
+}
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ViewOrderHistory",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

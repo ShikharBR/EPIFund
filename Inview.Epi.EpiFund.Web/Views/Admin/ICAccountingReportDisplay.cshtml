@@ -1,0 +1,61 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.AccountingRecordDisplayModel
+@{
+    ViewBag.Title = "Accounting Report Display";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h3 class="page-header">Accounting Report Display</h3>
+@if (Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin2 || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.SiteAdmin)
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <input type="button" class="btn btn-primary" value="Record Contract Payment" onclick="location.href='@Url.Action("RecordICContractPayment", "Admin", new { id = Model.UserId })    '" />
+        </div>
+    </div>
+    <br />
+}
+<div class="row">
+    <div class="col-md-12">
+        <h4>@Model.Name</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @Model.AddressLine1
+        <br />
+        @(string.Format("{0}, {1} {2}", Model.City, Model.State, Model.Zip))
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <label>Tax ID:</label>
+        <span style="text-align: right;">@Model.Tin</span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label>ICA Agreement Signed Date:</label>
+        @Model.DateOfCurrentSignedICAgreement.ToString("MM/dd/yyyy")
+    </div>
+</div>
+@using (Html.BeginForm("ICAccountingReportDisplay", "Admin"))
+{
+    @Html.HiddenFor(s => s.UserId)
+    @Html.HiddenFor(s => s.Type)
+    <br />
+    <label>Fiscal Year:</label>
+    @Html.DropDownListFor(s => s.StartYear, @Model.Years)
+    <input type="submit" value="View Results" name="action:ICAccountingReportDisplay" class="btn btn-primary" />
+    if (Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin ||
+        Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin2)
+    {
+    <input type="submit" value="Generate 1099" name="action:Generate1099" class="btn btn-primary" />
+    }
+    <br />
+    <br />
+    { Html.RenderPartial("_ICAccountingReportTable", Model); }
+    <br />
+
+}
+
+@Html.Partial("_CreateAssetPartial")

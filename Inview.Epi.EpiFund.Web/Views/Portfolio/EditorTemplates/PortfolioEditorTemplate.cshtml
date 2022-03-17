@@ -1,0 +1,760 @@
+﻿@model PortfolioViewModel
+@using MVCVideo
+@using Inview.Epi.EpiFund.Domain.Helpers
+@using Inview.Epi.EpiFund.Domain.Entity
+@using Inview.Epi.EpiFund.Domain.ViewModel
+@using Inview.Epi.EpiFund.Domain.Enum
+@using Newtonsoft.Json
+<style>
+    .field-validation-error {
+        color: red;
+        font-weight: bold;
+    }
+
+    .detailsHeading {
+        margin: 1px;
+        color: #fff;
+        padding: 3px 10px;
+        cursor: pointer;
+        position: relative;
+        background-color: #428bca;
+    }
+
+    .layer1 {
+        margin: 0;
+        padding: 0;
+        width: 300px;
+    }
+
+    .detailsContent {
+        padding: 5px 10px;
+        background-color: #fafafa;
+    }
+
+    #uploadDiv #AssetDocumentType, #uploadDiv #docTitle {
+        border: 1px solid #ccc;
+    }
+
+    #documents .deleteDocUpload {
+        background-color: transparent;
+        border: 0;
+        font-size: 10px;
+        color: #428bca;
+        padding: 0;
+        margin: 0;
+    }
+
+        #documents .deleteDocUpload:hover, #docManager .deleteDocUpload:focus {
+            color: #2a6496;
+        }
+
+    #documents a {
+        display: block;
+    }
+
+    #documents .description {
+        color: #888;
+        font-weight: normal;
+        font-style: italic;
+        font-size: 10px;
+        display: block;
+        margin: 0;
+    }
+
+    #documents .docPreviewDiv.row {
+        background-color: #f7f7f7;
+        width: 100%;
+        margin-left: 0px;
+        padding: 10px 0;
+        margin-bottom: 5px;
+        border: 1px solid #eee;
+        border-radius: 4px;
+    }
+
+        #documents .docPreviewDiv.row .col-sm-2 {
+            text-align: right;
+        }
+
+    #documents .document-item {
+        background-color: #fff;
+        border: 0;
+        padding: 0;
+    }
+
+    #documents .document-item-expanded {
+        background-color: transparent;
+        border: 0;
+        padding: 0;
+        margin: 0;
+    }
+
+    #PendingUploads .docPreviewDiv.row {
+        background-color: #F1FBED;
+        border-color: #d6e9c6;
+    }
+
+    #documents h4 {
+        margin-bottom: 5px;
+    }
+
+    .progressbar {
+        width: 300px;
+        height: 20px;
+        background-color: transparent;
+    }
+
+    .progressbarlabel {
+        width: 300px;
+        height: 20px;
+        position: absolute;
+        text-align: center;
+        font-size: smaller;
+    }
+
+
+    .ui-progressbar .ui-progressbar-value {
+        height: 20px;
+    }
+</style>
+<!-- Nav tabs -->
+<ul class="nav nav-pills">
+    <li class="active"><a href="#basic" data-toggle="pill">Primary Info</a></li>
+    <li><a href="#assets" data-toggle="tab">Manage Assets</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div id="mainDiv" class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <h3>Portfolio Information</h3>
+        <div class="row">
+            <div class="col-sm-6 text-right">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.PortfolioName) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group" style="padding-top: 10px">
+                    @Html.EditorFor(model => model.PortfolioName)
+
+                </div>
+            </div>
+        </div>
+        @* <div class="row">
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.LastReportedOccupancyDate) <span style="color: red;">*</span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        @Html.TextBoxFor(s => s.LastReportedOccupancyDate, new { @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                        @Html.ValidationMessageFor(model => model.LastReportedOccupancyDate)
+                    </div>
+                </div>
+            </div>*@
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.isSubjectToAuction) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.isSubjectToAuction, "true") Yes
+                    @Html.RadioButtonFor(s => s.isSubjectToAuction, "false") No
+                    @Html.ValidationMessageFor(model => model.isSubjectToAuction)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.CallforOfferDate)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.CallforOfferDate, new { @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                    @Html.ValidationMessageFor(model => model.CallforOfferDate)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage portfolios page.')) goBack()" value="Cancel" />
+                <input type="button" class="btn btn-primary" onclick="nextTab($(this));" value="Next" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane" id="assets">
+        <h3>Manage Assets</h3>
+        <div class="panel panel-default" style="border: 1px solid #B1A795;">
+            <div class="panel-heading" style="background-color: #428bca">
+                <span style="font-weight: bold;">@Model.PortfolioProperties.Count() Properties are in this Portfolio</span>
+            </div>
+            @if (Model.PortfolioProperties.Count() > 0)
+            {
+                <div class="overflow short-xs">
+                    <table class="table table-striped" id="tbAssets" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+                        <thead>
+                            <tr>
+                                <td><b><a style="cursor: pointer">Click to View</a></b></td>
+                                <td>
+                                    <b>Asset Name</b>
+                                </td>
+                                <td>
+                                    <b>Number of Assets</b>
+                                </td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.PortfolioProperties.Count(); i++)
+                            {
+                                <tr id="@Model.PortfolioProperties[i].AssetId">
+                                    @if (@Model.PortfolioProperties[i].IsActive)
+                                    {
+                                        <td style="width: 200px;">
+                                            <a href="@Url.Action("ViewAsset", "DataPortal", new { id = @Model.PortfolioProperties[i].AssetId, fromManageAssets = true })">
+                                                @Model.PortfolioProperties[i].AssetNumber
+                                            </a>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td style="width: 200px;">
+                                            <a>@Model.PortfolioProperties[i].AssetNumber</a>
+                                        </td>
+                                    }
+                                    <td style="width: 200px;">
+                                        @Model.PortfolioProperties[i].ProjectName
+                                    </td>
+                                    <td style="width: 200px;">
+                                        @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(@Model.PortfolioProperties[i].AssetType)
+                                    </td>
+
+                                    @if (Model.ControllingUserType != Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin)
+                                    {
+                                        if (@Model.PortfolioProperties[i].IsActive)
+                                        {
+                                            <td style="text-align: center;">
+                                                <a onclick="EditAsset('@Model.PortfolioProperties[i].AssetId')" style="cursor:pointer" title="edit">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                </a>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align: center;">
+                                                <span title="inaccessible" class="glyphicon glyphicon-ban-circle"></span>
+                                            </td>
+                                        }
+                                            <td style="text-align: center;">
+                                                <a href="@Url.Action("DeactivateAssetfromPortfolio", "Portfolio", new { id = @Model.PortfolioProperties[i].AssetId, pfId = @Model.PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove the Asset from this Portfolio?');">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </a>
+                                            </td>
+                                    }
+                                    else
+                                    {
+                                        <td colspan="2"></td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            }
+            @*<div class="panel-heading" style="background-color: #428bca">
+                    <span style="font-weight: bold;">Add Assets to the portfolio</span>
+                </div>
+                <div class="overflow short-xs">
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.AssetList)
+                    </div>
+                </div>
+                <div class="overflow short-xs">
+                    <div class="input-group">
+                        @Html.ListBoxFor(model => model.SelectedAssets, Model.AssetList as IEnumerable<SelectListItem>, new { style = "width:300px;" })
+                        <em>To make multiple selections hold down your CONTROL key as you click a selection.</em>
+                    </div>
+                </div>*@
+
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="background-color: #428bca">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#searchbox">
+                            <button class="btn btn-default btn-xs" style="border: 1px solid #888">
+                                Search & Add Assets
+                            </button>
+                        </a>
+                    </div>
+                    <div id="searchbox" class="panel-collapse collapse">
+                        <div id="searchData" class="panel-body" style="background-color: white">
+                            <div class="row asset-list-form">
+                                <div class="col-sm-3">
+                                    <div class="input-group text-right">
+                                        @Html.LabelFor(s => s.AssetNumber, new { @style = "line-height: 32px;" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.AssetNumber)
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group text-right">
+                                        @Html.LabelFor(s => s.SelectedAssetType, new { @style = "line-height: 32px;" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        @Html.DropDownListFor(s => s.SelectedAssetType, @Model.AssetTypes, new { @style = "width: 100%" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row asset-list-form">
+                                <div class="col-sm-3">
+                                    <div class="input-group text-right">
+                                        @Html.LabelFor(s => s.AddressLine1, new { @style = "line-height: 32px;" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.AddressLine1)
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="input-group text-right">
+                                        @Html.LabelFor(s => s.City, new { @style = "line-height: 32px;" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.City, new { @style = "width: 100%" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row asset-list-form">
+                                <div class="col-sm-3">
+                                    <div class="input-group text-right">
+                                        @Html.LabelFor(s => s.State, new { @style = "line-height: 32px;" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        @Html.DropDownListFor(s => s.State, @Model.States)
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group text-right">
+                                        @Html.LabelFor(s => s.ZipCode, new { @style = "line-height: 32px;" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.ZipCode, new { @style = "width: 100%" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row asset-list-form">
+                                <div class="col-sm-3">
+                                    <div class="input-group text-right">
+                                        @Html.LabelFor(s => s.StartDate, new { @style = "line-height: 32px; margin:0" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.StartDate, new { @style = "width: 100%", @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group text-right">
+                                        @Html.LabelFor(s => s.EndDate, new { @style = "line-height: 32px; margin:0" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.EndDate, new { @style = "width: 100%", @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row asset-list-form">
+                                <div class="col-sm-3">
+                                    <div class="input-group text-right">
+                                        @Html.LabelFor(s => s.AssetName, new { @style = "line-height: 32px; margin:0" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.AssetName, new { @style = "width: 100%" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group text-right">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row asset-list-form">
+
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <div class="input-group">
+                                        @Html.HiddenFor(model => Model.Page)
+                                        @Html.HiddenFor(model => Model.SortOrder)
+                                        @Html.HiddenFor(model => Model.RowCount)
+                                        <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="searchAssets()" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @{ Html.RenderPartial("_SearchAssetListView", Model.Assets); }
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage portfolios page.')) goBack()" value="Cancel" />
+                @*@if (Model.PortfolioId != null || Model.PortfolioId != Guid.Empty)
+                    {
+                        <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="updatePortfolio()" />
+                    }
+                    else if (Model.PortfolioId == null || Model.PortfolioId == Guid.Empty)
+                    {
+                        <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="createPortfolio()" />
+                    }*@
+                <input type="submit" class="btn btn-primary" value="Save Portfolio">
+            </div>
+        </div>
+
+    </div>
+</div>
+@Html.HiddenFor(model => model.PortfolioName)
+@Html.HiddenFor(s => s.CallforOfferDate)
+@Html.HiddenFor(model => Model.EstDeferredMaintenance)
+@Html.HiddenFor(model => Model.HasDeferredMaintenance)
+@Html.HiddenFor(model => Model.hasOffersDate)
+@Html.HiddenFor(model => Model.isSubjectToAuction)
+
+@Html.HiddenFor(model => Model.LastReportedOccupancyDate)
+@Html.HiddenFor(model => Model.NumberofAssets)
+@Html.HiddenFor(model => Model.PortfolioId)
+@Html.HiddenFor(model => Model.UserId)
+@Html.HiddenFor(model => Model.Assets)
+@Html.HiddenFor(model => Model.Assets, new { id = "hdnAssetList" })
+@Html.HiddenFor(model => Model.hasOffersDate)
+<input type="hidden" value="@(Model.PortfolioId)" data-asset="@(Model.PortfolioId)" id="PortfolioId" name="PortfolioId" />
+<input type="hidden" value="@(Model.GetType())" name="TypeOfAsset" />
+
+<script>
+
+    window.setInterval(function () {
+        getAssetList();
+    }, 500);
+
+    function serializeAnything(element) {
+        var toReturn = [];
+        var els = $(element).find(':input').get();
+        $.each(els, function () {
+            if (element.name && !element.disabled && (element.checked || /select|textarea/i.test(element.nodeName) || /text|hidden|password/i.test(element.type))) {
+                var val = $(element).val();
+                toReturn.push(encodeURIComponent(element.name) + "=" + encodeURIComponent(val));
+            }
+        });
+        return toReturn.join("&").replace(/%20/g, "+");
+    }
+
+    function updateAssets() {
+        //var myJavaScripVar = '<%=Model.Assets %>';
+        //$('#hdnAssetList').val('@Model.Assets');
+    }
+
+
+
+    function addCommasToInputAndCalculate(control, index) {
+        $(control).val(addCommas($(control).val(), false));
+        calculateEstimatedDeferredMaintenance(index);
+    };
+
+    function SaveAsset(method) {
+        $('#Method').val(method);
+        fixNumbers();
+    }
+
+    function fixNumbers() {
+        $("input.formatNumber").each(function (index) {
+            $(this).val($(this).val().replace(/,/g, ""));
+        });
+        $("input.formatMaint").each(function (index) {
+            $(this).val($(this).val().replace(/,/g, ""));
+        });
+    };
+
+    function goBack() {
+        window.location.href = "/Portfolio/ManagePortfolios";
+    }
+
+    // For PW-324, to fix issue where clicking back via the browser from Manage Assets tab on
+    // Update Portfolio Page brings you to Primary Info tab
+    $(document).ready(function () {
+        if (location.hash.substr(0, 2) == "#!") {
+
+            $("a[href='#" + location.hash.substr(2) + "']").tab("show");
+        }
+
+        $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+            var hash = $(e.target).attr("href");
+            if (hash.substr(0, 1) == "#") {
+                location.replace("#!" + hash.substr(1));
+            }
+        });
+    });
+
+    function nextTab(button) {
+        $('.nav li.active').removeClass('active');
+        var currentId = button.closest('.tab-pane');
+        var nextId = button.closest('.tab-pane').next('.tab-pane');
+        currentId.removeClass('active');
+        nextId.addClass('active');
+        var tabLink = '#' + nextId.attr('id');
+        $("[href = '" + tabLink + "']").closest('li').addClass('active');
+    }
+
+    function backTab(button) {
+        $('.nav li.active').removeClass('active');
+        var currentId = button.closest('.tab-pane');
+        var prevId = button.closest('.tab-pane').prev('.tab-pane');
+        currentId.removeClass('active');
+        prevId.addClass('active');
+        var tabLink = '#' + prevId.attr('id');
+        $("[href = '" + tabLink + "']").closest('li').addClass('active');
+    }
+
+    function toggleWRAP(show) {
+        if (show) {
+            $("#wrapFields").show();
+        } else {
+            $("#wrapFields").hide();
+        }
+    }
+
+    $("#imgUploader").change(function () {
+        var path = $(this).val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readIMG(this, fileName);
+    });
+
+    function fillUserInformation() {
+        $.ajax({
+            type: "POST",
+            url: "/Admin/GetUserInformation/",
+            data: JSON.stringify({ userId: $("#ProposedBuyer").val() }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            cache: false,
+            success: function (response) {
+                $("#ProposedBuyerContact").val(response.PrincipalContact);
+                $("#ProposedBuyerAddress").val(response.BuyerAddress);
+            },
+            error: function (jqXHR, exception) {
+            },
+            failure: function (response) {
+            }
+        });
+    }
+
+
+    function searchAssets() {
+        var tab = $("ul.nav li.active a").text();
+        $('#searchbox').collapse("hide");
+        if (tab != "Images" && tab != "Documents" && tab != "Videos" && tab != "Finish") {
+            var form = $('#searchData :input').serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Portfolio/SearchAssets/",
+                data: form,
+                async: false,
+                cache: false,
+                success: function (response) {
+                    $('#assetPartial').html(response);
+                },
+                error: function (jqXHR, exception) {
+                },
+                failure: function (response) {
+                }
+            });
+        }
+    }
+
+    function storeSelection() {
+
+        var form = $('#assetPartial :input').serialize();// serializeAnything($('#assetPartial'));
+        $.ajax({
+            type: "POST",
+            url: "/Portfolio/AssetsList/",
+            data: form,
+            async: false,
+            cache: false,
+            success: function (response) {
+                ("#hdnAssetList").value = response;
+            },
+            error: function (jqXHR, exception) {
+            },
+            failure: function (response) {
+            }
+        });
+
+    }
+
+    function sortResults(SortOrder) {
+        var tab = $("ul.nav li.active a").text();
+        var form = $('#searchData :input').serialize();
+        $.ajax({
+                type: "POST",
+                url: "/Portfolio/SortSearchAssets/",
+                data: {
+                    stringModel: form,
+                    sortOrder: SortOrder
+                },
+                async: false,
+                cache: false,
+                success: function (response) {
+                    $('#assetPartial').html(response);
+                },
+                error: function (jqXHR, exception) {
+                },
+                failure: function (response) {
+                }
+            });
+        }
+
+
+
+
+    function getAssetList() {
+        var tab = $("ul.nav li.active a").text();
+        if (tab != "Images" && tab != "Documents" && tab != "Videos" && tab != "Finish") {
+            var form = $('#assetPartial :input').serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Portfolio/AssetsList/",
+                data: form,
+                async: false,
+                cache: false,
+                success: function (response) {
+                    ("#hdnAssetList").value = response;
+                },
+                error: function (jqXHR, exception) {
+                },
+                failure: function (response) {
+                }
+            });
+        }
+    }
+
+
+    //Prepare Image and Document index
+    $(document).ready(function () {
+
+
+        jQuery(".detailsContent").hide();
+        //toggle the componenet with class msg_body
+        jQuery(".detailsHeading").click(function () {
+            jQuery(this).next(".detailsContent").slideToggle(500);
+            $('#AssetDocumentType').val('---');
+            $("#docTitle").val('');
+            $('#docDescription').val('');
+        });
+
+        jQuery(function ($) {
+            $(document).on('nested:fieldRemoved', function (event) {
+                $('[required]', event.field).removeAttr('required');
+            });
+        });
+
+        $("input.formatNumber").each(function (index) {
+            $(this).val(addCommas($(this).val(), true));
+            $(this).on("input", null, null, function () {
+                $(this).val(addCommas($(this).val(), true));
+            });
+        });
+        $("input.formatMaint").each(function (index) {
+            $(this).val(addCommas($(this).val(), true));
+        });
+        $("span.formatNumber").each(function (index) {
+            $(this).text(addCommas($(this).text(), false));
+        });
+
+
+
+        //Setup Calendar UI
+        $(function () {
+            $(".datepicker").datepicker();
+        });
+    });
+
+
+
+    function show(id) {
+        $('#' + id).show();
+    }
+    function hide(id) {
+        $('#' + id).hide();
+    }
+
+    function checkText(field) {
+        if (field.value.length < 1) {
+            alert("Please provide a description for the Other item");
+        }
+    }
+
+    function EditAsset(aId) {
+        $.ajax({
+            type: "POST",
+            url: "/Admin/EditAsset/",
+            data: JSON.stringify({ assetId: aId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            cache: false,
+            success: function (response) {
+                if (response["Status"] == "unlocked") {
+                    window.location.href = '@Url.Action("UpdateAsset", "Admin")' + '/' + aId;
+                }
+                else if (response["Status"] == "locked") {
+                    alert('The asset is currently being edited at the moment. Please try again someday.');
+                }
+                else {
+                    // admin
+                    if (confirm('The asset is currently locked. Would you like to edit the asset anyway?')) {
+                        $.post('@Url.Action("UnlockAsset", "Admin")', { assetId: aId }, function () {
+                            window.location.href = '/Admin/UpdateAsset/' + aId;
+                        });
+                    }
+                }
+            },
+            error: function (jqXHR, exception) {
+            },
+            failure: function (response) {
+            }
+        });
+}
+
+</script>

@@ -1,0 +1,38 @@
+﻿@using Postal
+@model Inview.Epi.EpiFund.Web.Models.Emails.RegistrationAutoWelcomeEmail
+To: @Model.Email
+From: USCREonline <info@uscreonline.com>
+Subject: Welcome to USCREOnline!
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+<br />
+
+<p>Dear @Model.To,</p>
+
+<p>Congratulations!  You have been automatically accepted as a US CRE Online @Model.RegistrationType registrant.</p>
+    @if (!string.IsNullOrEmpty(Model.AssetId))
+    {
+<p>Through your registration you were able to view the data file on Asset ID # @Model.AssetId, a commercial real estate asset located in @Model.City, @Model.State.  We hope that you will find the data provided at US CRE Online as a valuable tool for your commercial real estate ventures... creating viable, immediately available foundations for joint ventures between your debt and equity capital relationships.  </p>
+
+<p>Your registration included your acceptance and electronic execution of the USC Confidentiality and Margin Disclosure Agreements respectively.  They are attached herewith for your personal storage in PDF form.  They will also be stored for you at all times at your &#91;my USC page&#93; at <a href="http://www.uscreonline.com">http://www.uscreonline.com</a>  Each time you log in you will be taken to your &#91;my USC page&#93;.  A history of all of your USC activity will be prominently displayed.</p>
+    }
+    <p>US CRE Online (&#34;USC&#34;) is architected as a state-of-the-art Internet Data & Communications Portal for the global commercial investment real estate community with emphasis on fully automated and fully secured {Principal-to-Principal} relationships... presently on United States Commercial Real Estate Assets.  USC further welcomes NAR Community relationships with our registered principal&#39;s... ensuring optimization of vested interest CRE equity and liquidity.  We hope that you will find the data and services provided at US CRE Online as a valuable tool for your commercial real estate ventures... creating viable, immediately available foundations for vesting transfers and joint ventures between debt and equity capital relationships.  </p>
+    <p>Your registration included your acceptance and electronic execution of the USC <b>Confidentiality and Non-Compete Non-Disclosure Agreement (&#34;NCND&#34;)</b>.  Your <b>NCND</b> is permanently stored for you at your &#91;&#34;My USC Page&#34;&#93; at http://www.uscreonline.com.  Each time you log in you will be taken to your &#91;&#34;My USC Page&#34;&#93;.  A history of all of your USC online activity will always be prominently displayed therein.</p>
+    <p>You may login in anytime at http://www.uscreonline.com to access all areas of the site now available to you and to search and view USC&#39;s continually expanding Nationwide Inventory of CRE Assets & Debt Participation endorsements (from the USC Registered MBA Community). </p>
+    <p>Should you have interest in securing data on specific &#91;CRE Asset Types&#93; anywhere in the US, please follow these simple instructions to complete your applicable fully automated &#91;CRE Data Profile Search Criteria&#93;.  Upon submitting your Profile, your inquiry will be instantly noticed to our network of over 1 Million CRE Community Members for their invitation to identify matching assets: </p>
+
+<ol>
+<li>Go to http://www.uscreonline.com and log in.</li>
+<li>Select the &#91;INVESTOR&#93; tab at the top of the page.</li>
+<li>&#60;Click&#62; the tab at the bottom of the page that reads &#91;Proceed to Asset Criteria Questionnaire&#93;.</li>
+<li>Fill out the respective data fields in the Questionnaire as accurately as you can and &#60;click&#62; the &#91;Submit&#93; button.</li>
+    </ol>
+<p>When matching assets are uploaded at USC you will receive automated e mail notices re: the availability of said data. All &#91;CRE Asset Views&#93; utilize a uniform data presentation template.  This will allow our Registered Principal Investor Community opportunity to preliminarily assess multiple CRE Assets in minutes to determine respective interest levels.</p>
+    <p>Thank you for being a valued Registrant of <b>United States Commercial Real Estate Online.</b>  It is our honor and privilege to provide the defined data portal services to the CRE Investment Community.</p>
+<span>The Professional Staff</span><br />
+<span><b style="color:darkgoldenrod"><i>US CRE Online, LLC</i></b></span>
+</body>
+</html>

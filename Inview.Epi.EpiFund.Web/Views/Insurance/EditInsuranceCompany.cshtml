@@ -1,0 +1,17 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.InsuranceCompanyViewModel
+@{
+    ViewBag.Title = "Edit Insurance Company";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3>Create Insurance Company</h3>
+@using (Html.BeginForm("EditInsuranceCompany", "Insurance", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false)
+    <br />
+    @Html.EditorForModel()
+
+    <a  type ="submit" style="margin-bottom:5px;" class="btn btn-warning" href="@Url.Action("ManageInsuranceCompanies", "Insurance")" title="Cancel">Cancel</a>
+    <input type="submit" class="btn btn-primary create-user-save" id="btnSave" name="btnSave" value="Update Insurance Company" />
+}

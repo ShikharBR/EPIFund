@@ -1,0 +1,292 @@
+﻿@using PagedList.Mvc
+@model Inview.Epi.EpiFund.Web.Models.UserSearchResultsModel
+@{
+    ViewBag.Title = "Manage MBA Members";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h3 class="page-header">Manage MBA Members</h3>
+<div style="float:right;">
+    <select id="ddlRowCount" onchange="changeRowCount('@Url.Action("ManageMBAUsers", "Admin")')">
+        <option value="25">25</option>
+        <option value="50" selected="selected">50</option>
+        <option value="75">75</option>
+        <option value="100">100</option>
+    </select>
+</div>
+<ul class="nav nav-pills">
+    <li class="active"><a href="#user" data-toggle="pill">Registered MBA Users</a></li>
+    <li><a href="#import" data-toggle="tab">Imported MBA Users</a></li>
+</ul>
+<br />
+<br />
+
+
+<div class="tab-content">
+    <div class="tab-pane active" id="user">
+        <h5>Registered Users</h5>
+        @if (Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.SiteAdmin)
+        {
+            <div class="row">
+                <div class="col-lg-12">
+                    <input type="button" class="btn btn-primary" value="Create New User" onclick="location.href='@Url.Action("CreateUser", "Admin")    '" />
+                </div>
+            </div>
+            <br />
+            <br />
+        }
+        @using (Html.BeginForm("ManageMBAUsers", "Admin", FormMethod.Post, new { id = "userForm" }))
+        {
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#searchbox">
+                                <button class="btn btn-default btn-xs" style="border: 1px solid #888">
+                                        Search Users
+                                </button>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="searchbox" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.FirstName)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.FirstName)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.LastName)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.LastName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.City)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.City)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.State)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.DropDownListFor(s => s.State, @Model.States)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.SelectedUserType)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.DropDownListFor(s => s.SelectedUserType, @Model.UserTypes)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                        <input type="button" onclick="submitUser()" value="Search" class="btn btn-primary proceed" style="width: 200px; margin-top: 20px" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <br />
+        @{ Html.RenderPartial("_MBAUserListView", Model.Users); }
+        <br />
+    </div>
+    <div class="tab-pane" id="import">
+        <h5>Imported MBA Users</h5>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="button" class="btn btn-primary" value="Create New MBA Member" onclick="location.href='@Url.Action("CreateMba", "Admin")    '" style="margin-bottom: 5px;" />
+                <input type="button" class="btn btn-default" value="Import MBA Members" onclick="location.href='@Url.Action("ImportMBAUsers", "DataPortal")    '" />
+            </div>
+        </div>
+        <br />
+        <br />
+        @using (Html.BeginForm("ManageMBAUsers", "Admin", FormMethod.Post, new { id = "importForm" }))
+        {
+            <div class="panel-group" id="accordion2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#searchbox2">
+                                <button class="btn btn-default btn-xs" style="border: 1px solid #888">
+                                        Search Imported Principal Investors
+                                </button>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="searchbox2" class="panel-collapse collapse">
+                        <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.FirstName)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.FirstName)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.LastName)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.LastName)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.Email)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.Email)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.CompanyName)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.CompanyName)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.AddressLine1)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.AddressLine1)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.City)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.City)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.State)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.DropDownListFor(s => s.State, @Model.States)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.ShowActiveOnly)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.CheckBoxFor(s => s.ShowActiveOnly)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                                <input type="button" onclick="submitImport()" value="Search" class="btn btn-primary proceed" style="width: 200px; margin-top: 20px" />
+                        </div>
+                    </div>
+                </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <br />
+        @{ Html.RenderPartial("_MbasListView", Model.Members); }
+        <br />
+    </div>
+</div>
+<script>
+    function RenderPage(page, type) {
+        var sort = '';
+        var filter = '';
+        if ('@ViewBag.CurrentSort') {
+            sort = '&sortOrder=' + '@ViewBag.CurrentSort';
+        }
+        else if ('@ViewBag.CurrentFilter') {
+            filter = '@ViewBag.CurrentFilter';
+        }
+    if (type == 'import') {
+        $("#import").load('/Admin/ManageMBAUsers?page=' + page + sort + ' #import', function (response, status, xhr) {
+            if (status == "error") {
+                alert('failed');
+            }
+            if (status == "success") {
+                //alert('success');
+            }
+        });
+    }
+    else {
+        $("#user").load('/Admin/ManageMBAUsers?page=' + page + sort + ' #user', function (response, status, xhr) {
+            if (status == "error") {
+                alert('failed');
+            }
+            if (status == "success") {
+                //alert('success');
+            }
+        });
+    }
+}
+
+function submitImport() {
+    $('#import').load(
+        '/Admin/ManageMBAUsers' + ' #import',
+        $('#importForm').serialize());
+}
+function submitUser() {
+    $('#user').load(
+        '/Admin/ManageMBAUsers' + ' #user',
+        $('#userForm').serialize());
+}
+</script>

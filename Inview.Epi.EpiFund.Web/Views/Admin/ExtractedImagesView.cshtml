@@ -1,0 +1,20 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.ViewModel.ExtractedImageModel>
+<div id="imgsPreviewer">
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        <div class="imgPreviewDiv" style="display: inline-block;">
+            <div class="imgPreviewImg" style='background-image: url("data:image/jpg;base64,@System.Convert.ToBase64String(Model[i].ThumbnailByte)");'></div>
+            <br />
+            @Html.CheckBoxFor(s => Model[i].IsSelected, new { onchange = "showOptions(this, " + i + ")" })<span>Use this image?</span>
+            <br />
+            <div id="image-@i" style="display:none;">
+                @Html.CheckBoxFor(s => Model[i].IsMainImage, new { @class = "mainflyer", style = "margin:0;", onclick = "onlyOneCheckbox(this)" })<span>Is Main Image?</span>
+                <br />
+                @Html.CheckBoxFor(s => Model[i].IsFlyerImage, new { style = "margin:0;" })<span>Is Flyer Image?</span>
+                <br />
+            </div>
+            @Html.HiddenFor(s => Model[i].FileByteArray)
+            <br />
+        </div>
+    }
+</div>

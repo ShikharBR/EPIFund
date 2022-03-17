@@ -1,0 +1,720 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.AssetSearchCriteriaModel
+@Html.HiddenFor(s => s.AssetSearchCriteriaId)
+@Html.HiddenFor(s => s.UserId)
+<p>All fields marked with <span style="color: red;">*</span> are required.</p>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        CORPORATE DATA:  PARTNERS – CAPITALIZATION – PURCHASE MONEY FINANCING
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.NameOfPurchasingEntity, new { @class = "control-label" })
+                    <span style="color: red;">*</span>@Html.DisplayFor(s => s.NameOfPurchasingEntity, new { @class = "full-width" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.ManagingOfficerOfEntity, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.ManagingOfficerOfEntity, new { @class = "full-width" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.AddressLine1OfPurchasingEntity, new { @class = "control-label" })
+                    <span style="color: red;">*</span>@Html.DisplayFor(s => s.AddressLine1OfPurchasingEntity, new { @class = "full-width" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.OfficeNumberOfEntity, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.OfficeNumberOfEntity, new { @class = "control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.AddressLine2OfPurchasingEntity, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.AddressLine2OfPurchasingEntity, new { @class = "full-width" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.FaxNumberOfEntity, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.FaxNumberOfEntity, new { @class = "control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.CityOfPurchasingEntity, new { @class = "control-label" })
+                    <span style="color: red;">*</span>@Html.DisplayFor(s => s.CityOfPurchasingEntity, new { @class = "full-width" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.StateOfPurchasingEntity, new { @class = "control-label" })
+                    <span style="color: red;">*</span>@Html.DropDownListFor(s => s.StateOfPurchasingEntity, @Model.States, new { @class = "control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.ZipOfPurchasingEntity, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.ZipOfPurchasingEntity, new { @class = "control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.TypeOfPurchasingEntity, new { @class = "control-label" })
+                    @Html.DropDownListFor(s => s.TypeOfPurchasingEntity, @Model.CorporateEntityTypes, new { @class = "control" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.CellNumberOfEntity, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.CellNumberOfEntity, new { @class = "control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.EmailAddressOfEntity, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.EmailAddressOfEntity, new { @class = "full-width" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.StateOfIncorporation, new { @class = "control-label" })
+                    @Html.DropDownListFor(s => s.StateOfIncorporation, @Model.States, new { @class = "control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.IsCorporateEntityInGoodStanding, new { @class = "control-label" })
+                    @Html.RadioButtonFor(model => model.IsCorporateEntityInGoodStanding, "true") Yes
+                        @Html.RadioButtonFor(model => model.IsCorporateEntityInGoodStanding, "false") No    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.OtherCorporateOfficer, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.OtherCorporateOfficer, new { @class = "full-width" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.NameOfOtherCorporateOfficer, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.NameOfOtherCorporateOfficer, new { @class = "full-width" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.ContactNumberOfCorporateOfficer, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.ContactNumberOfCorporateOfficer)
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.NameOfOtherCorporateOfficer2, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.NameOfOtherCorporateOfficer2)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.WebsiteURLVestingCorporateEntity, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.WebsiteURLVestingCorporateEntity, new { @class = "full-width" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.EmailAddressOfOtherCorporateOfficer, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.EmailAddressOfOtherCorporateOfficer, new { @class = "full-width" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.HasEntityRaisedIntendedCap, new { @class = "control-label" })
+                    @(Model.HasEntityRaisedIntendedCap.GetValueOrDefault(false) ? "Yes" : "No")
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.TimelineSecuringCap, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.TimelineSecuringCap)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.AmountOfIntendedCapEquity, new { @class = "control-label" })
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    @Html.DisplayFor(s => s.AmountOfIntendedCapEquity, new { @class = "form-control width-132" })
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.UtilizePMFunding, new { @class = "control-label" })
+                    @(Model.UtilizePMFunding.GetValueOrDefault(false) ? "Yes" : "No")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.LeverageTarget, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.LeverageTarget)
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.CREPMFBrokerLender, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.CREPMFBrokerLender)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.TermsSought, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.TermsSought)
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.SecuredCLAPOF, new { @class = "control-label" })
+                    @(Model.SecuredCLAPOF.GetValueOrDefault(false) ? "Yes" : "No")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    @Html.LabelFor(s => s.GeneralNotesOfVestingEntity, new { @class = "control-label" })
+                    @Html.DisplayFor(s => s.GeneralNotesOfVestingEntity)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Asset Type:
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.TypeOfAssetsSought, new { @style = "width: 100%; margin-bottom: 5px; " })
+                @Html.DropDownListFor(s => s.TypeOfAssetsSought, @Model.AssetTypes)<span style="color: red;">*</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default" id="MHPSection" style="display: none;">
+    <div class="panel-heading">
+        Multi-Family / MHP Demographic & Architecture Parameters:
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <label>Number of Units Range:</label>
+            </div>
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMinimum, new { @style = "font-weight: 600" })
+                @Html.DisplayFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMinimum)
+            </div>
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMaximum, new { @style = "font-weight: 600" })
+                @Html.DisplayFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMaximum)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label style="margin-bottom: 5px;">Age of Property Range:</label>
+                <br />
+                <label class="full-width" style="font-weight: 600; margin-right: 10px;">Max Years</label>
+                @Html.DisplayFor(s => s.MultiFamilyDemographicDetail.AgeOfPropertyMaximum)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="inline-label">Is Multi-Level Architecture acceptable?</label>
+                @(Model.MultiFamilyDemographicDetail.MultiLevelAcceptable.GetValueOrDefault(false) ? "Yes" : "No")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="inline-label">If yes, click # of acceptable levels</label>
+                @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.MultiLevelTwoLevelsAcceptable, new { style = "margin-top: 0;" }) Two
+                        @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.MultiLevelThreeLevelsAcceptable, new { style = "margin-top: 0;" }) Three
+                        @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.MultiLevelFourLevelsAcceptable, new { style = "margin-top: 0;" }) Four
+                        @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.MultiLevelOtherLevelsAcceptable, new { style = "margin-top: 0;" }) Other
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.AcceptsEFFUnits, new { @class = "inline-label" })
+                @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsEFFUnits, "true") Yes
+                        @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsEFFUnits, "false") No
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfEFfUnits, new { @class = "full-width" })
+                @Html.DisplayFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfEFfUnits) % (as percentage of all units)<span style="color: red;">*</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.AcceptsOneBedroomUnits, new { @class = "inline-label" })
+                @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsOneBedroomUnits, "true") Yes
+                        @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsOneBedroomUnits, "false") No
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfOneBedroomUnits, new { @class = "full-width" })
+                @Html.DisplayFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfOneBedroomUnits, new { style = "margin-right: 10px" }) % (as percentage of all units)<span style="color: red;">*</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="full-width">Roofing requirements</label>
+                @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.RoofingFlatBuiltUp) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RoofingFlatBuiltUp, new { @style = "font-weight: 600" })
+                @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.RoofingTileOnly) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RoofingTileOnly, new { @style = "font-weight: 600" })
+                @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.RoofingShingleOnly)  @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RoofingShingleOnly, new { @style = "font-weight: 600" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.HasParkingRatioParameters, new { @class = "inline-label" })
+                @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.HasParkingRatioParameters, "true") Yes
+                        @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.HasParkingRatioParameters, "false") No
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.ParkingRatioRequisites, new { @class = "full-width" })
+                @Html.DisplayFor(s => s.MultiFamilyDemographicDetail.ParkingRatioRequisites)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RequiresParkingStalls, new { @class = "inline-label" })
+                @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.RequiresParkingStalls, "true") Yes
+                        @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.RequiresParkingStalls, "false") No
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label style="font-weight: 800">Check any applicable "Feature" box that shall apply to any matching property:</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.Pools)
+            </div>
+            <div class="col-lg-6">
+                @(Model.MultiFamilyDemographicDetail.Pools.GetValueOrDefault(false) ? "Yes" : (Model.MultiFamilyDemographicDetail.PoolsOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.OutdoorSpas)
+            </div>
+            <div class="col-lg-6">
+                @(Model.MultiFamilyDemographicDetail.OutdoorSpas.GetValueOrDefault(false) ? "Yes" : (Model.MultiFamilyDemographicDetail.OutdoorSpasOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SecurityGates)
+            </div>
+            <div class="col-lg-6">
+                @(Model.MultiFamilyDemographicDetail.SecurityGates.GetValueOrDefault(false) ? "Yes" : (Model.MultiFamilyDemographicDetail.SecurityGatesOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SeparateOfficeBuilding)
+            </div>
+            <div class="col-lg-6">
+                @(Model.MultiFamilyDemographicDetail.SeparateOfficeBuilding.GetValueOrDefault(false) ? "Yes" : (Model.MultiFamilyDemographicDetail.SeparateOfficeBuildingOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SeparateClubhouse)
+            </div>
+            <div class="col-lg-6">
+                @(Model.MultiFamilyDemographicDetail.SeparateClubhouse.GetValueOrDefault(false) ? "Yes" : (Model.MultiFamilyDemographicDetail.SeparateClubhouseOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.PlaygroundArea)
+            </div>
+            <div class="col-lg-6">
+                @(Model.MultiFamilyDemographicDetail.PlaygroundArea.GetValueOrDefault(false) ? "Yes" : (Model.MultiFamilyDemographicDetail.PlaygroundAreaOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TennisCourts)
+            </div>
+            <div class="col-lg-6">
+                @(Model.MultiFamilyDemographicDetail.TennisCourts.GetValueOrDefault(false) ? "Yes" : (Model.MultiFamilyDemographicDetail.TennisCourtsOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.GymFacilitiesForAdults)
+            </div>
+            <div class="col-lg-6">
+                @(Model.MultiFamilyDemographicDetail.GymFacilitiesForAdults.GetValueOrDefault(false) ? "Yes" : (Model.MultiFamilyDemographicDetail.GymFacilitiesForAdultsOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TurnKey)<span style="color: red;">*</span>
+            </div>
+            <div class="col-lg-6">
+                @(Model.MultiFamilyDemographicDetail.TurnKey.GetValueOrDefault(false) ? "Yes" : (Model.MultiFamilyDemographicDetail.TurnKeyOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds)<span style="color: red;">*</span>
+            </div>
+            <div class="col-lg-6">
+                @(Model.MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds.GetValueOrDefault(false) ? "Yes" : (Model.MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeedsOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.UnderperformingProperty)@*<span style="color: red;">*</span>*@
+            </div>
+            <div class="col-lg-6">
+                @(Model.MultiFamilyDemographicDetail.UnderperformingProperty.GetValueOrDefault(false) ? "Yes" : (Model.MultiFamilyDemographicDetail.UnderperformingPropertyOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="full-width">Utility Metering:       Electric & Gas Metering:</label>
+                <span style="display: block; font-size: 12px; font-style: italic">* Note: it is assumed that all rental space in MHP's are individually metered.</span>
+                @Html.CheckBoxFor(model => model.MultiFamilyDemographicDetail.TenantOnly) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TenantOnly)
+                @Html.CheckBoxFor(model => model.MultiFamilyDemographicDetail.MasterMetering) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.MasterMetering)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.GradeClassificationRequirementOfProperty, new { @class = "inline-label" })
+                @Html.DropDownListFor(s => s.MultiFamilyDemographicDetail.GradeClassificationRequirementOfProperty, @Model.MultiFamilyDemographicDetail.GradeClassifications)<span style="color: red;">*</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TenantProfileRestrictions, new { @class = "inline-label" })
+                @Html.DisplayFor(s => s.MultiFamilyDemographicDetail.TenantProfileRestrictions, new { @style = "margin: 0" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label style="font-weight: 800; margin-bottom: 10px" class="full-width">For MHP's: define individually rental space rations: single & double wide spaces:</label>
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SingleWideSpaceRatioForAllSpaces, new { @class = "full-width" })
+                @Html.DisplayFor(s => s.MultiFamilyDemographicDetail.SingleWideSpaceRatioForAllSpaces)
+            </div>
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.DoubleWideSpaceRatioForAllSpaces, new { @class = "full-width" })
+                @Html.DisplayFor(s => s.MultiFamilyDemographicDetail.DoubleWideSpaceRatioForAllSpaces)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.MultiFamilyDemographicDetail.OtherRequirements)
+                @Html.DisplayFor(s => s.MultiFamilyDemographicDetail.OtherRequirements)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default" id="OtherSection">
+    <div class="panel-heading">
+        Other Demographic & Architecture Parameters:
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="full-width">Square Footage Range</label>
+                @Html.LabelFor(s => s.OtherDemographicDetail.SquareFootageRangeMin, new { @style = "font-weight: 600" })
+                @Html.DisplayFor(s => s.OtherDemographicDetail.SquareFootageRangeMin, new { @style = "margin-right: 20px;" })
+                @Html.LabelFor(s => s.OtherDemographicDetail.SquareFootageRangeMax, new { @style = "font-weight: 600" })
+                @Html.DisplayFor(s => s.OtherDemographicDetail.SquareFootageRangeMax)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="full-width">Age of Property Range:</label>
+                <label style="font-weight: 600" class="full-width">Max Age</label>
+                @Html.DisplayFor(s => s.OtherDemographicDetail.AgePropertyRangeMax) years
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="inline-label">Is Multi-Level Architecture acceptable?</label>
+                @(Model.OtherDemographicDetail.MultiLevelAcceptable.GetValueOrDefault(false) ? "Yes" : "No")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="inline-label">Does the property require a Major Tenant?</label><span style="color: red;">*</span>
+                @(Model.OtherDemographicDetail.PropertyRequiresMajorTenant.GetValueOrDefault(false) ? "Yes" : "No")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="inline-label">If yes, define Tenant requisites:</label>
+                @Html.DisplayFor(s => s.OtherDemographicDetail.TenantRequisites)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.OtherDemographicDetail.RequiresSingleTenantPads, new { @class = "full-width" })
+                @(Model.OtherDemographicDetail.RequiresSingleTenantPads.GetValueOrDefault(false) ? "Yes" : "No")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="inline-label">IF yes, provide requisite details:</label>
+                @Html.DisplayFor(s => s.OtherDemographicDetail.SingleTenantPadsRequisiteDetails)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.OtherDemographicDetail.HasParkingRatioParameters)
+                @(Model.OtherDemographicDetail.HasParkingRatioParameters.GetValueOrDefault(false) ? "Yes" : "No")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="inline-label">IF yes, provide requisite details:</label>
+                @Html.DisplayFor(s => s.OtherDemographicDetail.ParkingRatioRatioRequisites)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.OtherDemographicDetail.OfficeMedicalMixedUseCoveredParkingStallsRequired)
+            </div>
+            <div class="col-lg-6">
+                @(Model.OtherDemographicDetail.OfficeMedicalMixedUseCoveredParkingStallsRequired.GetValueOrDefault(false) ? "Yes" : (Model.OtherDemographicDetail.OfficeMedicalMixedUseCoveredParkingStallsRequiredOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.OtherDemographicDetail.WillLookAtUnifinishedSuites)
+            </div>
+            <div class="col-lg-6">
+                @(Model.OtherDemographicDetail.WillLookAtUnifinishedSuites.GetValueOrDefault(false) ? "Yes" : (Model.OtherDemographicDetail.WillLookAtUnifinishedSuitesOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                @Html.LabelFor(s => s.OtherDemographicDetail.CanHaveExtensiveRenovationNeeds)
+            </div>
+            <div class="col-lg-6">
+                @(Model.OtherDemographicDetail.CanHaveExtensiveRenovationNeeds.GetValueOrDefault(false) ? "Yes" : (Model.OtherDemographicDetail.CanHaveExtensiveRenovationNeedsOptional.GetValueOrDefault(false) ? "Optional" : "No"))
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.OtherDemographicDetail.CanBeVacant)<span style="color: red;">*</span>
+                @Html.RadioButtonFor(model => model.OtherDemographicDetail.CanBeVacant, "true") Yes
+                            @Html.RadioButtonFor(model => model.OtherDemographicDetail.CanBeVacant, "false") No
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="full-width">If yes, what is the max vacancy a property can be at closing?</label>
+                @Html.DisplayFor(s => s.OtherDemographicDetail.MaxVacancy) %
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.OtherDemographicDetail.OtherRequirements, new { @class = "full-width" })
+                @Html.DisplayFor(s => s.OtherDemographicDetail.OtherRequirements)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Geographic Parameters <span style="color: red;">*</span></div>
+    <div class="panel-body">
+        @Html.EditorFor(s => s.GeographicParameters.Interests[0], "GeographicParameterInterestModel")
+        @Html.EditorFor(s => s.GeographicParameters.Interests[1], "GeographicParameterInterestModel")
+        @Html.EditorFor(s => s.GeographicParameters.Interests[2], "GeographicParameterInterestModel")
+        <div class="row">
+            <div class="lg-col-12">
+                @Html.LabelFor(s => s.GeographicParameters.AdditionalRequirements)
+                @Html.DisplayFor(s => s.GeographicParameters.AdditionalRequirements)
+            </div>
+        </div>
+        <div class="row">
+            <div class="lg-col-12">
+                @Html.LabelFor(s => s.GeographicParameters.Restrictions)
+                @Html.DisplayFor(s => s.GeographicParameters.Restrictions)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Financial Investment Parameters</div>
+    <div class="panel-body">
+        <p><b>Presumption:	</b>all acquisitions will be ALL CASH Funding’s (even though you may utilize a combination of debt and equity capital).   All financial investment parameters will be based on this presumption.</p>
+
+        <p><b>Definitions:</b></p>
+
+        <p><b>Capitalization Rate:</b>	the pre-tax cash flow a property throws off… after scheduled income less scheduled operating expenses and reserves… in relation to the ALL CASH acquisition cost of the property.  Example:</p>
+
+        <p>Pre-tax cash flow  ÷  Acquisition Cost  =  Capitalization Rate</p>
+
+        <p>Under Performing asset:	generally pertinent to assets that have higher than market normal vacancy factors, tenant profiles that require immediate replacement, assets with extensive deferred maintenance and or updating needs, and or assets that are presently deemed to be under poor management.</p>
+
+        <p>Future Pro-Forma Pricing:	aka “stabilized pro-forma operations”:  generally presumed to be projected operations after anticipated changeover of new management, and or implementation of scheduled renovations and or property updating, and or stabilization of tenant profiles.  For purposes of this questionnaire “Future Pro-Forma” presumes that operations are stabilized within one year of asset acquisition.</p>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="full-width">Min and Max Investment Funding Range for asset purchase:</label>
+                $@Html.DisplayFor(s => s.FinancialInvestmentParameters.InvestmentFundingRangeMin) to
+                    @Html.DisplayFor(s => s.FinancialInvestmentParameters.InvestmentFundingRangeMax)<span style="color: red;">*</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                (All property types)
+            </div>
+            <div class="col-lg-4">
+                Minimum Capitalization Rate:
+            </div>
+            <div class="col-lg-4">
+                @Html.DisplayFor(s => s.FinancialInvestmentParameters.MinimumCapitalizationRate)% <span style="color: red;">*</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                (Multi-Family)                  
+            </div>
+            <div class="col-lg-4">
+                Target Price per Unit
+            </div>
+            <div class="col-lg-4">
+                $@Html.DisplayFor(s => s.FinancialInvestmentParameters.TargetPricePerUnitMin) to 
+                    $@Html.DisplayFor(s => s.FinancialInvestmentParameters.TargetPricePerUnitMax)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                (Mobile Home Parks)                  
+            </div>
+            <div class="col-lg-4">
+                Target Price per Space:
+            </div>
+            <div class="col-lg-4">
+                $@Html.DisplayFor(s => s.FinancialInvestmentParameters.TargetPricePerSpaceMin) to 
+                    $@Html.DisplayFor(s => s.FinancialInvestmentParameters.TargetPricePerSpaceMax)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.FinancialInvestmentParameters.WillConsiderUnperformingAtPricing, new { @class = "inline-label" })
+                @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderUnperformingAtPricing, "true") Yes
+                        @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderUnperformingAtPricing, "false") No
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.FinancialInvestmentParameters.ProFormaParametersDetails, new { @class = "full-width" })
+                @Html.DisplayFor(s => s.FinancialInvestmentParameters.ProFormaParametersDetails)<span style="color: red;">*</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.FinancialInvestmentParameters.WillConsiderBrandNew, new { @class = "inline-label" })
+                @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderBrandNew, "true") Yes
+                        @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderBrandNew, "false") No
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.FinancialInvestmentParameters.BrandNewDetails, new { @class = "full-width" })
+                @Html.DisplayFor(s => s.FinancialInvestmentParameters.BrandNewDetails)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.FinancialInvestmentParameters.WillConsiderPartiallyBuilt, new { @class = "inline-label" })
+                @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderPartiallyBuilt, "true") Yes
+                        @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderPartiallyBuilt, "false") No
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.FinancialInvestmentParameters.PartiallyBuiltDetails, new { @class = "full-width" })
+                @Html.DisplayFor(s => s.FinancialInvestmentParameters.PartiallyBuiltDetails)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Due Diligence Process as Required by Respondent:</div>
+    <div class="panel-body">
+        <p><b>Presumption:</b>	at its web site, and for each asset, USC will display all of the tangible due diligence data it has been able to secure from the current owner of each asset and or the current owners management company.  To best serve the due diligence criteria of the Respondent, we present the following table of due diligence items standard to an inspection process.  We ask that the Respondent select the appropriate table box that applies to each inspection line item as to level of importance to Respondent in their estimated asset inspection process to determine the merits of each such matching asset presented by USC.</p>
+        @Html.EditorFor(s => s.DueDiligenceCheckList, "DueDiligenceCheckListModel")
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        CRE Available Inventory Questionnaire for End User Accredited Principals
+    </div>
+    <div class="panel-body">
+        <h5 style="text-align: center; color: #f00;">THIS IS NOT A CONTRACT OR AGREEMENT OF ANY TYPE</h5>
+        <h4>What MUST Respondent provide with this Questionnaire for US CRE Online to start the process?</h4>
+
+        <p>Nothing.  However, Entity must be prepared to accompany a bonafide LOI to Purchase to an Asset’s ownership and or List Agent with verifiable [Proof of Funds] from a recognizable financial institution (whether as a 100% equity participation or a combination debt and equity package).</p>
+
+        <h4>How will Respondent be informed by US CRE Online of assets that meet their requisites?</h4>
+
+        <p>Entity will receive correspondence (generally via e mail or text message) from USC informing said Entity that one or more assets that meet Entity’s requisites have been identified and uploaded for review by Entity to (www.uscreonline.com).  You will be given an Asset ID number for reference to each such asset.  Simply visit www.uscreonline.com, log in and enter the Asset ID number to view each asset.</p>
+
+        <h4>Will Respondent have to sign the US CRE Online IPA for each asset presentation?</h4>
+
+        <p>Yes.  Each such IPA will be identical in form and format for each asset.  The only change in each new asset MDA will be the asset ID code for web site access.  The process is automated and only requires seconds of the Registrant’s time.</p>
+
+        <h4>How will Respondent have opportunity to Preview and, if applicable, Contract on any asset of interest presented by USC?</h4>
+
+        <p>USC will introduce the interested Principal directly to the List Broker for each respective Property of Interest.</p>
+
+    </div>
+</div>

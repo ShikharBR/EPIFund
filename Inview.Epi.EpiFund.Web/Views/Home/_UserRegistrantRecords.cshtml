@@ -1,0 +1,32 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.ViewModel.UserFileModel>
+
+@if (Model.Any(s => s.Description.Contains("MDA")))
+{
+    <li>@Html.ActionLink("Report of executed IPA’s and corresponding Asset Inventory", "SignedMDAList", "Records")</li>
+}
+
+@foreach (var item in Model)
+{
+    if (item.Description == "Executed NCND")
+    {
+    <li>@Html.ActionLink("Original executed NCND", "DownloadSignedNCND", "Records")</li>
+    }
+    else if (item.Description == "Executed JV Agreement")
+    {
+    <li>@Html.ActionLink(string.Format("Review your Joint Venture Marketing Agreement ({0})", item.DateUploaded), "DownloadSignedJVAgreement", "Records", new { id = item.UserFileId }, null)</li>
+    
+    }
+    else if (item.Description == "Executed IC Agreement")
+    {
+    <li>@Html.ActionLink(string.Format("Review your Independent Contractor Agreement ({0})", item.DateUploaded), "DownloadSignedICAgreement", "Records", new { id = item.UserFileId }, null)</li>
+    }
+    else if (item.Description == "Executed Personal Financial Statement")
+    {
+    <li>@Html.ActionLink(item.Description, "DownloadUserFile", "Records", new { id = item.UserFileId }, new { }) (@Html.ActionLink("Email PFS Specific Mtg Lender/Broker", "SendPFSToMortgageLenderBroker", "DataPortal", new { id = item.UserFileId }, null))</li>
+    }
+    else if (!item.Description.Contains("MDA"))
+    {
+    <li>@Html.ActionLink(item.Description, "DownloadUserFile", "Records", new { id = item.UserFileId }, new { })</li>
+    }
+}
+

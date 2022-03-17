@@ -1,0 +1,1595 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.AssetSearchCriteriaModel
+<script type="text/javascript">
+    $(function () {
+
+        $('#TypeOfAssetsSought').change(function () {
+            var value = $(this).val();
+            
+            if (value == "MultiFamily") {
+                $("#MFSection").show();
+                $("#MHPSection").hide();
+                $("#OtherSection").hide();
+            }
+            else if (value == "MHP") {
+                $("#MHPSection").show();
+                $("#MFSection").hide();
+                $("#OtherSection").hide();
+            }
+            else {
+                $("#OtherSection").show();
+                $("#MHPSection").hide();
+                $("#MFSection").hide();
+            }
+        });
+
+        $('input:text').click(function () {
+            if ($(this).val() == "Optional") {
+                $(this).val('');
+            }
+        });
+        //$("input[type='radio']").click(function () {
+        //    if ($(this).val() == "true" || $(this).val() == "false") {
+        //        $(this).val(null);
+        //    }
+        //});
+    });
+    //function fixNumbers() {
+    //    $("input.formatNumber").each(function (index) {
+    //        $(this).val(addCommas($(this).val()));
+    //    });
+    //};
+
+    function fixNumbers() {
+        $("input.formatNumber").each(function (index) {
+            $(this).val($(this).val().replace(/,/g, ""));
+        });
+        $("input.formatMaint").each(function (index) {
+            $(this).val($(this).val().replace(/,/g, ""));
+        });
+    };
+
+    $(document).ready(function () {
+        var assettype = $('#TypeOfAssetsSought').val();
+        if (assettype == "MultiFamily") {
+            $("#MFSection").show();
+            $("#MHPSection").hide();
+            $("#OtherSection").hide();
+        }
+        else if (assettype == "MHP") {
+            $("#MHPSection").show();
+            $("#MFSection").hide();
+            $("#OtherSection").hide();
+        }
+        else {
+            $("#OtherSection").show();
+            $("#MHPSection").hide();
+            $("#MFSection").hide();
+        }
+        fixNumbers();
+        $("input.formatNumber").each(function (index) {
+            toMoney(this,false); 
+        });
+        
+    });
+</script>
+@Html.HiddenFor(s => s.AssetSearchCriteriaId)
+@Html.HiddenFor(s => s.UserId)
+<p>All fields marked with <span style="color: red;">*</span> are required.</p>
+<div class="assetsearchcriteriamodel">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            CORPORATE DATA:  PARTNERS – CAPITALIZATION – PURCHASE MONEY FINANCING
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.NameOfPurchasingEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.NameOfPurchasingEntity, "")</span>
+                        @Html.TextBoxFor(s => s.NameOfPurchasingEntity, new { @class = " " })
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.ManagingOfficerOfEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.ManagingOfficerOfEntity, "")</span>
+                        @Html.TextBoxFor(s => s.ManagingOfficerOfEntity, new { @class = " " })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.AddressLine1OfPurchasingEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.AddressLine1OfPurchasingEntity, "")</span>
+                        @Html.TextBoxFor(s => s.AddressLine1OfPurchasingEntity, new { @class = " " })
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.OfficeNumberOfEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.OfficeNumberOfEntity, "")</span>
+                        @Html.TextBoxFor(s => s.OfficeNumberOfEntity, new { @class = "control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.AddressLine2OfPurchasingEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.AddressLine2OfPurchasingEntity, "")</span>
+                        @Html.TextBoxFor(s => s.AddressLine2OfPurchasingEntity, new { @class = " " })
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.FaxNumberOfEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.FaxNumberOfEntity, "")</span>
+                        @Html.TextBoxFor(s => s.FaxNumberOfEntity, new { @class = "control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.CityOfPurchasingEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.CityOfPurchasingEntity, "")</span>
+                        @Html.TextBoxFor(s => s.CityOfPurchasingEntity, new { @class = " " })
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.StateOfPurchasingEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.StateOfPurchasingEntity, "")</span>
+                        @Html.DropDownListFor(s => s.StateOfPurchasingEntity, @Model.States, new { @class = "control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.ZipOfPurchasingEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.ZipOfPurchasingEntity, "")</span>
+                        @Html.TextBoxFor(s => s.ZipOfPurchasingEntity, new { @class = "control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.TypeOfPurchasingEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.TypeOfAssetsSought, "")</span>
+                        @Html.DropDownListFor(s => s.TypeOfPurchasingEntity, @Model.CorporateEntityTypes, new { @class = "control" })
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.CellNumberOfEntity, new { @class = "control-label" })
+                        @Html.TextBoxFor(s => s.CellNumberOfEntity, new { @class = "control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.EmailAddressOfEntity, new { @class = "control-label" })
+                        @Html.TextBoxFor(s => s.EmailAddressOfEntity, new { @class = " " })
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.StateOfIncorporation, new { @class = "control-label" })
+                        @Html.DropDownListFor(s => s.StateOfIncorporation, @Model.States, new { @class = "control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        <label class="control-label">Is Corporate Entity in Good Standing per <a title="Secretary of State">SOS</a> Records in its State of Origin?</label>
+                        @Html.RadioButtonFor(model => model.IsCorporateEntityInGoodStanding, "true") Yes
+                            @Html.RadioButtonFor(model => model.IsCorporateEntityInGoodStanding, "false") No    
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.OtherCorporateOfficer, new { @class = "control-label" })
+                        @Html.TextBoxFor(s => s.OtherCorporateOfficer, new { @class = " " })
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.NameOfOtherCorporateOfficer, new { @class = "control-label" })
+                        @Html.TextBoxFor(s => s.NameOfOtherCorporateOfficer, new { @class = " " })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.NameOfOtherCorporateOfficer2, new { @class = "control-label" })
+                        @Html.TextBoxFor(s => s.NameOfOtherCorporateOfficer2)
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.ContactNumberOfOtherCorporateOfficer, new { @class = "control-label" })
+                        @Html.TextBoxFor(s => s.ContactNumberOfOtherCorporateOfficer)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.WebsiteURLVestingCorporateEntity, new { @class = "control-label" })
+                        @Html.TextBoxFor(s => s.WebsiteURLVestingCorporateEntity, new { @class = " " })
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.EmailAddressOfOtherCorporateOfficer, new { @class = "control-label" })
+                        @Html.TextBoxFor(s => s.EmailAddressOfOtherCorporateOfficer, new { @class = " " })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.HasEntityRaisedIntendedCap, new { @class = "control-label" })
+                        @Html.RadioButtonFor(s => s.HasEntityRaisedIntendedCap, "true") Yes
+                            @Html.RadioButtonFor(s => s.HasEntityRaisedIntendedCap, "false") No
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.TimelineSecuringCap, new { @class = "control-label" })
+                        @Html.TextBoxFor(s => s.TimelineSecuringCap)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <label class="control-label">Amount of Intended Acquisition <a title="Capitalization for Vesting">CAP</a> Vesting?</label>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        @Html.TextBoxFor(s => s.AmountOfIntendedCapEquity, new { @class = "form-control width-132 formatNumber", onblur = "toMoney(this, false)" })
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <label class="control-label">Will Vesting Entity utilize <a title="Purchase Money Participation">PM</a> Funding?</label>
+                        @Html.RadioButtonFor(s => s.UtilizePMFunding, "true") Yes
+                            @Html.RadioButtonFor(s => s.UtilizePMFunding, "false") No
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <label class="control-label">If using <a title="Purchase Money Financing Participation">PMF</a>, define Target Leverage?</label>
+                        @Html.TextBoxFor(s => s.LeverageTarget) % <em>(xx% of intended Asset Acquisition Pricing)</em>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <label class="control-label">Identify <a title="Commercial Real Estate">CRE</a> <a title="Purchase Money Financing Participation">PMF</a> Broker/Lender you intend to utilize</label>
+                        @Html.TextBoxFor(s => s.CREPMFBrokerLender)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <label class="control-label">If used <a title="Purchase Money Financing Participation">PMF</a>, define Terms sought?</label>
+                        @Html.TextBoxFor(s => s.TermsSought)
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <label class="control-label">Has your Vesting Entity <a title="Condition Loan Approval">CLA</a>/<a title="Proof of Funds">POF</a>?</label>
+                        @Html.RadioButtonFor(s => s.SecuredCLAPOF, "true") Yes
+                            @Html.RadioButtonFor(s => s.SecuredCLAPOF, "false") No
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.GeneralNotesOfVestingEntity, new { @class = "control-label" })
+                        @Html.TextAreaFor(s => s.GeneralNotesOfVestingEntity, 8, 85, null)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Asset Type:
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <em>You can only do one Asset Type search per form submittal. If you wish to have USC conduct searches for you on different Asset Types, complete this form for the current Asset Type. Once you have saved, make any changes that you want and click "Use this Form to Create New Search Criteria" at the bottom of this form. This will create a unique Asset Search Criteria Request based on the values from the existing form and any changes you have made.</em>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.TypeOfAssetsSought, new { @style = "width: auto; margin-bottom: 5px; " })<span style="color: red;">*</span><br />
+                    @Html.DropDownListFor(s => s.TypeOfAssetsSought, @Model.AssetTypes)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="MFSection" style="display: none;">
+        <div class="panel-heading">
+            Multi-Family Demographic & Architecture Parameters:
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <label>Number of Units Range:</label>
+                </div>
+                <div class="col-lg-6">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMinimum, new { @style = "font-weight: 600" })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMinimum, new { onblur = "toMoney(this, false)", @class = "formatNumber" })
+                </div>
+                <div class="col-lg-6">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMaximum, new { @style = "font-weight: 600" })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMaximum, new { onblur = "toMoney(this, false)", @class = "formatNumber" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label style="margin-bottom: 5px;">Age of Property Range:</label>
+                    <br />
+                    <label class=" " style="font-weight: 600; margin-right: 10px;">Max Years</label>
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.AgeOfPropertyMaximum)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">Is Multi-Level Architecture acceptable?</label>
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.MultiLevelAcceptable, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.MultiLevelAcceptable, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">If yes, click # of acceptable levels</label>
+                    <input data-val="true" data-val-required="The MultiLevelTwoLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelTwoLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Two
+                    <input data-val="true" data-val-required="The MultiLevelThreeLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelThreeLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Three
+                    <input data-val="true" data-val-required="The MultiLevelFourLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelFourLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Four
+                    <input data-val="true" data-val-required="The MultiLevelOtherLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelOtherLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Other
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">Will you accept properties with <a title="Efficiency Units: aka Studio Units">EFF</a> Units?</label>
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsEFFUnits, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsEFFUnits, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class=" ">If yes, max % ratio of <a title="Efficiency Units: aka Studio Units">EFF</a> Units</label>
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfEFfUnits, new { style = "margin-right: 10px" }) % (as percentage of all units)<span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.AcceptsOneBedroomUnits, new { @class = "inline-label" })
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsOneBedroomUnits, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsOneBedroomUnits, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfOneBedroomUnits, new { @class = " " })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfOneBedroomUnits, new { style = "margin-right: 10px" }) % (as percentage of all units)<span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class=" ">Roofing requirements</label>
+                    @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.RoofingFlatBuiltUp) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RoofingFlatBuiltUp, new { @style = "font-weight: 600" })
+                    @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.RoofingTileOnly) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RoofingTileOnly, new { @style = "font-weight: 600" })
+                    @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.RoofingShingleOnly)  @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RoofingShingleOnly, new { @style = "font-weight: 600" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.HasParkingRatioParameters, new { @class = "inline-label" })
+                    <br />@Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.HasParkingRatioParameters, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.HasParkingRatioParameters, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.ParkingRatioRequisites, new { @class = " " })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.ParkingRatioRequisites) (x spaces per rental unit)
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                     
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RequiresParkingStalls, new { @class = "inline-label" })
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.RequiresParkingStalls, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.RequiresParkingStalls, "false") No
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label style="font-weight: 800">Check any applicable "Feature" box that shall apply to any matching property:</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.Pools)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_Pools" name="MultiFamilyDemographicDetail.Pools" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_Pools" name="MultiFamilyDemographicDetail.Pools" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PoolsOptional" name="MultiFamilyDemographicDetail.Pools" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.OutdoorSpas)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                         <input id="MultiFamilyDemographicDetail_OutdoorSpas" name="MultiFamilyDemographicDetail.OutdoorSpas" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_OutdoorSpas" name="MultiFamilyDemographicDetail.OutdoorSpas" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_OutdoorSpasOptional" name="MultiFamilyDemographicDetail.OutdoorSpas" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SecurityGates)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                         <input id="MultiFamilyDemographicDetail_SecurityGates" name="MultiFamilyDemographicDetail.SecurityGates" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SecurityGates" name="MultiFamilyDemographicDetail.SecurityGates" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SecurityGatesOptional" name="MultiFamilyDemographicDetail.SecurityGates" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SeparateOfficeBuilding)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateOfficeBuilding" name="MultiFamilyDemographicDetail.SeparateOfficeBuilding" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateOfficeBuilding" name="MultiFamilyDemographicDetail.SeparateOfficeBuilding" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateOfficeBuildingOptional" name="MultiFamilyDemographicDetail.SeparateOfficeBuilding" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SeparateClubhouse)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateClubhouse" name="MultiFamilyDemographicDetail.SeparateClubhouse" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateClubhouse" name="MultiFamilyDemographicDetail.SeparateClubhouse" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateClubhouseOptional" name="MultiFamilyDemographicDetail.SeparateClubhouse" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.PlaygroundArea)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PlaygroundArea" name="MultiFamilyDemographicDetail.PlaygroundArea" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PlaygroundArea" name="MultiFamilyDemographicDetail.PlaygroundArea" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PlaygroundAreaOptional" name="MultiFamilyDemographicDetail.PlaygroundArea" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TennisCourts)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TennisCourts" name="MultiFamilyDemographicDetail.TennisCourts" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TennisCourts" name="MultiFamilyDemographicDetail.TennisCourts" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TennisCourtsOptional" name="MultiFamilyDemographicDetail.TennisCourts" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.GymFacilitiesForAdults)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_GymFacilitiesForAdults" name="MultiFamilyDemographicDetail.GymFacilitiesForAdults" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_GymFacilitiesForAdults" name="MultiFamilyDemographicDetail.GymFacilitiesForAdults" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_GymFacilitiesForAdultsOptional" name="MultiFamilyDemographicDetail.GymFacilitiesForAdults" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TurnKey)<span style="color: red;">*</span>
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TurnKey" name="MultiFamilyDemographicDetail.TurnKey" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TurnKey" name="MultiFamilyDemographicDetail.TurnKey" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TurnKeyOptional" name="MultiFamilyDemographicDetail.TurnKey" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds)<span style="color: red;">*</span>
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_ExtensiveRenovationUpdatingNeeds" name="MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_ExtensiveRenovationUpdatingNeeds" name="MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_ExtensiveRenovationUpdatingNeedsOptional" name="MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.UnderperformingProperty)@*<span style="color: red;">*</span>*@
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_UnderperformingProperty" name="MultiFamilyDemographicDetail.UnderperformingProperty" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_UnderperformingProperty" name="MultiFamilyDemographicDetail.UnderperformingProperty" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_UnderperformingPropertyOptional" name="MultiFamilyDemographicDetail.UnderperformingProperty" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class=" ">Utility Metering:       Electric & Gas Metering:</label>
+                    <span style="display: block; font-size: 12px; font-style: italic">* Note: it is assumed that all rental space in MHP's are individually metered.</span>
+                    @Html.CheckBoxFor(model => model.MultiFamilyDemographicDetail.TenantOnly) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TenantOnly)
+                    @Html.CheckBoxFor(model => model.MultiFamilyDemographicDetail.MasterMetering) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.MasterMetering)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.GradeClassificationRequirementOfProperty, new { @class = "inline-label" })<span style="color: red;">*</span>
+                    <span style="display: block; font-size: 12px; font-style: italic">(Minimum grade level)</span>
+                    @Html.DropDownListFor(s => s.MultiFamilyDemographicDetail.GradeClassificationRequirementOfProperty, @Model.MultiFamilyDemographicDetail.GradeClassifications)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TenantProfileRestrictions, new { @class = "inline-label" })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.TenantProfileRestrictions, new { @style = "margin: 0" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label style="font-weight: 800; margin-bottom: 10px" class=" ">For MHP’s: define individual rental space rations: single & double wide spaces:</label>
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SingleWideSpaceRatioForAllSpaces, new { @class = " " })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.SingleWideSpaceRatioForAllSpaces) %
+                </div>
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.DoubleWideSpaceRatioForAllSpaces, new { @class = " " })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.DoubleWideSpaceRatioForAllSpaces) %
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.OtherRequirements)
+                    @Html.TextAreaFor(s => s.MultiFamilyDemographicDetail.OtherRequirements, 8, 85, null)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="MHPSection" style="display: none;">
+        <div class="panel-heading">
+            MHP Demographic & Architecture Parameters:
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <label>Number of MHP Spaces Range:</label>
+                </div>
+                <div class="col-lg-6">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMinimum, new { @style = "font-weight: 600" })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMinimum, new { onblur = "toMoney(this, false)", @class = "formatNumber" })
+                </div>
+                <div class="col-lg-6">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMaximum, new { @style = "font-weight: 600" })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.NumberOfUnitsRangeMaximum, new { onblur = "toMoney(this, false)", @class = "formatNumber" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label style="margin-bottom: 5px;">Age of Property Range:</label>
+                    <br />
+                    <label class=" " style="font-weight: 600; margin-right: 10px;">Max Years</label>
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.AgeOfPropertyMaximum)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">Is a MHP with additional undeveloped land acceptable?</label>
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.MultiLevelAcceptable, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.MultiLevelAcceptable, "false") No
+                </div>
+            </div>
+            @*<div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">If yes, click # of acceptable levels</label>
+                    <input data-val="true" data-val-required="The MultiLevelTwoLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelTwoLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Two
+                    <input data-val="true" data-val-required="The MultiLevelThreeLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelThreeLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Three
+                    <input data-val="true" data-val-required="The MultiLevelFourLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelFourLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Four
+                    <input data-val="true" data-val-required="The MultiLevelOtherLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelOtherLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Other
+                </div>
+            </div>*@
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">Will you accept properties with only single wide spaces?</label>
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsEFFUnits, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsEFFUnits, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @*<label class=" ">If yes, max % ratio of <a title="Efficiency Units: aka Studio Units">EFF</a> Units</label>*@
+                    <label class=" ">If no, max % ratio of single wide spaces per MHP Development</label>
+
+                    
+                    @*@Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfEFfUnits, new { style = "margin-right: 10px" }) % (as percentage of all units)<span style="color: red;">*</span>*@
+                    <br />  @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfEFfUnits, new { style = "margin-right: 10px" }) % (as percentage of all rentable spaces in MHP)<span style="color: red;">*</span>
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.AcceptsOneBedroomUnits, new { @class = "inline-label" })
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsOneBedroomUnits, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsOneBedroomUnits, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfOneBedroomUnits, new { @class = " " })
+                    @*@Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfOneBedroomUnits, new { style = "margin-right: 10px" }) % (as percentage of all units)<span style="color: red;">*</span>*@
+                    <br />@Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfOneBedroomUnits, new { style = "margin-right: 10px" }) % (as percentage of all rentable spaces in MHP)<span style="color: red;">*</span>
+                    
+                </div>
+            </div>
+
+            @*<div class="row">
+                <div class="col-lg-12">
+                    <label class=" ">Roofing requirements</label>
+                    @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.RoofingFlatBuiltUp) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RoofingFlatBuiltUp, new { @style = "font-weight: 600" })
+                    @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.RoofingTileOnly) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RoofingTileOnly, new { @style = "font-weight: 600" })
+                    @Html.CheckBoxFor(s => s.MultiFamilyDemographicDetail.RoofingShingleOnly)  @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RoofingShingleOnly, new { @style = "font-weight: 600" })
+                </div>
+            </div>*@
+
+            <div class="row">
+                <div class="col-lg-12">                    
+                    <label class="inline-label" for="MultiFamilyDemographicDetail_AcceptsTripleSpacesOnly">Will you accept properties with triple wide spaces?</label>
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsTripleSpacesOnly, "true") Yes
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsTripleSpacesOnly, "false") No
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">                    
+                    <label class=" " for="MultiFamilyDemographicDetail_MaxRatioOfTripleSpaces">If yes, max % ratio of triple wide spaces per MHP Development</label>
+                    <br />@Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfTripleSpaces, new { style = "margin-right: 10px" }) % (as percentage of all rentable spaces in MHP)<span style="color: red;">*</span>
+                </div>
+            </div> 
+
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.HasParkingRatioParameters, new { @class = "inline-label" })
+                    <br />@Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.HasParkingRatioParameters, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.HasParkingRatioParameters, "false") No
+                </div>
+            </div>
+            @*<div class="row">
+        <div class="col-lg-12">
+            @Html.LabelFor(s => s.MultiFamilyDemographicDetail.ParkingRatioRequisites, new { @class = " " })
+            @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.ParkingRatioRequisites) (x spaces per rental unit)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            @Html.LabelFor(s => s.MultiFamilyDemographicDetail.RequiresParkingStalls, new { @class = "inline-label" })
+            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.RequiresParkingStalls, "true") Yes
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.RequiresParkingStalls, "false") No
+        </div>
+    </div>
+            *@
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <label style="font-weight: 800">Check any applicable "Feature" box that shall apply to any matching property:</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.Pools)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_Pools" name="MultiFamilyDemographicDetail.Pools" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_Pools" name="MultiFamilyDemographicDetail.Pools" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PoolsOptional" name="MultiFamilyDemographicDetail.Pools" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.OutdoorSpas)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                         <input id="MultiFamilyDemographicDetail_OutdoorSpas" name="MultiFamilyDemographicDetail.OutdoorSpas" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_OutdoorSpas" name="MultiFamilyDemographicDetail.OutdoorSpas" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_OutdoorSpasOptional" name="MultiFamilyDemographicDetail.OutdoorSpas" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SecurityGates)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                         <input id="MultiFamilyDemographicDetail_SecurityGates" name="MultiFamilyDemographicDetail.SecurityGates" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SecurityGates" name="MultiFamilyDemographicDetail.SecurityGates" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SecurityGatesOptional" name="MultiFamilyDemographicDetail.SecurityGates" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SeparateOfficeBuilding)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateOfficeBuilding" name="MultiFamilyDemographicDetail.SeparateOfficeBuilding" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateOfficeBuilding" name="MultiFamilyDemographicDetail.SeparateOfficeBuilding" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateOfficeBuildingOptional" name="MultiFamilyDemographicDetail.SeparateOfficeBuilding" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SeparateClubhouse)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateClubhouse" name="MultiFamilyDemographicDetail.SeparateClubhouse" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateClubhouse" name="MultiFamilyDemographicDetail.SeparateClubhouse" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateClubhouseOptional" name="MultiFamilyDemographicDetail.SeparateClubhouse" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.PlaygroundArea)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PlaygroundArea" name="MultiFamilyDemographicDetail.PlaygroundArea" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PlaygroundArea" name="MultiFamilyDemographicDetail.PlaygroundArea" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PlaygroundAreaOptional" name="MultiFamilyDemographicDetail.PlaygroundArea" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TennisCourts)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TennisCourts" name="MultiFamilyDemographicDetail.TennisCourts" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TennisCourts" name="MultiFamilyDemographicDetail.TennisCourts" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TennisCourtsOptional" name="MultiFamilyDemographicDetail.TennisCourts" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.GymFacilitiesForAdults)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_GymFacilitiesForAdults" name="MultiFamilyDemographicDetail.GymFacilitiesForAdults" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_GymFacilitiesForAdults" name="MultiFamilyDemographicDetail.GymFacilitiesForAdults" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_GymFacilitiesForAdultsOptional" name="MultiFamilyDemographicDetail.GymFacilitiesForAdults" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TurnKey)<span style="color: red;">*</span>
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TurnKey" name="MultiFamilyDemographicDetail.TurnKey" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TurnKey" name="MultiFamilyDemographicDetail.TurnKey" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TurnKeyOptional" name="MultiFamilyDemographicDetail.TurnKey" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds)<span style="color: red;">*</span>
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_ExtensiveRenovationUpdatingNeeds" name="MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_ExtensiveRenovationUpdatingNeeds" name="MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_ExtensiveRenovationUpdatingNeedsOptional" name="MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.UnderperformingProperty)@*<span style="color: red;">*</span>*@
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_UnderperformingProperty" name="MultiFamilyDemographicDetail.UnderperformingProperty" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_UnderperformingProperty" name="MultiFamilyDemographicDetail.UnderperformingProperty" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_UnderperformingPropertyOptional" name="MultiFamilyDemographicDetail.UnderperformingProperty" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class=" ">Utility Metering:       Electric & Gas Metering:</label>
+                    <span style="display: block; font-size: 12px; font-style: italic">* Note: it is assumed that all rental space in MHP's are individually metered.</span>
+                    @Html.CheckBoxFor(model => model.MultiFamilyDemographicDetail.TenantOnly) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TenantOnly)
+                    @Html.CheckBoxFor(model => model.MultiFamilyDemographicDetail.MasterMetering) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.MasterMetering)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.GradeClassificationRequirementOfProperty, new { @class = "inline-label" })<span style="color: red;">*</span>
+                    <span style="display: block; font-size: 12px; font-style: italic">(Minimum grade level)</span>
+                    @Html.DropDownListFor(s => s.MultiFamilyDemographicDetail.GradeClassificationRequirementOfProperty, @Model.MultiFamilyDemographicDetail.GradeClassifications)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TenantProfileRestrictions, new { @class = "inline-label" })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.TenantProfileRestrictions, new { @style = "margin: 0" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label style="font-weight: 800; margin-bottom: 10px" class=" ">For MHP’s: define individual rental space rations: single & double wide spaces:</label>
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SingleWideSpaceRatioForAllSpaces, new { @class = " " })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.SingleWideSpaceRatioForAllSpaces) %
+                </div>
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.DoubleWideSpaceRatioForAllSpaces, new { @class = " " })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.DoubleWideSpaceRatioForAllSpaces) %
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.OtherRequirements)
+                    @Html.TextAreaFor(s => s.MultiFamilyDemographicDetail.OtherRequirements, 8, 85, null)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="MHPSection" style="display: none;">
+        <div class="panel-heading">
+            MHP Demographic & Architecture Parameters:
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <label>Number of MHP Spaces Range:</label>
+                </div>
+                <div class="col-lg-6">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.NumberOfSpacesRangeMinimum, new { @style = "font-weight: 600" })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.NumberOfSpacesRangeMinimum, new { onblur = "toMoney(this, false)", @class = "formatNumber" })
+                </div>
+                <div class="col-lg-6">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.NumberOfSpacesRangeMaximum, new { @style = "font-weight: 600" })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.NumberOfSpacesRangeMaximum, new { onblur = "toMoney(this, false)", @class = "formatNumber" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label style="margin-bottom: 5px;">Age of Property Range:</label>
+                    <br />
+                    <label class=" " style="font-weight: 600; margin-right: 10px;">Max Years</label>
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.AgeOfPropertyMaximum)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">Is a MHP with additional undeveloped land acceptable?</label>
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.UndevelopedAcceptable, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.UndevelopedAcceptable, "false") No
+                </div>
+            </div>
+            @*<div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">If yes, click # of acceptable levels</label>
+                    <input data-val="true" data-val-required="The MultiLevelTwoLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelTwoLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Two
+                    <input data-val="true" data-val-required="The MultiLevelThreeLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelThreeLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Three
+                    <input data-val="true" data-val-required="The MultiLevelFourLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelFourLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Four
+                    <input data-val="true" data-val-required="The MultiLevelOtherLevelsAcceptable field is required." id="MultiFamilyDemographicDetail_MultiLevelOtherLevelsAcceptable" name="MultiFamilyDemographicDetail.MultiLevelsAcceptable" style="margin-top: 0;" type="radio" value="true"> Other
+                </div>
+            </div>*@
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">Will you accept properties with only single wide spaces?</label>
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsSingleWide, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsSingleWide, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class=" ">If no, max % ratio of single wide spaces per MHP Development</label>
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfSingleSpaces, new { style = "margin-right: 10px" }) <br /> % (as percentage of all rentable spaces in MHP)<span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.AcceptsDoubleSpacesOnly, new { @class = "inline-label" })
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsDoubleSpacesOnly, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsDoubleSpacesOnly, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfDoubleSpaces, new { @class = " " })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfDoubleSpaces, new { style = "margin-right: 10px" }) <br /> % (as percentage of all rentable spaces in MHP)<span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.AcceptsTripleSpacesOnly, new { @class = "inline-label" })
+                    @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsTripleSpacesOnly, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptsTripleSpacesOnly, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfTripleSpaces, new { @class = " " })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.MaxRatioOfTripleSpaces, new { style = "margin-right: 10px" }) <br />% (as percentage of all rentable spaces in MHP)<span style="color: red;">*</span>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.AcceptGroundMH, new { @class = "inline-label" })
+                    <br />@Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptGroundMH, "true") Yes
+                            @Html.RadioButtonFor(model => model.MultiFamilyDemographicDetail.AcceptGroundMH, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label style="font-weight: 800">Check any applicable "Feature" box that shall apply to any matching property:</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.Pools)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_Pools" name="MultiFamilyDemographicDetail.Pools" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_Pools" name="MultiFamilyDemographicDetail.Pools" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PoolsOptional" name="MultiFamilyDemographicDetail.Pools" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.OutdoorSpas)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                         <input id="MultiFamilyDemographicDetail_OutdoorSpas" name="MultiFamilyDemographicDetail.OutdoorSpas" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_OutdoorSpas" name="MultiFamilyDemographicDetail.OutdoorSpas" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_OutdoorSpasOptional" name="MultiFamilyDemographicDetail.OutdoorSpas" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SecurityGates)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                         <input id="MultiFamilyDemographicDetail_SecurityGates" name="MultiFamilyDemographicDetail.SecurityGates" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SecurityGates" name="MultiFamilyDemographicDetail.SecurityGates" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SecurityGatesOptional" name="MultiFamilyDemographicDetail.SecurityGates" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SeparateOfficeBuilding)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateOfficeBuilding" name="MultiFamilyDemographicDetail.SeparateOfficeBuilding" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateOfficeBuilding" name="MultiFamilyDemographicDetail.SeparateOfficeBuilding" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateOfficeBuildingOptional" name="MultiFamilyDemographicDetail.SeparateOfficeBuilding" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SeparateClubhouse)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateClubhouse" name="MultiFamilyDemographicDetail.SeparateClubhouse" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateClubhouse" name="MultiFamilyDemographicDetail.SeparateClubhouse" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_SeparateClubhouseOptional" name="MultiFamilyDemographicDetail.SeparateClubhouse" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.PlaygroundArea)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PlaygroundArea" name="MultiFamilyDemographicDetail.PlaygroundArea" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PlaygroundArea" name="MultiFamilyDemographicDetail.PlaygroundArea" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_PlaygroundAreaOptional" name="MultiFamilyDemographicDetail.PlaygroundArea" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TennisCourts)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TennisCourts" name="MultiFamilyDemographicDetail.TennisCourts" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TennisCourts" name="MultiFamilyDemographicDetail.TennisCourts" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TennisCourtsOptional" name="MultiFamilyDemographicDetail.TennisCourts" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.GymFacilitiesForAdults)
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_GymFacilitiesForAdults" name="MultiFamilyDemographicDetail.GymFacilitiesForAdults" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_GymFacilitiesForAdults" name="MultiFamilyDemographicDetail.GymFacilitiesForAdults" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_GymFacilitiesForAdultsOptional" name="MultiFamilyDemographicDetail.GymFacilitiesForAdults" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TurnKey)<span style="color: red;">*</span>
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TurnKey" name="MultiFamilyDemographicDetail.TurnKey" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TurnKey" name="MultiFamilyDemographicDetail.TurnKey" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_TurnKeyOptional" name="MultiFamilyDemographicDetail.TurnKey" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds)<span style="color: red;">*</span>
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_ExtensiveRenovationUpdatingNeeds" name="MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_ExtensiveRenovationUpdatingNeeds" name="MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_ExtensiveRenovationUpdatingNeedsOptional" name="MultiFamilyDemographicDetail.ExtensiveRenovationUpdatingNeeds" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.UnderperformingProperty)@*<span style="color: red;">*</span>*@
+                </div>
+                <div class="col-lg-8">
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_UnderperformingProperty" name="MultiFamilyDemographicDetail.UnderperformingProperty" type="radio" value="true"> Yes
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_UnderperformingProperty" name="MultiFamilyDemographicDetail.UnderperformingProperty" type="radio" value="false"> No
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="MultiFamilyDemographicDetail_UnderperformingPropertyOptional" name="MultiFamilyDemographicDetail.UnderperformingProperty" type="radio" value="true"> Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class=" ">Utility Metering:       Electric & Gas Metering:</label>
+                    <span style="display: block; font-size: 12px; font-style: italic">* Note: it is assumed that all rental space in MHP's are individually metered.</span>
+                    @Html.CheckBoxFor(model => model.MultiFamilyDemographicDetail.TenantOnly) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TenantOnly)
+                    @Html.CheckBoxFor(model => model.MultiFamilyDemographicDetail.MasterMetering) @Html.LabelFor(s => s.MultiFamilyDemographicDetail.MasterMetering)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.GradeClassificationRequirementOfProperty, new { @class = "inline-label" })<span style="color: red;">*</span>
+                    <span style="display: block; font-size: 12px; font-style: italic">(Minimum grade level)</span>
+                    @Html.DropDownListFor(s => s.MultiFamilyDemographicDetail.GradeClassificationRequirementOfProperty, @Model.MultiFamilyDemographicDetail.GradeClassifications)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.TenantProfileRestrictions, new { @class = "inline-label" })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.TenantProfileRestrictions, new { @style = "margin: 0" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label style="font-weight: 800; margin-bottom: 10px" class=" ">For MHP’s: define individual rental space rations: single & double wide spaces:</label>
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.SingleWideSpaceRatioForAllSpaces, new { @class = " " })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.SingleWideSpaceRatioForAllSpaces) %
+                </div>
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.DoubleWideSpaceRatioForAllSpaces, new { @class = " " })
+                    @Html.TextBoxFor(s => s.MultiFamilyDemographicDetail.DoubleWideSpaceRatioForAllSpaces) %
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.MultiFamilyDemographicDetail.OtherRequirements)
+                    @Html.TextAreaFor(s => s.MultiFamilyDemographicDetail.OtherRequirements, 8, 85, null)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="OtherSection">
+        <div class="panel-heading">
+            Other Demographic & Architecture Parameters:
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class=" ">Square Footage Range</label>
+                    @Html.LabelFor(s => s.OtherDemographicDetail.SquareFootageRangeMin, new { @style = "font-weight: 600" })
+                    @Html.TextBoxFor(s => s.OtherDemographicDetail.SquareFootageRangeMin, new { @style = "margin-right: 20px;", @class="formatNumber", onblur = "toMoney(this, false)" })
+                    @Html.LabelFor(s => s.OtherDemographicDetail.SquareFootageRangeMax, new { @style = "font-weight: 600" })
+                    @Html.TextBoxFor(s => s.OtherDemographicDetail.SquareFootageRangeMax, new { @class="formatNumber", onblur = "toMoney(this, false)" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class=" ">Age of Property Range:</label>
+                    <label style="font-weight: 600" class=" ">Max Age</label>
+                    @Html.TextBoxFor(s => s.OtherDemographicDetail.AgePropertyRangeMax, new { @class="formatNumber", onblur = "toMoney(this, false)" }) years
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">Is Multi-Level Architecture acceptable?</label>
+                
+                    @Html.RadioButtonFor(model => model.OtherDemographicDetail.MultiLevelAcceptable, "true",new { onchange = "document.getElementById('rdBtnMultiNo').checked = false; document.getElementById('rdBtnMultiNPref').checked = false;" , id="rdBtnMultiYes"}) Yes
+                                @Html.RadioButtonFor(model => model.OtherDemographicDetail.MultiLevelAcceptable, "false",new { onchange = "document.getElementById('rdBtnMultiYes').checked = false; document.getElementById('rdBtnMultiNPref').checked = false;" , id="rdBtnMultiNo"}) No
+                    @Html.RadioButtonFor(model => model.OtherDemographicDetail.MultiLevelAcceptableOptional, "true",new { onchange = "document.getElementById('rdBtnMultiYes').checked = false; document.getElementById('rdBtnMultiNo').checked = false;" , id="rdBtnMultiNPref"}) No Preference
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">Does the property require a Major Tenant?</label><span style="color: red;">*</span>
+                    @Html.RadioButtonFor(model => model.OtherDemographicDetail.PropertyRequiresMajorTenant, "true",new { onchange = "document.getElementById('rdBtnTenantNo').checked = false; document.getElementById('rdBtnTenantNPref').checked = false;" , id="rdBtnTenantYes"}) Yes
+                                @Html.RadioButtonFor(model => model.OtherDemographicDetail.PropertyRequiresMajorTenant, "false",new { onchange = "document.getElementById('rdBtnTenantYes').checked = false; document.getElementById('rdBtnTenantNPref').checked = false;" , id="rdBtnTenantNo"}) No
+                    @Html.RadioButtonFor(model => model.OtherDemographicDetail.PropertyRequiresMajorTenantOptional, "true", new { onchange = "document.getElementById('rdBtnTenantYes').checked = false; document.getElementById('rdBtnTenantNo').checked = false;", id = "rdBtnTenantNPref" }) No Preference
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">If yes, define Tenant requisites:</label>
+                    @Html.TextBoxFor(s => s.OtherDemographicDetail.TenantRequisites)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">@Html.LabelFor(s => s.OtherDemographicDetail.MinimumForAccreditedTenantProfiles, new { @class = " " })</label>
+                    @Html.TextBoxFor(s => s.OtherDemographicDetail.MinimumForAccreditedTenantProfiles) %
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    @Html.LabelFor(s => s.OtherDemographicDetail.RequiresSingleTenantPads, new { @class = " " })
+                </div>
+                <div class="col-lg-6">
+                    @Html.RadioButtonFor(model => model.OtherDemographicDetail.RequiresSingleTenantPads, "true") Yes
+                                @Html.RadioButtonFor(model => model.OtherDemographicDetail.RequiresSingleTenantPads, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">IF yes, provide requisite details:</label>
+                    @Html.TextBoxFor(s => s.OtherDemographicDetail.SingleTenantPadsRequisiteDetails)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.OtherDemographicDetail.HasParkingRatioParameters)                    
+                    <br />
+                    @Html.RadioButtonFor(model => model.OtherDemographicDetail.HasParkingRatioParameters, "true") Yes
+                    @Html.RadioButtonFor(model => model.OtherDemographicDetail.HasParkingRatioParameters, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="inline-label">IF yes, provide requisite details:</label>
+                    @Html.TextBoxFor(s => s.OtherDemographicDetail.ParkingRatioRatioRequisites)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6" style="width:35%">
+                    @Html.LabelFor(s => s.OtherDemographicDetail.OfficeMedicalMixedUseCoveredParkingStallsRequired)
+                </div>
+                <div class="col-lg-6" style="width:65%">
+                    <div class="col-lg-4">
+                        @Html.RadioButtonFor(model => model.OtherDemographicDetail.OfficeMedicalMixedUseCoveredParkingStallsRequired, "true",new { onchange = "document.getElementById('rdBtnParkingNo').checked = false; document.getElementById('rdBtnParkingNPref').checked = false;" , id="rdBtnParkingYes"}) Yes
+                    </div>
+                    <div class="col-lg-4">
+                        @Html.RadioButtonFor(model => model.OtherDemographicDetail.OfficeMedicalMixedUseCoveredParkingStallsRequired, "false",new { onchange = "document.getElementById('rdBtnParkingYes').checked = false; document.getElementById('rdBtnParkingNPref').checked = false;" , id="rdBtnParkingNo"}) No
+                    </div>
+                    <div class="col-lg-4">
+                        @Html.RadioButtonFor(model => model.OtherDemographicDetail.OfficeMedicalMixedUseCoveredParkingStallsRequiredOptional, "true",new { onchange = "document.getElementById('rdBtnParkingYes').checked = false; document.getElementById('rdBtnParkingNo').checked = false;" , id="rdBtnParkingNPref"}) Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6" style="width:35%">
+                    @Html.LabelFor(s => s.OtherDemographicDetail.WillLookAtUnifinishedSuites)
+                </div>
+                <div class="col-lg-6" style="width:65%">
+                    <div class="col-lg-4">
+                        @Html.RadioButtonFor(model => model.OtherDemographicDetail.WillLookAtUnifinishedSuites, "true",new { onchange = "document.getElementById('rdBtnSuitesNo').checked = false; document.getElementById('rdBtnSuitesNPref').checked = false;" , id="rdBtnSuiteYes"}) Yes
+                    </div>
+                    <div class="col-lg-4">
+                        @Html.RadioButtonFor(model => model.OtherDemographicDetail.WillLookAtUnifinishedSuites, "false",new { onchange = "document.getElementById('rdBtnSuiteYes').checked = false; document.getElementById('rdBtnSuitesNPref').checked = false;" , id="rdBtnSuitesNo"}) No
+                    </div>
+                    <div class="col-lg-4">
+                        @Html.RadioButtonFor(model => model.OtherDemographicDetail.WillLookAtUnifinishedSuitesOptional, "true",new { onchange = "document.getElementById('rdBtnSuiteYes').checked = false; document.getElementById('rdBtnSuitesNo').checked = false;" , id="rdBtnSuitesNPref"}) Optional
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6" style="width:35%">
+                    @Html.LabelFor(s => s.OtherDemographicDetail.CanHaveExtensiveRenovationNeeds)
+                </div>
+                <div class="col-lg-6" style="width:65%">
+                    <div class="col-lg-4">
+                        @Html.RadioButtonFor(model => model.OtherDemographicDetail.CanHaveExtensiveRenovationNeeds, "true",new { onchange = "document.getElementById('rdBtnRenoNo').checked = false; document.getElementById('rdBtnRenoNPref').checked = false;" , id="rdBtnRenoYes"}) Yes
+                    </div>
+                    <div class="col-lg-4">
+                        @Html.RadioButtonFor(model => model.OtherDemographicDetail.CanHaveExtensiveRenovationNeeds, "false",new { onchange = "document.getElementById('rdBtnRenoYes').checked = false; document.getElementById('rdBtnRenoNPref').checked = false;" , id="rdBtnRenoNo"}) No
+                    </div>
+                    <div class="col-lg-4">
+                        @Html.RadioButtonFor(model => model.OtherDemographicDetail.CanHaveExtensiveRenovationNeedsOptional, "true",new { onchange = "document.getElementById('rdBtnRenoYes').checked = false; document.getElementById('rdBtnRenoNo').checked = false;" , id="rdBtnRenoNPref"}) Optional
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.OtherDemographicDetail.CanBeVacant)<span style="color: red;">*</span>
+                    @Html.RadioButtonFor(model => model.OtherDemographicDetail.CanBeVacant, "true") Yes
+                                @Html.RadioButtonFor(model => model.OtherDemographicDetail.CanBeVacant, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class=" ">If yes, what is the max vacancy a property can be at closing?</label>
+                    @Html.TextBoxFor(s => s.OtherDemographicDetail.MaxVacancy) %
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.OtherDemographicDetail.OtherRequirements, new { @class = " " })
+                    @Html.TextBoxFor(s => s.OtherDemographicDetail.OtherRequirements)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Geographic Parameters <span style="color: red;">*</span></div>
+        <div class="panel-body">
+            <div class="row">
+                <em>You must select at least one State of interest for your Search Criteria.  You may select up to three different States.  You must select at least one Metro City for each State.  Our Search will include all peripheral Cities and Towns to each Metro City.</em>
+            </div>
+            @Html.EditorFor(s => s.GeographicParameters.Interests[0], "GeographicParameterInterestModel")
+            @Html.EditorFor(s => s.GeographicParameters.Interests[1], "GeographicParameterInterestModel")
+            @Html.EditorFor(s => s.GeographicParameters.Interests[2], "GeographicParameterInterestModel")
+            <div class="row">
+                <div class="lg-col-12">
+                    @Html.LabelFor(s => s.GeographicParameters.AdditionalRequirements)
+                    @Html.TextAreaFor(s => s.GeographicParameters.AdditionalRequirements, 8, 85, null)
+                </div>
+            </div>
+            <div class="row">
+                <div class="lg-col-12">
+                    @Html.LabelFor(s => s.GeographicParameters.Restrictions)
+                    @Html.TextAreaFor(s => s.GeographicParameters.Restrictions, 8, 85, null)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Financial Investment Parameters</div>
+        <div class="panel-body">
+            <p><b>Presumption:	</b>all acquisitions will be ALL CASH Funding’s (even though you may utilize a combination of debt and equity capital).   All financial investment parameters will be based on this presumption.</p>
+
+            <p><b>Definitions:</b></p>
+
+            <p><b>Capitalization Rate:</b>	the pre-tax cash flow a property throws off… after scheduled income less scheduled operating expenses and reserves… in relation to the ALL CASH acquisition cost of the property.  Example:</p>
+
+            <center><span style="text-align: center; font-size: 15px; font-weight: bold;">Pre-tax cash flow  ÷  Acquisition Cost  =  Capitalization Rate</span></center>
+
+            <p><b>Under Performing</b> asset:	generally pertinent to assets that have higher than market normal vacancy factors, tenant profiles that require immediate replacement, assets with extensive deferred maintenance and or updating needs, and or assets that are presently deemed to be under poor management.</p>
+
+            <p><b>Future Pro-Forma Pricing</b>:	aka “stabilized pro-forma operations”:  generally presumed to be projected operations after anticipated changeover of new management, and or implementation of scheduled renovations and or property updating, and or stabilization of tenant profiles.  For purposes of this questionnaire “Future Pro-Forma” presumes that operations are stabilized within one year of asset acquisition.</p>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <label>Min and Max Investment Funding Range for asset purchase:</label><em>Enter your anticipated Minimum and Maximum Acquisition Price Range for your Intended Asset.  Assumes you will have POF – with or without PMF Participation – to complete the intended Investment Purchase.</em><span style="color: red;">*</span><br />
+                    $@Html.TextBoxFor(s => s.FinancialInvestmentParameters.InvestmentFundingRangeMin, new { @class = "formatNumber",onblur = "toMoney(this, false)" }) to
+                        $@Html.TextBoxFor(s => s.FinancialInvestmentParameters.InvestmentFundingRangeMax, new {  @class = "formatNumber",onblur = "toMoney(this, false)" })
+                </div> @*onblur = "toMoney(this, false)",*@
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    (All property types)
+                </div>
+                <div class="col-lg-4">
+                    Minimum Capitalization Rate:<span style="color: red;">*</span>
+                </div>
+                <div class="col-lg-4">
+                    @Html.TextBoxFor(s => s.FinancialInvestmentParameters.MinimumCapitalizationRate)% 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    (Multi-Family)                  
+                </div>
+                <div class="col-lg-4">
+                    Target Price per Unit
+                </div>
+                <div class="col-lg-4">
+                    $@Html.TextBoxFor(s => s.FinancialInvestmentParameters.TargetPricePerUnitMin, new { onblur = "toMoney(this, false)", @class = "formatNumber" }) to 
+                        $@Html.TextBoxFor(s => s.FinancialInvestmentParameters.TargetPricePerUnitMax, new { onblur = "toMoney(this, false)", @class = "formatNumber" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    (Mobile Home Parks)                  
+                </div>
+                <div class="col-lg-4">
+                    Target Price per Space:
+                </div>
+                <div class="col-lg-4">
+                    $@Html.TextBoxFor(s => s.FinancialInvestmentParameters.TargetPricePerSpaceMin, new { onblur = "toMoney(this, false)", @class = "formatNumber" }) to 
+                        $@Html.TextBoxFor(s => s.FinancialInvestmentParameters.TargetPricePerSpaceMax, new { onblur = "toMoney(this, false)", @class = "formatNumber" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.FinancialInvestmentParameters.WillConsiderUnperformingAtPricing, new { @class = "inline-label" })
+                    @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderUnperformingAtPricing, "true") Yes
+                            @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderUnperformingAtPricing, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.FinancialInvestmentParameters.ProFormaParametersDetails)
+                    <br />
+                    @Html.TextAreaFor(s => s.FinancialInvestmentParameters.ProFormaParametersDetails, 8, 85, null)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.FinancialInvestmentParameters.WillConsiderBrandNew, new { @class = "inline-label" })
+                    @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderBrandNew, "true") Yes
+                            @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderBrandNew, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.FinancialInvestmentParameters.BrandNewDetails, new { @class = " " })
+                    @Html.TextAreaFor(s => s.FinancialInvestmentParameters.BrandNewDetails, 8, 85, null)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.FinancialInvestmentParameters.WillConsiderPartiallyBuilt, new { @class = "inline-label" })
+                    @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderPartiallyBuilt, "true") Yes
+                            @Html.RadioButtonFor(model => model.FinancialInvestmentParameters.WillConsiderPartiallyBuilt, "false") No
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(s => s.FinancialInvestmentParameters.PartiallyBuiltDetails, new { @class = " " })
+                    @Html.TextAreaFor(s => s.FinancialInvestmentParameters.PartiallyBuiltDetails, 8, 85, null)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Due Diligence Process as Required by Respondent:</div>
+        <div class="panel-body">
+            <p><b>Presumption:</b>	at its web site, and for each asset, USC will display all of the tangible due diligence data it has been able to secure from the current owner of each asset and or the current owners management company.  To best serve the due diligence criteria of the Respondent, we present the following table of due diligence items standard to an inspection process.  We ask that the Respondent select the appropriate table box that applies to each inspection line item as to level of importance to Respondent in their estimated asset inspection process to determine the merits of each such matching asset presented by USC.</p>
+            @Html.EditorFor(s => s.DueDiligenceCheckList, "DueDiligenceCheckListModel")
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            CRE Available Inventory Questionnaire for End User Accredited Principals
+        </div>
+        <div class="panel-body">
+            <h5 style="text-align: center; color: #f00;">THIS IS NOT A CONTRACT OR AGREEMENT OF ANY TYPE</h5>
+            <h4>What MUST USC Registrant provide with this Questionnaire for US CRE Online to start the process?</h4>
+
+            <p>Nothing.  However, Entity must be prepared to accompany a bonafide LOI to Purchase to an Asset’s ownership and or List Agent with verifiable [Proof of Funds] from a recognizable financial institution (whether as a 100% equity participation or a combination debt and equity package).</p>
+
+            <h4>How will USC Registrant be informed by US CRE Online of assets that meet their requisites?</h4>
+
+            <p>USC Registered PI will receive automated e mail notification from USC informing <a title="Accredited Principal Investor">PI</a> that one or more assets that generally meet <a title="Accredited Principal Investor">PI</a> requisites defined herein have been identified and Published for PI review online at @Html.ActionLink("www.uscreonline.com", "Index", "Home"). Through your “My USC Page” you will be provided an Asset ID Number for full access to the data file to each such matching Asset. Simply Log in, go to your “My USC Page”, <click> each Asset ID # in your pending <a title="Internet Portal Agreement">IPA</a> folder, and complete the <a title="Internet Portal Agreement">IPA</a> protocol for each new Asset ID #.  Once you have acknowledged an <a title="Internet Portal Agreement">IPA</a> for any and each respective Asset ID # you will have full, immediate access to the Asset View Data File thereto as long as you maintain an active registration status at US CRE Online.</p>
+
+            <h4>Will USC Registrant have to sign the US CRE Online <a title="Internet Portal Agreement">IPA</a> for access to each asset view?</h4>
+
+            <p>There is a one-time automated electronic acknowledgement protocol for your first IPA.  The process is very simple and only takes minutes to complete online through Doc-U-Sign. Thereafter, all subsequent IPA’s are automatically authorized by USC Registrant in one-click protocol.  As defined, the process is automated and only requires seconds of the User’s time.</p>
+
+            <h4>How will USC Registrant have opportunity to Preview and, if applicable, Contract on any asset of interest presented by USC?</h4>
+
+            <p>As a Registered <a title="Accredited Principal Investor">PI</a> at USC, you will be given intra-site communications access to either the Asset’s ownership or its Listing Agent (as applicable).  You will receive you site inspection and offering protocol instructions directly from the Asset’s ownership or its’ Listing Agent (as applicable).</p>
+
+        </div>
+    </div>
+</div>

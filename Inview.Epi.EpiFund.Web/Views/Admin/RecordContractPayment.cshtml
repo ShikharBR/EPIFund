@@ -1,0 +1,62 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.RecordICContractPaymentModel
+@{
+    ViewBag.Title = "Record Contract Payment";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<script>
+    $(function () {
+        $('.datepicker').datepicker({ dateFormat: 'mm/dd/yy' });
+    });
+</script>
+<h3 class="page-header">Record Contract Payment</h3>
+@using (Html.BeginForm("RecordICContractPayment", "Admin"))
+{ 
+    @Html.HiddenFor(s => s.UserId)
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Name, new { @class = "control-label", style = "font-weight:bold;" })
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="input-group">
+                @Html.DisplayFor(s => s.Name, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.PaymentDate, new { @class = "control-label", style = "font-weight:bold;" })
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="input-group">
+                @Html.TextBoxFor(s => s.PaymentDate, new { @class = "form-control datepicker" }) <em>MM/dd/yyyy</em>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                @Html.LabelFor(s => s.AmountPaid, new { @class = "control-label", style = "font-weight:bold;" })
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                @Html.TextBoxFor(s => s.AmountPaid, new { @class = "form-control width-132 asset", style = "text-align: right;", onblur = "toMoney(this, false)" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-8">
+            <input type="submit" class="btn btn-primary" value="Submit" />
+            <input type="button" class="btn btn-default" value="Go Back" onclick="location.href='@Url.Action("ICAccountingReportDisplay", "Admin", new { id = Model.UserId })    '" />
+        </div>
+    </div>
+}

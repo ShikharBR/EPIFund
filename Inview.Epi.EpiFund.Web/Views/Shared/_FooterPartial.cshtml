@@ -1,0 +1,13 @@
+﻿@using Inview.Epi.EpiFund.Domain.Helpers
+<ul class="nav navbar-nav">
+    <li class="@Html.IsSelected(action: "Index", controller: "Home") col-xs-4"><a href="@Url.Action("Index", "Home")" style="font-size: x-small">Home</a></li>
+    <li class="@Html.IsSelected(action: "EpiFundBuysRealEstate") col-xs-4"><a href="@Url.Action("EpiFundBuysRealEstate", "Home")" style="font-size: x-small">Create New Fee Simple CRE Asset File</a></li>
+    <li class="@Html.IsSelected(action: "EpiFundBuysPaper") col-xs-4"><a href="@Url.Action("EpiFundBuysPaper", "Home")" style="font-size: x-small">Create New CRE Note Asset File</a></li>
+    <li class="@Html.IsSelected(action: "InvestorOpportunities") col-xs-4"><a href="@Url.Action("InvestorOpportunities", "Home")" style="font-size: x-small">CRE Asset Search</a></li>
+    <li class="@Html.IsSelected(action: "JointVentureMarketing")"><a href="@Url.Action("JointVentureMarketing", "Home")" style="font-size: x-small">MBA JV Marketing Ops</a></li>
+    <li class="@Html.IsSelected(action: "EmploymentOpportunities") col-xs-4"><a href="@Url.Action("EmploymentOpportunities", "Home")" style="font-size: x-small">Growth Opportunities</a></li>
+    <li class="@Html.IsSelected(action: "AboutUs") col-xs-4"><a href="@Url.Action("AboutUs", "Home")" style="font-size: xx-small">About USC</a></li>
+    <li class="@Html.IsSelected(action: "PrivacyPolicy") col-xs-4"><a href="@Url.Action("PrivacyPolicy", "Home")" style="font-size: xx-small">Privacy Policy</a></li>
+    <li class="@Html.IsSelected(action: "ContactUs") col-xs-4"><a href="@Url.Action("ContactUs", "Home")" style="font-size: x-small">Contact US CRE Online</a></li>
+</ul>
+<div class="text-center footer-text">US CRE Online.com is wholly owned by Executive Private Investment Funding Company, LLC <br />v<span>@typeof(Inview.Epi.EpiFund.Web.MvcApplication).Assembly.GetName().Version</span></div>

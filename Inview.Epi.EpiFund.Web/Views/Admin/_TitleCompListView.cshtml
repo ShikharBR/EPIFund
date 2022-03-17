@@ -1,0 +1,121 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.TitleQuickViewModel>
+@{
+    int i = 0;
+}
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+    </div>
+
+    <div class="overflow short-xs">
+        <table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+            <thead>
+                <tr>
+
+                    <td>
+                        @*<b>@Html.ActionLink("TitleCompany", "TitleManagement", new { sortOrder = ViewBag.TitleNameSortParm, currentFilter = ViewBag.CurrentFilter })</b>*@
+                        <b>Title Company Name </b>
+                    </td>
+                    <td>
+                        <b>Website</b>
+                    </td>
+                    <td>
+                        @*<b>@Html.ActionLink("State", "TitleManagement", new { sortOrder = ViewBag.StateSortParm, currentFilter = ViewBag.CurrentFilter })</b>*@
+                        <b>State(s) </b>
+                    </td>
+                    <td><b>Create Date</b>
+                    </td>
+                    <td><b>Is Active?</b>
+                    </td>
+                    <td colspan="5"></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in @Model)
+                {
+
+                    <tr id="@item.TitleCompanyId">
+                        <td>
+                            <a href="@Url.Action("TitleCompanyPage", "Admin", new { id = @item.TitleCompanyId })" title="Title Company Page" >@item.TitleCompName  </a>
+                        </td>
+
+                        <td>
+                            @item.TitleCompURL
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.State))
+                            {
+                                if (item.State.Length > 50)
+                                {
+                                @(item.State.Substring(0, 50) + "...")
+                                }
+                                else
+                                {
+                                @item.State
+                                }
+                            }
+                        </td>
+
+                        <td>
+                            @item.CreatedOn.ToString("MM/dd/yyyy")
+                        </td>
+                        @{
+                            if (@item.IsActive)
+                            {
+                            <td>Yes
+                            </td>
+                            }
+                            else
+                            {
+                            <td>No
+                            </td>
+                            }
+                        }
+                        <td style="text-align: center;">
+                            <a href="@Url.Action("EditTitleCompany", "Admin", new { id = @item.TitleCompanyId })" title="Edit" >
+                                <span class="glyphicon glyphicon-pencil"></span></a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("RecordTitleCoOrderPayment", "Admin", new { TitleCoId = @item.TitleCompanyId })" title="Manage Title Company Orders" >
+                                <span class="glyphicon glyphicon-usd"></span></a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("ManageTitleCompanyUsers", "Admin", new { id = @item.TitleCompanyId })" title="Users">
+                                <span class="glyphicon glyphicon-user"></span></a>
+                        </td>
+                        @{
+                            if (@item.IsActive)
+                            {
+                            <td>
+                                <a href="@Url.Action("DeactivateTitleCompany", "Admin", new { id = @item.TitleCompanyId })" title="Delete" onclick = "return confirm('Are you sure you wish to deactivate this Title Company?');">
+                                    <span class="glyphicon glyphicon-remove"></span></a>
+                            </td>
+                            }
+                            else
+                            {
+                            <td>
+                                <a href="@Url.Action("ActivateTitleCompany", "Admin", new { id = @item.TitleCompanyId })" title="Activate" onclick = "return confirm('Are you sure you wish to activate this Title Company?');">
+                                    <span class="glyphicon glyphicon-ok"></span></a>
+                            </td>
+                            }
+                        }
+
+                    </tr>
+                            i++;
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("UserManagement",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+<script>
+  
+</script>

@@ -1,0 +1,1556 @@
+﻿@model AssetViewModel
+@using MVCVideo
+@using Inview.Epi.EpiFund.Domain.Helpers
+@using Inview.Epi.EpiFund.Domain.Entity
+@using Inview.Epi.EpiFund.Domain.ViewModel
+@using Inview.Epi.EpiFund.Domain.Enum
+
+<style>
+    .field-validation-error
+    {
+        color: red;
+        font-weight: bold;
+    }
+
+    .detailsHeading {
+        margin: 1px;
+        color: #fff;
+        padding: 3px 10px;
+        cursor: pointer;
+        position: relative;
+        background-color:#428bca;
+    }
+    
+    .layer1 {
+        margin: 0;
+        padding: 0;
+        width: 300px;
+    }
+    
+    .detailsContent {
+        padding: 5px 10px;
+        background-color:#fafafa;
+    }
+
+    #uploadDiv #AssetDocumentType, #uploadDiv #docTitle {
+        border: 1px solid #ccc;
+    }
+
+    #documents .deleteDocUpload {
+        background-color: transparent;
+        border: 0;
+        font-size: 10px;
+        color: #428bca;
+        padding: 0;
+        margin: 0;
+    }
+
+    #documents .deleteDocUpload:hover, #docManager .deleteDocUpload:focus {
+        color: #2a6496;
+    }
+
+    #documents a {
+        display: block;
+    }
+
+    #documents .description {
+        color: #888;
+        font-weight: normal;
+        font-style: italic;
+        font-size: 10px;
+        display: block;
+        margin: 0;
+    }
+
+    #documents .docPreviewDiv.row {
+        background-color: #f7f7f7;
+        width: 100%;
+        margin-left: 0px;
+        padding: 10px 0;
+        margin-bottom: 5px;
+        border: 1px solid #eee;
+        border-radius: 4px;
+    }
+
+    #documents .docPreviewDiv.row .col-sm-2 {
+        text-align: right;
+    }
+
+    #documents .document-item {
+        background-color: #fff;
+        border: 0;
+        padding: 0;
+    }
+
+    #documents .document-item-expanded {
+        background-color: transparent;
+        border: 0;
+        padding: 0;
+        margin: 0;    
+    }
+
+    #PendingUploads .docPreviewDiv.row {
+        background-color: #F1FBED;
+        border-color: #d6e9c6;
+    }
+
+    #documents h4 {
+        margin-bottom: 5px;
+    }
+
+    .progressbar {
+        width:300px;
+        height:20px;
+        background-color: transparent;
+    }
+    .progressbarlabel {
+        width:300px;
+        height:20px;
+        position:absolute;
+        text-align:center;
+        font-size: smaller;
+    }
+
+    
+    .ui-progressbar .ui-progressbar-value {
+        height: 20px;
+    }
+    .spaceLab
+    {
+        margin-right: 10px;
+    }
+
+    .spaceText
+    {
+        margin-left: 10px;
+    }
+</style>
+<!-- Nav tabs -->
+<ul class="nav nav-pills">
+    <li class="active"><a href="#basic" data-toggle="pill">Basic Info</a></li>
+    <li><a href="#documents" data-toggle="tab">Documents</a></li>
+    <li><a href="#finish" data-toggle="tab">Finish</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <div class="row">
+            <div class="col-sm-6 text-right">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.AssetType)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(@Model.AssetType)
+                    @Html.HiddenFor(model => model.AssetType)
+                    @Html.HiddenFor(s => s.ExistingListingStatus)
+                    @Html.HiddenFor(model => Model.AssetNumber)
+                    @Html.HiddenFor(model => Model.IsPaper)
+                    @Html.HiddenFor(model => Model.IsSubmitted)
+                    @Html.HiddenFor(model => Model.Show)
+
+                    @Html.HiddenFor(model => Model.TitleCompanyId)
+                    @Html.HiddenFor(model => Model.TitleCompanyUserId)
+                    @Html.HiddenFor(model => Model.OrderId)
+                    @Html.HiddenFor(model => Model.OrderStatus)
+                    @Html.HiddenFor(model => Model.OrderDate)
+                    @Html.HiddenFor(model => Model.OrderedByUserId)
+
+                    @Html.HiddenFor(model => Model.AssetSellerId)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.Owner)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.Owner)
+                    @Html.ValidationMessageFor(model => model.Owner)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.ContactPhoneNumber)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.ContactPhoneNumber)
+                    @Html.ValidationMessageFor(model => model.ContactPhoneNumber)
+                </div>
+            </div>
+        </div>
+
+        @*<div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.OfficerOfSeller)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.OfficerOfSeller)
+                    @Html.ValidationMessageFor(model => model.OfficerOfSeller)
+                </div>
+            </div>
+        </div>*@
+
+        @*<div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.CorporateOwnershipAddress)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.CorporateOwnershipAddress)
+                   
+                </div>
+            </div>
+        </div>*@
+
+        @*<div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.CorporateOwnershipOfficer)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.CorporateOwnershipOfficer)
+                </div>
+            </div>
+        </div>*@
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.WebsiteEmail)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.WebsiteEmail)
+                    @Html.ValidationMessageFor(model => model.WebsiteEmail)
+                </div>
+            </div>
+        </div>
+
+       
+
+       
+        <hr />
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.ProjectName)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(s => s.ProjectName)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.PropertyAddress)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.PropertyAddress)
+                    @Html.ValidationMessageFor(model => model.PropertyAddress)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.City)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.City)
+                    @Html.ValidationMessageFor(model => model.City)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.State)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.State)
+                    @Html.ValidationMessageFor(model => model.State)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.Zip)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.Zip)
+                    @Html.ValidationMessageFor(model => model.Zip)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.County)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.County)
+                    @Html.ValidationMessageFor(model => model.County)
+                </div>
+            </div>
+        </div>
+       
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <label>APN</label>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.DisplayFor(model => model.TaxParcelNumber)
+                    @Html.HiddenFor(model => Model.TaxParcelNumber)
+                </div>
+            </div>
+        </div>
+
+
+      
+         
+        
+            @Html.HiddenFor(model => model.ClosingDate)
+            @Html.HiddenFor(model => model.ProposedBuyer)
+            @Html.HiddenFor(model => model.ProposedBuyerContact)
+            @Html.HiddenFor(model => model.ProposedBuyerAddress)
+            @Html.HiddenFor(model => model.ActualClosingDate)
+            @Html.HiddenFor(model => model.CommissionShareAgr)
+            @Html.HiddenFor(model => model.DateCommissionToEpiReceived)                
+       
+        <div class="row">
+            <div class="col-sm-12">
+                @*<input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage assets page.')) goBack()" value="Cancel" />*@
+                <input type="button" class="btn btn-primary" onclick="nextTab($(this));" value="Next" />
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="tab-pane" id="documents">
+        <h3>Documents</h3>
+        <div id="uploadDocs" class="layer1" style="width: 100%; margin-bottom: 20px;">
+            <h4 style="margin-top: 10px;">Upload Documents</h4>
+            <div class="docSetup" id="uploadDiv" style="width: 100%; background-color: #f7f7f7; border: 1px solid #eee; padding: 15px;">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Document Type</label>
+                    </div>
+                    <div class="col-sm-12">
+                        @*@Html.EnumDropDownList("AssetDocumentType", Model.AssetDocumentType, "---")*@
+                            @Html.DropDownListFor(model => model.SelectedDocumentType, Model.TitleAssetDocumentTypes as IEnumerable<SelectListItem>, "---",new {id = "AssetDocumentType"})
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Title</label>
+                    </div>
+                    <div class="col-sm-12">
+                        <input type="text" id="docTitle"  style="width:250px;" value="" />
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Description</label>
+                    </div>
+                    <div class="col-sm-12">
+                        <textarea cols="10" rows="4" id="docDescription"></textarea>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="file" data-type="" id="docUpload" value="Upload" />
+                    </div>
+                    <div class ="col-sm-6">
+                        <div id="progressbar" class="progressbar">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div style="color: #18904B; margin-top: 20px; display: none;" id="successDoc">
+                            <i class="fa fa-check" style="color: #27ae60; margin-right: 3px; display: inline;"></i>
+                            <span>The file has been uploaded successfully.</span>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        
+        <div id="docManager" data-doccount="@Model.Documents.Count">
+            <div id="PendingUploads" style="display: none; margin-bottom: 40px;">
+                <h4 id="UploadQueueTitle">Pending Uploads</h4>
+                <div id="uploadDocId" style="display: none;" class="document-item-expanded">
+                    <div class="docSetup" style="width: 100%">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <input type="hidden" id="uploadFileId" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.availablecurrentRentRoll)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkCRR">
+                        <h4>Current Rent Roll</h4>
+                    </div>
+                    <div id="currentRentRollDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.CurrentRentRoll)
+                            {  
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delCRR' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#currentRentRollDocs", ".delCRR", "#linkCRR")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            @if (Model.availablecurrentOperatingReport)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkCOR">
+                        <h4>Current Operating Report</h4>
+                    </div>
+                    <div id="currentOperatingReportDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.CurrentOperatingReport)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delCOR' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#currentOperatingReportDocs", ".delCOR", "#linkCOR")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            @if (Model.availablepriorFiscalYearOperReport)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkPFYOR">
+                        <h4>Prior Fiscal Year Oper Report</h4>
+                    </div>
+                    <div id="priorFiscalYearOperReportDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.PriorFiscalYearOperReport)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delPFYOR' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#priorFiscalYearOperReportDocs", ".delPFYOR", "#linkPFYOR")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            @if (Model.availablepreliminaryTitleReport)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkPTR">
+                        <h4>Preliminary Title Report</h4>
+                    </div>
+                    <div id="preliminaryTitleReportDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.PreliminaryTitleReport)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delPTR' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#preliminaryTitleReportDocs", ".delPTR", "#linkPTR")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            @if (Model.availableplatMap)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkPM">
+                        <h4>Plat Map</h4>
+                    </div>
+                    <div id="platMapDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.PlatMap)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delPM' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#platMapDocs", ".delPM", "#linkPM")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            @if (Model.availablearialMap)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkAM">
+                        <h4>Aerial Map</h4>
+                    </div>
+                    <div id="arialMapDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.ArialMap)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delAM' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#arialMapDocs", ".delAM", "#linkAM")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            @if (Model.availableoriginalAppraisal)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkAOA">
+                        <h4>Original Appraisal/BPO</h4>
+                    </div>
+                    <div id="originalAppraisalDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.OriginalAppraisal)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delAOA' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#originalAppraisalDocs", ".delAOA", "#linkAOA")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            @if (Model.availablecurrentAppraisal)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkCA">
+                        <h4>Calculated Market Value/CMV</h4>
+                    </div>
+                    <div id="currentAppraisalDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.CurrentAppraisal)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delCA' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#currentAppraisalDocs", ".delCA", "#linkCA")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            @if (Model.availableListingAgentMarketingBrochure)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkMB">
+                        <h4>Marketing Brochure</h4>
+                    </div>
+                    <div id="marketingBrochureDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.ListingAgentMarketingBrochure)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delMB' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#marketingBrochureDocs", ".delMB", "#linkMB")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            @if (Model.availableOtherDocument)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkOD">
+                        <h4>Other</h4>
+                    </div>
+                    <div id="otherDocumentsDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.Other)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delOD' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#otherDocumentsDocs", ".delOD", "#linkOD")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+                @if (Model.availableMortgageInstrumentRecord)
+                {
+                <div class="document-item">
+                    <div id="linkMIR">
+                        <h4>Title Company Mortgage Instrument of Record</h4>
+                    </div>
+                    <div id="mgInstRecDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.MortgageInstrumentOfRecord)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delMIR' value='Delete' data-id="#instrumentRecord" data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#mgInstRecDocs", ".delMIR", "#linkMIR")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                }
+                @if (Model.availableRecordedLiens)
+                {
+                <div class="document-item">
+                    <div id="linkRL">
+                        <h4>Title Company Recorded Liens</h4>
+                    </div>
+                    <div id="recordedLiensDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.RecordedLiens)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delRL' value='Delete' data-id="#recLiens" data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#recordedLiensDocs", ".delRL", "#linkRL")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                }
+                @if (Model.availableTaxLiens)
+                {
+                <div class="document-item">
+                    <div id="linkTL">
+                        <h4>Title Company Assessor's Annual Tax Billing Statement</h4>
+                    </div>
+                    <div id="taxLiensDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.TaxLiens)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delTL' value='Delete' data-id="#txLiens" data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#taxLiensDocs", ".delTL", "#linkTL")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                }
+                @if (Model.availableBKRelated)
+                {
+                <div class="document-item">
+                    <div id="linkBKR">
+                        <h4>Title Company BK Related Filings</h4>
+                    </div>
+                    <div id="bkRelatedDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.BKRelated)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delBKR' value='Delete' data-id="#related" data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#bkRelatedDocs", ".delBKR", "#linkBKR")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                }
+                @if (Model.availablePreliminaryTitleReportTitle)
+                {
+                <div class="document-item">
+                    <div id="linkPTRT">
+                        <h4>Title Company Preliminary Title Report</h4>
+                    </div>
+                    <div id="preliminaryTitleReportTitleDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.PreliminaryTitleReportTitle)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delPTRT' value='Delete' data-id="#ptrTitle" data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#preliminaryTitleReportTitleDocs", ".delPTRT", "#linkPTRT")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                }
+                @if (Model.availableDOTMTG)
+                {
+                <div class="document-item">
+                    <div id="linkDOTMG">
+                        <h4>Title Company Recorded DOTs & MTGs</h4>
+                    </div>
+                    <div id="recDOTMTGDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.DOTMTG)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delDOTMTG' value='Delete' data-id="#dotMG" data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#recDOTMTGDocs", ".delDOTMTG", "#linkDOTMG")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                }
+                @if (Model.availableOtherTitle)
+                {
+                <div class="document-item">
+                    <div id="linkODT">
+                        <h4>Title Company Other</h4>
+                    </div>
+                    <div id="otherDocumentsTitleDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.OtherTitle)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delODT' value='Delete' data-id="#othTitle" data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#otherDocumentsTitleDocs", ".delODT", "#linkODT")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+                }
+            
+            @if (Model.AvailableInsurance)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkIns">
+                        <h4>CRE P&C Coverage Quote</h4>
+                    </div>
+                    <div id="insuranceDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.Insurance)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delIns' value='Delete' data-id="#ins" data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#insuranceDocs", ".delIns", "#linkIns")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+            }
+            @if (Model.availableInsuranceOther)
+            {
+                <div class="document-item" style="display:none">
+                    <div id="linkInsOther">
+                        <h4>Other Insurance Coverage Related</h4>
+                    </div>
+                    <div id="insuranceOtherDocs" class="document-item-expanded">
+                        @for (int item = 0; item < Model.Documents.Count; item++)
+                        {
+                            if (Model.Documents[item].Type == (int)Inview.Epi.EpiFund.Domain.Enum.AssetDocumentType.InsuranceOther)
+                            {
+                            <div class="docPreviewDiv row">
+                                <div class="col-sm-10">
+                                    <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.AssetId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">@Model.Documents[item].Title</a>
+                                    <p class="description">@Model.Documents[item].Description</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.HiddenFor(s => Model.Documents[item].Title)
+                                    @Html.HiddenFor(s => Model.Documents[item].Description)
+                                    @Html.HiddenFor(s => Model.Documents[item].Type)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetDocumentId)
+                                    @Html.HiddenFor(s => Model.Documents[item].Size)
+                                    @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                                    @Html.HiddenFor(s => Model.Documents[item].AssetId)
+                                    @Html.HiddenFor(x => Model.Documents[item].Viewable)
+                                    @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                                    <input type='button' class='deleteDocUpload delInsOther' value='Delete' data-id="#insOther" data-button="@Model.Documents[item].FileName" onclick='docDelete(this, "#insuranceOtherDocs", ".delInsOther", "#linkInsOther")'/>
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <br />
+        <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage assets page.')) goBack()" value="Cancel" />
+        <input type="button" class="btn btn-default" onclick="backTab($(this));" value="Back" />
+        <input type="button" class="btn btn-primary" onclick="nextTab($(this));" value="Next" />
+    </div>
+
+    
+    <div class="tab-pane" id="finish">
+        <h3>End</h3>
+        @*<hr />*@
+        <h5>Once you submit, all data will be sent to the CORP admins and your title company can no longer access this asset</h5>
+        <br />
+        <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the access assets page.')) goBack()" value="Cancel" />
+        <input type="button" class="btn btn-default" onclick="backTab($(this));" value="Back" />
+        <input type="submit" class="btn btn-primary" onclick="fixNumbers()" name="action:Update" value="Save Asset">
+        <input type="submit" class="btn btn-primary" onclick="fixNumbers()" name="action:Complete" value="Save & Submit to Corp Admin">
+           
+        
+    </div>
+
+</div>
+@Html.HiddenFor(s => s.CreationDate)
+@Html.HiddenFor(s => s.IsActive)
+@Html.HiddenFor(s => s.ListedByUserId)
+@Html.HiddenFor(s => s.AssetNumber)
+<input type="hidden" value="@(Model.AssetId)" data-asset="@(Model.AssetId)" id="AssetId" name="AssetId"/>
+<input type="hidden" value="@(Model.GetType())" name="TypeOfAsset"/>
+
+
+<script>
+    function addCommasToInputAndCalculate(control, index) {
+        $(control).val(addCommas($(control).val(), false));
+        calculateEstimatedDeferredMaintenance(index);
+    };
+
+    function fixNumbers() {
+        $("input.formatNumber").each(function (index) {
+            $(this).val($(this).val().replace(/,/g, ""));
+        });
+        $("input.formatMaint").each(function (index) {
+            $(this).val($(this).val().replace(/,/g, ""));
+        });
+    };
+
+    $('#myTab a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+
+    $("[name = 'rbIsPaperAsset']").change(togglePaperTab);
+
+    function togglePaperTab() {
+        $("#tabPaper").toggle();
+    }
+
+    function goBack() {
+        window.location.href = "/Admin/AccessAsset";
+    }
+
+    function nextTab(button) {
+        $('.nav li.active').removeClass('active');
+        var currentId = button.closest('.tab-pane');
+        var nextId = button.closest('.tab-pane').next('.tab-pane');
+        currentId.removeClass('active');
+        nextId.addClass('active');
+        var tabLink = '#' + nextId.attr('id');
+        $("[href = '" + tabLink + "']").closest('li').addClass('active');
+    }
+
+    function backTab(button) {
+        $('.nav li.active').removeClass('active');
+        var currentId = button.closest('.tab-pane');
+        var prevId = button.closest('.tab-pane').prev('.tab-pane');
+        currentId.removeClass('active');
+        prevId.addClass('active');
+        var tabLink = '#' + prevId.attr('id');
+        $("[href = '" + tabLink + "']").closest('li').addClass('active');
+    }
+
+    function onlyOneCheckbox(cb) {
+        if (cb.checked) {
+            $("input:checkbox[class='mainflyer']").not(cb).removeAttr("checked");
+        }
+    }
+    
+    $("#AssetDocumentType").change(function () {
+        $('#successDoc').hide();
+        var selected = $("#AssetDocumentType option:selected").text();
+        $("#docTitle").val(selected);
+    });
+
+    $("#docUpload").change(function () {
+        var path = $(this).val();
+        var selDocType = $("#AssetDocumentType").val();
+        var type = $("#docUpload").attr('data-type');
+        var description = $('#docDescription').val();
+        var docId = null;
+        var fileID = null;
+        switch (selDocType) {
+            case 'CurrentRentRoll':
+                $("docUpload").attr("data-type",0); type = 0;
+                //docId = '#currentRentRoll'; fileID =  "#rentRoll"
+                break;
+            case 'CurrentOperatingReport':
+                $("docUpload").attr("data-type",1); type = 1;
+                //docId = '#currentOperatingReport'; fileID =  "#cor"
+                break;
+            case "PriorFiscalYearOperReport":
+                $("docUpload").attr("data-type",2); type = 2;
+                //docId = '#priorFiscalYearOperReport'; fileID =  "#pfyor"
+                break;
+            case "PreliminaryTitleReport":
+                $("docUpload").attr("data-type",3); type = 3;
+                //docId = '#preliminaryTitleReport'; fileID =  "#ptr"
+                break;
+            case "PlatMap":
+                $("docUpload").attr("data-type",4); type = 4;
+                //docId = '#platMap'; fileID =  "#pm"
+                break;
+            case "ArialMap":
+                $("docUpload").attr("data-type",5); type =5;
+                //docId = '#arialMap'; fileID =  "#am"
+                break;
+            case "OriginalAppraisal":
+                $("docUpload").attr("data-type",6);type =6;
+                //docId = '#originalAppraisal'; fileID =  "#oa"
+                break;
+            case "CurrentAppraisal":
+                $("docUpload").attr("data-type",7);type =7;
+                // docId = '#currentAppraisal'; fileID =  "#ca"
+                break;
+            case "ListingAgentMarketingBrochure":
+                $("docUpload").attr("data-type",8);type =8;
+                //docId = '#marketingBrochure'; fileID =  "#mb"
+                break;
+            case "Other":
+                $("docUpload").attr("data-type",9);type =9;
+                //docId = '#otherDocuments'; fileID =  "#od"
+                break;
+            case "MortgageInstrumentOfRecord":
+                $("docUpload").attr("data-type",10);type =10;
+                //docId = '#mgInstRec'; fileID =  "#instrumentRecord"
+                break;
+            case "RecordedLiens":
+                $("docUpload").attr("data-type",11);type =11;
+                //docId = '#recordedLiens'; fileID =  "#recLiens"
+                break;
+            case "TaxLiens":
+                $("docUpload").attr("data-type",12);type =12;
+                //docId = '#taxLiens'; fileID =  "#txLiens"
+                break;
+            case "BKRelated":
+                $("docUpload").attr("data-type",13);type = 13;
+                //docId = '#bkRelated'; fileID =  "#related"
+                break;
+            case "PreliminaryTitleReportTitle":
+                $("docUpload").attr("data-type",14);type =14;
+                //docId = '#preliminaryTitleReportTitle'; fileID =  "#ptrTitle"
+                break;
+            case "DOTMTG":
+                $("docUpload").attr("data-type",15);type =15;
+                //docId = '#recDOTMTG'; fileID =  "#dotMG"
+                break;
+            case "OtherTitle":
+                $("docUpload").attr("data-type",16);type =16;
+                //docId = '#otherDocumentsTitle'; fileID =  "#othTitle"
+                break;
+            case "Insurance":
+                $("docUpload").attr("data-type", 17); type = 17;
+                break;
+            case "InsuranceOther":
+                $("docUpload").attr("data-type", 18); type = 18;
+                break;
+        } 
+        var title = $('#docTitle').val();
+        var description = $('#docDescription').val();
+        docId = '#uploadDocId'; fileID =  "#uploadFileId"
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, docId, fileID);
+    });
+
+
+
+
+    function readDOC(input, fileName, title, description, type, id, fileUploadId) {
+
+        if (input.files && input.files[0]) {
+            var xhr = new XMLHttpRequest();
+            var fd = new FormData();
+            fd.append("file", input.files[0]);
+            fd.append("assetId", $('#AssetId').attr('data-asset'));
+            fd.append("title", title);
+            xhr.addEventListener("progress", function (event) {
+                if (event.lengthComputable) {
+                    var progress = Math.round(event.loaded * 100 / event.total);
+                    $('#progressbar').show();
+                    $('#PendingUploads').show(); 
+                    $("#progressbar").progressbar("value", progress);
+                }
+            }, false);
+            xhr.open("POST", "@Url.Action("DocumentUpload", "Admin")", true);
+            xhr.send(fd);
+            $("#progressbar").progressbar({
+                max: 100,
+                change: function (event, ui) {
+                    $("#progresslabel").text($("#progressbar").progressbar("value") + "%");
+                },
+                complete: function (event, ui) {
+                    $("#progresslabel").text("The file has been uploaded successfully");
+                }
+            });
+            xhr.addEventListener("load", function (event) {
+                var response = JSON.parse(event.target.response);
+                var success = response["message"];
+                var contentType = response["contentType"];
+                var newFilename = response["filename"];
+                var size = response["size"];
+                var downloadUrl = response["downloadUrl"];
+                if (success.toLowerCase() == "true") {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        if (isNaN(docCount)) {
+                            docCount = 0;
+                        }
+                        show(id.substring(1));
+                        jQuery(".detailsContent").hide();
+                        $(id).append("<div class='docPreviewDiv row'><div class='col-sm-10'><a target='_blank' class='spaceLab' href=" + downloadUrl + ">" + title + "</a><label class='description' name='Documents[" + docCount + "].Description'>" + description + "</label></div><div class='col-sm-2'><input type='hidden' class='docTitle' name='Documents[" + docCount + "].Title' value='" + title + "'><input type='hidden' class='docDescription' name='Documents[" + docCount + "].Description' value='" + description + "'><input type='hidden' class='docName' name='Documents[" + docCount + "].FileName' value=" + newFilename + "><input type='hidden' name='Documents[" + docCount + "].Size' value=" + size + "> <input type='hidden' name='Documents[" + docCount + "].ContentType' value=" + contentType + "> <input type='hidden' name='Documents[" + docCount + "].AssetId' value='@Model.AssetId'> <input type='hidden' name='Documents[" + docCount + "].Type' value='" + type + "'><input type='button' class='deleteDocUpload' value='Delete' data-id=" + fileUploadId + " data-button=" + newFilename + " onclick='docDelete(this)'></div></div>");
+                        $('#successDoc').show();
+                        $("#progressbar").delay(1200).fadeOut(300);
+                        document.getElementById('docUpload').value = '';
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                    docCount++;
+                }
+                else {
+                    alert("This document already exists on the server for this asset and this document. Please change the filename of the file before uploading.");
+                    $('#docsPreviewer').append("<div>" + success + " for " + fileName + "</div>")
+                }
+            }, false);
+        }
+    }
+
+    function docDelete(param,enclosingDiv,classType,linkDiv) {
+        var deleteDoc = confirm('Are you sure you want to delete?');
+        if (deleteDoc) {
+            var input = $($(param).attr('data-id'));
+            var xhr = new XMLHttpRequest();
+            var fd = new FormData();
+            fd.append("docId", param.getAttribute("data-button"));
+            fd.append("assetId", $('#AssetId').attr('data-asset'));
+            xhr.open("POST", "@Url.Action("DocumentDelete", "Admin")", true);
+            xhr.send(fd);
+            xhr.addEventListener("load", function (event) {
+                var response = JSON.parse(event.target.response);
+                var success = response["message"];
+                if (success == "true") {
+                    $(param).closest('.docPreviewDiv').hide();
+                    $(param).closest('.docPreviewDiv').find('.docName').val('');
+                    var numItems = $(classType).length;
+                    if(numItems <2)
+                    {
+                        $(enclosingDiv).hide();
+                        $(linkDiv).hide();
+                    }
+                    $(input).wrap('<form>').closest('form').get(0).reset();
+                    $(input).unwrap();
+                }
+                else {
+                    //alert("Data Saved: " + response["message"]);
+                    $(param).closest('.docPreviewDiv').hide();
+                    $(param).closest('.docPreviewDiv').find('.docName').val('');
+                    $(input).wrap('<form>').closest('form').get(0).reset();
+                    $(input).unwrap();
+                }
+            }, false);
+        }
+    }
+
+    $("#mb").change(function () {
+        var path = $(this).val();
+        var type = $("#mb").attr('data-type');
+        var title = $('#mbTitle').val();
+        var description = $('#mbDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#marketingBrochure', "#mb");
+    });
+
+    $("#od").change(function () {
+        var path = $(this).val();
+        var type = $("#od").attr('data-type');
+        var title = $('#odTitle').val();
+        var description = $('#odDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#otherDocuments', "#od");
+    });
+
+    $("#rentRoll").change(function () {
+        var path = $(this).val();
+        var type = $("#rentRoll").attr('data-type');
+        var title = $('#rentRollTitle').val();
+        var description = $('#rentRollDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#currentRentRoll', "#rentRoll");
+    });
+
+    $("#cor").change(function () {
+        var path = $(this).val();
+        var type = $('#cor').attr('data-type');
+        var title = $('#corTitle').val();
+        var description = $('#corDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#currentOperatingReport', "#cor");
+    });
+
+    $("#pfyor").change(function () {
+        var path = $(this).val();
+        var type = $('#pfyor').attr('data-type');
+        var title = $('#pfyorTitle').val();
+        var description = $('#pfyorDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#priorFiscalYearOperReport', "#pfyor");
+    });
+
+    $("#ptr").change(function () {
+        var path = $(this).val();
+        var type = $('#ptr').attr('data-type');
+        var title = $('#ptrTitle').val();
+        var description = $('#ptrDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#preliminaryTitleReport', "#ptr");
+    });
+
+    $("#pm").change(function () {
+        var path = $(this).val();
+        var type = $('#pm').attr('data-type');
+        var title = $('#pmTitle').val();
+        var description = $('#pmDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#platMap', "#pm");
+    });
+
+    $("#am").change(function () {
+        var path = $(this).val();
+        var type = $('#am').attr('data-type');
+        var title = $('#amTitle').val();
+        var description = $('#amDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#arialMap', "#am");
+    });
+
+    $("#oa").change(function () {
+        var path = $(this).val();
+        var type = $('#oa').attr('data-type');
+        var title = $('#oaTitle').val();
+        var description = $('#oaDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#originalAppraisal', "#oa");
+    });
+
+    $("#ca").change(function () {
+        var path = $(this).val();
+        var type = $('#ca').attr('data-type');
+        var title = $('#caTitle').val();
+        var description = $('#caDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#currentAppraisal', "#ca");
+    });
+
+    $("#instrumentRecord").change(function () {
+        var path = $(this).val();
+        var type = $('#instrumentRecord').attr('data-type');
+        var title = $('#mgInstRecTitle').val();
+        var description = $('#mgInstRecDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#mgInstRec', "#instrumentRecord");
+    });
+
+    $("#recLiens").change(function () {
+        var path = $(this).val();
+        var type = $('#recLiens').attr('data-type');
+        var title = $('#recLiensTitle').val();
+        var description = $('#recLiensDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#recordedLiens', "#recLiens");
+    });
+
+    $("#txLiens").change(function () {
+        var path = $(this).val();
+        var type = $('#txLiens').attr('data-type');
+        var title = $('#taxLiensTitle').val();
+        var description = $('#taxLiensDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#taxLiens', "#txLiens");
+    });
+
+    $("#related").change(function () {
+        var path = $(this).val();
+        var type = $('#related').attr('data-type');
+        var title = $('#bkRelatedTitle').val();
+        var description = $('#bkRelatedDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#bkRelated', "#related");
+    });
+
+    $("#ptrTitle").change(function () {
+        var path = $(this).val();
+        var type = $('#ptrTitle').attr('data-type');
+        var title = $('#ptrTitleTitle').val();
+        var description = $('#ptrTitleDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#preliminaryTitleReportTitle', "#ptrTitle");
+    });
+
+    $("#dotMG").change(function () {
+        var path = $(this).val();
+        var type = $('#dotMG').attr('data-type');
+        var title = $('#dotMGTitle').val();
+        var description = $('#dotMGDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#recDOTMTG', "#dotMG");
+    });
+
+    $("#othTitle").change(function () {
+        var path = $(this).val();
+        var type = $('#othTitle').attr('data-type');
+        var title = $('#otherTitleTitle').val();
+        var description = $('#otherTitleDescription').val();
+        var fileName = path.match(/[^\/\\]+$/);
+        readDOC(this, fileName, title, description, type, '#otherDocumentsTitle', "#othTitle");
+    });
+
+    var docCount = 0;
+
+    $(document).ready(function () {
+
+        jQuery(".detailsContent").hide();
+        //toggle the componenet with class msg_body
+        jQuery(".detailsHeading").click(function()
+        {
+            jQuery(this).next(".detailsContent").slideToggle(500);
+            $('#AssetDocumentType').val('---');
+            $("#docTitle").val('');
+            $('#docDescription').val('');
+        });
+
+        docCount = 0;
+        docCount = $('#docManager').attr('data-doccount');
+        docCount--;
+
+        jQuery(function ($) {
+            $(document).on('nested:fieldRemoved', function (event) {
+                $('[required]', event.field).removeAttr('required');
+            });
+        });
+
+        $("input.formatNumber").each(function (index) {
+            $(this).val(addCommas($(this).val(), true));
+            $(this).on("input", null, null, function () {
+                $(this).val(addCommas($(this).val(), true));
+            });
+        });
+        $("input.formatMaint").each(function (index) {
+            $(this).val(addCommas($(this).val(), true));
+        });
+        $("span.formatNumber").each(function (index) {
+            $(this).text(addCommas($(this).text(), false));
+        });
+
+        //Setup Calendar UI
+        $(function () {
+            $(".datepicker").datepicker();
+        });
+    });
+
+
+    function show(id) {
+        $('#' + id).show();
+    }
+    function hide(id) {
+        $('#' + id).hide();
+    }
+</script>

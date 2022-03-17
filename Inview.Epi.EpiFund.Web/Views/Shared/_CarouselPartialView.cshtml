@@ -1,0 +1,124 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.ViewModel.CarouselAssetData>
+@{
+    var offsetTop = ViewBag.IsAdmin ? 500 : 420;
+}
+<div class="sidebar-carousel-container" data-spy="affix" data-offset-top="@offsetTop" data-offset-bottom="0">
+    <div id="sidebar-carousel" class="carousel slide vertical" data-ride="carousel">
+        <div class="carousel-inner">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                if (i == 0)
+                {
+                <div class="item active test" style="background: transparent url(@Model[i].Image) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model[i].City, @Model[i].State @Model[i].AssetType<br />
+                            List Price @Model[i].AskingPrice
+                        </p>
+                    </div>
+                </div>
+                }
+                else
+                {
+                <div class="item" style="background: transparent url(@Model[i].Image) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model[i].City, @Model[i].State @Model[i].AssetType<br />
+                            List Price @Model[i].AskingPrice
+                        </p>
+                    </div>
+                </div>
+                }
+            }
+        </div>
+    </div>
+    @if (Model.Count > 0)
+    {
+        <div id="sidebar-carousel1" class="carousel slide vertical" data-ride="carousel">
+            <div class="carousel-inner">
+                @for (int i = 1; i < Model.Count; i++)
+                {
+                    if (i == 1)
+                    {
+                    <div class="item active test" style="background: transparent url(@Model[i].Image) 50% 50% no-repeat">
+                        <div class="carousel-caption">
+                            <h3>FEATURE INVENTORY</h3>
+                            <p>@Model[i].City, @Model[i].State @Model[i].AssetType<br />
+                                List Price @Model[i].AskingPrice
+                            </p>
+                        </div>
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="item" style="background: transparent url(@Model[i].Image) 50% 50% no-repeat">
+                        <div class="carousel-caption">
+                            <h3>FEATURE INVENTORY</h3>
+                            <p>@Model[i].City, @Model[i].State @Model[i].AssetType<br />
+                                List Price @Model[i].AskingPrice
+                            </p>
+                        </div>
+                    </div>
+                    }
+                }
+                <div class="item" style="background: transparent url(@Model[0].Image) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model[0].City, @Model[0].State @Model[0].AssetType<br />
+                            List Price @Model[0].AskingPrice
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sidebar-carousel2" class="carousel slide vertical" data-ride="carousel">
+            <div class="carousel-inner">
+                @for (int i = 2; i < Model.Count; i++)
+                {
+                    if (i == 2)
+                    {
+                    <div class="item active test" style="background: transparent url(@Model[i].Image) 50% 50% no-repeat">
+                        <div class="carousel-caption">
+                            <h3>FEATURE INVENTORY</h3>
+                            <p>@Model[i].City, @Model[i].State @Model[i].AssetType<br />
+                                List Price @Model[i].AskingPrice
+                            </p>
+                        </div>
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="item" style="background: transparent url(@Model[i].Image) 50% 50% no-repeat">
+                        <div class="carousel-caption">
+                            <h3>FEATURE INVENTORY</h3>
+                            <p>@Model[i].City, @Model[i].State @Model[i].AssetType<br />
+                                List Price @Model[i].AskingPrice
+                            </p>
+                        </div>
+                    </div>
+                    }
+                }
+                <div class="item" style="background: transparent url(@Model[0].Image) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model[0].City, @Model[0].State @Model[0].AssetType<br />
+                            List Price @Model[0].AskingPrice
+                        </p>
+                    </div>
+                </div>
+                @if (Model.Count > 1)
+                {
+                    <div class="item" style="background: transparent url(@Model[1].Image) 50% 50% no-repeat">
+                        <div class="carousel-caption">
+                            <h3>FEATURE INVENTORY</h3>
+                            <p>@Model[1].City, @Model[1].State @Model[1].AssetType<br />
+                                List Price @Model[1].AskingPrice
+                            </p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

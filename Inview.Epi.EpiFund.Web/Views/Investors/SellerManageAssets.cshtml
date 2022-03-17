@@ -1,0 +1,351 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.SellerAssetSearchResultsModel
+@{
+    ViewBag.Title = "Manage Assets";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    function showControls(control) {
+        if (control.value == 3) {
+            $("#MFSearch").show();
+            $("#ComSearch").hide();
+        }
+        else {
+            $("#ComSearch").show();
+            $("#MFSearch").hide();
+        }
+    }
+</script>
+<style>
+    .kill-width-for-td-address
+    {
+        max-width: 79px;
+    }
+</style>
+<h3>Assets</h3>
+
+<button id="createAssetButton" class="btn btn-primary" data-toggle="modal" data-target="#assetTypeModal">
+    Create New Asset
+</button>
+<div style="float:right;">
+    <select id="ddlRowCount" onchange="changeResults()">
+        <option value="25">25</option>
+        <option value="50" selected="selected">50</option>
+        <option value="75">75</option>
+        <option value="100">100</option>
+    </select>
+</div>
+<br />
+@Html.Partial("_CreateAssetPartial")
+<br />
+@using (Html.BeginForm("SellerManageAssets", "Investors", FormMethod.Post, new { id = "searchForm" }))
+{
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#searchbox">
+                        <button class="btn btn-default btn-xs" style="border: 1px solid #888">
+                                Search Assets
+                        </button>
+                    </a>
+                </h4>
+            </div>
+            <div id="searchbox" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.AssetNumber, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.AssetNumber)
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.SelectedAssetType, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.DropDownListFor(s => s.SelectedAssetType, @Model.AssetTypes, new { @style = "width: 100%", onchange="showControls(this)" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.AddressLine1, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.AddressLine1)
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.City, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.City, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.State, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.DropDownListFor(s => s.State, @Model.States)
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.ZipCode, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.ZipCode, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.StartDate, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.StartDate, new { @style = "width: 100%", @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.EndDate, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.EndDate, new { @style = "width: 100%", @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="row asset-list-form" id="MFSearch" display="style:none;">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.MinUnitsSpaces, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.MinUnitsSpaces, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.MaxUnitsSpaces, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.MaxUnitsSpaces, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form" id="ComSearch" display="style:none;">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.MinSquareFeet, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.MinSquareFeet, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.MaxSquareFeet, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.MaxSquareFeet, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+                     <div class="row asset-list-form">
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.AssetName, new { @style = "line-height: 32px; margin:0" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.AssetName, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row asset-list-form">
+
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <div class="input-group">
+                                @Html.HiddenFor(model => Model.Page)
+                                @Html.HiddenFor(model => Model.SortOrder)
+                                @Html.HiddenFor(model => Model.RowCount)
+                                <input type="submit" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto;" onclick="clearSearchValues()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@{ Html.RenderPartial("_SellerAssetListView", Model.Assets); }
+
+<script>
+    $(document).ready(function () {
+        showControls($("#SelectedAssetType"));
+    });
+    $('#createAssetButton').click(function () {
+        $('#overlay').show();
+    });
+    $('#cancelCreation').click(function () {
+        $('#overlay').hide();
+    });
+    $(function () {
+        $(".datepicker").datepicker();
+    });
+    function EditAsset(aId) {
+        $.ajax({
+            type: "POST",
+            url: "/Admin/EditAsset/",
+            data: JSON.stringify({ assetId: aId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            cache: false,
+            success: function (response) {
+                if (response["Status"] == "unlocked") {
+                    window.location.href = '@Url.Action("UpdateAsset", "Admin")' + '/' + aId;
+                }
+                else if (response["Status"] == "locked") {
+                    alert('The asset is currently being edited at the moment. Please try again someday.');
+                }
+                else {
+                    // admin
+                    if (confirm('The asset is currently locked. Would you like to edit the asset anyway?')) {
+                        $.post('@Url.Action("UnlockAsset", "Admin")', { assetId: aId }, function () {
+                            window.location.href = '/Admin/UpdateAsset/' + aId;
+                        });
+                    }
+                }
+            },
+            error: function (jqXHR, exception) {
+            },
+            failure: function (response) {
+            }
+        });
+    }
+
+    $('.pagination li a').click(function () {
+        var href = $(this).attr('href');
+        if (typeof href !== typeof undefined && href !== false) {
+            var page = parseInt(getPageNumber(href));
+            $('#Page').val(page);
+            $('#searchForm').submit();
+            return false;
+        }
+    });
+    function postForm(order) {
+        $('#SortOrder').val(order);
+        $('#searchForm').submit();
+        return false;
+    }
+    function changeResults() {
+        $('#RowCount').val($('#ddlRowCount').val());
+        $('#searchForm').submit();
+    }
+    function showControls(control) {
+        if (control.value == "MultiFamily" || control.value == "MHP") {
+            $("#MFSearch").show();
+            $("#ComSearch").hide();
+        }
+        else {
+            $("#ComSearch").show();
+            $("#MFSearch").hide();
+        }
+    }
+
+    $(document).ready(function () {
+        $('.pad').each(function (index) {
+            padCommas(this, false);
+        });
+    });
+
+    function padCommas(element, addDollarSign) {
+        // asumming element is span, not input
+        if (element) {
+            if (element.innerHTML.length != 0 && element.innerHTML != null) {
+                var sign = (addDollarSign) ? '$' : '';
+                num = getNumberFromNonInput(element);
+                if (num == null) {
+                    return;
+                }
+
+                str = num.toString();
+                sig = str.split('.');
+
+                tmp = '';
+                len = sig[0].length;
+                for (var i = len, j = 1; i > 0; i--, j++) {
+                    var t = sig[0].substring(i, i - 1);
+                    tmp = t + tmp;
+                    if ((j % 3 == 0) && j != len) {
+                        tmp = ',' + tmp;
+                    }
+                }
+
+                if (sig.length > 1 && sig[1].length) {
+                    tmp += '.' + sig[1].substr(0, 1);
+                    var t = sig[1].substr(1, 1);
+                    if (t) {
+                        tmp += t;
+                    } else {
+                        tmp += '0';
+                    }
+                }
+                str = sign + tmp;
+                element.innerHTML = str;
+            }
+        }
+    }
+
+</script>
+

@@ -1,0 +1,87 @@
+﻿@using Postal
+@model Inview.Epi.EpiFund.Web.Models.Emails.NotificationToInsCoUploadCompleteEmail
+To: @Model.To
+From: USCREonline <info@uscreonline.com>
+Subject: @Model.Subject
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+<p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <table style="width: 100%;">
+        <tr>
+            <td align="left">To @Model.CompanyName,</td>
+            <td align="right">@Model.Date.ToString("MMMM d, yyyy")</td>
+        </tr>
+    </table>
+    <p><b style="color:darkgoldenrod">US CRE Online.com</b> Recorded Documents & Prelim Title Report Upload Confirmation – for PI Buyer:</p>
+    <table>
+        <tr>
+            <td width="80"></td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Log in to:</td>
+                        <td><a href="www.USCREonline.com">www.USCREonline.com</a></td>
+                    </tr>
+                    <tr>
+                        <td>Asset ID&#35;:</td>
+                        <td>@Model.AssetId</td>
+                    </tr>
+                    <tr>
+                        <td>Property Address:</td>
+                        <td>@Model.AssetAddress1 @Model.AssetAddress2, @Model.AssetCity, @Model.AssetState @Model.AssetZip</td>
+                    </tr>
+                    <tr>
+                        <td>Property Type:</td>
+                        <td>@Model.AssetDescription</td>
+                    </tr>
+                    <tr>
+                        <td>APN:</td>
+                        <td>@Model.APN</td>
+                    </tr>
+                    <tr>
+                        <td>Registrant (PI-B)</td>
+                        <td>@Model.BuyerName</td>
+                    </tr>
+                    <tr>
+                        <td>PI-B Vesting Entity:</td>
+                        <td>@Model.VestingEntity</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <p>
+        This is the official automated confirmation that USCREonline.com LLC "USC" has successfully received the P&C Insurance Quote for 
+        the above captioned commercial investment property c/o its registered Principal Investor "PI" from @Model.CompanyName.  USC extends 
+        its continuing sincere gratitude and appreciation to @Model.CompanyName for its excellent and timely services extended to USC and its Portal Community.
+    </p>
+    <p>
+        With your &#91;submittal&#93; of subject documents, said Asset ID has been permanently deactivated from the &#91;Manage Assets&#93; folder at your 
+        &#91;"My USC Page"&#93;.  You will no longer be able to upload documents into the above captioned Asset ID#.  
+    </p>
+    <p>
+        The @Model.CompanyName "My USC Page" Record of Uploaded Recorded Documents TAB shall then be automatically updated for your 
+        review.  Per the terms and conditions of its Service Agreement with USC, @Model.CompanyName will receive not be compensated for its defined 
+        services (e.g., providing said quote) according thereto.
+    </p>
+    <p>
+        Uploaded Document Review Instructions: 
+    </p>
+    <ol>
+        <li>
+            Go to http://www.uscreonline.com and log in.
+        </li>
+        <li>From your &#91;"My USC Page"&#93; &#60;click&#62; on to the &#91;Record of Uploaded Insurance Quotes&#93; hyperlink.</li>
+        <li>
+            When completed, please Log Out.
+        </li>
+    </ol>
+    <p>
+        Thank you for being a valued Endorser to and Service Provider of <i><b style="color:darkgoldenrod">United States Commercial Real Estate Online, LLC</b></i>.  It is our honor and privilege to 
+        provide the defined CRE Data Portal Services to the investment community.
+    </p>
+    <span>The Professional Staff</span><br />
+    <span><b style="color:darkgoldenrod"><i>US CRE Online, LLC</i></b></span>
+</body>
+</html>

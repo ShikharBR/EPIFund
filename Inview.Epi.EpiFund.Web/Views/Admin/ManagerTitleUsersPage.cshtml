@@ -1,0 +1,116 @@
+﻿@using PagedList.Mvc
+@model Inview.Epi.EpiFund.Web.Models.TitleUserSearchResultsModel
+@{
+    ViewBag.Title = "Manage Title Company's Users";
+    if (Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.TitleCompUser || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.TitleCompManager)
+    {
+        Layout = "~/Views/Shared/_LayoutTitleUser.cshtml";
+    }
+    if (Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.SiteAdmin)
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+}
+<h3 class="page-header">Manage Title Company Users</h3>
+ 
+<div class="row">
+        <div class="col-lg-12">
+            <input type="button" class="btn btn-primary" value="New Title Company User" onclick="location.href='@Url.Action("CreateTitleUserbyManager", "Admin", new { id = @Model.TitleCompanyId })'" />
+        </div>
+    </div>
+
+@using (Html.BeginForm("ManagerTitleUsersPage", "Admin", new { id = @Model.TitleCompanyId }, FormMethod.Post, new { @id = "usersForm", @name = "usersForm" }))
+{
+     @Html.HiddenFor(s => s.TitleCompanyId, new { id = "hiddenId"})
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#searchbox">
+                        <button class="btn btn-default btn-xs" style="border: 1px solid #888">
+                                Search Title Company users
+                        </button>
+                    </a>
+                </h4>
+            </div>
+            <div id="searchbox" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.FirstName)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.FirstName, new { id = "searchFN" })
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.LastName)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.LastName, new { id = "searchLN" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.PhoneNumber)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.PhoneNumber , new { id = "searchPN" })
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.Email)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.Email, new { id = "searchEM" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                                <input type="submit" name="SubmitButton" value="Search" class="btn btn-primary proceed" style="width: 200px; margin-top: 20px" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<br />
+@{ Html.RenderPartial("_ManagerTitleUsersList", Model.TitleUsers); }
+<br />
+
+<script >
+
+    $('#usersForm').keypress(keypressHandler);
+
+    function keypressHandler(e)
+    {
+        if(e.which == 13) {
+            var id =  $('#hiddenId').val();
+            var searchFN = $('#searchFN').val();
+            var searchLN = $('#searchLN').val();
+            var searchPN = $('#searchPN').val();
+            var searchEM = $('#searchEM').val();
+            $(this).blur();
+            $.post('@Url.Action("SearchTitleUsersPage")', "&id="+id + "&searchFN=" + searchFN+ "&searchLN=" + searchLN+ "&searchPN=" + searchPN+ "&searchEM=" + searchEM, function (data) {
+                $('#userPartial').html(data);
+            });
+            //$('#SubmitButton').focus().click();
+        }
+    }
+
+</script>

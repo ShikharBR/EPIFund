@@ -1,0 +1,245 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.OperatingCompanyViewModel
+
+@Html.HiddenFor(m => m.OperatingCompanyId)
+@Html.HiddenFor(s => s.IsActive)
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.CompanyName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.CompanyName)@Html.ValidationMessageFor(s => s.CompanyName, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Email, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Email)@Html.ValidationMessageFor(s => s.Email, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.FirstName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.FirstName)@Html.ValidationMessageFor(s => s.FirstName, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.LastName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*</span>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.LastName)@Html.ValidationMessageFor(s => s.LastName, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.AddressLine1, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.AddressLine1)@Html.ValidationMessageFor(s => s.AddressLine1, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.AddressLine2, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.AddressLine2)@Html.ValidationMessageFor(s => s.AddressLine2, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.City, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.City)@Html.ValidationMessageFor(s => s.City, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.State, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.State)@Html.ValidationMessageFor(s => s.State, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Zip, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Zip)@Html.ValidationMessageFor(s => s.Zip, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Country, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.DropDownListFor(s => s.Country, new SelectList(Model.Countries, "Value", "Text", Model.Country))
+            @Html.ValidationMessageFor(s => s.Country, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.CellNumber, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.CellNumber)@Html.ValidationMessageFor(s => s.CellNumber, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.WorkNumber, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.WorkNumber)@Html.ValidationMessageFor(s => s.WorkNumber, "")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.FaxNumber, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.FaxNumber)@Html.ValidationMessageFor(s => s.FaxNumber, "")
+        </div>
+    </div>
+</div>
+<div style="padding-top:30px">
+    <label>Holding Companies:</label>
+    <div class="overflow short-xs" id="HoldingCompanyView">
+        <table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="padding: 5px; font-size: 10px !important; vertical-align: middle;">
+            <thead>
+                <tr>
+                    <td>
+                        <b>Company Name</b>
+                    </td>
+                    <td>
+                        <b>Assets</b>
+                    </td>
+                    <td>
+                        <b>Email</b>
+                    </td>
+                    <td>
+                        <b>State/Region/Province</b>
+                    </td>
+                    <td>
+                        <b>Country</b>
+                    </td>
+                    <td>
+                        <b>Active?</b>
+                    </td>
+                    <td colspan="2"></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in @Model.HoldingCompanies)
+                {
+                <tr id="@item.HoldingCompanyId">
+                    <td>
+                        @item.CompanyName
+                    </td>
+                    <td>
+                        @if (item.Assets.Count > 0)
+                        {
+                            for (int i = 0; i < item.Assets.Count; i++)
+                            {
+                                <a href="/Admin/UpdateAsset/@item.Assets[i].AssetId">@item.Assets[i].AssetNumber&nbsp;</a>
+                            }
+                        }
+                        else
+                        {
+                            <span style="font-weight:bold">No Assets</span>
+                        }
+                    </td>
+                    <td>
+                        @item.Email
+                    </td>
+                    <td>
+                        @item.State
+                    </td>
+                    <td>
+                        @item.Country
+                    </td>
+                    <td>
+                        @(item.IsActive ? "Yes" : "No")
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="@Url.Action("UpdateHoldingCompany", "Admin", new { id = @item.HoldingCompanyId })" title="edit">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                    </td>
+                    <td>
+                        @if (item.IsActive)
+                        {
+                            <a href="@Url.Action("DeactivateHoldingCompany", "Admin", new { id = @item.HoldingCompanyId, ocId = Model.OperatingCompanyId })" title="deactivate" onclick="return confirm('Are you sure you wish to deactivate this Holding Company?');">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("ReactivateHoldingCompany", "Admin", new { id = @item.HoldingCompanyId, ocId = Model.OperatingCompanyId })" title="reactivate" onclick="return confirm('Are you sure you wish to reactivate this Holding Company?');">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </a>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

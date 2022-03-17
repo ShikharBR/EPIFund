@@ -1,0 +1,192 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.OrderSearchResultsModel
+
+@using System.Collections
+
+@{
+    ViewBag.Title = "Title Company Orders";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<style>
+
+</style>
+<h3 class="page-header">Title Company Orders</h3>
+<div style="float:right;">
+    <select id="ddlRowCount" onchange="changeRowCount('@Url.Action("RecordTitleCoOrderPayment", "Admin", new { TitleCoId = Model.TitleCompanyId })')">
+        <option value="25">25</option>
+        <option value="50" selected="selected">50</option>
+        <option value="75">75</option>
+        <option value="100">100</option>
+    </select>
+</div>
+<ul class="nav nav-pills">
+    <li class="active"><a href="#pending" data-toggle="pill">Pending</a></li>
+    <li><a href="#completed" data-toggle="tab">History</a></li>
+</ul>
+<br />
+<br />
+@Html.HiddenFor(x => Model.TitleCompanyId)
+<div class="tab-content">
+    <div id="loadingDiv">
+        <img src="~/Content/images/fileUploadPlaceholder.GIF" />
+    </div>
+    <div class="tab-pane active" id="pending">
+        <h5>Pending</h5>
+        @using (Html.BeginForm("RecordTitleCoOrderPayment", "Admin", FormMethod.Post, new { id = "pendingForm" }))
+        {
+            @Html.HiddenFor(model => Model.PendingPage)
+        }
+        @{ Html.RenderPartial("_AdminPendingOrderHistoryListView", Model.Pending); }
+        <br />
+    </div>
+    <div class="tab-pane" id="completed">
+        <h5>History</h5>
+        <br />
+        @using (Html.BeginForm("RecordTitleCoOrderPayment", "Admin", FormMethod.Post, new { id = "completedForm" }))
+        {
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div id="searchbox" class="panel">
+                        <div class="panel-body">
+                            <div class="row">
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.LabelFor(s => s.AssetNumber)
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                @Html.TextBoxFor(s => s.AssetNumber)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                                        @Html.HiddenFor(model => Model.CompletedPage)
+                                <input type="button" onclick="searchCompleted()" value="Search" class="btn btn-primary proceed" style="width: 200px; margin-top: 20px" />
+                        </div>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <br />
+        @{ Html.RenderPartial("_AdminCompletedOrderHistoryListView", Model.Completed); }
+        <br />
+    </div>
+</div>
+
+<script>
+    var $loading = $('#loadingDiv').hide();
+    //$(document)
+    //  .ajaxStart(function () {
+    //      $loading.show();
+    //  })
+    //  .ajaxStop(function () {
+    //      $loading.hide();
+    //  });
+
+    $(function () {
+        $(".datepicker").datepicker();
+    });
+
+    function searchCompleted() {
+        clearSearchValues();
+        var titleId = $("#TitleCompanyId").val();
+        $("#completed").load('/Admin/RecordTitleCoOrderPayment?TitleCoId=' + titleId + ' #completed', $('#completedForm').serialize(), function (response, status, xhr) {
+            if (status == "error") {
+                alert('failed');
+            }
+            if (status == "success") {
+                //alert('success');
+            }
+        });
+    }
+
+    function changeResults() {
+        $('#RowCount').val($('#ddlRowCount').val());
+    }
+
+    function RenderPage(page, type) {
+        $('#Page').val(page);
+        var titleId = $("#TitleCompanyId").val();
+        if (type == 'pending') {
+            $('#PendingPage').val(page);
+            $("#pending").load('/Admin/RecordTitleCoOrderPayment?TitleCoId=' + titleId + '&task=pending #pending', $('#pendingForm').serialize(), function (response, status, xhr) {
+                if (status == "error") {
+                    alert('failed');
+                }
+                if (status == "success") {
+                    //alert('success');
+                }
+            });
+        }
+        else {
+            $('#CompletedPage').val(page);
+            $("#completed").load('/Admin/RecordTitleCoOrderPayment?TitleCoId=' + titleId + '&task=completed #completed', $('#completedForm').serialize(), function (response, status, xhr) {
+                if (status == "error") {
+                    alert('failed');
+                }
+                if (status == "success") {
+                    //alert('success');
+                }
+            });
+        }
+    }
+
+    function recordPayment(i) {
+        re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+        var currentRate = $("#" + i + "-currentRate").val();
+        var datePaid = $("#" + i + "-datePaid").val();
+        var assetId = $("#" + i + "-AssetId").val();
+        var titleCompanyId = $("#" + i + "-TitleCompanyId").val();
+
+        if (datePaid != '' && !datePaid.match(re)) {
+            alert("Date Paid not in correct format");
+            return;
+        }
+        if (!isNumber(currentRate)) {
+            alert("Current Rate is not in correct format");
+            return;
+        }
+
+        var form = $("<form/>",
+            {
+                action: '/Admin/RecordTitleCompanyPayment',
+                method: 'post',
+                hidden: 'hidden',
+                id: i + "-form"
+            });
+        form.prepend($("<input/>",
+            {
+                type: 'text',
+                name: 'currentRate',
+                id: 'currentRate',
+                value: currentRate
+            }));
+        form.prepend($("<input/>",
+            {
+                type: 'text',
+                name: 'datePaid',
+                id: 'datePaid',
+                value: datePaid
+            }));
+        form.prepend($("<input/>",
+            {
+                type: 'text',
+                name: 'assetId',
+                id: 'assetId',
+                value: assetId
+            }));
+        form.prepend($("<input/>",
+            {
+                type: 'text',
+                name: 'titleCompanyId',
+                id: 'titleCompanyId',
+                value: titleCompanyId
+            }));
+        $("body").append(form);
+        form.submit();
+        form.remove();
+    }
+</script>

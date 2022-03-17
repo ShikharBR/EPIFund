@@ -1,0 +1,15 @@
+﻿@model System.DateTime?
+
+@Html.TextBox("", String.Format("{0:MM/dd/yyyy}",(Model == DateTime.MinValue)? null : Model), new { @class="text"})
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#@ViewData.ModelMetadata.PropertyName").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'mm/dd/yy',
+            gotoCurrent: true
+        });
+    });
+</script>

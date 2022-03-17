@@ -1,0 +1,136 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.JVAgreementTemplateModel
+
+<div class="JVAgreement">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Month, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.DisplayFor(s=>s.Month, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Day, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.DisplayFor(s=>s.Day, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Year, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.DisplayFor(s=>s.Year, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.UserFirstName, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.UserFirstName, "*")</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s=>s.UserFirstName, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.UserLastName, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.UserLastName, "*")</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s=>s.UserLastName, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.Email, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.Email, "*")</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s=>s.Email, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.CorpTitle, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.CorpTitle, "*")</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s=>s.CorpTitle, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.CompanyName, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.CompanyName, "*")</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s=>s.CompanyName, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.AcronymOfCorporateEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.AcronymOfCorporateEntity, "*")</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.TextBoxFor(s=>s.AcronymOfCorporateEntity, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.TypeOfCorporateEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.TypeOfCorporateEntity, "*")</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.DropDownListFor(s=>s.TypeOfCorporateEntity, @Model.TypesOfCorporateEntity, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.LabelFor(s => s.StateOfOriginOfCorporateEntity, new { @class = "control-label" })<span class="red">@Html.ValidationMessageFor(s => s.StateOfOriginOfCorporateEntity, "*")</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.DropDownListFor(s=>s.StateOfOriginOfCorporateEntity, @Model.States, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,257 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.AdminAssetQuickListModel>
+@{
+    bool showCreatedBy = false;   
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var checkboxes = $("input[type='checkbox']");
+
+        checkboxes.click(function () {
+            if (checkboxes.is(":checked")) {
+                $("#notifyRegistrant").removeClass("hide", !checkboxes.is(":checked"));
+            } else {
+                $("#notifyRegistrant").addClass("hide", !checkboxes.is(":checked"));
+            }
+        });
+    });
+</script>
+<p>Select checkbox(es) and click "Hold and Notify Registrant" to hold asset for specific registrant (per asset search criteria). Note: Assets without a checkbox is already on hold for another registrant and is waiting action before being published to general database. If you would like to circumvent this process, you may click on the globe icon to publish to the general database.</p>
+
+@Html.PagedListPager(Model, page => Url.Action("ManageAssets",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+        @if ((Inview.Epi.EpiFund.Domain.Enum.UserType)ViewBag.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin2 ||
+            (Inview.Epi.EpiFund.Domain.Enum.UserType)ViewBag.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+        {
+            <a style="float: right; color: white;" title="export master db spreadsheet" href="@Url.Action("DownloadAssetList", "Admin")">
+                <span class="glyphicon glyphicon-export"></span>
+            </a>
+        }
+        </div>
+    @if (Model.Count > 0)
+    {
+        using (Html.BeginForm("GetSelectedItemsAndNotifyRegistrant", "Admin", FormMethod.Post))
+        {
+            <div class="overflow short-xs">
+                <table class="table table-striped" id="tbAssets" cellpadding="1" cellspacing="1" 
+                       style="font-size: 10px !important; padding: 1px; vertical-align: middle;">
+                    <thead>
+                        <tr>
+                            <th><b>Asset<br />ID#</b></th>
+                            <th><b>City/<br />State</b></th>
+                            <th><b>Asset<br />Type</b></th>                       
+                            <th><b>#Units<br />Sq.Ft</b></th>                      
+                            <th><b>Asset<br />Name</b></th>
+                            <th><b>Occ%<br />Mo/Year</b></th>
+                            <th><b>Proforma<br /><a title="Annualized Scheduled Gross Income">SGI</a></b></th>
+                            <th><b>Proforma<br /><a title="Annualized Net Operating Income">NOI</a></b></th>
+                            <th><b><a title="Annual Capitalization Rate"> CAP%</a></b></th>
+                            <th><b>Assm<br />Fin</b></th>
+                            <th><b>Pricing:LP<br />CMA/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a></b></th>
+                        
+                            <th><span class="glyphicon glyphicon-book" title="Portfolio"></span></th>
+                            <th title="Chain of Title"><img style="width:12px;" src="~/Content/images/tringle.png" /></th>
+                            <th><span class="glyphicon glyphicon-user" title="Users"></span></th>
+                            <th><span class="glyphicon glyphicon-retweet" title="Availability Status"></span></th>
+                            <th title="Who’s Driving the Bus" ><img style="height:16px;" src="~/Content/images/bus.png" /></th>
+                            <th>Manage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < @Model.Count; i++)
+                        {
+                            string username = string.Empty;
+                            string email = string.Empty;
+                            if (!string.IsNullOrEmpty(Model[i].CreatedBy))
+                            {
+                                username = Model[i].CreatedBy.Split('~')[0];
+                                email = Model[i].CreatedBy.Split('~')[1];
+                            }
+                            <tr id="@Model[i].AssetId">
+                                <td>
+                                    <a href="@Url.Action("ViewAsset", "DataPortal", new { id = @Model[i].AssetId, fromManageAssets = true })">
+                                        @Model[i].AssetNumber
+                                    </a>
+                                </td>
+                                <td style="word-wrap: break-word;">
+                                    <span class="AssetName" title="@Model[i].City"> @Model[i].City</span><br />
+                                    @Model[i].State
+                                </td>
+                                <td>
+                                    @Model[i].Type
+                                </td>
+                                <td>                                    
+                                    <span class="padNumber">@(Model[i].SquareFeet > 0 ? Model[i].SquareFeet.ToString() : Model[i].NumberOfUnits.ToString())</span>
+                                </td>
+                                <td style="word-wrap: break-word;">
+                                    <span class="AssetName" title="@Model[i].AssetName">@Model[i].AssetName</span>                                    
+                                </td>
+                                <td style="word-wrap: break-word;">
+                                    @(((100 - Model[i].CurrentVacancyFac) / 100).ToString("P"))
+                                    <br />@(Model[i].LastReportedOccupancyDate.HasValue ? Model[i].LastReportedOccupancyDate.Value.ToString("MM/yyyy") :
+                                            Model[i].OccupancyDate.HasValue? Model[i].OccupancyDate.Value.ToString("MM/yyyy"):"")
+                                </td>
+                                <td>
+                                    <span class="padmoney">@Model[i].ProformaAnnualIncome.ToString("C0")</span>
+                                </td>
+                                <td>
+                                    <span class="padmoney">@Model[i].ProformaNOI.ToString("C0")</span>
+                                </td>
+                                <td>
+                                    @((Model[i].capRate / 100).ToString("P2"))
+                                </td>
+                                <td>
+                                    @Model[i].AssmFin
+                                </td>
+                                <td>
+                                    @*askingPrice stand for LP and CurrentBpo stand for Calculated Market Value(CMV)*@
+                                    @{
+                                        if (Model[i].AskingPrice > 0)
+                                        {
+                                            @Model[i].AskingPrice.ToString("C0")
+                                            <br /> @Html.Raw("LP")
+                                        }
+                                        else
+                                        {
+                                            @Model[i].CurrentBpo.ToString("C0")
+                                            <br /> @Html.Raw("CMV")
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @if (Model[i].Portfolio)
+                                    {
+                                        <span class="glyphicon glyphicon-book" title="Portfolio" style="cursor:pointer" onclick="Viewportfolio('@Model[i].AssetId.ToString()',this)"></span>
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw("--")
+                                    }
+                                </td>
+                                <td>
+                                    <img title="Chain of Title" style="width:12px;" src="~/Content/images/tringle.png" />
+                                </td>
+                                <td>
+                                    @{
+                                        var uType = "";
+                                        if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin)
+                                        {
+                                            uType = "ICA";
+                                        }
+                                        else if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+                                        {
+                                            uType = "CA";
+                                        }
+                                        else if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.Investor)
+                                        {
+                                            uType = "PI";
+                                        }
+                                        else if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ListingAgent)
+                                        {
+                                            uType = "LA";
+                                        }
+                                        else
+                                        {
+                                            uType = "--";
+                                        }
+                                        @Html.Raw(uType)
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        var lstStatus = "";
+                                        if (Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Available)
+                                        {
+                                            lstStatus = "A";
+                                        }
+                                        else if (Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Pending)
+                                        {
+                                            lstStatus = "P";
+                                        }
+                                        else if (Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldNotClosed
+                                               || Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldAndClosed
+                                               || Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Withdrawn)
+                                        {
+                                            lstStatus = "U";
+                                        }
+                                        @Html.Raw(lstStatus)
+                                    }
+                                </td>
+                                <td title="Who’s Driving the Bus">
+                                    @if (Model[i].BusDriver == "SUS")
+                                    {
+                                        <span class="red">@Model[i].BusDriver</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@Model[i].BusDriver</span>
+                                    }
+                                </td>
+                                <td>
+                                    [<a onclick="EditAsset('@Model[i].AssetId')" style="cursor:pointer" title="edit">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a href="@Url.Action("AssetEscrowProcess", "Admin", new { id = @Model[i].AssetId })" title="escrow">
+                                        <span class="glyphicon glyphicon-usd"></span>
+                                    </a>
+                                    @if (Model[i].Show == "Yes")
+                                    {
+                                        <a href="@Url.Action("UnPublishAsset", "Admin", new { id = @Model[i].AssetId })" title="unpublish" onclick="return confirm('Are you sure you wish to unpublish this asset?');">
+                                            <span class="fa fa-lock" style="font-size: 13px; margin-top: 1px;"></span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("PublishAsset", "Admin", new { id = @Model[i].AssetId })" title="publish" onclick="return confirm('Are you sure you wish to publish this asset?');">
+                                            <span class="glyphicon glyphicon-globe"></span>
+                                        </a>
+                                    }
+                                    @if (Model[i].IsActive)
+                                    {
+                                        <a href="@Url.Action("DeActivateAsset", "Admin", new { id = @Model[i].AssetId })" title="deactive asset" onclick="return confirm('Are you sure you wish to make this asset deactive?');">
+                                            <span class="glyphicon glyphicon-arrow-down" style="font-size: 12px;"></span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("ActivateAsset", "Admin", new { id = @Model[i].AssetId })" title="active asset" onclick="return confirm('Are you sure you wish to make this asset active?');">
+                                            <span class="glyphicon glyphicon-arrow-up" style="font-size: 12px;"></span>
+                                        </a>
+                                    }
+                                    @*@if (Model[i].IsSampleAsset)
+                                    {
+                                        <a title="current sample asset">
+                                            <span class="glyphicon glyphicon-star" style="font-size: 12px;"></span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("SetSampleAsset", "Admin", new { id = @Model[i].AssetId })" title="set sample asset" onclick="return confirm('Are you sure you wish to make this asset the sample asset that will appear on the main page?');">
+                                            <span class="glyphicon glyphicon-star-empty" style="font-size: 12px;"></span>
+                                        </a>
+                                    }*@
+                                    ]
+                                </td>
+                            </tr>
+                            @*<tr id="@Model[i].AssetId.ToString()_portfolio" style="display:none;"></tr>*@                      
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div id="">
+                <input type="submit" class="btn btn-default proceed hide" value="Hold Asset(s) and Notify Registrant" id="notifyRegistrant" style="width: 300px; margin-bottom: 30px;" />
+            </div>
+        }
+    }
+</div>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ManageAssets",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

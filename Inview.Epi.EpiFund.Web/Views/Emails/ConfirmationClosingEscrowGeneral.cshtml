@@ -1,0 +1,36 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.ConfirmationClosingEscrowGeneralEmail
+To: @Model.Email
+From: USCREonline <info@uscreonline.com>
+Subject: Asset Closed Escrow
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.Name</p>
+
+<p>Notification:  a valued Principal Investor Registrant at US CRE Online.com has successfully closed on a CRE Escrow directly resulting from website community participant activities:</p>
+
+<p>Asset ID # @Model.AssetNumber, @Model.AssetDescription</p>
+
+<p>Closing Price of Asset:		@Model.ClosingPrice.ToString("C0")</p>
+    <p>Closing Date of Escrow: @Model.ClosingDate.ToString("MM/dd/yyyy")</p>
+
+<p>If you have/had a working interest in subject property, please update your file and joint venture participants accordingly.</p>
+
+<p>Registered Principal Members of the US CRE Online Community enjoy increased {Profits and Liquidity} with a global presence!</p>
+
+<p>We welcome all vested interests in US commercial real Estate and all CRE qualified Principal Investors to become a part of our very special community.  At USC, unlimited CRE Asset uploads and or unlimited CRE Asset File Reviews bear no registration nor recurring cost.  To become a member of our global community at USC please follow these simple instructions:</p>
+<ol>
+<li>Go to www.uscreonline.com and surf the site.</li>
+<li>Select &#91;New Visitor Registration&#93; from the Directory.</li>
+<li>Review the introduction, scroll down to the page bottom, and &#60;Click&#62; &#91;Proceed with Registration&#93;.</li>
+<li>Allow two minutes to complete the process.</li>
+    </ol>
+    <p>Note:  when your visit at USC is complete, please &#91;Log Out&#93;.  This will ensure the site is refreshed at each new session &#91;Log In&#93;.</p>
+    <p>US CRE Online, the #1 &#91;Principal to Principal&#93; Commercial Real Estate Data & Communications Portal in the World, is the online CRE Investment Community for the future.  We thank all USC Registrants for their participation at our Portal, and welcome all vested interests in US Commercial Real Estate to join our rapidly expanding community at United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+
+    <p>The Professional Staff</p>
+    <p><b>US CRE Online, LLC</b></p>
+</body>
+</html>

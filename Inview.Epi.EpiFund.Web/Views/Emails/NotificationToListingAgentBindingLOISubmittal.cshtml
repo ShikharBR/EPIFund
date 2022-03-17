@@ -1,0 +1,62 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.NotificationToListingAgentBindingLOISubmittalEmail
+To: @Model.RecipientEmail
+From: USCREonline <info@uscreonline.com>
+Subject: Asset Status Change
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.ListingAgent</p>
+
+    <p>US CRE Online, LLC is presently engaged with several vetted principals who have expressed interest in your CRE Listing identified below:</p>
+
+    <ol>
+        <li>Asset Name: @Model.ProjectName</li>
+        <li>@Model.Description</li>
+    </ol>
+
+    <p>As the Listing Broker for the subject property captioned below, please accept the Registration of the following Registered Principal(s) from US CRE Online, LLC: </p>
+
+    <table>
+        <tr>
+            <td>Name of Principal:</td>
+            <td>@Model.Principal</td>
+        </tr>
+        <tr>
+            <td>Corporate name of Principal:</td>
+            <td>@Model.PrincipalCorporateName</td>
+        </tr>
+        <tr>
+            <td>Contact Data of Principal:</td>
+            <td>Phone: @Model.Phone     e mail: @Model.PrincipalEmail</td>
+        </tr>
+    </table>
+    <p>A requisite of formal acquisition interest (LOI) to any investment is Proof of Funds (POF) (both equity and debt as applicable).  USC has vetted said principal and asserts their interest in subject property is qualified.  We encourage you to follow up with @Model.Vesting for Q&A and to establish a property inspection tour.  Please provide us with status updates as to the continuing interest of our Principal in subject property. You may e mail us directly to admin@uscreonline.com.  Thank you.</p>
+    <p>Please note:  if there has been a change in status and or listing data for subject property, please indicate same in a reply e mail hereto. Thank you.</p>
+    <table>
+        <tr>
+            <td>New List Pricing:</td>
+            <td>@Model.NewListPricing</td>
+        </tr>
+        <tr>
+            <td>New Available Terms:</td>
+            <td>@Model.NewAvailableTerms</td>
+        </tr>
+        <tr>
+            <td>COE must be before:</td>
+            <td>@Model.COEMustBeBefore</td>
+        </tr>
+        <tr>
+            <td>Other:</td>
+            <td>@Model.Other</td>
+        </tr>
+        <tr>
+            <td>Formal Bid Due Date:</td>
+            <td>@Model.FormalBidDueDate</td>
+        </tr>
+    </table>
+    <p>The Professional Staff</p>
+    <p>US CRE Online, LLC</p>
+</body>
+</html>

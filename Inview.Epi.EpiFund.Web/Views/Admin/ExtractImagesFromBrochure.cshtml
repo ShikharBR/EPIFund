@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Extract Images From Brochure";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h3 class="page-header">Extract Images from Brochure</h3>
+<p>
+    Upload brochure containing images for property. Note: Must be in PDF format. Max file size is 150MB. Please be aware upload and processing times vary depending on file size.
+</p>
+@using (Html.BeginForm("ExtractImagesFromBrochure", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="file" />
+    <br />
+    <div id="statusBorder">
+        <div id="statusFill">
+        </div>
+    </div>
+    <label id="uploadingDoc">Uploading document. Please wait...</label>
+    <br />
+    <input type="submit" value="Upload Brochure" class="btn btn-primary" id="startProcess" />
+}
+
+@Html.Partial("_CreateAssetPartial")
+
+<script type="text/javascript">
+    var uniqueId = jQuery.Guid.New();
+
+    $(document).ready(function (event) {
+        $('#uploadingDoc').hide();
+        $('#startProcess').click(function () {
+            $.post("/Admin/StartProcess", { id: uniqueId }, function () {
+                $('#statusBorder').show();
+                $('#uploadingDoc').show();
+                getStatus();
+            });
+            event.preventDefault;
+        });
+    });
+
+    function getStatus() {
+        var url = '/Admin/GetCurrentProgress/' + uniqueId;
+        $.get(url, function (data) {
+            if (data != "100") {
+                $('#status').html(data);
+                $('#statusFill').width(data);
+                window.setTimeout("getStatus()", 100);
+            }
+            else {
+                $('#status').html("Done");
+                $('#statusBorder').hide();
+                $('#uploadingDoc').text("Finished uploading. Please wait while we extract the images from this document. This could take up to several minutes...");
+            };
+        });
+    }
+
+</script>
+

@@ -1,0 +1,108 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.TitleCompanyUserModel
+<fieldset id="pnlUserInformation">
+    <legend>Title Company User Information</legend>
+
+    @Html.HiddenFor(m => m.TitleCompanyId)
+    @Html.HiddenFor(m => m.TitleCompanyUserId)
+    @Html.HiddenFor(m => m.IsManager)
+    @Html.HiddenFor(m => m.IsActive)
+    @Html.HiddenFor(m => m.OldEmail)
+    <span style="display:none">
+        @for (int i = 0; i < Model.AvailableStates.Count; i++)
+        {
+            @Html.HiddenFor(m => Model.AvailableStates[i].Text)
+            @Html.HiddenFor(m => Model.AvailableStates[i].Value)
+        }
+    </span>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="control-group">
+                @Html.LabelFor(s => s.FirstName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">@Html.ValidationMessageFor(s => s.FirstName, "*")</span>
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.FirstName)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.LastName, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">@Html.ValidationMessageFor(s => s.LastName, "*")</span>
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.LastName)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.PhoneNumber, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">@Html.ValidationMessageFor(s => s.PhoneNumber, "")</span>
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.PhoneNumber)
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <div class="row">
+        <div class="col-sm-12">
+            <legend>Account Access</legend>
+            <div class="control-group">
+                @Html.LabelFor(s => s.Email, new { @class = "control-label", style = "font-weight:bold;" })<span class="red">*@Html.ValidationMessageFor(s => s.Email, "")</span>
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.Email)
+                </div>
+            </div>
+            <div class="control-group">
+                <i>You may change your password at any time simply by entering a new password and confirming the same new password.</i> 
+                @Html.LabelFor(s => s.Password, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="input-group">
+                    @Html.PasswordFor(s => s.Password)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(s => s.ConfirmPassword, new { @class = "control-label", style = "font-weight:bold;" })
+                <div class="input-group">
+                    @Html.PasswordFor(s => s.ConfirmPassword)
+                </div>
+            </div>
+
+        </div>
+    </div>
+</fieldset>
+
+@if (@Model.IsManager == true)
+{
+    @*<fieldset>
+        <div class="row">
+            <div class="col-sm-12">
+                <legend>Account State</legend>
+                <div class="control-group">
+                    @Html.LabelFor(s => s.IsActive, new { @class = "control-label", style = "font-weight:bold;" })
+                    <div class="input-group">
+                        @Html.CheckBoxFor(s => s.IsActive)
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </fieldset>*@
+}
+else
+{
+<fieldset>
+    <div class="row states">
+        <div class="col-sm-12">
+            <legend>User States</legend>
+            <div class="control-group">
+                
+            </div>
+            <div class="control-group">
+                <i>To make multiple selections hold down your CONTROL key as you click a selection.</i>
+                <div class="input-group">
+                    @Html.ListBoxFor(s => s.SelectedStates, @Model.AvailableStates, new { style = "width:200px; height: 110px;" })
+                </div>
+            </div>
+            
+           
+        </div>
+    </div>
+</fieldset>   
+}
+
+

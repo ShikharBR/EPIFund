@@ -1,0 +1,37 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.InsuranceCompanySearchResultsModel
+@{
+    ViewBag.Title = "Insurance Company Page";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h3>Hello @Model.FullName!</h3>
+
+<p>Welcome to the insurance company page for <b>@Model.CompanyName</b></p>
+
+<p>Please find the list of active managers below</p>
+
+<table>
+    <thead>
+        <tr>
+            <th style="width: 150px">Name</th>
+            <th style="width: 250px">Email</th>
+            <th style="width: 150px">Phone Number</th>
+<th>Is Active</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Users.Count(); i++)
+        {
+    
+            <tr>
+                <td style="width: 150px">@Model.Users[i].FullName</td>
+                <td style="width: 250px">@Model.Users[i].Email</td>
+                <td style="width: 150px">@Model.Users[i].PhoneNumber</td>
+                <td style="width: 150px">@Model.Users[i].IsActive</td>
+            </tr>
+
+        
+        }
+    </tbody>
+</table>
+<p>Please refer their website at: <a href="http://@Model.CompanyURL" target="_blank">@Model.CompanyURL</a> for more information</p>
+

@@ -1,0 +1,36 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.ViewModel.AssetSearchCriteriaQuickViewModel>
+@{
+    ViewBag.Title = "User Search List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3>User's Search Criteria List</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td></td>
+            <td>View</td>
+            <td>Email</td>
+            <td>Matching Assets</td>
+        </tr>
+    </thead>
+    @foreach (var item in @Model)
+    {
+        <tr>
+            <td>@Html.ActionLink("Search Criteria ID #" + item.SearchCriteriaId, "ViewInvestmentAssetSearchCriteria", "DataPortal", new { id = item.SearchCriteriaId }, new { })
+            </td>
+            <td>
+                <a href="@Url.Action("ViewInvestmentAssetSearchCriteria", "DataPortal", new { id = @item.SearchCriteriaId })" title="view search criteria">
+                    <span class="glyphicon glyphicon-search"></span></a>
+            </td>
+            <td>
+                <a href="@Url.Action("EmailInvestmentAssetSearchCriteria", "Admin", new { id = @item.SearchCriteriaId })" title="email search criteria">
+                    <span class="glyphicon glyphicon-envelope"></span></a>
+            </td>
+            <td>
+                <a href="@Url.Action("EmailInvestmentAssetSearchCriteria", "Admin", new { id = @item.SearchCriteriaId })" title="email search criteria">
+                    <span class="glyphicon glyphicon-envelope"></span></a>
+            </td>
+        </tr>
+    }
+</table>

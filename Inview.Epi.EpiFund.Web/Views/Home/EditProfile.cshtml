@@ -1,0 +1,15 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.UserModel
+@{
+    ViewBag.Title = "Edit Profile";
+    Layout = ViewBag.Layout;
+}
+
+@using (Html.BeginForm("EditProfile", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    <br />
+    @Html.EditorForModel()
+    <br />
+    <input type="submit" class="btn btn-primary" id="btnSave" name="btnSave" value="Save Profile" />
+}

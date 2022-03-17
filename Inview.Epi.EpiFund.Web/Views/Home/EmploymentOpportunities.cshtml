@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "Employment Opportunities";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function proceedToJVA(){
+        $.post('/Home/IsLoggedIn/', function(result) {
+            if(result == "True") {
+                window.location.href ='/DataPortal/ExecuteJVAgreement';
+            }
+            else {
+                $("#loginwarning").toggle();
+            }
+        });
+    }
+</script>
+<div class="modal fade" id="loginwarning" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <form>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Must Be Logged In To Continue</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="margin: 0">You must be logged in to proceed to the JV Marketing Agreement. Click [continue] to be directed the <b>USC</b> Log In page.  If you have not Registered at <b>USC</b> click [Register] to be redirected to New Registration.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-warning" value="Cancel" data-dismiss="modal" />
+                    <input type="button" class="btn btn-default" value="Register" onclick="location.href='@Url.Action("Registration", "Home", new { rurl = "/Home/JointVentureMarketing" })    '" />
+                    <input type="button" class="btn btn-primary" value="Continue" onclick="location.href='@Url.Action("Login", "Home", new { rurl = "/Home/JointVentureMarketing" })    '" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="main-img"></div>
+
+<h3>US CRE Nationwide Recurring Profit Share Opportunities</h3>
+<p>US CRE Online is seeking to establish Independent Contractor (“IC”) referring relationships with corporate entities and sole proprietorships in the Global CRE Community. USC is expanding its database of United States Commercial Real Estate inventory (including Hawaii and Alaska) to every city and municipality in the United States (with no limitation of asset size or geographic parameters)… and, therefore, seeks individuals directly or tangently engaged in the CRE Industry to refer CRE vested principals to USC who would benefit from the technology, CRE Inventory, and proprietary CRE principal database provided at USC.</p>
+
+<h4>THERE IS NO LIMITATION TO YOUR INCOME POTENTIAL 
+</h4>
+<p>
+   US CRE Online offers a ten percent (10%) profit share to our applicable IC Community participants for each principal referral therefrom who registers at USC and engages in the USC Internet Portal Services Module on their respective CRE asset or portfolio of CRE assets.  As the referring contractor, you will receive 10% of all revenue generated from each of your referred principal investors to USC…regardless of the transactional engagement category of the referral.  <b>Time is of the essence.</b>   If information on a prospective referral has already been secured by USC you will not be able to upload said entry into the USC Imported Principal Investors db. The steps for becoming a USC IC and securing your profit share interests in all of your approved/accepted referrals are:
+</p>
+<ol>
+    <li>Complete your @Html.ActionLink("registration", "Registration", "Home") with USC.  Your [Registration Category] will be as an <b>“IC Participant”</b>;</li>
+    <li>Preview the USC @Html.ActionLink("Independent Contractor Profit Share Agreement", "DownloadICAgreementTemplate", "DataPortal") (“ICPSA”);</li>
+    <li>Download the USC exclusive Marketing Network <a href="../PrincipalInvestorImportTemplate.xlsx"><b>Excel Spread Sheet</b></a> and transfer your Network of Unique Target Marketing Principals (aka "Referred Principals") onto it.
+            <ul>
+                <li><span style="color: red; font-weight: bold;">Note:</span>  you cannot change any of headers or tabs in the Spread Sheet Template.  The mandatory data for each row of entries is <b>(1)</b> first name of individual, <b>(2)</b> last name of individual, and <b>(3)</b> e mail address of individual.</li>
+            </ul>
+    </li>
+    <li>Once your Spread Sheet is completed, login to USC, and from your @Html.ActionLink("My USC Page", "MyUscPage", "Home"), click the <b>[Import Principal Investor]</b> button to upload your list:
+        <ul>
+            <li>You will receive an automated confirmation of your upload with a display of the net entries accepted from your Network upload.</li>
+        </ul>
+    </li>
+    <li><span style="color: red; font-weight: bold;">Note:</span> time is of the essence.  If an entry has already been secured by USC or by a current MBA Participant, you will not be able to upload said entry into the USC Imported JVMA Participating database;</li>
+</ol>
+<p style="text-align: center">
+    <input type="button" id="proceed" class="btn btn-default" value="Preview Independent Contractor Profit Share Agreement" onclick="location.href='@Url.Action("DownloadJVTemplate", "DataPortal")    '" />
+</p>
+
+<p>
+    Getting started is simple.  First complete your @Html.ActionLink("registration", "Registration", "Home") and @Html.ActionLink("login", "Login", "Home") at USC.  Then, after your review and acceptance of the ICPSA, simply click the ICPSA button at the bottom of this page, and from that page follow the simple instructions to answer each of the pop up questions on you and, as applicable, your Corporate Entity in anticipation of electronically signing the IC Profit Share Agreement. 
+</p>
+<p><span style="color: red; font-weight: bold;">Note:</span> All corporate independent contractor candidates must demonstrate a certificate of good standing for their corporate entity in the corporation’s state of origination. All corporate officer’s and or sole proprietors must disclose all state governed operating licenses under which they conduct their current professional business, and such licenses must be demonstrated as being in good standing.
+</p>
+<ol>
+    <li>Your full name and full contact data;</li>
+    <li>Your professional corporate entity (this will be part of the IC Agreement);</li>
+    <li>Your professional corporate physical address and e mail;</li>
+    <li>Your professional corporate TIN (there is no withholding requirements for UC IC Participants);</li>
+    <li>Your current active professional State governed operating licenses & numbers (as may be applicable)</li>
+</ol>
+<p>
+    If you have any questions and or would like to post a communication with a US CRE Online, please click here and make your selection from the drop down menu in [@Html.ActionLink("Contact Us", "ContactUs", "Home")].  USC welcomes all constructive contributions that give opportunity for enhanced site use experience for its Users. 
+</p>
+
+<p style="text-align: center">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <input type="button" class="btn btn-default proceed" value="Proceed to Independent Contractor Profit Share Agreement" onclick="location.href='@Url.Action("ExecuteJVAgreement", "DataPortal")    '" />
+    }
+    else
+    {
+        <input type="button" class="btn btn-default proceed" data-toggle="modal" data-target="#loginwarning" value="Proceed to Independent Contractor Profit Share Agreement" />
+    }
+</p>

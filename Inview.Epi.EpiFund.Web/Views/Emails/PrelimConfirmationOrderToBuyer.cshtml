@@ -1,0 +1,113 @@
+﻿@using Postal
+@model Inview.Epi.EpiFund.Web.Models.Emails.PrelimConfirmationOrderToBuyer
+To: @Model.To
+From: USCREonline <info@uscreonline.com>
+Subject: @Model.Subject
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+<p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <table style="width: 100%;">
+        <tr>
+            <td align="left">To @Model.Registrant</td>
+            <td align="right">@Model.Date.ToString("MMMM d, yyyy")</td>
+        </tr>
+    </table>
+    <p><b style="color:darkgoldenrod">US CRE Online.com</b> Uploaded CRE Asset Recorded Documents Order Report:</p>
+    <table>
+        <tr>
+            <td width="80"></td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Title Company:</td>
+                        <td>@Model.TitleCompany</td>
+                    </tr>
+                    <tr>
+                        <td>Title Company Address:</td>
+                        <td>@Model.TitleCompanyAddress</td>
+                    </tr>
+                    <tr>
+                        <td>Title Company Corporate Phone #:</td>
+                        <td>@Model.TitleCompanyPhone</td>
+                    </tr>
+                    <tr>
+                        <td>Asset ID&#35;:</td>
+                        <td>@Model.AssetId</td>
+                    </tr>
+                    <tr>
+                        <td>Property Address:</td>
+                        <td>@Model.Address1 @Model.Address2, @Model.City, @Model.State @Model.Zip</td>
+                    </tr>
+                    <tr>
+                        <td>Property Type:</td>
+                        <td>@Model.AssetDescription</td>
+                    </tr>
+                    <tr>
+                        <td>APN:</td>
+                        <td>@Model.APN</td>
+                    </tr>
+                    <tr>
+                        <td>Ownership:</td>
+                        <td>@Model.Ownership</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <p>
+        The above captioned <b>Title Company</b> has contracted with &#123;<b style="color:darkgoldenrod"><i>USCREonline.com LLC</i></b>&#125; 
+        &#123;&#34;<b style="color:darkgoldenrod"><i>USC</i></b>&#34;&#125;
+        to secure and upload applicable recorded documentation for the above captioned data 
+        file at <a href="http://www.uscreonline.com">www.USCREonline.com</a>.  Per <b style="color:darkgoldenrod"><i>USC</i></b> automated order, @Model.TitleCompany shall 
+        endeavor to secure and upload the <b>Preliminary Title Report</b> and <b>Recorded Documents</b> for 
+        the above captioned commercial investment property in the ensuing business days.  <b style="color:red">Note</b>:  
+        <b style="color:darkgoldenrod"><i>USC</i></b> Registrant's are not required/obligated to employ the services of @Model.TitleCompany
+        for any purpose (present or future).  There is no cost to you for this Document upload 
+        service to your <b style="color:darkgoldenrod"><i>USC</i></b> File.
+    </p>
+    <p>
+        When the Documents are secured and uploaded to your file, you will 
+        receive an automated e mail notification thereto.  <b style="color:red">Note</b>:  all documents 
+        will be uploaded in Adobe Acrobat PDF non-editable Format.  <b style="color:red">Note</b>:
+        @Model.TitleCompany shall <u>only</u> have access to <u>upload</u> the defined 
+        <b>Recorded Documents</b> to the subject File.  Upon completion of such 
+        upload, no further access to your Asset File from @Model.TitleCompany
+        is possible.  Your Asset File remains fully secure at all times.  
+        Upon your receipt of the USC automated e mail notification that your 
+        <b>Recorded Documents</b> have been uploaded, you will be encouraged to review 
+        said Documents to ensure their accuracy.  
+    </p>
+    <p>
+        Uploaded Document Review Instructions:
+    </p>
+    <ol>
+        <li>
+            Go to http://www.uscreonline.com and log in. <br />
+            &#8226; You may enter the &#91;<b style="color:blue">Asset ID &#35;</b>&#93; at the Log in page to go directly to the <b>Asset View</b>.
+
+        </li>
+        <li>From your &#91;&#34;<b style="color:blue">My USC Page</b>&#34;&#93; &#60;click&#62; on to the &#91;<b style="color:blue">IPA Inventory</b>&#93; hyperlink.</li>
+        <li>Select the &#91;<b style="color:blue">Asset ID &#35;</b>&#93; that matches the Asset ID&#35; captioned above.</li>
+        <li>Scroll down to the bottom of the Asset View page to access the subject Documents.</li>
+        <li>
+            When your review is completed, and your visit to <b style="color:darkgoldenrod"><i>USC</i></b> is completed, please &#91;<b style="color:blue">Log Out</b>&#93; of
+            <b style="color:darkgoldenrod"><i>USC</i></b>
+        </li>
+    </ol>
+    <p>
+        When applicable, you will receive an automated notification that the defined 
+        <b>Recorded Documents</b> have been uploaded to your above captioned &#91;<b style="color:blue">Asset ID &#35;</b>&#93;
+        File.  At the time the vested interest in subject Asset is liquidated, there will 
+        be a requirement to update the <b>Recorded Documents</b> inventory for the then applicable 
+        Title &#38; Escrow work.
+    </p>
+    <p>
+        Thank you for being a valued Registrant and Customer of <i><b style="color:darkgoldenrod">United States Commercial Real Estate Online, LLC</b></i>.  It is our honor and privilege to 
+        provide the defined CRE Data Portal Services to the investment community.
+    </p>
+    <span>The Professional Staff</span><br />
+    <span><b style="color:darkgoldenrod"><i>US CRE Online, LLC</i></b></span>
+</body>
+</html>

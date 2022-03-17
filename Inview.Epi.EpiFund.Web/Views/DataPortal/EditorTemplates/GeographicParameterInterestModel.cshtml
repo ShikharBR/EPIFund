@@ -1,0 +1,41 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.GeographicParameterInterestModel
+<div class="row">
+    <div class="col-lg-12">
+        <div class="input-group">
+            @Html.LabelFor(s => s.StateOfInterest, new { @class = "control-label" })
+            @Html.DropDownListFor(s => s.StateOfInterest, @Model.States, new { @class = "control" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-2">
+        <div class="input-group">
+            Cities:
+        </div>
+    </div>
+    <div class="col-lg-2">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Cities[0], new { @class = "control", style = "width:85px;" })
+        </div>
+    </div>
+    <div class="col-lg-2">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Cities[1], new { @class = "control", style = "width:85px;" })
+        </div>
+    </div>
+    <div class="col-lg-2">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Cities[2], new { @class = "control", style = "width:85px;" })
+        </div>
+    </div>
+    <div class="col-lg-2">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Cities[3], new { @class = "control", style = "width:85px;" })
+        </div>
+    </div>
+    <div class="col-lg-2">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Cities[4], new { @class = "control", style = "width:85px;" })
+        </div>
+    </div>
+</div>

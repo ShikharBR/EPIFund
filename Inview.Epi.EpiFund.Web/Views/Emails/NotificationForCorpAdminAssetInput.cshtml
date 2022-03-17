@@ -1,0 +1,14 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.NotificationForCorpAdminAssetInputEmail
+To: @Model.Email
+From: USCREonline <info@uscreonline.com>
+Subject: Notification of New Asset Input
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <p>Dear @Model.To,</p>
+    <p>A new @Model.AssetDescription with ID# @Model.AssetNumber has been inputted into the USCRE online asset system by @Model.ICAdminName. This asset is not publicly available unless a CORP admin publishes this asset. In order to publish an asset, login to www.uscreonline.com and go to &#91;Manage Assets&#93;. Once you locate the asset, &#60;click&#62; on the globe icon to publish.</p>
+    <p>The Professional Staff</p>
+    <p><b>US CRE Online, LLC</b></p>
+</body>
+</html>

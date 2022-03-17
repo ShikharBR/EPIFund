@@ -1,0 +1,80 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.LoginModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-img"></div>
+@using (Html.BeginForm("Login", "Home", new { returnUrl = Request.QueryString["returnUrl"] ?? "" }))
+{ 
+    <p style="font-weight:bold;">Welcome US CRE Online Members</p>
+
+<p>Welcome back to US CRE online. Please use the below form to login to the members only section of the site. If you have not yet created an account, you can do so by clicking @Html.ActionLink("here", "Registration", "Home"). If you are a registered (A) accredited investor, (B) <a title="US National Association of Realtors">NAR</a> Member Member, and or (C) <a title="US Mortgage Bankers Association">MBA</a> Member, you must first log inbefore gaining access to the US CRE Online <b>Investor Opportunities</b> and <b>Asset Inventory</b>. At the Login below, you can enter an Assets ID Code to go directly to the subject CRE Asset’s Display.</p>
+
+<p>If this is your first time logging in to US CRE online, please note that access to view any Asset File within USC Inventory requires proper one time online execution and delivery of the USC <b>Non-Compete Non-Disclosure Confidentiality Agreement</b> ("@Html.ActionLink("NCND", "DownloadNCNDTemplate", "DataPortal")"), and <b>Internet Portal Agreement</b> ("@Html.ActionLink("IPA", "DownloadIPABuyerTemplate", "DataPortal")").  If you have registered, but not yet executed the USC IPA, and wish to view USC CRE Inventory, and or wish to submit a unique CRE Search Criteria Questionnaire for delivery to the USC Principal and Professional online Community, please click @Html.ActionLink("here", "Registration", "Home") to be taken to the Registration Page to complete our NCND and IPA protocol. On line registration processing bears NO COST and should only require a few minutes of your time.  Registration confirmation is automated in seconds… and can be accessed 24/7/365.</p>
+    
+<p>Thank you for being a registered member of US CRE Online.</p>
+    @Html.HiddenFor(s=>s.AssetSearchCriteriaId)
+    @Html.HiddenFor(s=>s.ReturnUrl)
+    if (Model != null)
+    {
+        for (int i = 0; i < Model.AssetIds.Count; i++)
+        {
+            @Html.HiddenFor(m => Model.AssetIds[i])
+        }
+    }
+    <div id="login-page">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Username, new { @class = "control-label", style = "font-weight:bold;" })
+            <div class="controls">
+                @Html.EditorFor(s => s.Username, new { @class="form-control" })
+            </div>
+        </div>
+        <div class="input-group">
+            @Html.LabelFor(s => s.Password, new { @class = "control-label", style = "font-weight:bold;" })
+            <div class="controls">
+                @Html.EditorFor(s => s.Password, new { @class="form-control" })
+            </div>
+        </div>
+        <div class="input-group">
+            @Html.LabelFor(s => s.AssetNumber, new { @class = "control-label", style = "font-weight:bold;" })
+            <br />
+            <i>No Asset ID# required to log in</i>
+            <div class="controls">
+                @Html.TextBoxFor(s => s.AssetNumber, new { @class="form-control" })
+            </div>
+        </div>
+        <div class="input-group" style="margin-bottom:20px;">
+            <input type="submit" class="btn btn-info" value="Log In / View Asset" />
+            <a href="@Url.Action("ForgotPassword")" style="margin-left: 2em;">Forgot Password?</a>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="userDeactivatedModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>Registered Visitor</h5>
+			</div>
+			<div class="modal-body text-center">
+				<p>
+                    Thank you for your Log In to USC.  At this time your account is temporarily in a suspended status. 
+                    If you wish to reactivate your site privileges please go to the @Html.ActionLink("Contact Us", "ContactUs", "Home") page and submit such request. 
+                    USC Corporate will review your account status and respond with a status update e mail within 24 business hours. 
+                    Thank you for your patience.
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+    $(window).bind("load", function () {
+        if ("@TempData["UserDeactivated"]") {
+            if ("@TempData["UserDeactivated"]" == "true") {
+                $('#userDeactivatedModal').modal('show');
+            }
+        }
+    });
+</script>

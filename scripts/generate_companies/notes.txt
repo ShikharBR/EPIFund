@@ -1,0 +1,1 @@
+A one off script created to generate holding company entities from  the asset's corporate address fields

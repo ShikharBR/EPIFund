@@ -1,0 +1,101 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.BindingContingentTemplateModel
+@{
+    ViewBag.Title = "Execute LOI";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @section CaptchaCss {
+        <link href="@Url.Content("~/Content/QapTcha.jquery.css")" rel="stylesheet" type="text/css" />
+    }
+    @section CaptchaJs {
+        <script src="@Url.Content("/Scripts/QapTcha.jquery.js")"></script>
+    }
+}
+@using (Html.BeginForm("ExecuteLOI", "DataPortal", FormMethod.Post, new { id="loiForm" }))
+{ 
+    <h3 class="page-header">Execute Letter of Intent to Purchase</h3>
+    <p>To download a sample LOI, click <a href="@Url.Action("DownloadLOITemplate", "DataPortal")">here</a></p>
+    <p>The advantages of submitting a Binding LOI are numerous.  If the respective Asset is set for an open auction, and or all initial LOI’s are due by a date certain, our automated process enables our principal investors to comply with stated timing requisites effectively and timely.  After you have reviewed and approved the LOI Template, the document signing procedure through DocuSign takes only minutes to complete and receive delivery confirmation.</p>
+    <p>Fill out fields below to execute your LOI to Asset Ownership through its Listing Agent. DocuSign will email you to digitally sign the document.  Once the document has been signed by you and received by USC, you will receive an email from USC with the signed document.  The LOI will be automatically e-mailed to the Listing Agent identified in the Asset’s Marketing Brochure (available in the Documents Section at the bottom of the respective Asset View).  You can also view your executed LOI through your @Html.ActionLink("My USC Page", "MyUSCPage", "Home")</p>
+    <p>It is incumbent upon you to follow up with the Listing Agent to manage their LOI submittal protocol through to acceptance, Escrow, Due Diligence, and Closing.</p>
+    @Html.ValidationSummary()
+    @Html.EditorForModel()  
+    <br />
+    <div class="QapTcha"></div>
+    <em>To Preview your LOI prior to Submitting it, slide the bar to the right, then &lt;click&gt; the [preview] button</em>
+    <br />
+    <div class="input-group">
+        <input name="SubmitLOI" type="submit" value="Preview" style="margin-right: 20px;" onclick="fixNumbers()" class="btn btn-default">
+        <input type="submit" name="SubmitLOI" class="btn btn-primary" onclick="fixNumbers()" value="Submit" />        
+    </div> 
+}
+<script type="text/javascript">
+    $(function () {
+        $('.QapTcha').QapTcha({
+            txtLock: 'Slide bar to the right to submit',
+            txtUnlock: 'Form can be submitted'
+        });
+    });
+
+    function fixNumbers() {
+        $("input.formatNumber").each(function (index) {
+            $(this).val($(this).val().replace(/,/g, ""));
+        });
+        $("input.formatMaint").each(function (index) {
+            $(this).val($(this).val().replace(/,/g, ""));
+        });
+    };
+
+    destroyNumbers();
+
+    $("input.formatMaint").each(function (index) {
+        $(this).val(addCommas($(this).val(), true));
+    });
+    $("span.formatNumber").each(function (index) {
+        $(this).text(addCommas($(this).text(), false));
+    });
+
+    $("#DueDiligenceDate").change(function () {
+        changeDDL("#DueDiligenceDate", "#DueDiligenceNumberOfDays");
+    });
+
+    $("#DueDiligenceNumberOfDays").change(function () {
+        changeDDL("#DueDiligenceNumberOfDays", "#DueDiligenceDate");
+    });
+
+    $("#SellerDisclosureDate").change(function () {
+        changeDDL("#SellerDisclosureDate", "#SellerDisclosureNumberOfDays");
+    });
+
+    $("#SellerDisclosureNumberOfDays").change(function () {
+        changeDDL("#SellerDisclosureNumberOfDays", "#SellerDisclosureDate");
+    });
+
+    $("#OperatingDisclosureDate").change(function () {
+        changeDDL("#OperatingDisclosureDate", "#OperatingDisclosureNumberOfDays");
+    });
+
+    $("#OperatingDisclosureNumberOfDays").change(function () {
+        changeDDL("#OperatingDisclosureNumberOfDays", "#OperatingDisclosureDate");
+    });
+
+    $("#ClosingDate").change(function () {
+        changeDDL("#ClosingDate", "#ClosingDateNumberOfDays");
+    });
+
+    $("#ClosingDateNumberOfDays").change(function () {
+        changeDDL("#ClosingDateNumberOfDays", "#ClosingDate");
+    });
+
+    $("#FormalDocumentationDate").change(function () {
+        changeDDL("#FormalDocumentationDate", "#FormalDocumentationNumberOfDays");
+    });
+
+    $("#FormalDocumentationNumberOfDays").change(function () {
+        changeDDL("#FormalDocumentationNumberOfDays", "#FormalDocumentationDate");
+    });
+
+    function changeDDL(el, other) {
+        var index = $(el + " option:selected").index();
+        $(other + ' option').eq(index).prop('selected', true);
+    }
+</script>
+

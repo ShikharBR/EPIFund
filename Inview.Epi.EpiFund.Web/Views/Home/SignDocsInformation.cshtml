@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "Sign Documents Information";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4>Finish Registration Process</h4>
+<em>you will need to complete and sign an IPA for each asset.</em>
+<fieldset>
+    <legend>NCND and IPA Agreements</legend>
+    <p>Completion of the registration protocol requires review, approval, and execution of the US CRE online “Non Compete Non Disclosure Confidentiality Agreement” (“NCND”) and “Internet Portal Agreement” (“IPA”). Please click the hyperlinks for @Html.ActionLink("NCND", "DownloadNCNDTemplate", "DataPortal") and @Html.ActionLink("MDA", "DownloadMDATemplate", "DataPortal") and review the provisions of each document. When you have completed your review of the NCND and MDA Agreements and approve same, please select the appropriate box below and proceed with the registration process. Each document will be electronically executed in your registration name and will be e mailed to you for your permanent record as well as made available to you for 24/7 review through you’re [my US CRE online] page.</p>
+    <input type="button" class="btn btn-default" value="Proceed to Sign NCND" onclick="location.href='@Url.Action("ExecuteNCND", "DataPortal")    '" />
+</fieldset>

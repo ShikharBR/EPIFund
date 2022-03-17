@@ -1,0 +1,7 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.ViewModel.AssetSearchCriteriaQuickViewModel>
+<ul class="ul-styled">
+    @foreach (var item in @Model)
+    {
+        <li>@Html.ActionLink("Asset Search Criteria ID#" + item.SearchCriteriaId + " (" + item.DateCreated.ToString("MM-dd-yyyy") + ")", "EditInvestmentAssetSearchCriteria", "DataPortal", new { id = item.SearchCriteriaId }, new { })</li>            
+    }
+</ul>

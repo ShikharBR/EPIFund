@@ -1,0 +1,78 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.TitleUserSearchResultsModel
+@{
+    ViewBag.Title = "My USC Page";
+    if (Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.TitleCompUser || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.TitleCompManager)
+    {
+        Layout = "~/Views/Shared/_LayoutTitleUser.cshtml";
+    }
+    if (Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin || Model.ControllingUserType == Inview.Epi.EpiFund.Domain.Enum.UserType.SiteAdmin)
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+}
+<h3>Hello @Model.FullName!</h3>
+
+<p>Welcome to the title company page for <b>@Model.TitleCompanyName</b></p>
+
+<p>Please find the list of active managers below</p>
+
+<table>
+    <thead>
+        <tr>
+            <th style="width: 150px">Name</th>
+            <th style="width: 250px">Email</th>
+            <th style="width: 150px">Phone Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.TitleUsers.Count(); i++)
+        {
+    
+            <tr>
+                <td style="width: 150px">@Model.TitleUsers[i].FullName</td>
+                <td style="width: 250px">@Model.TitleUsers[i].Email</td>
+                <td style="width: 150px">@Model.TitleUsers[i].PhoneNumber</td>
+            </tr>
+
+        
+        }
+    </tbody>
+</table>
+
+<p>Please find the list of active users below</p>
+
+ <table>
+        <thead>
+            <tr>
+                <th style="width: 150px">Name</th>
+                <th style="width: 250px">Email</th>
+                <th style="width: 150px">Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+@for (int i = 0; i < Model.TitleCompanyUsers.Count(); i++)
+{
+   
+            <tr>
+                <td style="width: 150px">@Model.TitleCompanyUsers[i].FullName</td>
+                <td style="width: 250px">@Model.TitleCompanyUsers[i].Email</td>
+                <td style="width: 150px">@Model.TitleCompanyUsers[i].PhoneNumber</td>
+            </tr>
+
+        
+}
+            </tbody>
+    </table>
+<p>Please refer their website at: <a href="http://@Model.TitleCompanyURL" target="_blank">@Model.TitleCompanyURL</a> for more information</p>
+
+
+
+<script>
+    $(window).bind("load", function () {
+        if ("@TempData["rejected"]") {
+            if ("@TempData["rejected"]" == "true") {
+                $('#rejectedICAdminModal').modal('show');
+            }
+        }
+    });
+</script>

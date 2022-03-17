@@ -1,0 +1,23 @@
+﻿@using Postal
+@model Inview.Epi.EpiFund.Web.Models.Emails.AutoRegistrationAutoWelcomeEmail
+To: @Model.Email
+From: USCREonline <info@uscreonline.com>
+Subject: Welcome to USCREOnline!
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+    <p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+<br />
+
+<p>Dear @Model.To,</p>
+
+<p>By filling out the Asset Search Criteria Form, you've been automatically enrolled as a USC registrant. Your username is : @Model.Email and your password is: @Model.Password</p>
+<p>You may login in anytime at <a href="http://www.uscreonline.com">http://www.uscreonline.com</a> to access all areas of the site now available to you and to view all authorized asset files. You will receive via e mail market status updates on each Asset ID as such information becomes available.  USC will e mail introduction brochures to you on new available assets as they are uploaded going forward.</p>
+
+<p>Thank you for being a valued Registrant of United States Commercial Real Estate Online, LLC.  It is our honor and privilege to provide the defined CRE data services to the investment community.</p>
+<p>
+The Professional Staff
+US CRE Online, LLC</p>
+</body>
+</html>

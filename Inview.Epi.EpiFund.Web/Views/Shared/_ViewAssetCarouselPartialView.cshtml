@@ -1,0 +1,187 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.AssetViewModel
+
+<div class="sidebar-carousel-container" data-spy="affix" data-offset-top="420" data-offset-bottom="0">
+    <div id="sidebar-carousel" class="carousel slide vertical" data-ride="carousel" data-pause="false">
+        <div class="carousel-inner">
+            @{
+                var images = Model.Images.OrderByDescending(s => s.IsMainImage).ThenBy(s => s.Order).ToList();
+            }
+            @for (int i = 0; i < images.Count; i++)
+            {
+                if (i == 0)
+                {
+                <div class="item active" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[i].FileName, assetId = Model.AssetId, contentType = images[i].ContentType })) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model.City, @Model.State @Model.AssetType<br />
+                            List Price @Model.AskingPrice.ToString("C0")
+                        </p>
+                    </div>
+                </div>
+                }
+                else
+                {
+                <div class="item" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[i].FileName, assetId = Model.AssetId, contentType = images[i].ContentType })) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model.City, @Model.State @Model.AssetType<br />
+                            List Price @Model.AskingPrice.ToString("C0")
+                        </p>
+                    </div>
+                </div>
+                }
+            }
+        </div>
+    </div>
+
+    <div id="sidebar-carousel1" class="carousel slide vertical" data-ride="carousel" data-pause="false">
+        <div class="carousel-inner">
+
+            
+
+                @for (int i = 1; i < images.Count; i++)
+                {
+                    if (i == 1)
+                    {
+                <div class="item active" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[i].FileName, assetId = Model.AssetId, contentType = images[i].ContentType })) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model.City, @Model.State @Model.AssetType<br />
+                            List Price @Model.AskingPrice.ToString("C0")
+                        </p>
+                    </div>
+                </div>
+                    }
+                    else
+                    {
+                <div class="item" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[i].FileName, assetId = Model.AssetId, contentType = images[i].ContentType })) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model.City, @Model.State @Model.AssetType<br />
+                            List Price @Model.AskingPrice.ToString("C0")
+                        </p>
+                    </div>
+                </div>
+                    }
+                }
+            @if (images.Count > 0) { 
+            <div class="item" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[0].FileName, assetId = Model.AssetId, contentType = images[0].ContentType })) 50% 50% no-repeat">
+                <div class="carousel-caption">
+                    <h3>FEATURE INVENTORY</h3>
+                    <p>@Model.City, @Model.State @Model.AssetType<br />
+                        List Price @Model.AskingPrice.ToString("C0")
+                    </p>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+
+
+    @if (images.Count > 2)
+    {
+        <div id="sidebar-carousel2" class="carousel slide vertical" data-ride="carousel" data-pause="false">
+            <div class="carousel-inner">
+                @for (int i = 2; i < images.Count; i++)
+                {
+                    if (i == 2)
+                    {
+                    <div class="item active" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[i].FileName, assetId = Model.AssetId, contentType = images[i].ContentType })) 50% 50% no-repeat">
+                        <div class="carousel-caption">
+                            <h3>FEATURE INVENTORY</h3>
+                            <p>@Model.City, @Model.State @Model.AssetType<br />
+                                List Price @Model.AskingPrice.ToString("C0")
+                            </p>
+                        </div>
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="item" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[i].FileName, assetId = Model.AssetId, contentType = images[i].ContentType })) 50% 50% no-repeat">
+                        <div class="carousel-caption">
+                            <h3>FEATURE INVENTORY</h3>
+                            <p>@Model.City, @Model.State @Model.AssetType<br />
+                                List Price @Model.AskingPrice.ToString("C0")
+                            </p>
+                        </div>
+                    </div>
+                    }
+                }
+                <div class="item" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[0].FileName, assetId = Model.AssetId, contentType = images[0].ContentType })) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model.City, @Model.State @Model.AssetType<br />
+                            List Price @Model.AskingPrice.ToString("C0")
+                        </p>
+                    </div>
+                </div>
+                <div class="item" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[1].FileName, assetId = Model.AssetId, contentType = images[1].ContentType })) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model.City, @Model.State @Model.AssetType<br />
+                            List Price @Model.AskingPrice.ToString("C0")
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+@*@if (images.Count > 3) 
+    {
+        <div id="sidebar-carousel3" class="carousel slide vertical" data-ride="carousel" data-pause="false">
+            <div class="carousel-inner">
+                @for (int i = 3; i < images.Count; i++)
+                {
+                    if (i == 3)
+                    {
+                    <div class="item active" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[i].FileName, assetId = Model.AssetId, contentType = images[i].ContentType })) 50% 50% no-repeat">
+                        <div class="carousel-caption">
+                            <h3>FEATURE INVENTORY</h3>
+                            <p>@Model.City, @Model.State @Model.AssetType<br />
+                                List Price @Model.AskingPrice.ToString("C0")
+                            </p>
+                        </div>
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="item" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[i].FileName, assetId = Model.AssetId, contentType = images[i].ContentType })) 50% 50% no-repeat">
+                        <div class="carousel-caption">
+                            <h3>FEATURE INVENTORY</h3>
+                            <p>@Model.City, @Model.State @Model.AssetType<br />
+                                List Price @Model.AskingPrice.ToString("C0")
+                            </p>
+                        </div>
+                    </div>
+                    }
+                }
+                <div class="item" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[0].FileName, assetId = Model.AssetId, contentType = images[0].ContentType })) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model.City, @Model.State @Model.AssetType<br />
+                            List Price @Model.AskingPrice.ToString("C0")
+                        </p>
+                    </div>
+                </div>
+                <div class="item" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[1].FileName, assetId = Model.AssetId, contentType = images[1].ContentType })) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model.City, @Model.State @Model.AssetType<br />
+                            List Price @Model.AskingPrice.ToString("C0")
+                        </p>
+                    </div>
+                </div>
+                <div class="item" style="background: transparent url(@Url.Action("GetImageSource", "Admin", new { fileName = images[2].FileName, assetId = Model.AssetId, contentType = images[2].ContentType })) 50% 50% no-repeat">
+                    <div class="carousel-caption">
+                        <h3>FEATURE INVENTORY</h3>
+                        <p>@Model.City, @Model.State @Model.AssetType<br />
+                            List Price @Model.AskingPrice.ToString("C0")
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }*@
+
+</div>

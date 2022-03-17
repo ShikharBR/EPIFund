@@ -1,0 +1,60 @@
+﻿@using Postal
+@model Inview.Epi.EpiFund.Web.Models.Emails.PrelimConfirmationDeliverToUSCPISeller
+To: @Model.To
+From: USCREonline <info@uscreonline.com>
+Subject: @Model.Subject
+Content-type: text/html;charset=utf-8
+<html>
+<body>
+<p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+    <table style="width: 100%;">
+        <tr>
+            <td align="left">To US CRE online Corp Admin,</td>
+            <td align="right">@Model.Date.ToString("MMMM d, yyyy")</td>
+        </tr>
+    </table>
+    <p><b style="color:blue">US CRE Online.com</b> Recorded Documents &#38; Prelim Title Report Delivery Confirm &#45; for <b>PI Seller</b></p>
+    <table>
+        <tr>
+            <td width="80"></td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Title Company:</td>
+                        <td>@Model.TitleCompany</td>
+                    </tr>
+                    <tr>
+                        <td>Asset ID&#35;:</td>
+                        <td>@Model.AssetId</td>
+                    </tr>
+                    <tr>
+                        <td>Property Address:</td>
+                        <td>@Model.Address1 @Model.Address2, @Model.City, @Model.State @Model.Zip</td>
+                    </tr>
+                    <tr>
+                        <td>Property Type:</td>
+                        <td>@Model.AssetDescription</td>
+                    </tr>
+                    <tr>
+                        <td>APN:</td>
+                        <td>@Model.APN</td>
+                    </tr>
+                    <tr>
+                        <td>Ownership &#40;<b>PI</b>&#41;:</td>
+                        <td>@Model.Ownership</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <p>
+        The above captioned <b>Title Company</b> has completed the upload of the <b>Preliminary Title Report</b> and <b>Recorded Documents</b> for the above captioned 
+        commercial investment property with &#123;<b style="color:darkgoldenrod"><i>USCREonline.com LLC</i></b>&#125; &#123;&#34;<b style="color:darkgoldenrod"><i>USC</i></b>&#34;&#125;.
+    </p>
+    <p>
+        Per the terms and conditions of its Service Agreement with <b style="color:darkgoldenrod"><i>USC</i></b>, @Model.TitleCompany will receive payment for its defined services according thereto.
+    </p>
+    <span>The Professional Staff</span><br />
+    <span><b style="color:darkgoldenrod"><i>US CRE Online, LLC</i></b></span>
+</body>
+</html>

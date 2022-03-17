@@ -1,0 +1,31 @@
+﻿@model Inview.Epi.EpiFund.Web.Models.Emails.AuthenticateComputerEmail
+To: @Model.To
+From: USCREonline <info@uscreonline.com>
+Subject: USCREonline Security Access Code
+Content-type: text/html;charset=utf-8
+
+<html>
+<body>
+<p><img src="http://uscreonline.com/content/images/uscrelogowithbg.png" /></p>
+
+<pre>
+    Dear @Model.UserName,
+
+    We've received a request to access your account from a new computer
+    located at IP address: @Model.IP
+
+    To complete the login, enter the following special access code into the 
+    code textbox in the NewMachine page before trying to log in again:
+
+    <b>@Model.Code</b>
+
+    If you did not attempt this action, please change your password immediately.
+
+    Thank you for helping us maintain the security of your account.
+
+    The Professional Staff
+    US CRE Online, LLC
+
+</pre>
+    </body>
+</html>

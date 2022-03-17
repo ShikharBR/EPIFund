@@ -1,0 +1,74 @@
+﻿@model List<Inview.Epi.EpiFund.Domain.Entity.AssetMHPSpecification>
+
+@foreach (var spec in Model.OrderByDescending(m => m.AssetMHPSpecificationId))
+{
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.NumberSingleWide)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.NumberSingleWide)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.CurrentSingleBaseRent)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.CurrentSingleBaseRent)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.NumberSingleWideOwned)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.NumberSingleWideOwned)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.CurrentSingleOwnedBaseRent)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.CurrentSingleOwnedBaseRent)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.NumberDoubleWide)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.NumberDoubleWide)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.CurrentDoubleBaseRent)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.CurrentDoubleBaseRent)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.NumberDoubleWideOwned)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.NumberDoubleWideOwned)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.CurrentDoubleOwnedBaseRent)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.CurrentDoubleOwnedBaseRent)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-6">
+        <table class="table table-striped asset-table">
+            <tbody>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.NumberTripleWide)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.NumberTripleWide)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.CurrentTripleBaseRent)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.CurrentTripleBaseRent)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.NumberTripleWideOwned)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.NumberTripleWideOwned)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(s => spec.CurrentTripleOwnedBaseRent)</td>
+                    <td style="text-align: right;">@Html.DisplayFor(s => spec.CurrentTripleOwnedBaseRent)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+                    
+}
+

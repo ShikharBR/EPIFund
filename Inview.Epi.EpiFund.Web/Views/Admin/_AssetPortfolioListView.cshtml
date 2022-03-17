@@ -1,0 +1,149 @@
+﻿@using PagedList.Mvc
+@model List<Inview.Epi.EpiFund.Domain.ViewModel.PortfolioQuickListModel>
+@{
+    bool showCreatedBy = false;   
+}
+
+
+    <td colspan="18">
+        <table class="table table-striped" style="font-size: 10px !important; padding: 5px; vertical-align: middle; ">
+            <tr>
+                <td colspan="18" align="center" style="text-align: center;">
+                    <b>PORTFOLIO TABLE SUMMARY FOR ANY ASSET IN MASTER db THAT IS PART OF A PORTFOLIO</b>
+                </td>
+            </tr>
+            <tr>
+                <th>Port<br />View</th>
+                <th>States</th>
+                <th>Asset<br />Type</th>
+                <th># Unit<br />Sq.Ft.</th>
+                <th>Portfolio<br />Name</th>
+                <th>Occ %<br />Mo/Year</th>
+                <th>Proforma<br /><a title="Annualized Scheduled Gross Income">SGI</a></th>
+                <th>Proforma<br /><a title="Annualized Net Operating Income">NOI</a></th>
+                <th style="vertical-align: bottom;"><a title="Annual Capitalization Rate"> CAP%</a></th>
+                <th>Assm<br />Fin</th>
+                <th>Pricing:LP<br />CMA/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a></th>
+                @*action*@
+                <th><span class="glyphicon glyphicon-folder-open" title="View a One-Line Summary Asset"></span></th>
+                @*<th title="Chain of Title"><img style="width:12px;" src="~/Content/images/tringle.png" /></th>*@
+                <th><span class="glyphicon glyphicon-user" title="Users"></span></th>
+                <th><span class="glyphicon glyphicon-retweet" title="Availability Status"></span></th>
+                <th title="Who’s Driving the Bus"><img style="height:16px;" src="~/Content/images/bus.png" /></th>
+                <th>Manage</th>
+            </tr>
+            @{
+
+                foreach (var portItem in Model)
+                {
+                    <tr>
+                        <td><a href="@Url.Action("ViewPortfolioSummary", "Portfolio", new { id = portItem.PortfolioId })">View</a></td>
+                        <td>@string.Join("/", portItem.States)</td>
+                        <td>
+                            @{
+                                var lstAssettype = "";
+                                foreach (var asstType in portItem.AssetType)
+                                {
+                                    lstAssettype += Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(asstType) + " ";
+                                }
+                                @Html.Raw(lstAssettype)
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var returnStr = "";
+                                if (portItem.NumberOfUnits > 0)
+                                {
+                                    returnStr = "<span class='padNumber'>" + portItem.NumberOfUnits.ToString() + "</span>";
+                                }
+                                if (portItem.SquareFeet > 0.0)
+                                {
+                                    if (returnStr != "")
+                                    {
+                                        returnStr += "<br/><span class='padNumber'>" + portItem.SquareFeet.ToString() + "</span>";
+                                    }
+                                    else
+                                    {
+                                        returnStr = "<span class='padNumber'>" + portItem.SquareFeet.ToString() + "</span>";
+                                    }
+                                }
+                                @Html.Raw(returnStr)
+                            }
+
+                        </td>
+                        <td><span class="AssetName" title="@portItem.PortfolioName">@portItem.PortfolioName</span></td>
+                        <td>
+                            @(((100 - portItem.OccupancyPercentage) / 100).ToString("P"))
+                            <br />@(portItem.OccupancyDate)
+                        </td>
+                        <td>@portItem.CumiProformaSGI</td>
+                        <td>@portItem.CumiProformaNOI</td>
+                        <td>@portItem.CumiLPCapRate</td>
+                        <td>@portItem.AssmFin</td>
+                        <td>@portItem.Pricing.ToString("C0")<br />@portItem.PricingType</td>
+
+                        @*action*@
+                        <td>
+                            <span class="glyphicon glyphicon-folder-open" title="Portfolio" style="cursor:pointer" onclick="ViewRelatedAssets('@portItem.PortfolioId.ToString()')"></span>
+                        </td>
+                        <td>
+                            @{
+                                var uType = "";
+                                if (portItem.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin)
+                                {
+                                    uType = "ICA";
+                                }
+                                else if (portItem.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+                                {
+                                    uType = "CA";
+                                }
+                                else if (portItem.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.Investor)
+                                {
+                                    uType = "PI";
+                                }
+                                else //if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ListingAgent)
+                                {
+                                    uType = "LA";
+                                }
+                                @Html.Raw(uType)
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var lstStatus = "";
+                                if (portItem.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Available)
+                                {
+                                    lstStatus = "A";
+                                }
+                                else if (portItem.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Pending)
+                                {
+                                    lstStatus = "P";
+                                }
+                                else if (portItem.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldNotClosed
+                                       || portItem.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldAndClosed
+                                       || portItem.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Withdrawn)
+                                {
+                                    lstStatus = "U";
+                                }
+                                @Html.Raw(lstStatus)
+                            }
+                        </td>
+                        <td title="Who’s Driving the Bus">
+                            @if (portItem.BusDriver == "SUS")
+                            {
+                                <span class="red">@portItem.BusDriver</span>
+                            }
+                            else
+                            {
+                                <span>@portItem.BusDriver</span>
+                            }
+                        </td>
+                        <td>
+                            [ <a href="@Url.Action("UpdatePortfolio", "Portfolio", new { id = @portItem.PortfolioId })" style="cursor:pointer" title="Edit"> <span class="glyphicon glyphicon-pencil"></span>                     </a>]
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </td>
+

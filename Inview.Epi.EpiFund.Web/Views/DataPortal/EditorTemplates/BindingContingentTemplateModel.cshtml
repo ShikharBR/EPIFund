@@ -1,0 +1,1316 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.BindingContingentTemplateModel
+
+@using Inview.Epi.EpiFund.Domain.Helpers
+@using Inview.Epi.EpiFund.Domain.Enum
+
+<style>
+    .field-validation-error {
+        color: red;
+    }
+</style>
+<h4>Listing Agent</h4>
+<em>Your Binding LOI will be auto e-mailed to all @Model.AssetNARMembers.Count of the Listing Agents of Record for this CRE Asset.</em>
+<br />
+<br />
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            <label>Listing Agent</label>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DropDownListFor(model => Model.SelectedListingAgent, Model.ListingAgents, "---")
+        </div>
+    </div>
+</div>
+@for (int i = 0; i < Model.ListingAgents.Count; i++)
+{
+    @Html.HiddenFor(model => Model.ListingAgents[i].Text) 
+    @Html.HiddenFor(model => Model.ListingAgents[i].Value)
+    @Html.HiddenFor(model => Model.ListingAgents[i].Selected)
+}
+@for (int i = 0; i < Model.AssetNARMembers.Count; i++)
+{
+    @Html.HiddenFor(model => Model.AssetNARMembers[i].NARMember.CompanyName, new { @class = "company" + Model.AssetNARMembers[i].NARMember.NarMemberId })
+    @Html.HiddenFor(model => Model.AssetNARMembers[i].NARMember.Email, new { @class = "email" + Model.AssetNARMembers[i].NARMember.NarMemberId })
+    @Html.HiddenFor(model => Model.AssetNARMembers[i].NARMember.WorkPhoneNumber, new { @class = "wNumber" + Model.AssetNARMembers[i].NARMember.NarMemberId })
+    @Html.HiddenFor(model => Model.AssetNARMembers[i].NARMember.CellPhoneNumber, new { @class = "cNumber" + Model.AssetNARMembers[i].NARMember.NarMemberId })
+    @Html.HiddenFor(model => Model.AssetNARMembers[i].NARMember.FaxNumber, new { @class = "fNumber" + Model.AssetNARMembers[i].NARMember.NarMemberId })
+    @Html.HiddenFor(model => Model.AssetNARMembers[i].NARMember.CompanyAddressLine1, new { @class = "address" + Model.AssetNARMembers[i].NARMember.NarMemberId })
+    @Html.HiddenFor(model => Model.AssetNARMembers[i].NARMember.FullName, new { @class = "name" + Model.AssetNARMembers[i].NARMember.NarMemberId })
+    @Html.HiddenFor(model => Model.AssetNARMembers[i].NARMember.FirstName)
+    @Html.HiddenFor(model => Model.AssetNARMembers[i].NARMember.NarMemberId)
+   @Html.HiddenFor(model => Model.AssetNARMembers[i].NARMember.LastName)
+}
+@Html.HiddenFor(model => Model.AssetNumber)
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.To) <span style="color: red;">*</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.To)
+            @Html.ValidationMessageFor(model => model.To)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.EmailAddress) <span style="color: red;">*</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.EmailAddress)
+            @Html.ValidationMessageFor(model => model.EmailAddress)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.FaxNumber)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.FaxNumber)
+            @Html.ValidationMessageFor(model => model.FaxNumber)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Company) <span style="color: red;">*</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.Company)
+            @Html.ValidationMessageFor(model => model.Company)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.WorkPhoneNumber) <span style="color: red;">*</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.WorkPhoneNumber)
+            @Html.ValidationMessageFor(model => model.WorkPhoneNumber)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.CellPhoneNumber)<span style="color: red;">*</span> 
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.CellPhoneNumber)
+            @Html.ValidationMessageFor(model => model.CellPhoneNumber)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.CREAquisitionLOI)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.CREAquisitionLOI)
+            @Html.ValidationMessageFor(model => model.CREAquisitionLOI)
+        </div>
+    </div>
+</div>
+
+<h4>Buyer</h4>
+<br />
+<br />
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.From)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.From)
+            @Html.ValidationMessageFor(model => model.From)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Date)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.Date, new { @class = "datepicker" })
+            @Html.ValidationMessageFor(model => model.Date)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.CareOf)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.CareOf)
+            @Html.ValidationMessageFor(model => model.CareOf)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.TotalNumberOfPagesIncludingCover)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.TotalNumberOfPagesIncludingCover, new { @class = "formatNumber" }) + Attachments
+            @Html.ValidationMessageFor(model => model.TotalNumberOfPagesIncludingCover)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BusinessPhoneNumber)<span style="color: red;">*</span> 
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BusinessPhoneNumber)
+            @Html.ValidationMessageFor(model => model.BusinessPhoneNumber)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.EmailAddress2)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.EmailAddress2)
+            @Html.ValidationMessageFor(model => model.EmailAddress2)
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<h2>BINDING: LETTER OF INTENT</h2>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BeneficiarySeller)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BeneficiarySeller)
+            @Html.ValidationMessageFor(model => model.BeneficiarySeller)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.OfficePhone)<span style="color: red;">*</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.OfficePhone)
+            @Html.ValidationMessageFor(model => model.OfficePhone)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.OfficerOfSeller) <span style="color: red;">*</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.OfficerOfSeller)
+            @Html.ValidationMessageFor(model => model.OfficerOfSeller)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.WebsiteEmail)<span style="color: red;">*</span> 
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.WebsiteEmail)
+            @Html.ValidationMessageFor(model => model.WebsiteEmail)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Buyer1Name)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.Buyer1Name)
+            @Html.ValidationMessageFor(model => model.Buyer1Name)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BuyerAssigneeName)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BuyerAssigneeName)
+            @Html.ValidationMessageFor(model => model.BuyerAssigneeName)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.ObjectOfPurchase)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.ObjectOfPurchase)
+            @Html.ValidationMessageFor(model => model.ObjectOfPurchase)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Address1)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.Address1)
+            @Html.ValidationMessageFor(model => model.Address1)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Address2)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.Address2)
+            @Html.ValidationMessageFor(model => model.Address2)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.City)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.City)
+            @Html.ValidationMessageFor(model => model.City)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.State)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DropDownListFor(s => s.State, @Model.States)
+            @Html.ValidationMessageFor(model => model.State)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Zip)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.Zip)
+            @Html.ValidationMessageFor(model => model.Zip)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.AssessorNumber)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.AssessorNumber)
+            @Html.HiddenFor(s => s.AssessorNumber)
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.NoSecuredMortgages)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.RadioButtonFor(s => s.NoSecuredMortgages, "true", new { onchange = "toggleSecuredMorgage(true)" }) Yes
+            @Html.RadioButtonFor(s => s.NoSecuredMortgages, "false", new { onchange = "toggleSecuredMorgage(false)" }) No
+            @Html.ValidationMessageFor(model => model.NoSecuredMortgages)
+        </div>
+    </div>
+</div>
+<br />
+<div id="securedMortgages">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(model => model.SecuredMortgages)
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(model => model.SecuredMortgages)
+                @Html.ValidationMessageFor(model => model.SecuredMortgages)
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.LabelFor(model => model.Lender)
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                @Html.TextBoxFor(model => model.Lender)
+                @Html.ValidationMessageFor(model => model.Lender)
+            </div>
+        </div>
+    </div>
+    <br />
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.OfferingPurchasePrice)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.OfferingPurchasePrice, new { @class = "formatNumber", onblur = "calculateNumbers()" })
+            @Html.ValidationMessageFor(model => model.OfferingPurchasePrice)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.InitialEarnestDeposit)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.InitialEarnestDeposit, new { @class = "formatNumber", onblur = "calculateIED(this)" })
+            <input type="hidden" id="ied" />
+            @Html.ValidationMessageFor(model => model.InitialEarnestDeposit)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BalanceEarnestDeposit)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BalanceEarnestDeposit, new { @class = "formatNumber", onblur = "calculateBED(this)" })
+            @Html.ValidationMessageFor(model => model.BalanceEarnestDeposit)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.TermsOfPurchase)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.TermsOfPurchase, new { @class = "formatNumber" })
+            @Html.ValidationMessageFor(model => model.TermsOfPurchase)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.EmailAddress2)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.EmailAddress2)
+            @Html.ValidationMessageFor(model => model.EmailAddress2)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Releasing)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.Releasing)
+            @Html.ValidationMessageFor(model => model.Releasing)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Terms1)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextAreaFor(s => Model.Terms1, 4, 100, null)
+            @Html.ValidationMessageFor(model => model.Terms1)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Terms2)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextAreaFor(s => Model.Terms2, 4, 100, null)
+            @Html.ValidationMessageFor(model => model.Terms2)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Terms3)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextAreaFor(s => Model.Terms3, 4, 100, null)
+            @Html.ValidationMessageFor(model => model.Terms3)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.DueDiligenceDate)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DropDownListFor(model => model.DueDiligenceDate, Model.DueDiligenceNames as IEnumerable<SelectListItem>, "---")
+            (@Html.DropDownListFor(model => model.DueDiligenceNumberOfDays, Model.DueDiligenceNumbers as IEnumerable<SelectListItem>, "---"))
+            @Html.ValidationMessageFor(model => model.Terms2)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.SellerDisclosureDate)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DropDownListFor(model => model.SellerDisclosureDate, Model.SellerDisclosureNames as IEnumerable<SelectListItem>, "---")
+            (@Html.DropDownListFor(model => model.SellerDisclosureNumberOfDays, Model.SellerDisclosureNumbers as IEnumerable<SelectListItem>, "---"))
+            @Html.ValidationMessageFor(model => model.Terms2)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.OperatingDisclosureDate)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DropDownListFor(model => model.OperatingDisclosureDate, Model.OperationDisclosureNames as IEnumerable<SelectListItem>, "---")
+            (@Html.DropDownListFor(model => model.OperatingDisclosureNumberOfDays, Model.OperationDisclosureNumbers as IEnumerable<SelectListItem>, "---"))
+            @Html.ValidationMessageFor(model => model.Terms2)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.ClosingDate)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DropDownListFor(model => model.ClosingDate, Model.ClosingDateNames as IEnumerable<SelectListItem>, "---")
+            (@Html.DropDownListFor(model => model.ClosingDateNumberOfDays, Model.ClosingDateNumbers as IEnumerable<SelectListItem>, "---"))
+            @Html.ValidationMessageFor(model => model.ClosingDate)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.FormalDocumentationDate)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DropDownListFor(model => model.FormalDocumentationDate, Model.ClosingDateNames as IEnumerable<SelectListItem>, "---")
+            (@Html.DropDownListFor(model => model.FormalDocumentationNumberOfDays, Model.ClosingDateNumbers as IEnumerable<SelectListItem>, "---"))
+            @Html.ValidationMessageFor(model => model.FormalDocumentationDate)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.CommissionFeesName) <span style="color: red;">*</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.CommissionFeesName)
+            (@Html.TextBoxFor(model => model.CommissionFeesNumber, new { @class = "formatNumber", style = "width: 53px;" })) 
+            @Html.ValidationMessageFor(model => model.CommissionFeesName)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.EscrowCompanyName) <span style="color: red;">*</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.EscrowCompanyName)
+            @Html.ValidationMessageFor(model => model.EscrowCompanyName)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.EscrowCompanyAddress) <span style="color: red;">*</span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.EscrowCompanyAddress)
+            @Html.ValidationMessageFor(model => model.EscrowCompanyAddress)
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.EscrowCompanyAddress2)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.EscrowCompanyAddress2)
+            @Html.ValidationMessageFor(model => model.EscrowCompanyAddress2)
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.EscrowCompanyCity)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.EscrowCompanyCity)
+            @Html.ValidationMessageFor(model => model.EscrowCompanyCity)
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.EscrowCompanyState)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.DropDownListFor(s => s.EscrowCompanyState, @Model.EscrowStates)
+            @Html.ValidationMessageFor(model => model.EscrowCompanyState)
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.EscrowCompanyZip)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.EscrowCompanyZip)
+            @Html.ValidationMessageFor(model => model.EscrowCompanyZip)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.EscrowCompanyPhoneNumber)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.EscrowCompanyPhoneNumber)
+            @Html.ValidationMessageFor(model => model.EscrowCompanyPhoneNumber)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.StateOfCountyAssessors)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.StateOfCountyAssessors)
+            @Html.ValidationMessageFor(model => model.StateOfCountyAssessors)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.StateOfPropertyTaxOffice)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.StateOfPropertyTaxOffice)
+            @Html.ValidationMessageFor(model => model.StateOfPropertyTaxOffice)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.LOIDate)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.LOIDate, new { @class = "datepicker" })
+            @Html.ValidationMessageFor(model => model.LOIDate)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Buyer1)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.Buyer1)
+            @Html.ValidationMessageFor(model => model.Buyer1)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BuyerTitle1)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BuyerTitle1)
+            @Html.ValidationMessageFor(model => model.BuyerTitle1)
+        </div>
+    </div>
+</div>
+
+@*<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.Buyer2)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.Buyer2)
+            @Html.ValidationMessageFor(model => model.Buyer2)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BuyerTitle2)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BuyerTitle2)
+            @Html.ValidationMessageFor(model => model.BuyerTitle2)
+        </div>
+    </div>
+</div>*@
+
+@*<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.SellerReceiver1)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.SellerReceiver1)
+            @Html.ValidationMessageFor(model => model.SellerReceiver1)
+        </div>
+    </div>
+</div>*@
+
+@*<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.SellerReceiver1Officer)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.SellerReceiver1Officer)
+            @Html.ValidationMessageFor(model => model.SellerReceiver1Officer)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.SellerReceiver1Title)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.SellerReceiver1Title)
+            @Html.ValidationMessageFor(model => model.SellerReceiver1Title)
+        </div>
+    </div>
+</div>*@
+
+@*<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.SellerReceiver2)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.SellerReceiver2)
+            @Html.ValidationMessageFor(model => model.SellerReceiver2)
+        </div>
+    </div>
+</div>*@
+
+@*<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.SellerReceiver2Officer)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.SellerReceiver2Officer)
+            @Html.ValidationMessageFor(model => model.SellerReceiver2Officer)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.SellerReceiver2Title)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.SellerReceiver2Title)
+            @Html.ValidationMessageFor(model => model.SellerReceiver2Title)
+        </div>
+    </div>
+</div>*@
+
+@*<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BuyersAssignee1)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BuyersAssignee1)
+            @Html.ValidationMessageFor(model => model.BuyersAssignee1)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BuyersAssignee1Officer)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BuyersAssignee1Officer)
+            @Html.ValidationMessageFor(model => model.BuyersAssignee1Officer)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BuyersAssignee1Title)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BuyersAssignee1Title)
+            @Html.ValidationMessageFor(model => model.BuyersAssignee1Title)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BuyersAssignee2)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BuyersAssignee2)
+            @Html.ValidationMessageFor(model => model.BuyersAssignee2)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BuyersAssignee2Officer)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BuyersAssignee2Officer)
+            @Html.ValidationMessageFor(model => model.BuyersAssignee2Officer)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.LabelFor(model => model.BuyersAssignee2Title)
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            @Html.TextBoxFor(model => model.BuyersAssignee2Title)
+            @Html.ValidationMessageFor(model => model.BuyersAssignee2Title)
+        </div>
+    </div>
+</div>*@
+<div id="documents">
+    <h3>Documents</h3>
+    <div id="docManager" data-doccount="@Model.Documents.Count">
+        <div class="document-item">
+            <span style="width: 40%; float: left;">LOI Document that must/shall be attached to Vesting Buyer’s LOI submittal:</span>
+            @if (Model.HasDocuments)
+            {
+                <a onclick="show('currentOperatingReport')" style="margin-left: 15px;">View Document(s)</a>
+            }
+            <div id="docDiv" class="document-item-expanded">
+                <div class="docSetup" style="width: 100%">
+                    <h4 style="margin-top: 0px;">Upload New Document</h4>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Title</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="text" id="docTitle" />
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Description</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <textarea cols="10" rows="4" id="docDescription"></textarea>
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Type</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Html.RadioButton("rdb", "1", new { id = "omr" }) Operating & Management <a title="State & Date of Incorporation; Ownership Summary of CRE Inventory in US">Resumes</a> of Corporate Vesting Entity
+                            <br />
+                            @Html.RadioButton("rdb", "2", new { id = "pof" }) <a title="Reference Letter from Corporate Banking Relationship Officer and or from a Bonafide Debt Funding Partner (“CLA”) in sum equal to Offering Price is required by Seller">Proof of Funds</a> of Corporate Vesting Entity
+                            <br />
+                            @Html.RadioButton("rdb", "3", new { id = "pfs" }) <a title="Attach any other supporting documentation that you feel will enhance your LOI submittal">Other</a>
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="file" id="loiDoc" />
+                        </div>
+                    </div>
+                </div>
+                @for (int item = 0; item < Model.Documents.Count; item++)
+                {
+                    <div class="docPreviewDiv">
+                        <a target='_blank' href="@Url.Action("DownloadDocument", "Admin", new { fileName = Model.Documents[item].FileName, assetId = Model.LOIId, contentType = Model.Documents[item].ContentType, title = Model.Documents[item].Title })">Click here to download file</a>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label style="font-weight: bold;">Title</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Html.TextBoxFor(s => Model.Documents[item].Title)
+                            </div>
+                            <div class="col-lg-12">
+                                <label style="font-weight: bold;">Description</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Html.TextAreaFor(s => Model.Documents[item].Description, 4, 10, null)
+                            </div>
+                            <div class="col-lg-12">
+                                <label style="font-weight: bold;">Type</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(Model.Documents[item].Type)
+                            </div>
+                        </div>
+                        @Html.HiddenFor(s => Model.Documents[item].Type)
+                        @Html.HiddenFor(s => Model.Documents[item].LOIDocumentId)
+                        @Html.HiddenFor(s => Model.Documents[item].Size)
+                        @Html.HiddenFor(s => Model.Documents[item].ContentType)
+                        @Html.HiddenFor(s => Model.Documents[item].LOIId)
+                        @Html.HiddenFor(s => Model.Documents[item].FileName, new { @class = "docName" })
+                        <input type='button' class='deleteDocUpload' value='Delete' data-button="@Model.Documents[item].FileName" onclick='docDelete(this)'/>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(model => model.AssetId)
+@Html.HiddenFor(model => model.LOIId, new { id = "loiId" })
+
+<script>
+    $("#loiDoc").change(function () {
+        var type = $('input[name=rdb]:checked', '#loiForm').val();
+        var title = $('#docTitle').val();
+        var path = $(this).val();
+        var fileName = path.match(/[^\/\\]+$/);
+        if (!title) {
+            title = fileName[0].split(".")[0];
+        }
+        if (type) {
+            var description = $('#docDescription').val();
+            readDOC(this, fileName, title, description, type, '#docDiv');
+        }
+        else {
+            alert("Please select a document type.");
+            $(this).val('');
+        }
+    });
+
+
+    function readDOC(input, fileName, title, description, type, id) {
+
+        if (input.files && input.files[0]) {
+            var xhr = new XMLHttpRequest();
+            var fd = new FormData();
+            fd.append("file", input.files[0]);
+            fd.append("loiId", $('#loiId').val());
+            fd.append("type", type);
+            fd.append("title", title);
+            xhr.open("POST", "@Url.Action("DocumentUpload", "DataPortal")", true);
+            xhr.send(fd);
+            xhr.addEventListener("load", function (event) {
+                var response = JSON.parse(event.target.response);
+                var success = response["message"];
+                var contentType = response["contentType"];
+                var newFilename = response["filename"];
+                var typeDesc = response["typeDesc"];
+                var size = response["size"];
+                var downloadUrl = response["downloadUrl"];
+                if (success.toLowerCase() == "true") {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        if (isNaN(docCount)) {
+                            docCount = 0;
+                        }
+                        $(id).append("<hr /><div class='docPreviewDiv'><a target='_blank' href=" + downloadUrl + ">Click here to download file</a><br /><span>Title: </span><label class='title' name='Documents[" + docCount + "].Title' >" + title + "</label><br /><span>Description: </span><label class='description' name='Documents[" + docCount + "].Description'>" + description + "</label><span>Type: </span><label class='title' name='Documents[" + docCount + "].Type' >" + typeDesc + "</label><br /><input type='hidden' class='docTitle' name='Documents[" + docCount + "].Title' value='" + title + "'><input type='hidden' class='docDescription' name='Documents[" + docCount + "].Description' value=" + description + "><input type='hidden' class='docName' name='Documents[" + docCount + "].FileName' value=" + newFilename + "><input type='hidden' name='Documents[" + docCount + "].Size' value=" + size + "> <input type='hidden' name='Documents[" + docCount + "].ContentType' value=" + contentType + "> <input type='hidden' name='Documents[" + docCount + "].LOIId' value='@Model.LOIId'> <input type='hidden' name='Documents[" + docCount + "].Type' value='" + type + "'><input type='button' class='deleteDocUpload' value='Delete' data-button=" + newFilename + " onclick='docDelete(this)'> </div>");
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                    docCount++;
+                }
+                else {
+                    alert("This document already exists on the server for this asset and this document. Please change the filename of the file before uploading.");
+                    $('#docsPreviewer').append("<div>" + success + " for " + fileName + "</div>")
+                }
+            }, false);
+        }
+    }
+
+    $("#SelectedListingAgent").change(function () {
+        var id = $(this).val();
+        $("#To").val($(".name" + id).val());
+        $("#EmailAddress").val($(".email" + id).val());
+        $("#FaxNumber").val($(".fNumber" + id).val());
+        $("#Company").val($(".company" + id).val());
+        $("#WorkPhoneNumber").val($(".wNumber" + id).val());
+        $("#CellPhoneNumber").val($(".cNumber" + id).val());
+    });
+
+    function docDelete(param) {
+
+        var xhr = new XMLHttpRequest();
+        var fd = new FormData();
+        fd.append("docId", param.getAttribute("data-button"));
+        fd.append("assetId", $('#loiId').val());
+        xhr.open("POST", "@Url.Action("DocumentDelete", "Admin")", true);
+        xhr.send(fd);
+        xhr.addEventListener("load", function (event) {
+            var response = JSON.parse(event.target.response);
+            var success = response["message"];
+            if (success == "true") {
+                $(param).closest('.docPreviewDiv').hide();
+                $(param).closest('.docPreviewDiv').find('.docName').val('');
+            }
+            else {
+                $(param).closest('.docPreviewDiv').remove();
+            }
+        }, false);
+    };
+
+    var docCount = 0;
+    var ced = 0;
+    var ied = 0;
+    var opp = 0;
+    var bed = 0;
+    $(document).ready(function () {
+        docCount = 0;
+        calculateNumbers();
+        docCount = $('#docManager').attr('data-doccount');
+        docCount--;
+        $(".datepicker").datepicker();
+        $("input.formatNumber").each(function (index) {
+            $(this).val(addCommas($(this).val(), true));
+            $(this).on("input", null, null, function () {
+                $(this).val(addCommas($(this).val(), true));
+            });
+        });
+        if (!$("#NoSecuredMortgages").prop('checked')) {
+            toggleSecuredMorgage(false);
+        }
+        else {
+            toggleSecuredMorgage(true);
+        }
+
+        $("#DueDiligenceDate").val("Thirty");
+        $("#DueDiligenceNumberOfDays").val("30");
+        $("#SellerDisclosureDate").val("Seven");
+        $("#SellerDisclosureNumberOfDays").val("7");
+        $("#OperatingDisclosureDate").val("Seven");
+        $("#OperatingDisclosureNumberOfDays").val("7");
+        $("#ClosingDate").val("Fourteen");
+        $("#ClosingDateNumberOfDays").val("14");
+        $("#FormalDocumentationDate").val("Fourteen");
+        $("#FormalDocumentationNumberOfDays").val("14");
+    });
+
+    function calculateCED() {
+        opp = parseFloat($("#OfferingPurchasePrice").val());
+        ced = Math.round((opp * 0.10) / 1000) * 1000;
+    }
+    function calculateNumbers() {
+        fixNumbers();
+        calculateCED();
+        setIED();
+        setBED();
+        setTOP(ced);
+        destroyNumbers();
+    }
+
+    function setIED() {
+        ied = ced * 0.2;
+        $("#InitialEarnestDeposit").val(ied);
+        $("#ied").val(ied);
+    }
+
+    function setOPP() {
+        bed = parseFloat($("#BalanceEarnestDeposit").val());
+        ied = parseFloat($("#InitialEarnestDeposit").val());
+        ced = bed - ied;
+        opp = (ced / 0.10);
+        $("#OfferingPurchasePrice").val(opp);
+    }
+
+    function calculateIED(input) {
+        fixNumbers();
+        ied = parseFloat(input.value);
+        //calculateCED();
+        setBED();
+        //setTOP();
+        destroyNumbers();
+    }
+
+    function setBED() {
+        fixNumbers();
+        $("#BalanceEarnestDeposit").val(ced - ied);
+        destroyNumbers();
+    }
+
+    function calculateBED(input) {
+        fixNumbers();
+        //calculateCED();
+        //setIED();
+        setTOP(ied + parseFloat(input.value));
+        destroyNumbers();
+    }
+
+    function setTOP(value) {
+        $("#TermsOfPurchase").val(opp - value);
+    }
+
+    function toggleSecuredMorgage(show) {
+        if (show) {
+            $("#securedMortgages").show();
+        } else {
+            $("#securedMortgages").hide();
+        }
+    }
+
+    function destroyNumbers() {
+        $("input.formatNumber").each(function (index) {
+            $(this).val(addCommas($(this).val(), true));
+            $(this).on("input", null, null, function () {
+                $(this).val(addCommas($(this).val(), true));
+            });
+        });
+    }
+</script>

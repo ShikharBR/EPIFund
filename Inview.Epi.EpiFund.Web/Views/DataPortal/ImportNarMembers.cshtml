@@ -1,0 +1,24 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.ImportNarMemberModel
+@{
+    ViewBag.Title = "Import NAR Members";
+    Layout = ViewBag.Layout;
+}
+
+<h3 class="page-header">Import NAR Members</h3>
+<p>
+    Upload excel spreadsheet of NAR members. Download template <a href="../NARMemberImportTemplate.xlsx">here</a>.
+</p>
+@using (Html.BeginForm("ImportNarMembers", "DataPortal", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.TextBoxFor(s => s.File, new { type = "file" })
+    <br />
+    if (Model.ShowCheckbox)
+    {
+        @Html.CheckBoxFor(s => s.CheckAgainstMBAs)<span> Check against MBA Members?</span>
+        @Html.CheckBoxFor(s => s.CheckAgainstPrincipalInvestors)<span> Check against Principal Investors?</span>
+@Html.CheckBoxFor(s => s.AreReferredUsers)<span> Do you want to set these users as referred by you?</span>
+        <br />
+        <br />
+    }
+    <input type="submit" value="Import NAR Members" class="btn btn-primary" />
+}

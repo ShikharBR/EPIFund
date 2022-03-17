@@ -1,0 +1,173 @@
+﻿@using PagedList.Mvc
+@model Inview.Epi.EpiFund.Web.Models.PrincipalInvestorSearchResultsModel
+@{
+    ViewBag.Title = "Manage Principal Investors";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h3 class="page-header">Manage Principal Investors</h3>
+
+<div style="float:right;">
+    <select id="ddlRowCount" onchange="changeResults()">
+        <option value="25">25</option>
+        <option value="50" selected="selected">50</option>
+        <option value="75">75</option>
+        <option value="100">100</option>
+    </select>
+</div>
+<ul class="nav nav-pills">
+    <li><a href="@Url.Action("ManagePrincipalInvestorsReg", "Admin")">Registered Principal Investors</a></li>
+    <li class="active"><a href="#ipi">Imported Principal Investors</a></li>
+</ul>
+<br />
+<br />
+<div class="tab-content">
+    <div class="tab-pane active" id="ipi">
+        <div class="row">
+            <div class="col-lg-12">
+                <a class="btn btn-primary" href="@Url.Action("CreateUser", "Admin")">Create New User</a>
+                <a class="btn btn-primary" href="@Url.Action("ImportPrincipalInvestors", "DataPortal")">Import Principal Investor</a>
+            </div>
+        </div>
+        <br />
+        <br />
+        @using (Html.BeginForm("ManagePrincipalInvestorsImport", "Admin", FormMethod.Post, new { @id = "searchForm" }))
+        {
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#searchbox">
+                                <button class="btn btn-default btn-xs" style="border: 1px solid #888">
+                                        Search Principal Investors
+                                </button>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="searchbox" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.FirstName)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.FirstName)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.LastName)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.LastName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.Email)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.Email)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.CompanyName)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.CompanyName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.AddressLine1)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.AddressLine1)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.City)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(s => s.City)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.State)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.DropDownListFor(s => s.State, @Model.States)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.LabelFor(s => s.ShowActiveOnly)
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        @Html.CheckBoxFor(s => s.ShowActiveOnly)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    @Html.HiddenFor(model => Model.Page)
+                                    @Html.HiddenFor(model => Model.SortOrder)
+                                    @Html.HiddenFor(model => Model.RowCount)
+                                    <input type="submit" value="Search" class="btn btn-primary proceed" style="width: 200px; margin-top: 20px" onclick="clearSearchValues()"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <br />
+        @{ Html.RenderPartial("_PrincipalInvestorListView", Model.Investors); }
+        <br />
+    </div>
+</div>
+<script>
+    $('.pagination li a').click(function () {
+        var href = $(this).attr('href');
+        if (typeof href !== typeof undefined && href !== false) {
+            var page = parseInt(getPageNumber(href));
+            $('#Page').val(page);
+            $('#searchForm').submit();
+            return false;
+        }
+    });
+    function postForm(order) {
+        $('#SortOrder').val(order);
+        $('#searchForm').submit();
+        return false;
+    }
+    function changeResults() {
+        $('#RowCount').val($('#ddlRowCount').val());
+        $('#searchForm').submit();
+    }
+</script>

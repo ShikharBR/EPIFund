@@ -1,0 +1,24 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.TitleCompanyModel
+@{
+    ViewBag.Title = "Edit Title Company";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using (Html.BeginForm("EditTitleCompany", "Admin", FormMethod.Post))
+{
+    <h3>Edit Title Company Details</h3>
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false)
+    <br />
+    @Html.EditorForModel()
+
+    <div>
+        
+
+    </div>
+    
+    <a  type ="submit" style="margin-bottom:5px" class="btn btn-warning" href="@Url.Action("ManageTitleCompanies", "Admin")" title="Cancel">Cancel</a>
+    <input type="submit"  class="btn btn-primary" id="btnSave" name="btnSave" value="Save Title Company" />
+    
+ 
+}

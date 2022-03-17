@@ -1,0 +1,718 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.PortfolioViewModel
+@using MVCVideo
+@using Inview.Epi.EpiFund.Domain.ViewModel
+@using Inview.Epi.EpiFund.Domain.Helpers
+
+@{
+    ViewBag.Title = "Existing Debt Fund Calculator";
+    ViewBag.IsAssetView = false;
+    List<MVCVideo.VideoOptions> videoOptions = ViewBag.Videos as List<MVCVideo.VideoOptions>;
+MultiFamilyAssetViewModel mfAsset = new MultiFamilyAssetViewModel();
+    CommercialAssetViewModel cAsset = new CommercialAssetViewModel();
+
+    foreach (var AssetViewModel in Model.PortfolioProperties)
+    {
+
+        if (AssetViewModel.GetType() == typeof(MultiFamilyAssetViewModel))
+        {
+            mfAsset = (AssetViewModel as MultiFamilyAssetViewModel);
+        }
+        else if (Model.GetType() == typeof(CommercialAssetViewModel))
+        {
+            cAsset = (AssetViewModel as CommercialAssetViewModel);
+        }
+
+    }
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>USCREonline.com : @ViewBag.Title</title>
+    <link rel="stylesheet" href="@Url.Content("~/content/css/ProgressBar.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/content/bootstrap.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/content/css/font-awesome.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/content/bootstrap-lightbox.min.css")" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @Styles.Render("~/bundles/css")
+    @Styles.Render("~/bundles/themes/base/css")
+    <link rel="stylesheet" href="@Url.Content("~/content/responsive.css")" />
+    @Scripts.Render("~/bundles/modernizr")
+    <script type="text/javascript">
+        var $buoop = {};
+        $buoop.ol = window.onload;
+        window.onload = function () {
+            try { if ($buoop.ol) $buoop.ol(); } catch (e) { }
+            var e = document.createElement("script");
+            e.setAttribute("type", "text/javascript");
+            e.setAttribute("src", "//browser-update.org/update.js");
+            document.body.appendChild(e);
+            setInterval(KeepSessionAlive, 30000);
+        }
+
+        function KeepSessionAlive() {
+            //$.post("/Home/KeepSessionAlive", null, function () {
+            //});
+        }
+    </script>
+    <style type="text/css">
+        #eqcalc
+        {
+        }
+
+        .blueText
+        {
+            color: #369;
+            font-weight: bold;
+        }
+
+        .calculator
+        {
+            position: absolute;
+            top: 122px;
+            left: 396px;
+            background-color: white;
+            z-index: 100;
+            width: 400px;
+        }
+
+        .container.fund-calculator
+        {
+            background-color: #fff !important;
+            min-width: 600px;
+            padding: 20px 60px !important;
+        }
+
+        h5
+        {
+            margin-bottom: 20px;
+        }
+
+        input[type="radio"]
+        {
+            margin-right: 5px;
+        }
+
+        input[type="text"].form-control
+        {
+            height: 26px;
+            font-size: 12px;
+        }
+
+        .well .row
+        {
+            margin-bottom: 20px;
+        }
+
+            .well .row label
+            {
+                margin-bottom: 0;
+            }
+
+        select.form-control[disabled]
+        {
+            border: 1px solid #B1A795;
+            height: 26px;
+            padding: 0;
+            font-size: 12px;
+        }
+    </style>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="@Url.Content("/Scripts/bootstrap.js")"></script>
+    <script src="@Url.Content("/Scripts/jquery-guid.js")"></script>
+
+</head>
+
+<div class="fund-calculator container" id="Dialog-Box-2" style="min-width: 600px; background-color: #fff !important;">
+    <div class="row">
+        <div class="col-xs-6">
+            <label class="control-label">Analysis is Based On:</label>
+        </div>
+        <div class="col-xs-6">
+            <input type="hidden" value="@Model.PortfolioListedPrice" id="hdnListedPrice1" />
+            <input type="hidden" value="@Model.AccumulatedBPO" id="hdnAppraisal1" />
+            <input type="hidden" value="@Model.CumiPrinciBal" id="hdnBalance" />
+            <input type="hidden" value="@Model.CumiMonthBal" id="hdnMonthlyPay" />
+            <input type="hidden" value="@Model.isARM" id="hdnARM1" />
+            <input type="hidden" value="@Model.SelectedAmortSchedule" id="hdnAmrtSche" />
+            <input type="radio" id="radiobtn1" name="option1" class="option1" value="ListedPrice" />Listed Price
+            <input type="radio" id="radiobtn2" name="option1" class="option1" value="Appraisal" /><label><a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h5>EXISTING DEBT FUNDING DATA</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="well">
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Existing Debt Funding apx. balance</label>
+                    </div>
+                    <div class="col-xs-5">
+                        <input type="TEXT" class="form-control" name="existingPrin" placeholder="@Model.CumiPrinciBal" onchange="ExtEquityCalculation()" onblur="toMoney(this, true)" maxlength="10" readonly>
+                        <span style="display: block; font-size: 9px; font-style: italic">As last reported by List Agent/Owner</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Current Reported Interest Rate</label>
+
+                    </div>
+                    <div class="col-xs-5">
+                        <input type="TEXT" class="form-control" name="currentIntrest" value=@Model.AvgInterestRate onblur="calculateExtMonthlyPayment()" maxlength="10" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Original Reported Amortization Schedule</label>
+                    </div>
+                    <div class="col-xs-5 ">
+                        <select id="ddlOrgAmortSchedule" class="form-control" onchange="calculateExtMonthlyPayment()" disabled>
+                            <option value="0">0</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                            <option value="30">30</option>
+                        </select>
+                        <span style="display: block; font-size: 9px; font-style: italic">Options: 10, 15, 20, 25, 30, IO</span>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Current Reported Monthly Payment</label>
+                    </div>
+                    <div class="col-xs-5 ">
+                        <input type="TEXT" class="form-control" name="curMonthlyPayment" value="@Model.CumiMonthBal" onblur="toMoney(this, true)" style="float: left; width: 70%; margin-right: 5px" readonly>
+                        <input type="TEXT" class="form-control" name="curPaymentType" readonly style="float: left; width: 25%" readonly>
+                        <span style="display: block; font-size: 9px; font-style: italic">Options: IO, PI</span>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Calculated Annual Debt Service</label>
+
+                    </div>
+                    <div class="col-xs-5 ">
+                        <input type="TEXT" class="form-control" name="curAnnualDebt" onblur="toMoney(this, true)" maxlength="10" readonly>
+                        <span style="display: block; font-size: 9px; font-style: italic">Auto Calculated</span>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Is Existing Funding Fixed or Adj?</label>
+
+                    </div>
+                    <div class="col-xs-5 ">
+                        <select id="ddlExistFunding" class="form-control" onchange="selectDropDowns()" disabled>
+                            <option value="0">---</option>
+                            <option value="1">Fixed</option>
+                            <option value="2">Adjustable</option>
+                        </select>
+                        <span style="display: block; font-size: 9px; font-style: italic">Must verify by review of Original Note</span>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Reported Debt Terms adjustment date</label>
+
+                    </div>
+                    <div class="col-xs-5">
+                        <input type="text" class="form-control" name="RepDebtDate" value="@Model.MortgageAdjustIfARM" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Debt Funding proposed maturity date</label>
+
+                    </div>
+                    <div class="col-xs-5">
+                        <input type="text" class="form-control" name="extMaturityDate" value ="@Model.BallonDate" readonly>
+                        <span style="display: block; font-size: 9px; font-style: italic">As last reported by List Agent/Owner</span>
+                    </div>
+                </div>
+                @*<div class="col-xs-6">
+                            <label class="control-label">Proposed Debt Funding Partner</label>
+                        </div>
+                        <div class="col-xs-6">
+                            <input type="TEXT" class="form-control" name="fundingPartner" value ="@Model.MBAAgentName" >
+                        </div>*@
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h5>EQUITY CALCULATION</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="well">
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label" id="equityPrice"></label>
+                    </div>
+                    <div class="col-xs-5">
+                        <input type="TEXT" class="form-control" name="extlistedPrice" onblur="toMoney(this, true)" maxlength="10" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Existing Debt Funding apx. balance</label>
+                    </div>
+                    <div class="col-xs-5">
+                        <input type="TEXT" class="form-control" name="existingPrin1" onblur="toMoney(this, true)" maxlength="10" readonly>
+                        <span style="display: block; font-size: 9px; font-style: italic">As last reported by List Agent/Owner</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Balance Acquisition (Cash Equity)</label>
+                    </div>
+                    <div class="col-xs-5">
+                        <input type="TEXT" class="form-control" name="extBalanceAcq" onblur="toMoney(this, true)" maxlength="10" readonly>
+                        <span style="display: block; font-size: 9px; font-style: italic">Auto Calculated</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Cash Equity as Percentage of LP/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV}</a></label>
+                    </div>
+                    <div class="col-xs-5">
+                        <input type="TEXT" class="form-control" name="extEquityPer" style="width: calc(100% - 25px); float: left;" readonly>
+                        <span style="width: 20px; float: left; text-align: center; padding-top: 3px;">%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h5>CASH FLOW CALCULATION</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="well">
+                <div class="row">
+                    <div class="col-xs-7">
+                        <label class="control-label">Reported Annual Pre-Tax Proforma NOI</label>
+                    </div>
+                    <div class="col-xs-5">
+                        <input type="TEXT" class="form-control" name="curAnnualPreforma" class="calc" maxlength="10" value=@Model.CumiProformaNOI readonly>
+                        <span style="display: block; font-size: 9px; font-style: italic">As last reported by List Agent/Owner</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7 text-left">
+                        <label class="control-label">Current Reported Annual Debt Service</label>
+                    </div>
+                    <div class="col-xs-5">
+                        <input type="TEXT" class="form-control" name="curAnnualDebt1" class="calc" maxlength="10" value="" readonly>
+                        <span style="display: block; font-size: 9px; font-style: italic">(Auto Filled as entered above by USC User)</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7 text-left">
+                        <label class="control-label">Calc. Annual Pre-Tax Cash Flow</label>
+                    </div>
+                    <div class="col-xs-5">
+                        <div class="row" style="margin-bottom: 0px;">
+                            <input type="TEXT" class="form-control" name="curCalcCashFlow" class="calc" maxlength="10" readonly>
+                        </div>
+                        <div class="row" style="margin-bottom: 0px;">
+                            <input type="TEXT" class="form-control" name="curCashFlowPerc" class="calc" readonly style="width: 50px; margin-right: 5px; float: left;" readonly />
+                            <span style="padding-top: 3px; float: left;">%</span>
+                        </div>
+                        <div class="row" style="margin-bottom: 0px;">
+                            <span style="display: block; font-size: 9px; font-style: italic">As % of (LP/CMV) Cash Equity</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        var temp = $('input[name="curAnnualPreforma"]').val();
+        $('input[name="curAnnualPreforma"]').val(formatMoney(temp, true));
+
+        var bal = document.getElementById('hdnBalance').value;
+        var monP = document.getElementById('hdnMonthlyPay').value;
+        $('input[name="curMonthlyPayment"]').val(formatMoney(monP, true));
+        $('input[name="existingPrin"]').val(formatMoney(bal, true));
+        var l1 = document.getElementById('hdnListedPrice1').value;
+        var a1 = document.getElementById('hdnAppraisal1').value;
+        if (getNumberFromValue(l1) > 0) {
+            $('input[name="extlistedPrice"]').val(formatMoney(l1, true));
+            var radiobtn = document.getElementById("radiobtn1");
+            radiobtn.checked = true;
+            document.getElementById("equityPrice").innerHTML = "Listed Price";
+        }
+        else if (getNumberFromValue(a1) > 0) {
+            $('input[name="extlistedPrice"]').val(formatMoney(a1, true));
+            var radiobtn = document.getElementById("radiobtn2");
+            radiobtn.checked = true;
+            document.getElementById("equityPrice").innerHTML = "CMV";
+        }
+
+
+        $(".option1").change(function () {
+            var val = $('.option1:checked').val();
+            switch (val) {
+                case 'ListedPrice':
+                    var listing = document.getElementById('hdnListedPrice1').value;
+                    $('input[name="extlistedPrice"]').val(formatMoney(listing, true));
+                    document.getElementById("equityPrice").innerHTML = "Listed Price";
+                    ExtEquityCalculation();
+                    break;
+                case 'Appraisal':
+                    var appraisal = document.getElementById('hdnAppraisal1').value;
+                    $('input[name="extlistedPrice"]').val(formatMoney(appraisal, true));
+                    document.getElementById("equityPrice").innerHTML = "CMV";
+                    ExtEquityCalculation();
+                    break;
+            }
+        });
+
+        ExtEquityCalculation();
+        selectDropDowns();
+    });
+
+    function selectDropDowns() {
+        var option = null;
+        option = document.getElementById('hdnARM1').value;
+
+        if (option.toLowerCase() == "0") {
+            $('#ddlExistFunding').prop('selectedIndex', 1);
+        }
+        else if (option.toLowerCase() == "1") {
+            $('#ddlExistFunding').prop('selectedIndex', 2);
+        }
+        else if (option == null || option == "") {
+            $('#ddlExistFunding').prop('selectedIndex', 0);
+        }
+
+        option = document.getElementById('hdnAmrtSche').value;
+        if (option.toLowerCase() == "0") {
+            $('#ddlOrgAmortSchedule').prop('selectedIndex', 0);
+        }
+        else if (option.toLowerCase() == "10") {
+            $('#ddlOrgAmortSchedule').prop('selectedIndex', 1);
+        }
+        else if (option.toLowerCase() == "15") {
+            $('#ddlOrgAmortSchedule').prop('selectedIndex', 2);
+        }
+        else if (option.toLowerCase() == "20") {
+            $('#ddlOrgAmortSchedule').prop('selectedIndex', 3);
+        }
+        else if (option.toLowerCase() == "25") {
+            $('#ddlOrgAmortSchedule').prop('selectedIndex', 4);
+        }
+        else if (option.toLowerCase() == "30") {
+            $('#ddlOrgAmortSchedule').prop('selectedIndex', 5);
+        }
+        else if (option == null || option == "") {
+            $('#ddlOrgAmortSchedule').prop('selectedIndex', 0);
+        }
+
+    }
+
+
+
+    function ExtEquityCalculation() {
+        var principal = $('input[name="existingPrin"]').val(); //.getElementsByName('#proposedPrin').value;
+        var listingPrice = $('input[name="extlistedPrice"]').val()
+        //$('input[name="listedPrice"]').val(listingPrice);
+        $('input[name="existingPrin1"]').val(formatMoney(principal, true));
+        var balance = getNumberFromValue(listingPrice) - getNumberFromValue(principal);
+        $('input[name="extBalanceAcq"]').val(formatMoney(Math.round(balance.toFixed(2)).toString(), true));
+        var equityPer = (balance / getNumberFromValue(listingPrice)) * 100;
+        $('input[name="extEquityPer"]').val(Math.round(equityPer.toFixed(2)));
+        calculateExtMonthlyPayment();
+    }
+
+
+    function calculateExtMonthlyPayment() {
+        var principal = $('input[name="existingPrin"]').val();// document.getElementsByName('#proposedPrin').value;
+        principal = getNumberFromValue(principal);
+        var irate = $('input[name="currentIntrest"]').val();//document.getElementsByName('#lenderIntrest').value; 
+        irate = getNumberFromValue(irate);
+
+        var option = null;
+
+        option = $("#ddlOrgAmortSchedule option:selected").text();
+        if (option == null) { return; }
+
+        if (irate > 1.0) {
+            irate /= 100;
+        }
+
+        var payment = 0;
+
+        if (option == '0') {
+            payment = (principal * irate) / 12;
+            //$('input[name="curMonthlyPayment"]').val(payment); //form.monthlyPayment.value = payment;
+            $('input[name="curPaymentType"]').val("IO");
+        } else if (option == '10' || option == '15' || option == '30' || option == '20' || option == '25') {
+
+            $('input[name="curPaymentType"]').val("P&I");
+
+            irate /= 12;
+
+            payments = parseInt(option) * 12;
+
+            var p = 1.0;
+            for (var i = 0; i < payments; i++)
+                p = p * (1 + irate);
+
+            payment = (principal * p * irate) / (p - 1);
+            //$('input[name="curMonthlyPayment"]').val(payment.toFixed(2)); //form.monthlyPayment.value = payment;
+        }
+
+        //$('#curMonthlyPayment').val(addCommas(payment.toFixed(2).toString(), true, true, false));
+        payment = $('input[name="curMonthlyPayment"]').val();
+        var anDebt = getNumberFromValue(payment) * 12;
+        $('input[name="curAnnualDebt"]').val(formatMoney(Math.round(anDebt.toFixed(2)).toString(), true)); //form.annualDebt = payment * 12;
+        $('input[name="curAnnualDebt1"]').val(formatMoney(Math.round(anDebt.toFixed(2)).toString(), true)); //form.annualDebt = payment * 12;
+
+        // calculate pre-tax cash flow:
+        var perfoma = $('input[name="curAnnualPreforma"]').val();
+        var annualDebt = $('input[name="curAnnualDebt1"]').val();
+        var cashFlow = getNumberFromValue(perfoma) - getNumberFromValue(annualDebt);
+        $('input[name="curCalcCashFlow"]').val(formatMoney(Math.round(cashFlow.toFixed(2)).toString(), true));
+        var balanceAcq = $('input[name="extBalanceAcq"]').val();// document.getElementsByName('#proposedPrin').value;
+        balanceAcq = getNumberFromValue(balanceAcq);
+        var flowPrec = (cashFlow / balanceAcq) * 100;
+        $('input[name="curCashFlowPerc"]').val(flowPrec.toFixed(2));
+
+
+
+    }
+
+    function computeField(input) {
+        if (input.value != null && input.value.length != 0)
+            input.value = "" + eval(input.value);
+        // computeForm(input.form);
+    }
+
+    function checkNumber(fld, min, max, message) {
+        message = message + " field has invalid data: " + fld;
+
+        num = getNumber(fld);
+        if (num == null) {
+            //alert(message + " you must enter a value");
+            return false;
+        }
+
+        if (num < min || max < num) {
+            //alert(message + " is not in the range [" + min + ".." + max + "]");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    function getNumberFromNonInput(element) {
+        var str = element.innerHTML;
+        var tmp = '';
+
+        if (element.innerHTML.length == 0) {
+            return null;
+        }
+
+        for (var i = 0; i < str.length; i++) {
+            var ch = str.substring(i, i + 1);
+            if (ch == '$' || ch == ',' || ((ch < '0' || ch > '9') && ch != '.')) {
+                continue;
+            }
+            tmp += ch;
+        }
+
+        if (tmp == '') {
+            return null;
+        }
+
+        var num = parseFloat(tmp)
+
+        return num;
+    }
+
+    function getNumberFromValue(val) {
+        var tmp = '';
+
+        if (!val) {
+            return null;
+        }
+
+        for (var i = 0; i < val.length; i++) {
+            var ch = val.substring(i, i + 1);
+            if (ch == '$' || ch == ',' || ((ch < '0' || ch > '9') && ch != '.')) {
+                continue;
+            }
+            tmp += ch;
+        }
+
+        if (tmp == '') {
+            return null;
+        }
+
+        var num = parseFloat(tmp)
+
+        return num;
+    }
+
+    function toMoney(input, addDollarSign) {
+        if (input.value != null && input.value.length != 0) {
+            var sign = (addDollarSign) ? '$' : '';
+            num = getNumberFromValue(input.value);
+            if (num == null) {
+                return;
+            }
+
+            str = num.toString();
+            sig = str.split('.');
+
+            tmp = '';
+            len = sig[0].length;
+            for (var i = len, j = 1; i > 0; i--, j++) {
+                var t = sig[0].substring(i, i - 1);
+                tmp = t + tmp;
+                if ((j % 3 == 0) && j != len) {
+                    tmp = ',' + tmp;
+                }
+            }
+
+            if (sig.length > 1 && sig[1].length) {
+                tmp += '.' + sig[1].substr(0, 1);
+                var t = sig[1].substr(1, 1);
+                if (t) {
+                    tmp += t;
+                } else {
+                    tmp += '0';
+                }
+            }
+            str = sign + tmp;
+
+            input.value = str;
+        }
+    }
+
+    function formatMoney(value, addDollarSign) {
+        if (value != null) {
+            var sign = (addDollarSign) ? '$' : '';
+            num = getNumberFromValue(value);
+            if (num == null) {
+                return;
+            }
+
+            str = num.toString();
+            sig = str.split('.');
+
+            tmp = '';
+            len = sig[0].length;
+            for (var i = len, j = 1; i > 0; i--, j++) {
+                var t = sig[0].substring(i, i - 1);
+                tmp = t + tmp;
+                if ((j % 3 == 0) && j != len) {
+                    tmp = ',' + tmp;
+                }
+            }
+
+            if (sig.length > 1 && sig[1].length) {
+                tmp += '.' + sig[1].substr(0, 1);
+                var t = sig[1].substr(1, 1);
+                if (t) {
+                    tmp += t;
+                } else {
+                    tmp += '0';
+                }
+            }
+            str = sign + tmp;
+
+            return str;
+        }
+    }
+
+
+    function padCommas(element, addDollarSign) {
+        // asumming element is span, not input
+        if (element) {
+            if (element.innerHTML.length != 0 && element.innerHTML != null) {
+                var sign = (addDollarSign) ? '$' : '';
+                num = getNumberFromNonInput(element);
+                if (num == null) {
+                    return;
+                }
+
+                str = num.toString();
+                sig = str.split('.');
+
+                tmp = '';
+                len = sig[0].length;
+                for (var i = len, j = 1; i > 0; i--, j++) {
+                    var t = sig[0].substring(i, i - 1);
+                    tmp = t + tmp;
+                    if ((j % 3 == 0) && j != len) {
+                        tmp = ',' + tmp;
+                    }
+                }
+
+                if (sig.length > 1 && sig[1].length) {
+                    tmp += '.' + sig[1].substr(0, 1);
+                    var t = sig[1].substr(1, 1);
+                    if (t) {
+                        tmp += t;
+                    } else {
+                        tmp += '0';
+                    }
+                }
+                str = sign + tmp;
+                element.innerHTML = str;
+            }
+        }
+    }
+
+    function addCommasToInput(control) {
+        $(control).val(addCommas($(control).val(), false));
+    };
+
+    function addCommas(str, includeDecimals, addDollarSign, addPercentSign) {
+        str = str.replace(/,/g, "");
+        var isNegative = str.indexOf("-") > -1;
+        str = str.replace(/-/g, "");
+        var output = getNumberFromValue(str);
+        output = (str + "").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+        if (addDollarSign) {
+            output = "$" + output;
+        }
+        else if (addPercentSign) {
+            output = output + "%";
+        }
+        if (isNegative) {
+            output = "<" + output + ">";
+        }
+        return output;
+    }
+
+
+</script>
