@@ -1,0 +1,79 @@
+﻿@model Inview.Epi.EpiFund.Domain.ViewModel.SavedAssetSearchViewModel
+
+@{
+    ViewBag.Title = "Asset Search";
+    Layout = "~/Views/Shared/_LayoutSearch.cshtml";
+}
+
+<!-- DataTables Stuff -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.2/r-2.2.2/datatables.min.css" />
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.2/r-2.2.2/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/api/page.jumpToData().js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+@*<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqYSKwQkzv0nPfRWWRiVNOVoMIAQjSrok"></script>*@
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBV3nTZqDmBaifM8IRM_XHMTFeobjfckLw"></script>
+
+<style>
+    .favorite-asset {
+    }
+
+    .favorite-asset-card {
+        background-color: #e2ddd2;
+    }
+
+    .favorite-groups {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+        .favorite-groups a {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+    .modal {
+        text-align: center;
+        padding: 0 !important;
+    }
+
+        .modal:before {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            margin-right: -4px;
+        }
+
+    #savedSearchPrompt.modal:before {
+        content: '';
+        display: inline-block;
+        height: 30%;
+        vertical-align: middle;
+        margin-right: -4px;
+    }
+
+    .modal-dialog {
+        display: inline-block;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    .table th {
+        text-align: center;
+    }
+
+    .table {
+        border-radius: 5px;
+        margin: auto;
+        float: none;
+    }
+</style>
+
+<div class="loading"></div>
+<div id="asset-search" style="height:100%;"></div>
+
+

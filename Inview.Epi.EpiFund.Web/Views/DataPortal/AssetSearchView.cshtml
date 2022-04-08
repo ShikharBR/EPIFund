@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Asset Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #assetSearchIFrame {
+        position: static;
+    }
+
+    .main-content {
+        padding: 0;
+    }
+</style>
+
+<iframe id="assetSearchIFrame" src="@Url.Action("AssetSearch","DataPortal")" width="850" height="1650"></iframe>
+
+

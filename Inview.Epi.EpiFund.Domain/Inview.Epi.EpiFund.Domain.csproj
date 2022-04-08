@@ -184,6 +184,7 @@
     <Compile Include="Enum\AssetStatus.cs" />
     <Compile Include="Entity\AssetUnitSpecification.cs" />
     <Compile Include="Entity\CommercialAsset.cs" />
+    <Compile Include="Enum\AssetSubType.cs" />
     <Compile Include="Enum\ContractFeePayoutType.cs" />
     <Compile Include="Enum\InteriorRoadType.cs" />
     <Compile Include="Enum\MasterCommercialPropertyDetails.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Enum\VacantSuites.cs" />
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\LinqHelper.cs" />
     <Compile Include="Helpers\MvcHtmlHelper.cs" />
     <Compile Include="IAssetEmailServiceManager.cs" />
     <Compile Include="IAssetManager.cs" />
@@ -275,6 +277,7 @@
     <Compile Include="ViewModel\AssetDeferredItemViewModel.cs" />
     <Compile Include="ViewModel\AssetDescriptionModel.cs" />
     <Compile Include="ViewModel\AssetDocumentOrderRequestModel.cs" />
+    <Compile Include="ViewModel\AssetDynamicViewModel.cs" />
     <Compile Include="ViewModel\AssetHCOwnershipModel.cs" />
     <Compile Include="ViewModel\AssetEscrowModel.cs" />
     <Compile Include="ViewModel\AssetImagesViewModel.cs" />
@@ -309,6 +312,8 @@
     <Compile Include="ViewModel\PrincipalInvestorSearchModel.cs" />
     <Compile Include="ViewModel\PropHoldType.cs" />
     <Compile Include="ViewModel\HoldingCompanyViewModel.cs" />
+    <Compile Include="ViewModel\SavedAssetSearchViewModel.cs" />
+    <Compile Include="ViewModel\SearchAssetModel.cs" />
     <Compile Include="ViewModel\SellerAssetQuickListModel.cs" />
     <Compile Include="ViewModel\Emails\AssetListingStatusRequestEmail.cs" />
     <Compile Include="ViewModel\Emails\AllAssetListingStatusRequestEmail.cs" />

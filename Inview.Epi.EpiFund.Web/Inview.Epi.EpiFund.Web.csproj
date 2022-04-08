@@ -940,6 +940,9 @@
     <Content Include="Views\Admin\_AdminAssetListView.cshtml" />
     <Content Include="Views\Admin\_AssetPortfolioListView.cshtml" />
     <Content Include="Views\Admin\_AssetViewPortfolio.cshtml" />
+    <Content Include="Views\DataPortal\AssetSearch.cshtml" />
+    <Content Include="Views\DataPortal\AssetSearchView.cshtml" />
+    <Content Include="Views\Shared\_LayoutSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
