@@ -387,5 +387,13 @@ namespace Inview.Epi.EpiFund.Domain
 			get;
 			set;
 		}
+
+		IDbSet<AssetOC> AssetOC
+		{
+			get;
+			set;
+		}
+
+
 	}
 }

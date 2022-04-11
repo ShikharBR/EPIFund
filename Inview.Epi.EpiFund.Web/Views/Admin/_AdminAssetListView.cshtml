@@ -80,8 +80,7 @@
                                     </a>
                                 </td>
                                 <td style="word-wrap: break-word;">
-                                    <span class="AssetName" title="@Model[i].City"> @Model[i].City</span><br />
-                                    @Model[i].State
+                                    <div style="margin-bottom: -3px !important;" class="AssetName" title="@Model[i].City"> @Model[i].City</div><br />@Model[i].State
                                 </td>
                                 <td>
                                     @Model[i].Type
@@ -135,7 +134,9 @@
                                     }
                                 </td>
                                 <td>
-                                    <img title="Chain of Title" style="width:12px;" src="~/Content/images/tringle.png" />
+                                    <span style="cursor:pointer" title="Chain Of Title" onclick="ViewChainOfTitle('@Model[i].AssetId.ToString()')" >
+                                        <img title="Chain of Title" style="width:12px;" src="~/Content/images/tringle.png" />
+                                    </span>
                                 </td>
                                 <td>
                                     @{
@@ -208,38 +209,35 @@
                                     }
                                     else
                                     {
-                                        <a href="@Url.Action("PublishAsset", "Admin", new { id = @Model[i].AssetId })" title="publish" onclick="return confirm('Are you sure you wish to publish this asset?');">
-                                            <span class="glyphicon glyphicon-globe"></span>
-                                        </a>
+                                        if (Model[i].IsActive)
+                                        {
+                                            <a href="@Url.Action("PublishAsset", "Admin", new { id = @Model[i].AssetId })" title="publish" onclick="return confirm('Are you sure you wish to publish this asset?');">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <spane style="cursor:pointer;" title="publish" onclick="alert('You need to active this asset first.');">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                            </spane>
+                                        }
                                     }
                                     @if (Model[i].IsActive)
                                     {
                                         <a href="@Url.Action("DeActivateAsset", "Admin", new { id = @Model[i].AssetId })" title="deactive asset" onclick="return confirm('Are you sure you wish to make this asset deactive?');">
-                                            <span class="glyphicon glyphicon-arrow-down" style="font-size: 12px;"></span>
+                                            <span class="glyphicon glyphicon-arrow-up" style="font-size: 12px;"></span>
                                         </a>
                                     }
                                     else
                                     {
                                         <a href="@Url.Action("ActivateAsset", "Admin", new { id = @Model[i].AssetId })" title="active asset" onclick="return confirm('Are you sure you wish to make this asset active?');">
-                                            <span class="glyphicon glyphicon-arrow-up" style="font-size: 12px;"></span>
+                                            <span class="glyphicon glyphicon-arrow-down" style="font-size: 12px;"></span>
                                         </a>
                                     }
-                                    @*@if (Model[i].IsSampleAsset)
-                                    {
-                                        <a title="current sample asset">
-                                            <span class="glyphicon glyphicon-star" style="font-size: 12px;"></span>
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a href="@Url.Action("SetSampleAsset", "Admin", new { id = @Model[i].AssetId })" title="set sample asset" onclick="return confirm('Are you sure you wish to make this asset the sample asset that will appear on the main page?');">
-                                            <span class="glyphicon glyphicon-star-empty" style="font-size: 12px;"></span>
-                                        </a>
-                                    }*@
                                     ]
                                 </td>
                             </tr>
-                            @*<tr id="@Model[i].AssetId.ToString()_portfolio" style="display:none;"></tr>*@                      
+                               
                         }
                     </tbody>
                 </table>

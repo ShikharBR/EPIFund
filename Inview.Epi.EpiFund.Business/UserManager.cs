@@ -14,6 +14,7 @@ using Inview.Epi.EpiFund.Domain.Helpers;
 using System.IO;
 using System.Data.OleDb;
 using System.Web.Mvc;
+using System.Data.SqlClient;
 
 namespace Inview.Epi.EpiFund.Business
 {
@@ -1625,6 +1626,7 @@ namespace Inview.Epi.EpiFund.Business
             return null;
         }
 
+
         public void UpdatePersonalFinancialStatement(PersonalFinancialStatementTemplateModel model)
         {
             var context = _factory.Create();
@@ -1757,7 +1759,6 @@ namespace Inview.Epi.EpiFund.Business
 
             context.Save();
         }
-
         public List<UserAssetSearchCriteriaQuickViewModel> GetAllSearches()
         {
             var context = _factory.Create();
@@ -3277,7 +3278,14 @@ namespace Inview.Epi.EpiFund.Business
                 entity.Country = model.Country;
                 entity.WorkNumber = model.WorkNumber;
                 entity.CellNumber = model.CellNumber;
+                
                 entity.FaxNumber = model.FaxNumber;
+
+                entity.LinkedIn = model.LinkedIn;
+                entity.Facebook = model.Facebook;
+                entity.Instagram = model.Instagram;
+                entity.Twitter = model.Twitter;
+
                 entity.IsActive = model.IsActive;
 
                 context.OperatingCompanies.Add(entity);
@@ -3315,65 +3323,7 @@ namespace Inview.Epi.EpiFund.Business
             return null;
         }
 
-        public List<OperatingCompanyViewModel> GetOperatingCompanies(OperatingCompanySearchModel model)
-        {
-            var context = _factory.Create();
-            var entities = new List<OperatingCompanyViewModel>();
-            foreach (var entity in context.OperatingCompanies)
-            {
-                entities.Add(new OperatingCompanyViewModel
-                {
-                    OperatingCompanyId = entity.OperatingCompanyId,
-                    CompanyName = entity.CompanyName,
-                    FirstName = entity.FirstName,
-                    LastName = entity.LastName,
-                    Email = entity.Email,
-                    AddressLine1 = entity.AddressLine1,
-                    AddressLine2 = entity.AddressLine2,
-                    City = entity.City,
-                    State = entity.State,
-                    Zip = entity.Zip,
-                    Country = entity.Country,
-                    WorkNumber = entity.WorkNumber,
-                    CellNumber = entity.CellNumber,
-                    FaxNumber = entity.FaxNumber,
-                    IsActive = entity.IsActive
-                });
-            }
-            if (model.ShowActiveOnly)
-            {
-                entities = entities.Where(w => w.IsActive).ToList();
-            }
-            if (!string.IsNullOrEmpty(model.AddressLine1))
-            {
-                entities = entities.Where(w => w.AddressLine1 == model.AddressLine1).ToList();
-            }
-            if (!string.IsNullOrEmpty(model.City))
-            {
-                entities = entities.Where(w => w.City == model.City).ToList();
-            }
-            if (!string.IsNullOrEmpty(model.FirstName))
-            {
-                entities = entities.Where(w => w.FirstName == model.FirstName).ToList();
-            }
-            if (!string.IsNullOrEmpty(model.LastName))
-            {
-                entities = entities.Where(w => w.LastName == model.LastName).ToList();
-            }
-            if (!string.IsNullOrEmpty(model.State))
-            {
-                entities = entities.Where(w => w.State == model.State).ToList();
-            }
-            if (!string.IsNullOrEmpty(model.Zip))
-            {
-                entities = entities.Where(w => w.Zip == model.Zip).ToList();
-            }
-            if (!string.IsNullOrEmpty(model.CompanyName))
-            {
-                entities = entities.Where(w => w.CompanyName == model.CompanyName).ToList();
-            }
-            return entities.ToList();
-        }
+        
 
         public PrincipalInvestorQuickViewModel GetPrincipalInvestor(int id)
         {
@@ -3575,7 +3525,14 @@ namespace Inview.Epi.EpiFund.Business
                     entity.Country = hc.Country;
                     entity.WorkNumber = hc.WorkNumber;
                     entity.CellNumber = hc.CellNumber;
+                    
                     entity.FaxNumber = hc.FaxNumber;
+
+                    entity.LinkedIn = hc.LinkedIn;
+                    entity.Facebook = hc.Facebook;
+                    entity.Instagram = hc.Instagram;
+                    entity.Twitter = hc.Twitter;
+
                     entity.IsActive = hc.IsActive;
                     context.Save();
                 }
@@ -3591,7 +3548,13 @@ namespace Inview.Epi.EpiFund.Business
                 {
                     o.CellNumber = "";
                     o.WorkNumber = "";
+
                     o.FaxNumber = "";
+                    o.LinkedIn = "";
+                    o.Facebook = "";
+                    o.Instagram = "";
+                    o.Twitter = "";
+
                     o.AddressLine1 = "";
                     o.AddressLine2 = "";
                     o.City = "";
@@ -3611,6 +3574,12 @@ namespace Inview.Epi.EpiFund.Business
                     o.CellNumber = model.CellNumber;
                     o.WorkNumber = model.WorkNumber;
                     o.FaxNumber = model.FaxNumber;
+
+                    o.LinkedIn = model.LinkedIn;
+                    o.Facebook = model.Facebook;
+                    o.Instagram = model.Instagram;
+                    o.Twitter = model.Twitter;
+
                     o.AddressLine1 = model.AddressLine1;
                     o.AddressLine2 = model.AddressLine2;
                     o.City = model.City;
@@ -4509,6 +4478,8 @@ namespace Inview.Epi.EpiFund.Business
                 model.HoldingCompanyId = entity.HoldingCompanyId;
                 model.OperatingCompanyId = entity.OperatingCompanyId;
                 model.CompanyName = entity.CompanyName;
+                model.ISRA = entity.ISRA;
+
                 model.FirstName = entity.FirstName;
                 model.LastName = entity.LastName;
                 model.Email = entity.Email;
@@ -4522,6 +4493,12 @@ namespace Inview.Epi.EpiFund.Business
                 model.CellNumber = entity.CellNumber;
                 model.FaxNumber = entity.FaxNumber;
                 model.IsActive = entity.IsActive;
+
+                model.LinkedIn = entity.LinkedIn;
+                model.Facebook = entity.Facebook;
+                model.Instagram = entity.Instagram;
+                model.Twitter = entity.Twitter;
+
                 return model;
             }
             return null;
@@ -4550,7 +4527,8 @@ namespace Inview.Epi.EpiFund.Business
             var data = new Dictionary<string, string>();
             if (type == "Holding")
             {
-                var comps = context.HoldingCompanies.Where(x => x.CompanyName.ToLower().Contains(term.ToLower())).OrderBy(c => c.CompanyName);
+                var comps = context.HoldingCompanies.Where(x => x.CompanyName.ToLower().Contains(term.ToLower()) || 
+                                                                x.AddressLine1.ToLower().Contains(term.ToLower()) ).OrderBy(c => c.CompanyName);
                 foreach (var comp in comps) data.Add(comp.HoldingCompanyId.ToString(), comp.CompanyName);
             }
             else if (type == "Operating")
@@ -4562,164 +4540,7 @@ namespace Inview.Epi.EpiFund.Business
         }
 
 
-        public List<HoldingCompanyViewModel> GetHoldingCompaniesNew()
-        {
-            var context = _factory.Create();
-            List<HoldingCompanyViewModel> entities = new List<HoldingCompanyViewModel>();
-
-            var things = (from hc in context.HoldingCompanies
-                          select new HoldingCompanyViewModel
-                          {
-                              HoldingCompanyId = hc.HoldingCompanyId,
-                              CompanyName = hc.CompanyName,
-                              PIName = ( !string.IsNullOrEmpty(hc.FirstName) && !string.IsNullOrEmpty(hc.LastName) ? hc.FirstName +" "+hc.LastName 
-                                         : !string.IsNullOrEmpty(hc.FirstName)? hc.FirstName
-                                         : !string.IsNullOrEmpty(hc.LastName)?hc.LastName: "N/A" ),
-                              City = hc.City,
-                              State = hc.State,
-                              Email=hc.Email,
-                              WorkNumber=hc.WorkNumber,
-                              AssetsCount = context.Assets.Where(a => a.OwnerHoldingCompanyId == hc.HoldingCompanyId).Count(),
-                              AssetsPublishedCount = context.Assets.Where(a => a.OwnerHoldingCompanyId == hc.HoldingCompanyId &&
-                                                                                a.IsActive &&
-                                                                                a.IsSubmitted).Count(),
-                              OperatingComapnyName = context.OperatingCompanies.Where(a=>a.OperatingCompanyId == hc.OperatingCompanyId).FirstOrDefault().CompanyName == "Unknown" ? "N/A" : 
-                                                     context.OperatingCompanies.Where(a => a.OperatingCompanyId == hc.OperatingCompanyId).FirstOrDefault().CompanyName
-
-                          }).ToList();
-
-            return things;
-        }
-
-        public List<HoldingCompanyViewModel> GetHoldingCompanies()
-        {
-            var context = _factory.Create();
-            List<HoldingCompanyViewModel> entities = new List<HoldingCompanyViewModel>();
-            // good, single query
-            //var things = (from hc in context.HoldingCompanies
-            //              join a in context.Assets on hc.HoldingCompanyId equals a.OwnerHoldingCompanyId
-            //              join oc in context.OperatingCompanies on a.OwnerOperatingCompanyId equals oc.OperatingCompanyId)
-
-            // bad, queries in loop
-
-            //foreach (var holding in context.HoldingCompanies.ToList())
-            foreach (var holding in context.HoldingCompanies.Take(100).ToList())
-            {
-                var holdingCompany = new HoldingCompanyViewModel();
-                holdingCompany.AddressLine1 = holding.AddressLine1;
-                holdingCompany.AddressLine2 = holding.AddressLine2;
-                holdingCompany.CellNumber = holding.CellNumber;
-                holdingCompany.City = holding.City;
-                holdingCompany.CompanyName = holding.CompanyName;
-                holdingCompany.Country = holding.Country;
-                holdingCompany.Email = holding.Email;
-                holdingCompany.FaxNumber = holding.FaxNumber;
-                holdingCompany.FirstName = holding.FirstName;
-                holdingCompany.HoldingCompanyId = holding.HoldingCompanyId;
-                holdingCompany.IsActive = holding.IsActive;
-                holdingCompany.LastName = holding.LastName;
-                holdingCompany.State = holding.State;
-                holdingCompany.WorkNumber = holding.WorkNumber;
-                holdingCompany.Zip = holding.Zip;
-
-                holdingCompany.Assets = context.Assets.Where(a => a.OwnerHoldingCompanyId == holding.HoldingCompanyId)
-                    .Select(a => new HoldingCompanyAssetSimpleViewModel { AssetId = a.AssetId, 
-                                                                          AssetNumber = a.AssetNumber, 
-                                                                          OperatingCompanyId = a.OwnerOperatingCompanyId, 
-                                                                          Published = (a.IsActive && a.IsSubmitted) }).ToList();
-                List<Guid?> guids = holdingCompany.Assets.Select(a => a.OperatingCompanyId).Where(guid => guid.HasValue).ToList();
-
-                if (holdingCompany.Assets != null && holdingCompany.Assets.Count > 0 && holdingCompany.Assets.Any(a => a.OperatingCompanyId.HasValue))
-                {
-                    List<PrincipalInvestorQuickViewModel> investors = new List<PrincipalInvestorQuickViewModel>();
-                    List<UserQuickViewModel> users = new List<UserQuickViewModel>();
-                    // I dont know how to do these queries in a single call in such short notice
-                    holdingCompany.OperatingCompanies = context.OperatingCompanies
-                        .Where(oc => guids
-                            .Any(guid => guid.Value == oc.OperatingCompanyId))
-                        .Select(x => new HoldingCompanyOperatingCompanySimpleViewModel
-                        {
-                            OperatingCompanyId = x.OperatingCompanyId,
-                            CompanyName = x.CompanyName,
-                            Email = x.Email,
-                            FirstName = x.FirstName,
-                            LastName = x.LastName
-                        }).ToList();
-
-                    if (holdingCompany.OperatingCompanies != null && holdingCompany.OperatingCompanies.Count > 0)
-                    {
-                        //List<string> emails = holdingCompany.OperatingCompanies.Select(oc => oc.Email).Where(email => email.Length > 0).ToList();
-
-                        List<string> emails = holdingCompany.OperatingCompanies.Select(oc => oc.Email).ToList();
-                        emails = emails.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
-
-                        if (emails != null && emails.Count > 0)
-                        {
-                            // get all principal investors against the operating company emails to see if the
-                            investors = context.PrincipalInvestors
-                                .Where(pi => emails
-                                    .Any(email => email == pi.Email.ToLower()))
-                                .Select(x => new PrincipalInvestorQuickViewModel { ReferredByUserId = x.ReferredByUserId, Email = x.Email }).ToList();
-
-                            // get users for the Register Date and Docs
-                            users = context.Users
-                                .Where(u => emails
-                                    .Any(email => email == u.Username.ToLower()))
-                                .Select(x => new UserQuickViewModel { SignupDate = x.SignupDate, HasNCND = x.NCNDSignDate.HasValue, Username = x.Username }).ToList();
-                        }
-                    }
-                    foreach (var operatingCompany in holdingCompany.OperatingCompanies)
-                    {
-                        if (!string.IsNullOrEmpty(operatingCompany.Email))
-                        {
-                            operatingCompany.DateOfRegistration = "N/A";
-                            var investor = investors.FirstOrDefault(i => i.Email != null && i.Email.ToLower() == operatingCompany.Email.ToLower());
-                            var user = users.FirstOrDefault(u => u.Username.ToLower() == operatingCompany.Email.ToLower());
-                            if (investor != null)
-                            {
-                                operatingCompany.ReferredByJvmp = investor.ReferredByUserId.HasValue;
-                            }
-                            if (user != null)
-                            {
-                                operatingCompany.DateOfRegistration = user.SignupDate.HasValue ? user.SignupDate.Value.ToString("MM/dd/yyyy") : "N/A";
-                                operatingCompany.RegisteredDocs = user.HasNCND;
-                            }
-                        }
-                    }
-                }
-                entities.Add(holdingCompany);
-            }
-            return entities;
-        }
-
-        public List<HoldingCompanyViewModel> GetHoldingCompaniesForOperatingCompany(Guid id)
-        {
-            var context = _factory.Create();
-            var data = new List<HoldingCompanyViewModel>();
-            var entities = _factory.Create().HoldingCompanies.Where(x => x.OperatingCompanyId == id);
-            foreach (var entity in entities)
-            {
-                data.Add(new HoldingCompanyViewModel
-                {
-                    HoldingCompanyId = entity.HoldingCompanyId,
-                    OperatingCompanyId = entity.OperatingCompanyId,
-                    CompanyName = entity.CompanyName,
-                    FirstName = entity.FirstName,
-                    LastName = entity.LastName,
-                    Email = entity.Email,
-                    AddressLine1 = entity.AddressLine1,
-                    AddressLine2 = entity.AddressLine2,
-                    City = entity.City,
-                    State = entity.State,
-                    Zip = entity.Zip,
-                    Country = entity.Country,
-                    WorkNumber = entity.WorkNumber,
-                    CellNumber = entity.CellNumber,
-                    FaxNumber = entity.FaxNumber
-                });
-            }
-            return data;
-        }
+       
 
         #region Private Methods
         private string ReferUser(IEPIRepository context, string firstName, string lastName, string city, string state, string email, User referrer)
@@ -5643,6 +5464,8 @@ namespace Inview.Epi.EpiFund.Business
             {
                 entity.OperatingCompanyId = model.OperatingCompanyId;
                 entity.CompanyName = model.CompanyName;
+                entity.ISRA = model.ISRA;
+
                 entity.FirstName = model.FirstName;
                 entity.LastName = model.LastName;
                 entity.Email = model.Email;
@@ -5655,6 +5478,12 @@ namespace Inview.Epi.EpiFund.Business
                 entity.WorkNumber = model.WorkNumber;
                 entity.CellNumber = model.CellNumber;
                 entity.FaxNumber = model.FaxNumber;
+
+                entity.LinkedIn = model.LinkedIn; 
+                entity.Facebook = model.Facebook;
+                entity.Instagram = model.Instagram;
+                entity.Twitter = model.Twitter;
+
                 entity.IsActive = model.IsActive;
                 context.Save();
 
@@ -5707,6 +5536,8 @@ namespace Inview.Epi.EpiFund.Business
                 entity.HoldingCompanyId = model.HoldingCompanyId;
                 entity.OperatingCompanyId = model.OperatingCompanyId;
                 entity.CompanyName = model.CompanyName;
+                entity.ISRA = model.ISRA;
+
                 entity.FirstName = model.FirstName;
                 entity.LastName = model.LastName;
                 entity.Email = model.Email;
@@ -5719,6 +5550,12 @@ namespace Inview.Epi.EpiFund.Business
                 entity.WorkNumber = model.WorkNumber;
                 entity.CellNumber = model.CellNumber;
                 entity.FaxNumber = model.FaxNumber;
+
+                entity.LinkedIn = model.LinkedIn;
+                entity.Facebook = model.Facebook;
+                entity.Instagram = model.Instagram;
+                entity.Twitter = model.Twitter;
+
                 entity.IsActive = model.IsActive;
 
                 context.HoldingCompanies.Add(entity);
@@ -5727,5 +5564,387 @@ namespace Inview.Epi.EpiFund.Business
             catch { success = false; }
             return success;
         }
+
+
+        #region Holding Company and Operating Company
+        public List<HoldingCompanyViewModel> GetHoldingCompaniesNew()
+        {
+            var context = _factory.Create();
+            List<HoldingCompanyViewModel> entities = new List<HoldingCompanyViewModel>();
+
+            var things = (from hc in context.HoldingCompanies
+                          select new HoldingCompanyViewModel
+                          {
+                              HoldingCompanyId = hc.HoldingCompanyId,
+                              CompanyName = hc.CompanyName,
+                              PIName = (!string.IsNullOrEmpty(hc.FirstName) && !string.IsNullOrEmpty(hc.LastName) ? hc.FirstName + " " + hc.LastName
+                                         : !string.IsNullOrEmpty(hc.FirstName) ? hc.FirstName
+                                         : !string.IsNullOrEmpty(hc.LastName) ? hc.LastName : "N/A"),
+                              City = hc.City,
+                              State = hc.State,
+                              Email = hc.Email,
+                              WorkNumber = hc.WorkNumber,
+                              AssetsCount = context.Assets.Where(a => a.OwnerHoldingCompanyId == hc.HoldingCompanyId).Count(),
+                              AssetsPublishedCount = context.Assets.Where(a => a.OwnerHoldingCompanyId == hc.HoldingCompanyId &&
+                                                                                a.IsActive &&
+                                                                                a.IsSubmitted).Count(),
+                              OperatingComapnyName = context.OperatingCompanies.Where(a => a.OperatingCompanyId == hc.OperatingCompanyId).FirstOrDefault().CompanyName == "Unknown" ? "N/A" :
+                                                     context.OperatingCompanies.Where(a => a.OperatingCompanyId == hc.OperatingCompanyId).FirstOrDefault().CompanyName
+
+                          }).ToList();
+
+            return things;
+        }
+
+        public List<HoldingCompanyViewModel> GetHoldingCompaniesForOperatingCompany(Guid id)
+        {
+            var context = _factory.Create();
+            var data = new List<HoldingCompanyViewModel>();
+            var entities = _factory.Create().HoldingCompanies.Where(x => x.OperatingCompanyId == id);
+            foreach (var entity in entities)
+            {
+                data.Add(new HoldingCompanyViewModel
+                {
+                    HoldingCompanyId = entity.HoldingCompanyId,
+                    OperatingCompanyId = entity.OperatingCompanyId,
+                    CompanyName = entity.CompanyName,
+                    FirstName = entity.FirstName,
+                    LastName = entity.LastName,
+                    Email = entity.Email,
+                    AddressLine1 = entity.AddressLine1,
+                    AddressLine2 = entity.AddressLine2,
+                    City = entity.City,
+                    State = entity.State,
+                    Zip = entity.Zip,
+                    Country = entity.Country,
+                    WorkNumber = entity.WorkNumber,
+                    CellNumber = entity.CellNumber,
+                    FaxNumber = entity.FaxNumber,
+                    Facebook = entity.Facebook,
+                    Twitter=entity.Twitter,
+                    LinkedIn=entity.LinkedIn,
+                    Instagram=entity.Instagram
+                });
+            }
+            return data;
+        }
+
+        public List<HoldingCompanyList> GetHoldingCompanies(ManageHoldingCompanyModel model)
+        {
+            var context = _factory.Create();
+            List<HoldingCompanyList> HCList = new List<HoldingCompanyList>();
+
+            context.HoldingCompanies.Where(a=>a.IsActive).OrderBy(a=>a.CompanyName).ToList().ForEach(x =>
+            {
+                if (x != null)
+                {
+                    HoldingCompanyList holdingCompanyList = new HoldingCompanyList();
+
+                    holdingCompanyList.HoldingCompanyId = x.HoldingCompanyId;
+                    holdingCompanyList.HoldingCompanyName = x.CompanyName.Trim();
+                    holdingCompanyList.HoldingCompanyEmail = x.Email;
+                    holdingCompanyList.HoldingCompanyFirstName = x.FirstName;
+                    holdingCompanyList.HoldingCompanyLastName = x.LastName;
+                    holdingCompanyList.ISRA = x.ISRA;
+
+                    holdingCompanyList.HoldingCompanyLinkedInurl = x.LinkedIn;
+                    holdingCompanyList.HoldingCompanyFacebookurl = x.Facebook;
+                    holdingCompanyList.HoldingCompanyInstagramurl = x.Instagram;
+                    holdingCompanyList.HoldingCompanyTwitterurl = x.Twitter;
+
+                    var HCAsset = context.AssetHCOwnership.Include("Asset").Where(a => a.HoldingCompanyId == x.HoldingCompanyId).
+                                  OrderByDescending(a => a.HoldingCompanyId).FirstOrDefault();
+
+                    if (HCAsset != null)
+                    {
+                        holdingCompanyList.AssetId = HCAsset.AssetId;
+                        holdingCompanyList.City = HCAsset.Asset.City;
+                        holdingCompanyList.State = HCAsset.Asset.State;
+                        holdingCompanyList.AssetName = HCAsset.Asset.ProjectName;
+                        holdingCompanyList.AssetNumber = HCAsset.Asset.AssetNumber;
+                        holdingCompanyList.Show = HCAsset.Asset.Show;
+                        holdingCompanyList.Type = HCAsset.Asset.AssetType;
+                        holdingCompanyList.ListingStatus = HCAsset.Asset.ListingStatus;
+                        holdingCompanyList.BusDriver = HCAsset.Asset.Show ? "CA" : "SUS";
+                        holdingCompanyList.IsPaper = HCAsset.Asset.IsPaper;
+
+                        holdingCompanyList.Address1 = HCAsset.Asset.PropertyAddress;
+                        holdingCompanyList.ZipCode = HCAsset.Asset.Zip;
+                        holdingCompanyList.County = HCAsset.Asset.County;
+
+                        holdingCompanyList.SquareFeet = (HCAsset.Asset as CommercialAsset) != null ? HCAsset.Asset.SquareFeet : 0;
+                        holdingCompanyList.NumberOfUnits = (HCAsset.Asset as MultiFamilyAsset) != null ? (HCAsset.Asset as MultiFamilyAsset).TotalUnits :
+                                (HCAsset.Asset.AssetType == AssetType.MHP ? ((HCAsset.Asset as MultiFamilyAsset).TotalUnits +
+                                                                       (HCAsset.Asset.NumberNonRentableSpace != null ? (int)HCAsset.Asset.NumberRentableSpace : 0) +
+                                                                       (HCAsset.Asset.NumberNonRentableSpace != null ? (int)HCAsset.Asset.NumberNonRentableSpace : 0)) : 0);
+
+                        holdingCompanyList.AssetCount = context.AssetHCOwnership.Where(a => a.AssetId == HCAsset.AssetId).Count();
+
+                        holdingCompanyList.UserType = context.Users.Where(u => u.UserId == HCAsset.Asset.ListedByUserId).Any() ?
+                                   context.Users.Where(u => u.UserId == HCAsset.Asset.ListedByUserId).FirstOrDefault().UserType : (UserType)0;
+
+                        holdingCompanyList.Portfolio = context.PortfolioAssets.Where(a => a.AssetId == HCAsset.Asset.AssetId).Any() ? true : false;
+
+                        holdingCompanyList.OperatingCompanyId = context.AssetOC.Where(a => a.AssetId == HCAsset.Asset.AssetId).Any() ?
+                                             context.AssetOC.Where(a => a.AssetId == HCAsset.Asset.AssetId).OrderByDescending(a => a.CreateDate).FirstOrDefault().OperatingCompanyId : null;
+                        holdingCompanyList.OperatingCompanyName = context.AssetOC.Where(a => a.AssetId == HCAsset.Asset.AssetId).Any() ?
+                                             context.AssetOC.Include("OperatingCompany").Where(a => a.AssetId == HCAsset.Asset.AssetId).OrderByDescending(a => a.CreateDate).FirstOrDefault().OperatingCompany.CompanyName : "";
+
+                    }
+
+                    HCList.Add(holdingCompanyList);
+                }
+            });
+
+           
+
+            if (model.ISRA)
+            {
+                HCList = HCList.Where(hc => hc.ISRA == model.ISRA).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(model.HCName))
+            {
+                var regex = "[^A-Za-z0-9]";
+                var HCName = Regex.Replace(model.HCName, regex, "");
+                HCList = HCList.Where(a => a.HoldingCompanyName != null && Regex.Replace(a.HoldingCompanyName.ToLower(), regex, "").Contains(HCName.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.HCEmail))
+            {
+                var regex = "[^A-Za-z0-9]";
+                var HCEmail = Regex.Replace(model.HCEmail, regex, "");
+                HCList = HCList.Where(a => a.HoldingCompanyEmail != null && Regex.Replace(a.HoldingCompanyEmail.ToLower(), regex, "").Contains(HCEmail.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.HCFirstName))
+            {
+                var regex = "[^A-Za-z0-9]";
+                var HCFirstName = Regex.Replace(model.HCFirstName, regex, "");
+                HCList = HCList.Where(a => a.HoldingCompanyFirstName != null && Regex.Replace(a.HoldingCompanyFirstName.ToLower(), regex, "").Contains(HCFirstName.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.HCLastName))
+            {
+                var regex = "[^A-Za-z0-9]";
+                var HCLastName = Regex.Replace(model.HCLastName, regex, "");
+                HCList = HCList.Where(a => a.HoldingCompanyLastName != null && Regex.Replace(a.HoldingCompanyLastName.ToLower(), regex, "").Contains(HCLastName.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.LinkedInurl))
+            {
+                var regex = "[^A-Za-z0-9]";
+                var LinkedInurl = Regex.Replace(model.LinkedInurl, regex, "");
+                HCList = HCList.Where(a => a.HoldingCompanyLinkedInurl != null && Regex.Replace(a.HoldingCompanyLinkedInurl.ToLower(), regex, "").Contains(LinkedInurl.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.Facebookurl))
+            {
+                var regex = "[^A-Za-z0-9]";
+                var Facebookurl = Regex.Replace(model.Facebookurl, regex, "");
+                HCList = HCList.Where(a => a.HoldingCompanyFacebookurl != null && Regex.Replace(a.HoldingCompanyFacebookurl.ToLower(), regex, "").Contains(Facebookurl.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.Instagramurl))
+            {
+                var regex = "[^A-Za-z0-9]";
+                var Instagramurl = Regex.Replace(model.Instagramurl, regex, "");
+                HCList = HCList.Where(a => a.HoldingCompanyInstagramurl != null && Regex.Replace(a.HoldingCompanyInstagramurl.ToLower(), regex, "").Contains(Instagramurl.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.Twitterurl))
+            {
+                var regex = "[^A-Za-z0-9]";
+                var Twitterurl = Regex.Replace(model.Twitterurl, regex, "");
+                HCList = HCList.Where(a => a.HoldingCompanyTwitterurl != null && Regex.Replace(a.HoldingCompanyTwitterurl.ToLower(), regex, "").Contains(Twitterurl.ToLower())).ToList();
+            }
+            //Get filtered HC
+
+           
+            if (model.IsPaper)
+            {
+                // Only filtering if this is true. If we filtered when this value is false, we would exclude paper assets by default
+                HCList = HCList.Where(a => a.IsPaper == model.IsPaper).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.AssetNumber))
+            {
+                int id = 0;
+                int.TryParse(model.AssetNumber, out id);
+                if (id != 0)
+                {
+                    HCList = HCList.Where(a => a.AssetNumber == id).ToList();
+                }
+            }
+
+            if (!string.IsNullOrEmpty(model.AssetName))
+            {
+                var regex = "[^A-Za-z0-9]";
+                var assetName = Regex.Replace(model.AssetName, regex, "");
+                HCList = HCList.Where(a => a.AssetName != null && Regex.Replace(a.AssetName.ToLower(), regex, "").Contains(assetName.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.AddressLine1))
+            {
+                var regex = "[^A-Za-z0-9]";
+                var AddressLine1 = Regex.Replace(model.AddressLine1, regex, "");
+                HCList = HCList.Where(a => a.Address1 != null && Regex.Replace(a.Address1.ToLower(), regex, "").Contains(AddressLine1.ToLower())).ToList();
+
+            }
+            if (!string.IsNullOrEmpty(model.City))
+            {
+                HCList = HCList.Where(x => !string.IsNullOrEmpty(x.City) && x.City.ToLower().Contains(model.City.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.State))
+            {
+                HCList = HCList.Where(a => a.State == model.State).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.ZipCode))
+            {
+                HCList = HCList.Where(a => a.ZipCode == model.ZipCode).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.ApnNumber))
+            {
+                var regex = "[^A-Za-z0-9]";
+                List<Asset> apnAssetList = new List<Asset>();
+                var apnNumber = Regex.Replace(model.ApnNumber, regex, "");
+                var apnList = context.AssetTaxParcelNumbers.ToList();
+                var assetIDs = apnList.Where(w => w.TaxParcelNumber != null && Regex.Replace(w.TaxParcelNumber.ToLower(), regex, "").Contains(apnNumber.ToLower())).Select(s => s.AssetId).Distinct().ToList();
+
+                HCList = HCList.Where(a => assetIDs.Contains(a.AssetId ?? Guid.Empty)).ToList();
+               
+            }
+            if (!string.IsNullOrEmpty(model.County))
+            {
+                var regex = "[^A-Za-z0-9]";
+                var County = Regex.Replace(model.County, regex, "");
+                HCList = HCList.Where(a => a.County != null && Regex.Replace(a.County.ToLower(), regex, "").Contains(County.ToLower())).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.ListAgentName))
+            {
+                var NARMembersList = context.NarMembers.
+                                     Where(a => a.FirstName.ToLower().Contains(model.ListAgentName.ToLower())
+                                     || a.LastName.ToLower().Contains(model.ListAgentName.ToLower())).
+                                     Select(a => a.NarMemberId).ToList();
+
+                var AssetNARMembersList = context.AssetNARMembers.Where(a => NARMembersList.Contains(a.NarMemberId)).Select(a => a.AssetId).ToList();
+                HCList = HCList.Where(a => AssetNARMembersList.Contains(a.AssetId ?? Guid.Empty)).ToList();
+            }
+
+            return HCList.OrderBy(a=>a.HoldingCompanyName).ToList();
+        }
+
+        public List<HoldingCompanyList> GetHoldingCompany(ManageHoldingCompanyModel model)
+        {
+            Helper help = new Helper();
+            var hcList = help.GetHoldingCompany(model);
+            return hcList.OrderBy(a => a.HoldingCompanyName).ToList();
+        }
+
+        public HoldingCompany GetHoldingCompanybyId(Guid id)
+        {
+            var context = _factory.Create();
+            return context.HoldingCompanies.Where(a => a.HoldingCompanyId == id).FirstOrDefault();
+        }
+
+        public OperatingCompany GetOpertingCompanybyId(Guid id)
+        {
+            var context = _factory.Create();
+            return context.OperatingCompanies.Where(a => a.OperatingCompanyId == id).FirstOrDefault();
+        }
+
+
+        public List<OperatingCompanyViewModel> GetOperatingCompanies(OperatingCompanySearchModel model)
+        {
+            var context = _factory.Create();
+            var entities = new List<OperatingCompanyViewModel>();
+            foreach (var entity in context.OperatingCompanies)
+            {
+                entities.Add(new OperatingCompanyViewModel
+                {
+                    OperatingCompanyId = entity.OperatingCompanyId,
+                    CompanyName = entity.CompanyName,
+                    FirstName = entity.FirstName,
+                    LastName = entity.LastName,
+                    Email = entity.Email,
+                    AddressLine1 = entity.AddressLine1,
+                    AddressLine2 = entity.AddressLine2,
+                    City = entity.City,
+                    State = entity.State,
+                    Zip = entity.Zip,
+                    Country = entity.Country,
+                    WorkNumber = entity.WorkNumber,
+                    CellNumber = entity.CellNumber,
+                    FaxNumber = entity.FaxNumber,
+                    IsActive = entity.IsActive
+                });
+            }
+            if (model.ShowActiveOnly)
+            {
+                entities = entities.Where(w => w.IsActive).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.AddressLine1))
+            {
+                entities = entities.Where(w => w.AddressLine1 == model.AddressLine1).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.City))
+            {
+                entities = entities.Where(w => w.City == model.City).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.FirstName))
+            {
+                entities = entities.Where(w => w.FirstName == model.FirstName).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.LastName))
+            {
+                entities = entities.Where(w => w.LastName == model.LastName).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.State))
+            {
+                entities = entities.Where(w => w.State == model.State).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.Zip))
+            {
+                entities = entities.Where(w => w.Zip == model.Zip).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.CompanyName))
+            {
+                entities = entities.Where(w => w.CompanyName == model.CompanyName).ToList();
+            }
+            return entities.ToList();
+        }
+
+        public List<OperatingCompanyList> GetOperataingCompany(ManageOperatingCompanyModel model)
+        {
+            Helper help = new Helper();
+            var ocList = help.GetOperatingCompany(model);
+            return ocList.OrderBy(a => a.OperatingCompanyName).ToList();
+        }
+
+        public OperatingCompanyViewModel GetOPeratingCompany(Guid operatingCompanyId)
+        {
+            OperatingCompanyViewModel model = new OperatingCompanyViewModel();
+            var entity = _factory.Create().OperatingCompanies.FirstOrDefault(u => u.OperatingCompanyId == operatingCompanyId);
+            if (entity != null)
+            {
+                model.OperatingCompanyId = entity.OperatingCompanyId;
+                model.CompanyName = entity.CompanyName;
+                model.FirstName = entity.FirstName;
+                model.LastName = entity.LastName;
+                model.Email = entity.Email;
+                model.AddressLine1 = entity.AddressLine1;
+                model.AddressLine2 = entity.AddressLine2;
+                model.City = entity.City;
+                model.State = entity.State;
+                model.Zip = entity.Zip;
+                model.Country = entity.Country;
+                model.WorkNumber = entity.WorkNumber;
+                model.CellNumber = entity.CellNumber;
+                model.FaxNumber = entity.FaxNumber;
+                model.IsActive = entity.IsActive;
+
+                model.LinkedIn = entity.LinkedIn;
+                model.Facebook = entity.Facebook;
+                model.Instagram = entity.Instagram;
+                model.Twitter = entity.Twitter;
+
+                return model;
+            }
+            return null;
+        }
+
+        #endregion
+
     }
 }

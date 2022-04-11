@@ -1,10 +1,9 @@
 ﻿@model Inview.Epi.EpiFund.Domain.ViewModel.HoldingCompanyViewModel
 
 @Html.HiddenFor(m => m.HoldingCompanyId)
-@Html.HiddenFor(m => m.OperatingCompanyId)
 @Html.HiddenFor(s => s.IsActive)
 
-<div class="row">
+<div class="row" style="display:none">
     <div class="col-sm-6">
         <div class="input-group">
             @Html.LabelFor(s => s.AssetAssignment, new { @class = "control-label", style = "font-weight:bold;" })
@@ -29,6 +28,25 @@
     <div class="col-sm-6">
         <div class="input-group">
             @Html.TextBoxFor(s => s.CompanyName)@Html.ValidationMessageFor(s => s.CompanyName, "")
+            &nbsp;&nbsp;
+            @Html.LabelFor(s => s.ISRA, new { @class = "control-label", style = "font-weight:bold;" })
+            @Html.CheckBoxFor(s => s.ISRA)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.OperatingCompanyId, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.DropDownListFor(s => s.OperatingCompanyId,
+                new SelectList(Model.OpertingCompanyList, "Value", "Text", Model.OperatingCompanyId),
+                new { style = "width: 250px;" })
+            @Html.ValidationMessageFor(s => s.OperatingCompanyId, "")
         </div>
     </div>
 </div>
@@ -175,7 +193,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row" style="display:none;" >
     <div class="col-sm-6">
         <div class="input-group">
             @Html.LabelFor(s => s.FaxNumber, new { @class = "control-label", style = "font-weight:bold;" })
@@ -184,6 +202,59 @@
     <div class="col-sm-6">
         <div class="input-group">
             @Html.TextBoxFor(s => s.FaxNumber)@Html.ValidationMessageFor(s => s.FaxNumber, "")
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.LinkedIn, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.LinkedIn)@Html.ValidationMessageFor(s => s.LinkedIn, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Facebook, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Facebook)@Html.ValidationMessageFor(s => s.Facebook, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Instagram, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Instagram)@Html.ValidationMessageFor(s => s.Instagram, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Twitter, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Twitter)@Html.ValidationMessageFor(s => s.Twitter, "")
         </div>
     </div>
 </div>

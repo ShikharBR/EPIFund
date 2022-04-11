@@ -1,10 +1,63 @@
-﻿@using PagedList.Mvc
-@model Inview.Epi.EpiFund.Web.Models.OperatingCompanySearchResultsModel
+﻿@model Inview.Epi.EpiFund.Web.Models.AdminOperatingCompanySearchResultsModel
 @{
     ViewBag.Title = "Manage Operating Companies";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-<h3 class="page-header">Manage Operating Companies</h3>
+<style>
+    .header {
+        margin: 1px;
+        color: #fff;
+        padding: 3px 10px;
+        cursor: pointer;
+        position: relative;
+        background-color: #B1A795 !important;
+    }
+
+    .kill-width-for-td-address {
+        max-width: 79px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        padding: 6px;
+        text-align: left;
+    }
+
+    .AssetName {
+        display: inline-block;
+        width: 50px;
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+    }
+
+    input[type="text"] {
+        height: 25px;
+        padding: 0px 2px;
+    }
+
+    .panel-body table {
+        width: 100%;
+    }
+
+    .panel-body label {
+        font-size: 11px;
+    }
+
+    .panel-body td {
+        padding: 0px 5px;
+    }
+
+    .panel-body table tbody tr td table tbody tr td {
+        border-bottom: 2px dotted #fff;
+        padding: 10px 0px;
+    }
+
+    label {
+        padding: 0px 5px;
+    }
+</style>
+
+<h3>Manage Operating Companies</h3>
 
 <div style="float:right;">
     <select id="ddlRowCount" onchange="changeResults()">
@@ -14,6 +67,7 @@
         <option value="100">100</option>
     </select>
 </div>
+<br />
 <br />
 <div style="clear:both">
     @using (Html.BeginForm("ManageOperatingCompanies", "Admin", FormMethod.Post, new { @id = "searchForm" }))
@@ -31,102 +85,126 @@
                 </div>
                 <div id="searchbox" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-lg-3">
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td> @Html.LabelFor(s => s.OCName)</td>
+                                            <td> @Html.TextBoxFor(s => s.OCName)</td>
+                                            <td> (aka “Contract Owner of Asset”)</td>
+
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td width="112px"> @Html.LabelFor(s => s.OCEmail)</td>
+                                            <td>@Html.TextBoxFor(s => s.OCEmail)</td>
+
+                                            <td width="150px"> @Html.LabelFor(s => s.OCFirstName)</td>
+                                            <td> @Html.TextBoxFor(s => s.OCFirstName)</td>
+
+                                            <td width="150px"> @Html.LabelFor(s => s.OCLastName)</td>
+                                            <td>@Html.TextBoxFor(s => s.OCLastName)</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td width="85px"> @Html.LabelFor(s => s.LinkedInurl)</td>
+                                            <td> @Html.TextBoxFor(s => s.LinkedInurl)</td>
+
+                                            <td width="100px"> @Html.LabelFor(s => s.Facebookurl)</td>
+                                            <td> @Html.TextBoxFor(s => s.Facebookurl)</td>
+
+                                            <td width="100x"> @Html.LabelFor(s => s.Instagramurl)</td>
+                                            <td> @Html.TextBoxFor(s => s.Instagramurl)</td>
+
+                                            <td width="85px"> @Html.LabelFor(s => s.Twitterurl)</td>
+                                            <td>  @Html.TextBoxFor(s => s.Twitterurl)</td>
+
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>@Html.LabelFor(s => s.AssetNumber)</td>
+                                            <td>@Html.TextBoxFor(s => s.AssetNumber)</td>
+
+                                            <td> @Html.LabelFor(s => s.AssetName)</td>
+                                            <td>@Html.TextBoxFor(s => s.AssetName)</td>
+
+                                            <td>@Html.LabelFor(s => s.AddressLine1)</td>
+                                            <td>@Html.TextBoxFor(s => s.AddressLine1)</td>
+
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>@Html.LabelFor(s => s.City)</td>
+                                            <td>@Html.TextBoxFor(s => s.City)</td>
+
+                                            <td> @Html.LabelFor(s => s.State)</td>
+                                            <td>  @Html.DropDownListFor(s => s.State, @Model.States)</td>
+
+                                            <td> @Html.LabelFor(s => s.ZipCode)</td>
+                                            <td> @Html.TextBoxFor(s => s.ZipCode)</td>
+
+                                            <td width="90px">@Html.LabelFor(s => s.ApnNumber)</td>
+                                            <td> @Html.TextBoxFor(s => s.ApnNumber)</td>
+
+                                            <td width="60px"> @Html.LabelFor(s => s.IsPaper)</td>
+                                            <td> @Html.CheckBoxFor(s => s.IsPaper)</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td> @Html.LabelFor(s => s.County)</td>
+                                            <td> @Html.TextBoxFor(s => s.County)</td>
+
+                                            <td>@Html.LabelFor(s => s.ListAgentName)</td>
+                                            <td> @Html.TextBoxFor(s => s.ListAgentName)</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <div class="row asset-list-form">
+                            <div class="col-sm-6">
                                 <div class="input-group">
-                                    @Html.LabelFor(s => s.FirstName)
+                                    @Html.HiddenFor(model => Model.Page)
+                                    @Html.HiddenFor(model => Model.RowCount)
+                                    <input type="submit" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto;" onclick="clearSearchValues()" />
                                 </div>
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-sm-6">
                                 <div class="input-group">
-                                    @Html.TextBoxFor(s => s.FirstName)
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.LabelFor(s => s.LastName)
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.TextBoxFor(s => s.LastName)
+                                    <input type="button" value="Clear" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto;" onclick="ClearOCSearch()" />
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.LabelFor(s => s.Email)
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.TextBoxFor(s => s.Email)
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.LabelFor(s => s.CompanyName)
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.TextBoxFor(s => s.CompanyName)
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.LabelFor(s => s.AddressLine1)
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.TextBoxFor(s => s.AddressLine1)
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.LabelFor(s => s.City)
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.TextBoxFor(s => s.City)
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.LabelFor(s => s.State)
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.DropDownListFor(s => s.State, @Model.States)
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.LabelFor(s => s.ShowActiveOnly)
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    @Html.CheckBoxFor(s => s.ShowActiveOnly)
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                @Html.HiddenFor(model => Model.Page)
-                                @Html.HiddenFor(model => Model.SortOrder)
-                                @Html.HiddenFor(model => Model.RowCount)
-                                <input type="submit" value="Search" class="btn btn-primary proceed" style="width: 200px; margin-top: 20px" onclick="clearSearchValues()" />
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -134,8 +212,45 @@
     }
 </div>
 <br />
-@{ Html.RenderPartial("_OperatingCompanyListView", Model.OperatingCompanies); }
-<br />
+@{ Html.RenderPartial("_AdminOperatingCompanyListView", Model.OcList); }
+
+
+<div class="modal fade" id="portfholioAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewPortfolio">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="chainOfTitleAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewchainOfTitle">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="HCDetails" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divHCDetails">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="OCDetails" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divOCDetails">
+
+        </div>
+    </div>
+</div>
+
 <script>
     $('.pagination li a').click(function () {
         var href = $(this).attr('href');
@@ -146,13 +261,129 @@
             return false;
         }
     });
-    function postForm(order) {
-        $('#SortOrder').val(order);
-        $('#searchForm').submit();
-        return false;
-    }
+
     function changeResults() {
         $('#RowCount').val($('#ddlRowCount').val());
         $('#searchForm').submit();
     }
+
+    function ViewRelatedAssets(PortfolioId) {
+        //alert(PortfolioId);
+        /*show model popup
+         bind data as per the assets list*/
+        $.ajax({
+            url: "@Url.Action("GetAssetsbyPortfolioId", "Admin")",
+            data: { portfolioId: PortfolioId },
+            success: function (data) {
+                $("#divAssetViewPortfolio").html(data);
+                $("#portfholioAssets").modal();
+
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
+
+    function Viewportfolio(assetId, curretntSpan) {
+        if ($("#" + assetId + "_portfolio").length) {
+            $("#" + assetId + "_portfolio").remove();
+        }
+        else {
+            $.ajax({
+                url: "@Url.Action("GetRelatedPortfolio", "Admin")",
+                data: { assetId: assetId },
+                success: function (data) {
+                    $(curretntSpan).closest('tr').after("<tr id='" + assetId + "_portfolio' >" + data + "</tr>");
+                    //add comma
+                    $('.padNumber').each(function (index) {
+                        padCommas(this, false);
+                    });
+                }
+            });
+        }
+    }
+
+    function ViewChainOfTitle(assetId) {
+        $.ajax({
+            url: "@Url.Action("GetChainOfTitle", "Admin")",
+            data: { assetId: assetId },
+            success: function (data) {
+                $("#divAssetViewchainOfTitle").html(data);
+                $("#chainOfTitleAssets").modal();
+
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
+
+    function OperatingCoRelatedAsset(OCID) {
+        /*show model popup
+         bind data as per the assets list*/
+        $.ajax({
+            url: "@Url.Action("GetAssetsbyOCId", "Admin")",
+            data: { OcId: OCID },
+            success: function (data) {
+                $("#divOCDetails").html(data);
+                $("#OCDetails").modal();
+
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
+
+    function HoldingCoDetail(HCID) {
+         $.ajax({
+            url: "@Url.Action("GetHoldingCompanybyId", "Admin")",
+             data: { id: HCID },
+            success: function (data) {
+                $("#divHCDetails").html(data);
+                $("#HCDetails").modal();
+            }
+        });
+    }
+
+    function OperatingCoDetail(OCID) {
+        $.ajax({
+            url: "@Url.Action("GetOpertingCompanybyId", "Admin")",
+            data: { id: OCID },
+            success: function (data) {
+                $("#divOCDetails").html(data);
+                $("#OCDetails").modal();
+            }
+        });
+    }
+
+    function ClearOCSearch() {
+
+        $("#OCName").val('');
+       
+        $("#OCEmail").val('');
+        $("#OCFirstName").val('');
+        $("#OCLastName").val('');
+        $("#LinkedInurl").val('');
+        $("#Facebookurl").val('');
+        $("#Instagramurl").val('');
+        $("#Twitterurl").val('');
+
+        $("#AssetNumber").val('');
+        $("#AssetName").val('');
+        $("#AddressLine1").val('');
+        $("#City").val('');
+        $("#State").val('');
+        $("#ZipCode").val('');
+        $("#ApnNumber").val('');
+        $('#IsPaper').prop('checked', false);
+
+        $("#County").val('');
+        $("#ListAgentName").val('');
+    }
+
 </script>

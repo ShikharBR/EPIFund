@@ -1209,9 +1209,11 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			AssetViewModel assetViewModel = new AssetViewModel();
             assetViewModel = this._asset.GenerateNewAsset(isPaper, assetType);
             assetViewModel.Countries = GetAllCountries();
+
             var allOperatingCompanies = _user.GetOperatingCompanies(new OperatingCompanySearchModel()).OrderBy(x => x.CompanyName).ToList();
             assetViewModel.OperatingCompanies.Add(new SelectListItem { Text = "---", Value = "" });
             assetViewModel.OperatingCompanies.Add(new SelectListItem { Text = "Unknown", Value = new Guid().ToString() });
+
             var unknown = allOperatingCompanies.FirstOrDefault(x => x.OperatingCompanyId == new Guid());
             // remove it from the list in order to exempt it from sorting
             if (unknown != null) allOperatingCompanies.Remove(unknown);
@@ -2965,7 +2967,19 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 					{
 						jsonResult = new JsonResult()
 						{
-							Data = new { Status = "true", ListingAgentWorkNumber = narMember.WorkNumber, ListingAgentFaxNumber = narMember.FaxNumber, ListingAgentCellNumber = narMember.CellPhoneNumber, ListingAgentName = narMember.FullName, ListingAgentCompany = narMember.CompanyName ?? "", ListingAgentEmail = narMember.Email, ListingAgentCorpAddress = narMember.AddressLine1 ?? "", ListingAgentCorpAddress2 = narMember.AddressLine2 ?? "", ListingAgentCity = narMember.City ?? "", ListingAgentState = narMember.State ?? "", ListingAgentZip = narMember.Zip ?? "", FirstName = narMember.FirstName ?? "", LastName = narMember.LastName ?? "", CommissionShareAgr = narMember.CommissionShareAgr, CommissionAmount = narMember.CommissionAmount, DateOfCsaConfirm = narMember.DateOfCsaConfirm, NARMemberId = narMember.NarMemberId, ReferredByUserId = narMember.ReferredByUserId, IsActive = narMember.IsActive, Website = narMember.Website, Registered = narMember.Registered }
+							Data = new { Status = "true", 
+										 ListingAgentWorkNumber = narMember.WorkNumber, 
+										 ListingAgentFaxNumber = narMember.FaxNumber, 
+										 ListingAgentCellNumber = narMember.CellPhoneNumber, 
+										 ListingAgentName = narMember.FullName, ListingAgentCompany = narMember.CompanyName ?? "", 
+										 ListingAgentEmail = narMember.Email, ListingAgentCorpAddress = narMember.AddressLine1 ?? "", 
+										 ListingAgentCorpAddress2 = narMember.AddressLine2 ?? "", ListingAgentCity = narMember.City ?? "", 
+										 ListingAgentState = narMember.State ?? "", ListingAgentZip = narMember.Zip ?? "", 
+										 FirstName = narMember.FirstName ?? "", LastName = narMember.LastName ?? "", 
+										 CommissionShareAgr = narMember.CommissionShareAgr, CommissionAmount = narMember.CommissionAmount, 
+										 DateOfCsaConfirm = narMember.DateOfCsaConfirm, NARMemberId = narMember.NarMemberId, 
+										 ReferredByUserId = narMember.ReferredByUserId, IsActive = narMember.IsActive, 
+										 Website = narMember.Website, Registered = narMember.Registered }
 						};
 						return jsonResult;
 					}
@@ -3078,7 +3092,26 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                 {
                     jsonResult = new JsonResult()
                     {
-                        Data = new { Status = "true", Id = entity.OperatingCompanyId, entity.FirstName, entity.LastName, entity.AddressLine1, entity.AddressLine2, entity.City, entity.State, entity.Zip, entity.Country, WorkPhone = entity.WorkNumber, CellPhone = entity.CellNumber, Fax = entity.FaxNumber, entity.Email, entity.CompanyName, entity.IsActive }
+                        Data = new { Status = "true", 
+							Id = entity.OperatingCompanyId, 
+							entity.FirstName, 
+							entity.LastName, 
+							entity.AddressLine1, 
+							entity.AddressLine2, 
+							entity.City, 
+							entity.State, 
+							entity.Zip, 
+							entity.Country,
+							WorkPhone = entity.WorkNumber, 
+							CellPhone = entity.CellNumber,
+							//Fax = entity.FaxNumber, 
+							entity.LinkedIn,
+							entity.Facebook,
+							entity.Instagram,
+							entity.Twitter,
+							entity.Email, 
+							entity.CompanyName, 
+							entity.IsActive }
                     };
                 }
                 else jsonResult = new JsonResult() { Data = new { Status = "false" } };
@@ -3099,10 +3132,34 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                 var entity = _user.GetHoldingCompany(Guid.Parse(id));
                 if (entity != null)
                 {
-                    jsonResult = new JsonResult()
-                    {
-                        Data = new { Status = "true", Id = entity.HoldingCompanyId, entity.FirstName, entity.LastName, entity.AddressLine1, entity.AddressLine2, entity.City, entity.State, entity.Zip, entity.Country, WorkPhone = entity.WorkNumber, CellPhone = entity.CellNumber, Fax = entity.FaxNumber, entity.Email, entity.CompanyName, entity.IsActive }
-                    };
+					jsonResult = new JsonResult()
+					{
+						Data = new
+						{
+							Status = "true",
+							Id = entity.HoldingCompanyId,
+							entity.ISRA,
+							entity.FirstName,
+							entity.LastName,
+							entity.AddressLine1,
+							entity.AddressLine2,
+							entity.City,
+							entity.State,
+							entity.Zip,
+							entity.Country,
+							WorkPhone = entity.WorkNumber,
+							CellPhone = entity.CellNumber,
+							//Fax = entity.FaxNumber, 
+							entity.LinkedIn,
+							entity.Facebook,
+							entity.Instagram,
+							entity.Twitter,
+
+							entity.Email,
+							entity.CompanyName,
+							entity.IsActive
+						}
+					};
                 }
                 else jsonResult = new JsonResult() { Data = new { Status = "false" } };
             }
@@ -3123,7 +3180,8 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                 {
                     var pis = _user.GetPrincipalInvestors(new PrincipalInvestorSearchModel() { Email = email, DomainSearch = true });
                     var options = new Dictionary<string, string>();
-                    foreach (var option in pis) options.Add(option.PrincipalInvestorId.ToString(), option.Email);
+                    foreach (var option in pis) 
+						options.Add(option.PrincipalInvestorId.ToString(), option.Email);
                     jsonResult = new JsonResult() { Data = new { Status = "true", Options = options } };
                 }
                 else jsonResult = new JsonResult() { Data = new { Status = "false", Message = "Email is null" } };
@@ -3149,7 +3207,8 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                     {
                         entities = entities.OrderBy(x => x.CompanyName).ToList();
                         var options = new Dictionary<string, string>();
-                        foreach (var option in entities) options.Add(option.HoldingCompanyId.ToString(), option.CompanyName);
+                        foreach (var option in entities) 
+							options.Add(option.HoldingCompanyId.ToString(), option.CompanyName);
                         return jsonResult = new JsonResult() { Data = new { Status = "true", Options = options } };
                     }
                 }
@@ -3592,306 +3651,8 @@ namespace Inview.Epi.EpiFund.Web.Controllers
             };
         }
 
-		[Authorize]
-		public ActionResult ManageHoldingCompany()
-		{			
-				return View();
-			
-		}
-
-		[Authorize]
-		public ActionResult ManageHoldingCompanyNew(JqueryDatatableParam param)
-		{
-			var employees = _user.GetHoldingCompaniesNew();
-
-			
-			if (!string.IsNullOrEmpty(param.sSearch))
-			{
-				employees = employees.Where(x => x.CompanyName.ToLower().Contains(param.sSearch.ToLower())).ToList();
-			}
-
-			var sortColumnIndex = Convert.ToInt32(HttpContext.Request.QueryString["iSortCol_0"]);
-			var sortDirection = HttpContext.Request.QueryString["sSortDir_0"];
-
-			var displayResult = employees.Skip(param.iDisplayStart)
-				.Take(param.iDisplayLength).ToList();
-			var totalRecords = employees.Count();
-
-			return Json(new
-			{
-				param.sEcho,
-				iTotalRecords = totalRecords,
-				iTotalDisplayRecords = totalRecords,
-				aaData = displayResult
-			}, JsonRequestBehavior.AllowGet);
-		}
-
-
-		[Authorize]
-		public ActionResult ManageHoldingCompanies()
-		{
-			if (!base.ValidateAdminUser(this._user.GetUserByUsername(base.User.Identity.Name)))
-			{
-				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
-				return base.RedirectToAction("Index", "Home");
-			}
-			else
-			{
-				return View(_user.GetHoldingCompanies());
-			}
-		}
-
-		[Authorize]
-		public ActionResult ManageAssets(AdminAssetSearchResultsModel model, string sortOrder, int? page, string assetNumber = null)
-		{
-			int value;
-			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
-			if (!base.ValidateAdminUser(userByUsername))
-			{
-				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
-				return base.RedirectToAction("Index", "Home");
-			}
-			this._user.RemoveUserAssetLocks(base.User.Identity.Name);
-			if (assetNumber != null)
-			{
-				model.AssetNumber = assetNumber;
-			}
-			List<AdminAssetQuickListModel> adminAssetQuickListModels = new List<AdminAssetQuickListModel>();
-			List<PortfolioQuickListViewModel> portfolioQuickListViewModels = new List<PortfolioQuickListViewModel>();
-			ManageAssetsModel manageAssetsModel = new ManageAssetsModel()
-			{
-				AddressLine1 = model.AddressLine1,
-				City = model.City,
-				State = model.State,
-				ZipCode = model.ZipCode,
-				AssetNumber = model.AssetNumber,
-				AssetType = model.SelectedAssetType.GetValueOrDefault(0),
-				AssetName = model.AssetName,
-				AccListPrice = model.AccListPrice,
-				AccUnits = model.AccUnits,
-				MinSquareFeet = model.MinSquareFeet,
-				MaxSquareFeet = model.MaxSquareFeet,
-				MaxUnitsSpaces = model.MaxUnitsSpaces,
-				MinUnitsSpaces = model.MinUnitsSpaces,
-				UserId = new int?(userByUsername.UserId),
-				ControllingUserType = userByUsername.UserType,
-				IsPaper = model.IsPaper,
-				ApnNumber = model.ApnNumber
-			};
-			adminAssetQuickListModels = this._asset.GetManageAssetsQuickList(manageAssetsModel);
-			if (this.ValidSearch(model))
-			{
-				portfolioQuickListViewModels = this._asset.GetManageAssetQuickListPF(manageAssetsModel);
-			}
-			((dynamic)base.ViewBag).CurrentSort = model.SortOrder;
-			base.ViewBag.ShowSortParm = (model.SortOrder == "show" ? "show_desc" : "show");
-			base.ViewBag.TypeSortParm = (model.SortOrder == "type" ? "type_desc" : "type");
-			base.ViewBag.CitySortParm = (model.SortOrder == "city" ? "city_desc" : "city");
-			base.ViewBag.StateSortParm = (model.SortOrder == "state" ? "state_desc" : "state");
-			base.ViewBag.ZipCodeParm = (model.SortOrder == "zip" ? "zip_desc" : "zip");
-			base.ViewBag.StatusSortParm = (model.SortOrder == "status" ? "status_desc" : "status");
-			base.ViewBag.AddressSortParm = (model.SortOrder == "address" ? "address_desc" : "address");
-			base.ViewBag.AssetIdSortParm = (model.SortOrder == "assetId" ? "assetId_desc" : "assetId");
-			base.ViewBag.CreatedSortParm = (model.SortOrder == "createdBy" ? "createdBy_desc" : "createdBy");
-			base.ViewBag.AssetNameSortParm = (model.SortOrder == "assetName" ? "assetName_desc" : "assetName");
-			base.ViewBag.UserType = userByUsername.UserType;
-			string str = model.SortOrder;
-
-			switch (str)
-			{
-				case "assetName_desc":
-					{
-						adminAssetQuickListModels = (
-							from a in adminAssetQuickListModels
-							orderby a.AssetName descending
-							select a).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "assetName":
-					{
-						adminAssetQuickListModels = (
-							from a in adminAssetQuickListModels
-							orderby a.AssetName
-							select a).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "createdBy_desc":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.CreatedBy descending
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "createdBy":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.CreatedBy
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "type_desc":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.Type descending
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "type":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.Type
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "show_desc":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.Show descending
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "show":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.Show
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "city_desc":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.City descending
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "city":
-					{
-						adminAssetQuickListModels = (
-							from w in adminAssetQuickListModels
-							orderby w.City
-							select w).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "state_desc":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.State descending
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "state":
-					{
-						adminAssetQuickListModels = (
-							from w in adminAssetQuickListModels
-							orderby w.State
-							select w).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "address_desc":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.AddressLine1 descending
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "address":
-					{
-						adminAssetQuickListModels = (
-							from w in adminAssetQuickListModels
-							orderby w.AddressLine1
-							select w).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "assetId_desc":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.AssetNumber descending
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "assetId":
-					{
-						adminAssetQuickListModels = (
-							from w in adminAssetQuickListModels
-							orderby w.AssetNumber
-							select w).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "status_desc":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.Status descending
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "status":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.Status
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				case "zip_desc":
-					{
-						adminAssetQuickListModels = (
-							from s in adminAssetQuickListModels
-							orderby s.Zip descending
-							select s).ToList<AdminAssetQuickListModel>();
-						break;
-					}
-				default:
-					{
-						adminAssetQuickListModels = (str == "zip" ? (
-							from w in adminAssetQuickListModels
-							orderby w.Zip
-							select w).ToList<AdminAssetQuickListModel>() : (
-							from s in adminAssetQuickListModels
-							orderby s.AssetNumber
-							select s).ToList<AdminAssetQuickListModel>());
-						break;
-					}
-			}
-
-			int num = 0;
-			TempDataDictionary tempData = base.TempData;
-			int? rowCount = model.RowCount;
-			if (rowCount.HasValue)
-			{
-				rowCount = model.RowCount;
-				value = rowCount.Value;
-			}
-			else
-			{
-				value = 50;
-			}
-
-			num = value;
-			tempData["RowCount"] = value;
-			base.TempData.Keep("RowCount");
-			rowCount = model.Page;
-			if (rowCount.GetValueOrDefault(0) > 0)
-			{
-				page = model.Page;
-			}
-			rowCount = page;
-			int num1 = (rowCount.HasValue ? rowCount.GetValueOrDefault() : 1);
-			model.Assets = adminAssetQuickListModels.ToPagedList<AdminAssetQuickListModel>(num1, num);
-			//model.Portfolios = portfolioQuickListViewModels.ToPagedList<PortfolioQuickListViewModel>(num1, num);
-			return base.View(model);
-		}
-
+		
+		
 
 		[Authorize]
 		public ActionResult ManageAssetsOld(AdminAssetSearchResultsModel model, string sortOrder, int? page, string assetNumber = null)
@@ -5778,208 +5539,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 		}
 
 
-        [Authorize]
-        public ActionResult ManageOperatingCompanies(OperatingCompanySearchResultsModel model)
-        {
-            int value;
-            if (!base.ValidateAdminUser(this._user.GetUserByUsername(base.User.Identity.Name)))
-            {
-                base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
-                return base.RedirectToAction("Index", "Home");
-            }
-            OperatingCompanySearchModel searchModel = new OperatingCompanySearchModel()
-            {
-                AddressLine1 = model.AddressLine1,
-                City = model.City,
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                State = model.State,
-                Zip = model.Zip,
-                ShowActiveOnly = model.ShowActiveOnly,
-                CompanyName = model.CompanyName
-            };
-            ((dynamic)base.ViewBag).CurrentSort = model.SortOrder;
-            base.ViewBag.CitySortParm = (model.SortOrder == "city" ? "city_desc" : "city");
-            base.ViewBag.StateSortParm = (model.SortOrder == "state" ? "state_desc" : "state");
-            base.ViewBag.CountrySortParm = (model.SortOrder == "country" ? "country_desc" : "country");
-            base.ViewBag.CompanyNameSortParm = (model.SortOrder == "company" ? "company_desc" : "company");
-            base.ViewBag.AddressSortParm = (model.SortOrder == "address" ? "address_desc" : "address");
-            base.ViewBag.EmailSortParm = (model.SortOrder == "email" ? "email_desc" : "email");
-            base.ViewBag.FirstNameSortParm = (model.SortOrder == "first" ? "first_desc" : "first");
-            base.ViewBag.LastNameSortParm = (model.SortOrder == "last" ? "last_desc" : "last");
-            base.ViewBag.IsActiveParm = (model.SortOrder == "active" ? "active_desc" : "active");
-            List<OperatingCompanyViewModel> list = this._user.GetOperatingCompanies(searchModel).ToList<OperatingCompanyViewModel>();
-            string sortOrder = model.SortOrder;
-            switch (sortOrder)
-            {
-                case "active_desc":
-                    {
-                        list = (
-                            from s in list
-                            orderby s.IsActive descending
-                            select s).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "active":
-                    {
-                        list = (
-                            from w in list
-                            orderby w.IsActive
-                            select w).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "city_desc":
-                    {
-                        list = (
-                            from s in list
-                            orderby s.City descending
-                            select s).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "city":
-                    {
-                        list = (
-                            from w in list
-                            orderby w.City
-                            select w).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "country":
-                    {
-                        list = (
-                            from w in list
-                            orderby w.Country
-                            select w).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "country_desc":
-                    {
-                        list = (
-                            from w in list
-                            orderby w.Country descending
-                            select w).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "state_desc":
-                    {
-                        list = (
-                            from s in list
-                            orderby s.State descending
-                            select s).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "state":
-                    {
-                        list = (
-                            from w in list
-                            orderby w.State
-                            select w).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "address_desc":
-                    {
-                        list = (
-                            from s in list
-                            orderby s.AddressLine1 descending
-                            select s).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "address":
-                    {
-                        list = (
-                            from w in list
-                            orderby w.AddressLine1
-                            select w).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "company_desc":
-                    {
-                        list = (
-                            from s in list
-                            orderby s.CompanyName descending
-                            select s).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "company":
-                    {
-                        list = (
-                            from w in list
-                            orderby w.CompanyName
-                            select w).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "email_desc":
-                    {
-                        list = (
-                            from s in list
-                            orderby s.Email descending
-                            select s).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "email":
-                    {
-                        list = (
-                            from w in list
-                            orderby w.Email
-                            select w).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "first_desc":
-                    {
-                        list = (
-                            from s in list
-                            orderby s.FirstName descending
-                            select s).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "first":
-                    {
-                        list = (
-                            from w in list
-                            orderby w.FirstName
-                            select w).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                case "last_desc":
-                    {
-                        list = (
-                            from s in list
-                            orderby s.LastName descending
-                            select s).ToList<OperatingCompanyViewModel>();
-                        break;
-                    }
-                default:
-                    {
-                        list = (sortOrder == "last" ? (
-                            from w in list
-                            orderby w.LastName
-                            select w).ToList<OperatingCompanyViewModel>() : (
-                            from x in list
-                            orderby x.FirstName
-                            select x).ToList<OperatingCompanyViewModel>());
-                        break;
-                    }
-            }
-            int num = 0;
-            TempDataDictionary tempData = base.TempData;
-            int? rowCount = model.RowCount;
-            if (rowCount.HasValue)
-            {
-                rowCount = model.RowCount;
-                value = rowCount.Value;
-            }
-            else
-            {
-                value = 50;
-            }
-            num = value;
-            tempData["RowCount"] = value;
-            base.TempData.Keep("RowCount");
-            rowCount = model.Page;
-            model.OperatingCompanies = list.ToPagedList<OperatingCompanyViewModel>((rowCount.HasValue ? rowCount.GetValueOrDefault() : 1), num);
-            return base.View(model);
-        }
+      
 
         [Authorize]
 		public ActionResult ManagerTitleUsersPage(int id, TitleUserSearchResultsModel model, string sortOrder, int? page)
@@ -6412,17 +5972,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
             return portfolioSelectList;
 		}
 
-        public ActionResult PublishAsset(Guid id)
-		{
-			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
-			this._asset.PublishAsset(id);
-			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully published.");
-			if (userByUsername.UserType != UserType.CREBroker && userByUsername.UserType != UserType.CRELender && userByUsername.UserType != UserType.Investor)
-			{
-				return base.RedirectToAction("ManageAssets", "Admin");
-			}
-			return base.RedirectToAction("SellerManageAssets", "Investors");
-		}
+     
 
 		public ActionResult ReactivateMba(int id)
 		{
@@ -7896,26 +7446,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			return null;
 		}
 
-		[Authorize]
-		public ActionResult UnPublishAsset(Guid id)
-		{
-			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
-			this._asset.UnPublishAsset(id);
-			this._asset.UnlockAsset(id);
-			if (userByUsername.UserType == UserType.CorpAdmin || userByUsername.UserType == UserType.ICAdmin)
-			{
-				base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully withdrawn.");
-			}
-			else
-			{
-				base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully deactivated.");
-			}
-			if (userByUsername.UserType != UserType.CREBroker && userByUsername.UserType != UserType.CRELender && userByUsername.UserType != UserType.Investor)
-			{
-				return base.RedirectToAction("ManageAssets", "Admin");
-			}
-			return base.RedirectToAction("SellerManageAssets", "Investors");
-		}
+	
 
 		[Authorize]
 		[HttpGet]
@@ -8041,7 +7572,8 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 
 				
 				asset.AssetHCOwnershipLst = this._asset.GetAssetHCByAssetId(id);
-				
+				asset.AssetOCLst = this._asset.GetAssetOCByAssetId(id);
+
 				return base.View(asset);
 			}
 			AssetViewModel assetViewModel = new AssetViewModel()
@@ -8693,40 +8225,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			return base.View(model);
 		}
 
-        [Authorize]
-        [HttpGet]
-        public ViewResult UpdateOperatingCompany(string id)
-        {
-            var model = _user.GetOperatingCompanyForAssetContract(Guid.Parse(id));
-            model.Countries = GetAllCountries();
-            return base.View(model);
-        }
 
-        [HttpPost]
-        public ActionResult UpdateOperatingCompany(OperatingCompanyViewModel model)
-        {
-            try
-            {
-                model.Countries = GetAllCountries();
-                var modelForLists = _user.GetOperatingCompanyForAssetContract(model.OperatingCompanyId);
-                model.HoldingCompanies = modelForLists.HoldingCompanies;
-                if (ModelState.IsValid)
-                {
-                    this._user.UpdateOperatingCompany(model);
-                    base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Operating Company successfully updated.");
-                }
-                else
-                {
-                    return View(model);
-                }
-            }
-            catch (Exception exception1)
-            {
-                Exception exception = exception1;
-                base.TempData["message"] = new MessageViewModel(MessageTypes.Error, exception.Message);
-            }
-            return base.View(model);
-        }
 
        
 
@@ -10128,41 +9627,12 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			return this.PartialView("_AssetViewPortfolio", assetsList);
 		}
 				
-		public ActionResult ActivateAsset(string id)
-		{
-			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
-			this._asset.ActivateAsset(id);
-			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully Activated.");
-			if (userByUsername.UserType != UserType.CREBroker && userByUsername.UserType != UserType.CRELender && userByUsername.UserType != UserType.Investor)
-			{
-				return base.RedirectToAction("ManageAssets", "Admin");
-			}
-			return base.RedirectToAction("SellerManageAssets", "Investors");
-		}
-			
-		public ActionResult DeActivateAsset(string id)
-		{
-			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
-			this._asset.DeActivateAsset(id);
-			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully DeActivated.");
-			if (userByUsername.UserType != UserType.CREBroker && userByUsername.UserType != UserType.CRELender && userByUsername.UserType != UserType.Investor)
-			{
-				return base.RedirectToAction("ManageAssets", "Admin");
-			}
-			return base.RedirectToAction("SellerManageAssets", "Investors");			
-		}
+
 
 
 		//HC & OC Logic
 
-		[Authorize]
-		[HttpGet]
-		public ViewResult UpdateHoldingCompany(string id)
-		{
-			var model = _user.GetHoldingCompany(Guid.Parse(id));
-			model.Countries = GetAllCountries();
-			return base.View(model);
-		}
+		
 		
 		[HttpPost]
 		public JsonResult GetApplicableOwnerCompanyOptions(string name, string type)
@@ -10184,31 +9654,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			return jsonResult;
 		}
 
-		[HttpPost]
-		public ActionResult UpdateHoldingCompany(HoldingCompanyViewModel model)
-		{
-			try
-			{
-				if (ModelState.IsValid)
-				{
-					var result = this._user.UpdateHoldingCompany(model);
-					// Allowing a success to be sent even if !result.Success due to the holding company successfully updating(most likely)
-					if (!result.Success) base.TempData["message"] = new MessageViewModel(MessageTypes.Success, result.Message);
-					else base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Holding company successfully updated.");
-				}
-				else
-				{
-					model.Countries = GetAllCountries();
-					return View(model);
-				}
-			}
-			catch (Exception exception1)
-			{
-				Exception exception = exception1;
-				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, exception.Message);
-			}
-			return base.RedirectToAction("ManageHoldingCompanies");
-		}
+		
 
 		[HttpPost]
 		public ActionResult UpdateCreateHCnAssetHCOwnerships(HCCAssetHCOwnerships model)
@@ -10224,17 +9670,17 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				else
                 {
 					model.HoldingCompany.HoldingCompanyId = Guid.NewGuid();
+					model.HoldingCompany.IsActive = true;
 					var result = this._user.CreateHoldingCompany(model.HoldingCompany);
 				}
 
 				//map model
 				AssetHCOwnership assetHC = new AssetHCOwnership();
 
+				assetHC.AssetHCOwnershipId = model.AssetHCOwnershipId ?? 0;
 				assetHC.AssetId = model.AssetId;
 				assetHC.HoldingCompanyId = model.HoldingCompany.HoldingCompanyId;
-
-				assetHC.CreateDate = DateTime.Now;
-				
+				assetHC.CreateDate = DateTime.Now;				
 				assetHC.Terms = model.Terms;
 				assetHC.ActualClosingDate = model.ActualClosingDate;
 				assetHC.SalesPrice = model.SalesPrice;
@@ -10243,6 +9689,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				assetHC.CalculatedPPSqFt = model.CalculatedPPSqFt;
 				assetHC.CashInvestmentApy = model.CashInvestmentApy;
 				assetHC.TermsOther = model.TermsOther;
+				assetHC.CapRate = model.CapRate;
 
 				this._asset.SaveUpdateAssetHC(assetHC);
 
@@ -10260,18 +9707,919 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 
 		public ActionResult GetAssetHCByAssetId(Guid assetId)
 		{
-			JsonResult jsonResult;
-			jsonResult = new JsonResult() { Data = new { Status = "true", data = this._asset.GetAssetHCByAssetId(assetId) } };
-			return jsonResult;
+			var result = this._asset.GetAssetHCByAssetId(assetId);
+			return Json(new { result }, JsonRequestBehavior.AllowGet);
 		}
 
 		public ActionResult GetOwnerHCByAssetHCOwnershipId(int assetHCOwnershipId)
 		{
+			var result = this._asset.GetAssetHCByAssetHCOwnershipId(assetHCOwnershipId);
+			return Json(new { result }, JsonRequestBehavior.AllowGet);			
+		}
+
+
+		public ActionResult UpdateCreateOC(HCCAssetOC model)
+		{
+			//only update OC table data
+			//AssetOCId is not null
+			//OperatingCompanyId is Not null
+
+			//insert both the table AssetOC and OC
+			//AssetOCId is null
+			//OperatingCompanyId is null
+
+			//insert AssetOC and update OC
+			//AssetOCId is null
+			//OperatingCompanyId is Not null
+
 			JsonResult jsonResult;
-			jsonResult = new JsonResult() { Data = new { Status = "true", data = this._asset.GetAssetHCByAssetHCOwnershipId(assetHCOwnershipId) } };
+
+			try
+			{
+				if (model.OperatingCompanyId != null && model.OperatingCompanyId != Guid.Empty)
+				{
+					OperatingCompanyViewModel OCViewModel = new OperatingCompanyViewModel();
+					OCViewModel.OperatingCompanyId = model.OperatingCompanyId ?? Guid.NewGuid();
+					OCViewModel.CompanyName = model.CompanyName;
+					OCViewModel.FirstName = model.FirstName;
+					OCViewModel.LastName = model.LastName;
+					OCViewModel.Email = model.Email;
+					OCViewModel.AddressLine1 = model.AddressLine1;
+					OCViewModel.AddressLine2 = model.AddressLine2;
+					OCViewModel.City = model.City;
+					OCViewModel.State = model.State;
+					OCViewModel.Zip = model.Zip;
+					OCViewModel.Country = model.Country;
+					OCViewModel.WorkNumber = model.WorkNumber;
+					OCViewModel.CellNumber = model.CellNumber;
+					OCViewModel.FaxNumber = model.FaxNumber;
+
+					OCViewModel.LinkedIn = model.LinkedIn;
+					OCViewModel.Facebook = model.Facebook;
+					OCViewModel.Instagram = model.Instagram;
+					OCViewModel.Twitter = model.Twitter;
+
+					OCViewModel.IsActive = true;
+
+					this._user.UpdateOperatingCompany(OCViewModel);
+				}
+				else
+				{
+					model.OperatingCompanyId = Guid.NewGuid();
+					model.IsActive = true;
+
+					OperatingCompanyViewModel OCViewModel = new OperatingCompanyViewModel();
+					OCViewModel.OperatingCompanyId = model.OperatingCompanyId ?? Guid.NewGuid();
+					OCViewModel.CompanyName = model.CompanyName;
+					OCViewModel.FirstName = model.FirstName;
+					OCViewModel.LastName = model.LastName;
+					OCViewModel.Email = model.Email;
+					OCViewModel.AddressLine1 = model.AddressLine1;
+					OCViewModel.AddressLine2 = model.AddressLine2;
+					OCViewModel.City = model.City;
+					OCViewModel.State = model.State;
+					OCViewModel.Zip = model.Zip;
+					OCViewModel.Country = model.Country;
+					OCViewModel.WorkNumber = model.WorkNumber;
+					OCViewModel.CellNumber = model.CellNumber;
+					OCViewModel.FaxNumber = model.FaxNumber;
+
+					OCViewModel.LinkedIn = model.LinkedIn;
+					OCViewModel.Facebook = model.Facebook;
+					OCViewModel.Instagram = model.Instagram;
+					OCViewModel.Twitter = model.Twitter;
+
+					OCViewModel.IsActive = model.IsActive;
+
+					var result = this._user.CreateOperatingCompany(OCViewModel);
+				}
+
+				//map model
+				this._asset.SaveUpdateAssetOC(model);
+
+				jsonResult = new JsonResult() { Data = new { Status = "true" } };
+			}
+			catch (Exception exception1)
+			{
+				Exception exception = exception1;
+				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, exception.Message);
+				jsonResult = new JsonResult() { Data = new { Status = "false" } };
+			}
+
 			return jsonResult;
 		}
-		
+
+		public ActionResult GetAssetOCByAssetId(Guid assetId)
+		{
+			var result = this._asset.GetAssetOCByAssetId(assetId);
+			return Json(new { result }, JsonRequestBehavior.AllowGet);
+		}
+		public ActionResult GetOCByAssetOCId(int AssetOCId)
+		{
+			var result = this._asset.GetAssetOCByAssetOCId(AssetOCId);
+			return Json(new { result }, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult GetHCAddressByAssetId(Guid assetId)
+		{
+			var result = this._asset.GetHCAddressByAssetId(assetId);
+			return Json(new { result }, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult GetChainOfTitle(string assetId)
+		{
+			var assetsList = this._asset.GetChainOfTitleByAssetId(assetId);
+			return this.PartialView("_AssetViewChainOfTitle", assetsList);
+		}
+
+        #region ManageAsset		      
+
+        [Authorize]
+		public ActionResult ManageAssets(AdminAssetSearchResultsModel model, string sortOrder, int? page, string assetNumber = null)
+		{
+			int value;
+			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
+			if (!base.ValidateAdminUser(userByUsername))
+			{
+				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
+				return base.RedirectToAction("Index", "Home");
+			}
+			this._user.RemoveUserAssetLocks(base.User.Identity.Name);
+			if (assetNumber != null)
+			{
+				model.AssetNumber = assetNumber;
+			}
+			List<AdminAssetQuickListModel> adminAssetQuickListModels = new List<AdminAssetQuickListModel>();
+			ManageAssetsModel manageAssetsModel = new ManageAssetsModel()
+			{
+				AddressLine1 = model.AddressLine1,
+				City = model.City,
+				State = model.State,
+				ZipCode = model.ZipCode,
+				AssetNumber = model.AssetNumber,
+				AssetType = model.SelectedAssetType.GetValueOrDefault(0),
+				AssetName = model.AssetName,
+				AccListPrice = model.AccListPrice,
+				AccUnits = model.AccUnits,
+				MinSquareFeet = model.MinSquareFeet,
+				MaxSquareFeet = model.MaxSquareFeet,
+				MaxUnitsSpaces = model.MaxUnitsSpaces,
+				MinUnitsSpaces = model.MinUnitsSpaces,
+				UserId = new int?(userByUsername.UserId),
+				ControllingUserType = userByUsername.UserType,
+				IsPaper = model.IsPaper,
+				ApnNumber = model.ApnNumber,
+
+				County = model.County,
+				ListAgentCompanyName = model.ListAgentCompanyName,
+				ListAgentName = model.ListAgentName
+			};
+			adminAssetQuickListModels = this._asset.GetManageAssetsQuickList(manageAssetsModel);
+			
+			((dynamic)base.ViewBag).CurrentSort = model.SortOrder;
+			base.ViewBag.ShowSortParm = (model.SortOrder == "show" ? "show_desc" : "show");
+			base.ViewBag.TypeSortParm = (model.SortOrder == "type" ? "type_desc" : "type");
+			base.ViewBag.CitySortParm = (model.SortOrder == "city" ? "city_desc" : "city");
+			base.ViewBag.StateSortParm = (model.SortOrder == "state" ? "state_desc" : "state");
+			base.ViewBag.ZipCodeParm = (model.SortOrder == "zip" ? "zip_desc" : "zip");
+			base.ViewBag.StatusSortParm = (model.SortOrder == "status" ? "status_desc" : "status");
+			base.ViewBag.AddressSortParm = (model.SortOrder == "address" ? "address_desc" : "address");
+			base.ViewBag.AssetIdSortParm = (model.SortOrder == "assetId" ? "assetId_desc" : "assetId");
+			base.ViewBag.CreatedSortParm = (model.SortOrder == "createdBy" ? "createdBy_desc" : "createdBy");
+			base.ViewBag.AssetNameSortParm = (model.SortOrder == "assetName" ? "assetName_desc" : "assetName");
+			base.ViewBag.UserType = userByUsername.UserType;
+			string str = model.SortOrder;
+
+			switch (str)
+			{
+				case "assetName_desc":
+					{
+						adminAssetQuickListModels = (
+							from a in adminAssetQuickListModels
+							orderby a.AssetName descending
+							select a).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "assetName":
+					{
+						adminAssetQuickListModels = (
+							from a in adminAssetQuickListModels
+							orderby a.AssetName
+							select a).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "createdBy_desc":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.CreatedBy descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "createdBy":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.CreatedBy
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "type_desc":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.Type descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "type":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.Type
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "show_desc":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.Show descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "show":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.Show
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "city_desc":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.City descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "city":
+					{
+						adminAssetQuickListModels = (
+							from w in adminAssetQuickListModels
+							orderby w.City
+							select w).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "state_desc":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.State descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "state":
+					{
+						adminAssetQuickListModels = (
+							from w in adminAssetQuickListModels
+							orderby w.State
+							select w).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "address_desc":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.AddressLine1 descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "address":
+					{
+						adminAssetQuickListModels = (
+							from w in adminAssetQuickListModels
+							orderby w.AddressLine1
+							select w).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "assetId_desc":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.AssetNumber descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "assetId":
+					{
+						adminAssetQuickListModels = (
+							from w in adminAssetQuickListModels
+							orderby w.AssetNumber
+							select w).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "status_desc":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.Status descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "status":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.Status
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				case "zip_desc":
+					{
+						adminAssetQuickListModels = (
+							from s in adminAssetQuickListModels
+							orderby s.Zip descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
+				default:
+					{
+						adminAssetQuickListModels = (str == "zip" ? (
+							from w in adminAssetQuickListModels
+							orderby w.Zip
+							select w).ToList<AdminAssetQuickListModel>() : (
+							from s in adminAssetQuickListModels
+							orderby s.AssetNumber
+							select s).ToList<AdminAssetQuickListModel>());
+						break;
+					}
+			}
+
+			int num = 0;
+			TempDataDictionary tempData = base.TempData;
+			int? rowCount = model.RowCount;
+			if (rowCount.HasValue)
+			{
+				rowCount = model.RowCount;
+				value = rowCount.Value;
+			}
+			else
+			{
+				value = 50;
+			}
+
+			num = value;
+			tempData["RowCount"] = value;
+			base.TempData.Keep("RowCount");
+			rowCount = model.Page;
+			if (rowCount.GetValueOrDefault(0) > 0)
+			{
+				page = model.Page;
+			}
+			rowCount = page;
+			int num1 = (rowCount.HasValue ? rowCount.GetValueOrDefault() : 1);
+			model.Assets = adminAssetQuickListModels.ToPagedList<AdminAssetQuickListModel>(num1, num);
+			return base.View(model);
+		}
+
+		public ActionResult ActivateAsset(string id)
+		{
+			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
+			this._asset.ActivateAsset(id);
+			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully Activated.");
+			if (userByUsername.UserType != UserType.CREBroker && userByUsername.UserType != UserType.CRELender && userByUsername.UserType != UserType.Investor)
+			{
+				return base.RedirectToAction("ManageAssets", "Admin");
+			}
+			return base.RedirectToAction("SellerManageAssets", "Investors");
+		}
+
+		public ActionResult DeActivateAsset(string id)
+		{
+			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
+			this._asset.DeActivateAsset(id);
+			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully DeActivated.");
+			if (userByUsername.UserType != UserType.CREBroker && userByUsername.UserType != UserType.CRELender && userByUsername.UserType != UserType.Investor)
+			{
+				return base.RedirectToAction("ManageAssets", "Admin");
+			}
+			return base.RedirectToAction("SellerManageAssets", "Investors");
+		}
+
+		public ActionResult PublishAsset(Guid id)
+		{
+			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
+			this._asset.PublishAsset(id);
+			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully published.");
+			if (userByUsername.UserType != UserType.CREBroker && userByUsername.UserType != UserType.CRELender && userByUsername.UserType != UserType.Investor)
+			{
+				return base.RedirectToAction("ManageAssets", "Admin");
+			}
+			return base.RedirectToAction("SellerManageAssets", "Investors");
+		}
+
+		[Authorize]
+		public ActionResult UnPublishAsset(Guid id)
+		{
+			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
+			this._asset.UnPublishAsset(id);
+			this._asset.UnlockAsset(id);
+			if (userByUsername.UserType == UserType.CorpAdmin || userByUsername.UserType == UserType.ICAdmin)
+			{
+				base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully withdrawn.");
+			}
+			else
+			{
+				base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully deactivated.");
+			}
+			if (userByUsername.UserType != UserType.CREBroker && userByUsername.UserType != UserType.CRELender && userByUsername.UserType != UserType.Investor)
+			{
+				return base.RedirectToAction("ManageAssets", "Admin");
+			}
+			return base.RedirectToAction("SellerManageAssets", "Investors");
+		}
+
+		public ActionResult CheckHCDate(DateTime date, Guid assetId)
+		{
+			JsonResult jsonResult;
+			try
+			{
+				var result = this._asset.CheckHCDate(date, assetId);
+				jsonResult = new JsonResult() { Data = new { Status = result } };
+			}
+			catch (Exception exception1)
+			{
+				Exception exception = exception1;
+				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, exception.Message);
+				jsonResult = new JsonResult() { Data = new { Status = "false" } };
+			}
+
+
+			return jsonResult;
+
+		}
+
+		#endregion
+
+		#region ManageHC
+
+		[Authorize]
+		public ActionResult ManageHoldingCompanies(AdminHoldingCompanySearchResultsModel model, int? page)
+		{
+			int value;
+			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
+			if (!base.ValidateAdminUser(userByUsername))
+			{
+				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
+				return base.RedirectToAction("Index", "Home");
+			}
+			base.ViewBag.UserType = userByUsername.UserType;
+
+			this._user.RemoveUserAssetLocks(base.User.Identity.Name);
+
+			
+
+			List<HoldingCompanyList> HCQuickListModels = new List<HoldingCompanyList>();
+
+			ManageHoldingCompanyModel manageHCModel = new ManageHoldingCompanyModel()
+			{
+				HCName = model.HCName,
+				ISRA = model.ISRA,
+				HCEmail = model.HCEmail,
+				HCFirstName = model.HCFirstName,
+				HCLastName = model.HCFirstName,
+				LinkedInurl = model.LinkedInurl,
+				Facebookurl = model.Facebookurl,
+				Instagramurl = model.Instagramurl,
+				Twitterurl = model.Twitterurl,
+
+				AssetNumber = model.AssetNumber,
+				AssetName = model.AssetName,
+				AddressLine1 = model.AddressLine1,
+				City = model.City,
+				State = model.State,
+				ZipCode = model.ZipCode,
+				ApnNumber = model.ApnNumber,
+				IsPaper = model.IsPaper,
+				County = model.County,
+				ListAgentName = model.ListAgentName
+			};
+
+			//HCQuickListModels = this._user.GetHoldingCompanies(manageHCModel);
+			HCQuickListModels = this._user.GetHoldingCompany(manageHCModel);
+
+			int num = 0;
+			TempDataDictionary tempData = base.TempData;
+			int? rowCount = model.RowCount;
+			if (rowCount.HasValue)
+			{
+				rowCount = model.RowCount;
+				value = rowCount.Value;
+			}
+			else
+			{
+				value = 50;
+			}
+
+			num = value;
+			tempData["RowCount"] = value;
+			base.TempData.Keep("RowCount");
+			rowCount = model.Page;
+			if (rowCount.GetValueOrDefault(0) > 0)
+			{
+				page = model.Page;
+			}
+			rowCount = page;
+			int num1 = (rowCount.HasValue ? rowCount.GetValueOrDefault() : 1);
+			model.HcList = HCQuickListModels.ToPagedList<HoldingCompanyList>(num1, num);			
+			
+			return base.View(model);
+
+		}
+
+		[Authorize]
+		[HttpGet]
+		public ViewResult UpdateHoldingCompany(string id)
+		{
+			var model = _user.GetHoldingCompany(Guid.Parse(id));
+			model.Countries = GetAllCountries();
+			model.OpertingCompanyList = _user.GetOperatingCompanies(new OperatingCompanySearchModel()).OrderBy(x => x.CompanyName)
+				.Select(a => new SelectListItem
+			{
+				Text = a.CompanyName,
+				Value = Convert.ToString(a.OperatingCompanyId)
+			}).ToList();
+			return base.View(model);
+		}
+
+		[HttpPost]
+		public ActionResult UpdateHoldingCompany(HoldingCompanyViewModel model)
+		{
+			try
+			{
+				if (ModelState.IsValid)
+				{
+					var result = this._user.UpdateHoldingCompany(model);
+					// Allowing a success to be sent even if !result.Success due to the holding company successfully updating(most likely)
+					if (!result.Success) base.TempData["message"] = new MessageViewModel(MessageTypes.Success, result.Message);
+					else base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Holding company successfully updated.");
+				}
+				else
+				{
+					model.Countries = GetAllCountries();
+					model.Countries = GetAllCountries();
+					return View(model);
+				}
+			}
+			catch (Exception exception1)
+			{
+				Exception exception = exception1;
+				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, exception.Message);
+			}
+			return base.RedirectToAction("ManageHoldingCompanies");
+		}
+
+
+		public ActionResult GetHoldingCompanybyId(Guid id)
+		{
+			var result = this._user.GetHoldingCompanybyId(id);
+			return this.PartialView("_HoldingComapnyDeatails", result);
+			
+		}
+		public ActionResult GetOpertingCompanybyId(Guid id)
+		{
+			var result = this._user.GetOpertingCompanybyId(id);
+			return this.PartialView("_OpertingComapnyDeatails", result);
+		}
+
+		public ActionResult GetAssetsbyHCId(string HcId)
+		{
+			var assetsList = this._asset.GetAssetsbyHCId(HcId);
+			return this.PartialView("_AssetViewPortfolio", assetsList);
+		}
+
+		public ActionResult GetAssetsbyOCId(string OcId)
+		{
+			var assetsList = this._asset.GetAssetsbyOCId(OcId);
+			return this.PartialView("_AssetViewPortfolio", assetsList);
+		}
+
+		#endregion
+
+		#region ManageOC
+
+		//[Authorize]
+		//public ActionResult ManageOperatingCompanies(OperatingCompanySearchResultsModel model)
+		//{
+		//	int value;
+		//	if (!base.ValidateAdminUser(this._user.GetUserByUsername(base.User.Identity.Name)))
+		//	{
+		//		base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
+		//		return base.RedirectToAction("Index", "Home");
+		//	}
+		//	OperatingCompanySearchModel searchModel = new OperatingCompanySearchModel()
+		//	{
+		//		AddressLine1 = model.AddressLine1,
+		//		City = model.City,
+		//		Email = model.Email,
+		//		FirstName = model.FirstName,
+		//		LastName = model.LastName,
+		//		State = model.State,
+		//		Zip = model.Zip,
+		//		ShowActiveOnly = model.ShowActiveOnly,
+		//		CompanyName = model.CompanyName
+		//	};
+		//	((dynamic)base.ViewBag).CurrentSort = model.SortOrder;
+		//	base.ViewBag.CitySortParm = (model.SortOrder == "city" ? "city_desc" : "city");
+		//	base.ViewBag.StateSortParm = (model.SortOrder == "state" ? "state_desc" : "state");
+		//	base.ViewBag.CountrySortParm = (model.SortOrder == "country" ? "country_desc" : "country");
+		//	base.ViewBag.CompanyNameSortParm = (model.SortOrder == "company" ? "company_desc" : "company");
+		//	base.ViewBag.AddressSortParm = (model.SortOrder == "address" ? "address_desc" : "address");
+		//	base.ViewBag.EmailSortParm = (model.SortOrder == "email" ? "email_desc" : "email");
+		//	base.ViewBag.FirstNameSortParm = (model.SortOrder == "first" ? "first_desc" : "first");
+		//	base.ViewBag.LastNameSortParm = (model.SortOrder == "last" ? "last_desc" : "last");
+		//	base.ViewBag.IsActiveParm = (model.SortOrder == "active" ? "active_desc" : "active");
+		//	List<OperatingCompanyViewModel> list = this._user.GetOperatingCompanies(searchModel).ToList<OperatingCompanyViewModel>();
+		//	string sortOrder = model.SortOrder;
+		//	switch (sortOrder)
+		//	{
+		//		case "active_desc":
+		//			{
+		//				list = (
+		//					from s in list
+		//					orderby s.IsActive descending
+		//					select s).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "active":
+		//			{
+		//				list = (
+		//					from w in list
+		//					orderby w.IsActive
+		//					select w).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "city_desc":
+		//			{
+		//				list = (
+		//					from s in list
+		//					orderby s.City descending
+		//					select s).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "city":
+		//			{
+		//				list = (
+		//					from w in list
+		//					orderby w.City
+		//					select w).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "country":
+		//			{
+		//				list = (
+		//					from w in list
+		//					orderby w.Country
+		//					select w).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "country_desc":
+		//			{
+		//				list = (
+		//					from w in list
+		//					orderby w.Country descending
+		//					select w).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "state_desc":
+		//			{
+		//				list = (
+		//					from s in list
+		//					orderby s.State descending
+		//					select s).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "state":
+		//			{
+		//				list = (
+		//					from w in list
+		//					orderby w.State
+		//					select w).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "address_desc":
+		//			{
+		//				list = (
+		//					from s in list
+		//					orderby s.AddressLine1 descending
+		//					select s).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "address":
+		//			{
+		//				list = (
+		//					from w in list
+		//					orderby w.AddressLine1
+		//					select w).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "company_desc":
+		//			{
+		//				list = (
+		//					from s in list
+		//					orderby s.CompanyName descending
+		//					select s).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "company":
+		//			{
+		//				list = (
+		//					from w in list
+		//					orderby w.CompanyName
+		//					select w).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "email_desc":
+		//			{
+		//				list = (
+		//					from s in list
+		//					orderby s.Email descending
+		//					select s).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "email":
+		//			{
+		//				list = (
+		//					from w in list
+		//					orderby w.Email
+		//					select w).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "first_desc":
+		//			{
+		//				list = (
+		//					from s in list
+		//					orderby s.FirstName descending
+		//					select s).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "first":
+		//			{
+		//				list = (
+		//					from w in list
+		//					orderby w.FirstName
+		//					select w).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		case "last_desc":
+		//			{
+		//				list = (
+		//					from s in list
+		//					orderby s.LastName descending
+		//					select s).ToList<OperatingCompanyViewModel>();
+		//				break;
+		//			}
+		//		default:
+		//			{
+		//				list = (sortOrder == "last" ? (
+		//					from w in list
+		//					orderby w.LastName
+		//					select w).ToList<OperatingCompanyViewModel>() : (
+		//					from x in list
+		//					orderby x.FirstName
+		//					select x).ToList<OperatingCompanyViewModel>());
+		//				break;
+		//			}
+		//	}
+		//	int num = 0;
+		//	TempDataDictionary tempData = base.TempData;
+		//	int? rowCount = model.RowCount;
+		//	if (rowCount.HasValue)
+		//	{
+		//		rowCount = model.RowCount;
+		//		value = rowCount.Value;
+		//	}
+		//	else
+		//	{
+		//		value = 50;
+		//	}
+		//	num = value;
+		//	tempData["RowCount"] = value;
+		//	base.TempData.Keep("RowCount");
+		//	rowCount = model.Page;
+		//	model.OperatingCompanies = list.ToPagedList<OperatingCompanyViewModel>((rowCount.HasValue ? rowCount.GetValueOrDefault() : 1), num);
+		//	return base.View(model);
+		//}
+
+
+		[Authorize]
+		public ActionResult ManageOperatingCompanies(AdminOperatingCompanySearchResultsModel model, int? page)
+		{
+			int value;
+			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
+			if (!base.ValidateAdminUser(userByUsername))
+			{
+				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
+				return base.RedirectToAction("Index", "Home");
+			}
+			base.ViewBag.UserType = userByUsername.UserType;
+
+			this._user.RemoveUserAssetLocks(base.User.Identity.Name);
+
+
+
+			List<OperatingCompanyList> OCQuickListModels = new List<OperatingCompanyList>();
+
+			ManageOperatingCompanyModel manageOCModel = new ManageOperatingCompanyModel()
+			{
+				OCName = model.OCName,
+				OCEmail = model.OCEmail,
+				OCFirstName = model.OCFirstName,
+				OCLastName = model.OCFirstName,
+				LinkedInurl = model.LinkedInurl,
+				Facebookurl = model.Facebookurl,
+				Instagramurl = model.Instagramurl,
+				Twitterurl = model.Twitterurl,
+
+				AssetNumber = model.AssetNumber,
+				AssetName = model.AssetName,
+				AddressLine1 = model.AddressLine1,
+				City = model.City,
+				State = model.State,
+				ZipCode = model.ZipCode,
+				ApnNumber = model.ApnNumber,
+				IsPaper = model.IsPaper,
+				County = model.County,
+				ListAgentName = model.ListAgentName
+			};
+
+			//HCQuickListModels = this._user.GetHoldingCompanies(manageHCModel);
+			OCQuickListModels = this._user.GetOperataingCompany(manageOCModel);
+
+			int num = 0;
+			TempDataDictionary tempData = base.TempData;
+			int? rowCount = model.RowCount;
+			if (rowCount.HasValue)
+			{
+				rowCount = model.RowCount;
+				value = rowCount.Value;
+			}
+			else
+			{
+				value = 50;
+			}
+
+			num = value;
+			tempData["RowCount"] = value;
+			base.TempData.Keep("RowCount");
+			rowCount = model.Page;
+			if (rowCount.GetValueOrDefault(0) > 0)
+			{
+				page = model.Page;
+			}
+			rowCount = page;
+			int num1 = (rowCount.HasValue ? rowCount.GetValueOrDefault() : 1);
+			model.OcList = OCQuickListModels.ToPagedList<OperatingCompanyList>(num1, num);
+
+			return base.View(model);
+
+		}
+
+		[Authorize]
+		[HttpGet]
+		public ViewResult UpdateOperatingCompany(string id)
+		{
+			var model = _user.GetOPeratingCompany(Guid.Parse(id));
+			model.Countries = GetAllCountries();
+			return base.View(model);
+		}
+
+		[HttpPost]
+		public ActionResult UpdateOperatingCompany(OperatingCompanyViewModel model)
+		{
+			try
+			{				
+				if (ModelState.IsValid)
+				{
+					this._user.UpdateOperatingCompany(model);
+					base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Operating Company successfully updated.");
+				}
+				else
+				{
+					return View(model);
+				}
+			}
+			catch (Exception exception1)
+			{
+				Exception exception = exception1;
+				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, exception.Message);
+			}
+			return base.View(model);
+		}
+
+		#endregion
 
 	}
 	public class JqueryDatatableParam

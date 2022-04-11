@@ -297,4 +297,129 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 	}
+	public class ChainOfTitleQuickListModel
+	{
+		public Guid AssetId
+		{
+			get;
+			set;
+		}
+		public string AssetName
+		{
+			get;
+			set;
+		}
+		public int AssetNumber
+		{
+			get;
+			set;
+		}
+		public string City
+		{
+			get;
+			set;
+		}
+		public string State
+		{
+			get;
+			set;
+		}
+
+		public string Type
+		{
+			get;
+			set;
+		}
+		public int SquareFeet
+		{
+			get;
+			set;
+		}
+		public int NumberOfUnits
+		{
+			get;
+			set;
+		}
+		public string County
+		{
+			get;
+			set;
+		}
+		public string Show
+		{
+			get;
+			set;
+		}
+
+		public DateTime? Date
+		{
+			get;
+			set;
+		}
+		public double Pricing
+		{
+			get;
+			set;
+		}
+		public string Terms
+		{
+			get;
+			set;
+		}
+		public double CAP
+		{
+			get;
+			set;
+		}
+
+		public Guid? HCID
+		{
+			get;
+			set;
+		}
+		public Guid? OCID
+		{
+			get;
+			set;
+		}
+
+		public string HCName
+		{
+			get;
+			set;
+		}
+		public string OCName
+		{
+			get;
+			set;
+		}
+
+		public bool Portfolio
+		{
+			get;
+			set;
+		}
+
+		public UserType UserType
+		{
+			get;
+			set;
+		}
+		public ListingStatus ListingStatus
+		{
+			get;
+			set;
+		}
+		public bool IsActive
+		{
+			get;
+			set;
+		}
+		public string BusDriver
+		{
+			get;
+			set;
+		}
+
+	}
 }

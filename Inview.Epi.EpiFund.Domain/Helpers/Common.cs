@@ -13,6 +13,7 @@ namespace Inview.Epi.EpiFund.Domain.Helpers
         public static List<SelectListItem> GetSelectListItemsOfStates(bool IncludeAll)
         {
             var list = new List<SelectListItem>();
+
             if (IncludeAll)
             {
                 list.Add(new SelectListItem()

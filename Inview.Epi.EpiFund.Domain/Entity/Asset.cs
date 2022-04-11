@@ -1502,5 +1502,6 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			this.ListingStatus = Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Pending;
 			this.IsSubmitted = false;
 		}
+
 	}
 }

@@ -123,6 +123,7 @@
     <Compile Include="Entity\AssetCommission.cs" />
     <Compile Include="Entity\AssetDeferredMaintenanceItem.cs" />
     <Compile Include="Entity\AssetDocument.cs" />
+    <Compile Include="Entity\AssetOC.cs" />
     <Compile Include="Entity\AssetHCOwnership.cs" />
     <Compile Include="Entity\AssetImage.cs" />
     <Compile Include="Entity\AssetIncome.cs" />
@@ -300,6 +301,7 @@
     <Compile Include="ViewModel\IPASellerTemplateModel.cs" />
     <Compile Include="ViewModel\IPATemplateViewModels.cs" />
     <Compile Include="ViewModel\JVMAUserMDAViewModels.cs" />
+    <Compile Include="ViewModel\ManageHoldingCompanyModel.cs" />
     <Compile Include="ViewModel\ManagePortfoliosModel.cs" />
     <Compile Include="ViewModel\MHPadType.cs" />
     <Compile Include="ViewModel\OperatingCompanyViewModel.cs" />
