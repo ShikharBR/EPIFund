@@ -4948,11 +4948,12 @@
                     <div class="col-sm-6">
                         <div class="input-group">
                             @Html.LabelFor(s => s.CurrentPrincipalBalance, new { @class = "control-label" })
+                            <span style="color: red;">*</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="input-group">
-                            @Html.TextBoxFor(s => s.CurrentPrincipalBalance, new { @class = "control-label formatNumber" })
+                            @Html.TextBoxFor(s => s.CurrentPrincipalBalance, new { @class = "control-label formatNumber"})
                         </div>
                     </div>
                 </div>
@@ -4960,6 +4961,7 @@
                     <div class="col-sm-6">
                         <div class="input-group">
                             @Html.LabelFor(model => model.SelectedAmortSchedule)
+                            <span style="color: red;">*</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -4972,6 +4974,7 @@
                     <div class="col-sm-6">
                         <div class="input-group">
                             @Html.LabelFor(s => s.MonthlyPayment, new { @class = "control-label" })
+                            <span style="color: red;">*</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -4983,7 +4986,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="input-group">
-                            @Html.LabelFor(s => s.PaymentIncludes, new { @class = "control-label" })
+                            @Html.LabelFor(s => s.PaymentIncludes, new { @class = "control-label" }) <span style="color: red;">*</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -4995,7 +4998,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="input-group">
-                            @Html.LabelFor(s => s.InterestRate, new { @class = "control-label" })
+                            @Html.LabelFor(s => s.InterestRate, new { @class = "control-label" }) <span style="color: red;">*</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -5008,7 +5011,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="input-group">
-                            @Html.LabelFor(s => s.IsMortgageAnARM, new { @class = "control-label" })
+                            @Html.LabelFor(s => s.IsMortgageAnARM, new { @class = "control-label" }) <span style="color: red;">*</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -5025,7 +5028,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="input-group">
-                            @Html.LabelFor(s => s.MortgageAdjustIfARM, new { @class = "control-label" })
+                            @Html.LabelFor(s => s.MortgageAdjustIfARM, new { @class = "control-label" }) <span style="color: red;">*</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -6174,7 +6177,7 @@
                 {
                     <input type="submit" class="btn btn-primary" onclick="SaveAsset('User')" name="action:Submit" value="Save & Submit">
                 }
-                else
+                else    
                 {
                     <input type="submit" class="btn btn-primary" onclick="SaveAsset('User')" name="action:Submit" value="Save & Submit to Corp Admin">
                 }
@@ -6192,7 +6195,60 @@
 <input type="hidden" value="@(Model.GetType())" name="TypeOfAsset" />
 
 <script>
+    var isValidForm = true;
+    var valErrorMSg = '';
+    function formValidation() {
+    
+        let input = document.getElementsByTagName('input');
+        isValidForm = true;
+        $(input).css("borderColor", "#B1A795");
 
+        if ($('#CurrentPrincipalBalance').val() === '') {
+            $('#CurrentPrincipalBalance').css("borderColor", "red");
+            valErrorMSg += $('#CurrentPrincipalBalance').attr('data-val-number');
+            isValidForm = false;
+        }
+
+        if ($('#SelectedAmortSchedule option:selected').val() === '') {
+            $('#SelectedAmortSchedule').css('borderColor', 'red');
+            valErrorMSg += $('#SelectedAmortSchedule').attr('data-val-number');
+            isValidForm = false;
+        }
+        else {
+            ('#SelectedAmortSchedule').css('borderColor', '#B1A795')
+        }           
+
+        if ($('#MonthlyPayment').val() === '') {
+            $('#MonthlyPayment').css("borderColor", "red");
+            valErrorMSg += $('#MonthlyPayment').attr('data-val-number');
+            isValidForm = false;
+        }
+        if ($('#PaymentIncludes option:selected').val() === '') {
+            $('#PaymentIncludes').css("borderColor", "red");
+            valErrorMSg += $('#PaymentIncludes').attr('data-val-number');
+
+            isValidForm = false;
+        }
+        else {
+            ($('#PaymentIncludes').css("borderColor", "#B1A795"))
+        } 
+        if ($('#InterestRate').val() === '') {
+            $('#InterestRate').css("borderColor", "red");
+            valErrorMSg += $('#InterestRate').attr('data-val-number');
+            isValidForm = false;
+        }
+        if ($('#IsMortgageAnARM option :cheked').val() === 'false') {
+            $('#IsMortgageAnARM').css("borderColor", "red");
+            valErrorMSg += $('#IsMortgageAnARM').attr('data-val-number');
+            isValidForm = false;
+        }
+        if ($('#MortgageAdjustIfARM').val() === '') {
+            $('#MortgageAdjustIfARM').css("borderColor", "red");
+            valErrorMSg += $('#MortgageAdjustIfARM').attr('data-val-number');
+            isValidForm = false;
+        }
+        return isValidForm;
+    }
     function ShowHCpopup() {
 
         clearOwnerHolding();
@@ -7059,15 +7115,19 @@
     function goBackSeller() {
         window.location.href = "/Investors/SellerManageAssets";
     }
-
+    
     function nextTab(button) {
-        $('.nav li.active').removeClass('active');
-        var currentId = button.closest('.tab-pane');
-        var nextId = button.closest('.tab-pane').next('.tab-pane');
-        currentId.removeClass('active');
-        nextId.addClass('active');
-        var tabLink = '#' + nextId.attr('id');
-        $("[href = '" + tabLink + "']").closest('li').addClass('active');
+        if (formValidation()) {
+            $('.nav li.active').removeClass('active');
+            var currentId = button.closest('.tab-pane');
+            var nextId = button.closest('.tab-pane').next('.tab-pane');
+            currentId.removeClass('active');
+            nextId.addClass('active');
+            var tabLink = '#' + nextId.attr('id');
+
+            $("[href = '" + tabLink + "']").closest('li').addClass('active');
+        }
+
     }
 
     function backTab(button) {
