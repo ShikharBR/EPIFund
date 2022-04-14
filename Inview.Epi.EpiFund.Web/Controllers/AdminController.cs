@@ -7911,7 +7911,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                     Country = model.OwnerOperatingCompanyCountry,
                     CellPhoneNumber = model.OwnerOperatingCompanyCellPhone,
                     WorkNumber = model.OwnerOperatingCompanyWorkPhone,
-                    FaxNumber = model.OwnerOperatingCompanyFax,
+                    FaxNumber = model.OwnerOperatingCompanyFax, 
                     IsActive = true,
                     IsASeller = false,
                     DoesPIHaveSellerPrivilege = false
