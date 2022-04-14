@@ -1,0 +1,204 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.OperatingCompanyList>
+@{
+    bool showCreatedBy = false;   
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var checkboxes = $("input[type='checkbox']");
+
+        checkboxes.click(function () {
+            if (checkboxes.is(":checked")) {
+                $("#notifyRegistrant").removeClass("hide", !checkboxes.is(":checked"));
+            } else {
+                $("#notifyRegistrant").addClass("hide", !checkboxes.is(":checked"));
+            }
+        });
+    });
+</script>
+<p>Select checkbox(es) and click "Hold and Notify Registrant" to hold asset for specific registrant (per asset search criteria). Note: Assets without a checkbox is already on hold for another registrant and is waiting action before being published to general database. If you would like to circumvent this process, you may click on the globe icon to publish to the general database.</p>
+
+@Html.PagedListPager(Model, page => Url.Action("ManageOperatingCompanies",
+    new { page, currentFilter = ViewBag.CurrentFilter }))
+
+<div class="panel panel-default" style="border: 1px solid #B1A795;">
+    <div class="panel-heading">
+        <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
+        @if ((Inview.Epi.EpiFund.Domain.Enum.UserType)ViewBag.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin2 ||
+            (Inview.Epi.EpiFund.Domain.Enum.UserType)ViewBag.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+        {
+            <a style="float: right; color: white;" title="export master db spreadsheet" href="@Url.Action("DownloadAssetList", "Admin")">
+                <span class="glyphicon glyphicon-export"></span>
+            </a>
+        }
+    </div>
+    @if (Model.Count > 0)
+    {
+        <div class="overflow short-xs">
+            <table class="table table-striped" id="tbAssets" cellpadding="1" cellspacing="1"
+                   style="font-size: 10px !important; padding: 1px; vertical-align: middle;">
+                <thead>
+                    <tr>
+                        <th><b>Asset<br />ID#</b></th>
+                        <th><b>City/<br />State</b></th>
+                        <th><b>Asset<br />Type</b></th>
+                        <th><b>#Units<br />Sq.Ft</b></th>
+                        <th><b>Asset<br />Name</b></th>
+
+                        <th><b>Operating Co</b></th>
+                        <th><b>OC #<br />Assets</b></th>
+
+                        <th><b>Holding Co</b></th>
+
+                        <th><b>Title<br />Chain</b></th>
+
+                        <th><span class="glyphicon glyphicon-book" title="Portfolio"></span></th>
+                        <th><span class="glyphicon glyphicon-user" title="Users"></span></th>
+                        <th><span class="glyphicon glyphicon-retweet" title="Availability Status"></span></th>
+                        <th title="Who’s Driving the Bus"><img style="height:16px;" src="~/Content/images/bus.png" /></th>
+
+                        <th>Manage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < @Model.Count; i++)
+                    {
+
+                    <tr id="@Model[i].AssetId">
+                        <td>
+                            <a href="@Url.Action("ViewAsset", "DataPortal", new { id = @Model[i].AssetId, fromManageAssets = true })">
+                                @Model[i].AssetNumber
+                            </a>
+                        </td>
+                        <td style="word-wrap: break-word;">
+                            <div style="margin-bottom: -3px !important;" class="AssetName" title="@Model[i].City"> @Model[i].City</div><br />@Model[i].State
+                        </td>
+                        <td>
+                            @Model[i].Type
+                        </td>
+                        <td>
+                            <span class="padNumber">@(Model[i].SquareFeet > 0 ? Model[i].SquareFeet.ToString() : Model[i].NumberOfUnits.ToString())</span>
+                        </td>
+                        <td style="word-wrap: break-word;">
+                            <span class="AssetName" title="@Model[i].AssetName">@Model[i].AssetName</span>
+                        </td>
+
+                        <td>
+                            <a href="javascript:void(0)" onclick="OperatingCoDetail('@Model[i].OperatingCompanyId')">
+                                @Model[i].OperatingCompanyName
+                            </a>
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)" onclick="OperatingCoRelatedAsset('@Model[i].OperatingCompanyId')">
+                                @Model[i].AssetCount
+                            </a>
+                        </td>
+
+                        <td style="word-wrap: break-word;">
+                            <a href="javascript:void(0)" onclick="HoldingCoDetail('@Model[i].HoldingCompanyId')">
+                                @Model[i].HoldingCompanyName
+                            </a>
+                        </td>
+
+                        <td>
+                            <span style="cursor:pointer" title="Chain Of Title" onclick="ViewChainOfTitle('@Model[i].AssetId.ToString()')">
+                                <img title="Chain of Title" style="width:12px;" src="~/Content/images/tringle.png" />
+                            </span>
+                        </td>
+                        <td>
+                            @if (Model[i].PortfolioCount > 0)
+                            {
+                                <span class="glyphicon glyphicon-book" title="Portfolio" style="cursor:pointer" onclick="Viewportfolio('@Model[i].AssetId.ToString()',this)"></span>
+                            }
+                            else
+                            {
+                                @Html.Raw("--")
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var uType = "";
+                                if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin)
+                                {
+                                    uType = "ICA";
+                                }
+                                else if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+                                {
+                                    uType = "CA";
+                                }
+                                else if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.Investor)
+                                {
+                                    uType = "PI";
+                                }
+                                else if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ListingAgent)
+                                {
+                                    uType = "LA";
+                                }
+                                else
+                                {
+                                    uType = "--";
+                                }
+                                @Html.Raw(uType)
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var lstStatus = "";
+                                if (Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Available)
+                                {
+                                    lstStatus = "A";
+                                }
+                                else if (Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Pending)
+                                {
+                                    lstStatus = "P";
+                                }
+                                else if (Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldNotClosed
+                                       || Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldAndClosed
+                                       || Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Withdrawn)
+                                {
+                                    lstStatus = "U";
+                                }
+                                @Html.Raw(lstStatus)
+                            }
+                        </td>
+                        <td title="Who’s Driving the Bus">
+
+
+
+                            @if (!Model[i].Show)
+                            {
+                                <span class="red">SUS</span>
+                            }
+                            else
+                            {
+                                <span>CA</span>
+                            }
+                        </td>
+                        <td>
+                            [
+                            <a href="@Url.Action("UpdateOperatingCompany","Admin", new { id = @Model[i].OperatingCompanyId})" title="Edit">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            @if (Model[i].Show)
+                            {
+                                <span class="fa fa-lock" style="font-size: 13px; margin-top: 1px;"></span>
+                            }
+                            else
+                            {
+                                <span class="glyphicon glyphicon-globe"></span>
+                            }]
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ManageOperatingCompanies",
+    new { page, currentFilter = ViewBag.CurrentFilter }))

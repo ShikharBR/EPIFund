@@ -421,5 +421,11 @@ namespace Inview.Epi.EpiFund.Data
             get;
             set;
         }
+        public virtual IDbSet<AssetOC> AssetOC
+        {
+            get;
+            set;
+        }
+
     }
 }

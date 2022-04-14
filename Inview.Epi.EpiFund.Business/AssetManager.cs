@@ -1766,7 +1766,7 @@ namespace Inview.Epi.EpiFund.Business
                         context.Entry(nar.NARMember).State = EntityState.Modified;
                     }
                     asset.IsSubmitted = model.IsSubmitted;
-                    var existingAsset = context.Assets.FirstOrDefault(a => a.AssetId == asset.AssetId && a.IsActive);
+                    var existingAsset = context.Assets.FirstOrDefault(a => a.AssetId == asset.AssetId);
                     existingAsset.IsSubmitted = model.IsSubmitted;
                     var images = context.AssetImages.Where(w => w.AssetId == asset.AssetId).ToList();
                     foreach (var image in images)
@@ -2372,7 +2372,32 @@ namespace Inview.Epi.EpiFund.Business
                     apnAssetList.Add(temp);
                 }
                 assetList = apnAssetList;
+            }
 
+            if (!string.IsNullOrEmpty(model.County))
+            {                
+                assetList = (from a in assetList
+                             where a.County != null && a.County.ToLower().Contains(model.County.ToLower())
+                             select a).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.ListAgentCompanyName))
+            {
+                var NARMembersList = context.NarMembers.
+                                     Where(a => a.CompanyName.ToLower().Contains(model.ListAgentCompanyName.ToLower())).
+                                     Select(a=>a.NarMemberId).ToList();
+
+                var AssetNARMembersList = context.AssetNARMembers.Where(a => NARMembersList.Contains(a.NarMemberId)).Select(a => a.AssetId).ToList();
+                assetList = assetList.Where(a => AssetNARMembersList.Contains(a.AssetId)).ToList();
+            }
+            if (!string.IsNullOrEmpty(model.ListAgentName))
+            {
+                var NARMembersList = context.NarMembers.
+                                     Where(a => a.FirstName.ToLower().Contains(model.ListAgentName.ToLower()) 
+                                     || a.LastName.ToLower().Contains(model.ListAgentName.ToLower())).
+                                     Select(a => a.NarMemberId).ToList();
+
+                var AssetNARMembersList = context.AssetNARMembers.Where(a => NARMembersList.Contains(a.NarMemberId)).Select(a => a.AssetId).ToList();
+                assetList = assetList.Where(a => AssetNARMembersList.Contains(a.AssetId)).ToList();
             }
 
             /* */
@@ -2463,7 +2488,9 @@ namespace Inview.Epi.EpiFund.Business
                             ProformaAnnualIncome = a.ProformaAnnualIncome,
                             ProformaNOI = proformaNOI,
                             CashInvestmentApy = a.CashInvestmentApy,
+                            
                             capRate = ((pretax / a.CurrentBpo) * 100),
+
                             AskingPrice = a.AskingPrice,
                             CurrentBpo = a.CurrentBpo,
                             Portfolio = portfolioAssets.Where(x => x.AssetId == a.AssetId).Any() ? true : false,
@@ -2508,6 +2535,8 @@ namespace Inview.Epi.EpiFund.Business
                 {
                     PortfolioQuickListModel pfModel = new PortfolioQuickListModel();
                     var portfolio = context.Portfolios.Where(x => x.PortfolioId == item.PortfolioId).FirstOrDefault();
+
+                    pfModel.NumberOfAssets = context.PortfolioAssets.Where(x => x.PortfolioId == portfolio.PortfolioId).ToList().Count();
 
                     pfModel.PortfolioId = portfolio.PortfolioId;
                     pfModel.PortfolioName = portfolio.PortfolioName;
@@ -6232,7 +6261,6 @@ namespace Inview.Epi.EpiFund.Business
             return context.AssetUserMDAs.Any(w => w.UserId == userId);
         }
 
-
         public int GetPublishedCommercialAssetCount()
         {
             var context = _factory.Create();
@@ -7055,7 +7083,6 @@ namespace Inview.Epi.EpiFund.Business
             return portfolioQuickListViewModels1;
         }
 
-
         public List<PortfolioQuickListViewModel> GetManageAssetQuickListPF(ManageAssetsModel model)
         {
             int totalUnits;
@@ -7490,7 +7517,6 @@ namespace Inview.Epi.EpiFund.Business
             return portfolioQuickListViewModels1;
         }
 
-
         public int GetPublishedAssetCount()
         {
             int num = this._factory.Create().Assets.Count<Asset>((Asset x) => x.IsSubmitted);
@@ -7628,13 +7654,232 @@ namespace Inview.Epi.EpiFund.Business
 
         public void DeActivateAsset(string assetId)
         {
+            //If an asset is deactived then automatically unpublished, and actived does not again published it needs one more click
+
             var context = _factory.Create();
             Guid asId = new Guid(assetId);
             var asset = context.Assets.SingleOrDefault(w => w.AssetId == asId);
             if (asset != null)
             {
+                asset.Show = false;                
                 asset.IsActive = false;
                 context.Save();
+
+                var assetLocks = context.AssetLocks.Where(x => x.AssetId == asId).ToList();
+                if (assetLocks.Count > 0)
+                {
+                    foreach (var assetLock in assetLocks)
+                    {
+                        context.AssetLocks.Remove(assetLock);
+                    }
+                    context.Save();
+                }
+            }
+        }
+
+        public List<AdminAssetQuickListModel> GetAssetsbyHCId(string HcId)
+        {
+            var list = new List<AdminAssetQuickListModel>();
+            var context = _factory.Create();
+
+            Guid hcId = new Guid(HcId);
+            var AssetsidsInPortfolio = context.AssetHCOwnership.Where(x => x.HoldingCompanyId == hcId).Select(a => a.AssetId).ToList();
+
+            var assets = context.Assets.Where(la => AssetsidsInPortfolio.Contains(la.AssetId));
+
+            var users = context.Users.ToList();
+            bool isSpecificType = false;
+
+            var assetList = assets.ToList();
+
+            assetList.ForEach(a =>
+            {
+
+                int units = 0;
+                int squareFeet = 0;
+                if (a.AssetType == AssetType.MultiFamily)
+                {
+                    var mf = a as MultiFamilyAsset;
+                    units = mf.TotalUnits;
+                }
+                else if (a.AssetType == AssetType.MHP)
+                {
+                    var mf = a as MultiFamilyAsset;
+                    units = mf.TotalUnits;
+                    units += a.NumberRentableSpace != null ? (int)a.NumberRentableSpace : 0;
+                    units += a.NumberNonRentableSpace != null ? (int)a.NumberNonRentableSpace : 0;
+                }
+                else
+                {
+                    var ca = a as CommercialAsset;
+                    squareFeet = ca.SquareFeet;
+                }
+
+                if (a != null)
+                {
+                    //-------
+                    var aoe = a.ProformaAnnualOperExpenses;
+                    var pagi = a.ProformaAnnualIncome;
+                    var pami = a.ProformaMiscIncome;
+                    var totalIncome = pagi + pami;
+                    var pvf = (a.ProformaVacancyFac / 100) * totalIncome;
+                    var proformaNOI = Math.Round((totalIncome - pvf) - aoe);
+                    var pretax = totalIncome - pvf - aoe;
+                    //-------
+
+                    list.Add(new AdminAssetQuickListModel()
+                    {
+                        AddressLine1 = a.PropertyAddress,
+                        AssetId = a.AssetId,
+                        AssetNumber = a.AssetNumber,
+                        City = a.City,
+                        Show = a.Show ? "Yes" : "No",
+                        State = a.State,
+                        Zip = a.Zip,
+                        Status = EnumHelper.GetEnumDescription(a.ListingStatus),
+                        Type = EnumHelper.GetEnumDescription(a.AssetType),
+                        //ControllingUserType = model.ControllingUserType,
+                        IsOnHold = a.HoldForUserId.HasValue,
+                        IsSampleAsset = a.IsSampleAsset,
+                        CreatedBy = context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault() != null
+                                  ? context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault().FullName + "~" +
+                                  context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault().Username : "",
+                        AssetName = a.ProjectName,
+                        SquareFeet = squareFeet,
+                        NumberOfUnits = units,
+                        isSpecificType = isSpecificType,
+                        CurrentVacancyFac = a.CurrentVacancyFac,
+                        LastReportedOccupancyDate = a.LastReportedOccupancyDate != null ? a.LastReportedOccupancyDate : a.OccupancyDate,
+                        ProformaAnnualIncome = a.ProformaAnnualIncome,
+                        ProformaNOI = proformaNOI,
+                        CashInvestmentApy = a.CashInvestmentApy,
+                        capRate = ((pretax / a.CurrentBpo) * 100),
+                        AskingPrice = a.AskingPrice,
+                        CurrentBpo = a.CurrentBpo,
+                        Portfolio = context.PortfolioAssets.Where(x => x.AssetId == a.AssetId).Any() ? true : false,
+
+                        /*Unknown 0,Yes 1,No 2	 */
+                        AssmFin = a.HasPositionMortgage == PositionMortgageType.Yes ? "Yes" : "No",
+                        UserType = context.Users.Where(us => us.UserId == a.ListedByUserId).FirstOrDefault().UserType,
+                        ListingStatus = a.ListingStatus,
+                        IsActive = a.IsActive,
+                        BusDriver = a.Show ? "CA" : "SUS"
+
+                    });
+
+                }
+            });
+            return list;
+
+        }
+
+        public List<AdminAssetQuickListModel> GetAssetsbyOCId(string OcId)
+        {
+            var list = new List<AdminAssetQuickListModel>();
+            var context = _factory.Create();
+
+            Guid ocId = new Guid(OcId);
+            var AssetsidsInPortfolio = context.AssetOC.Where(x => x.OperatingCompanyId == ocId).Select(a => a.AssetId).ToList();
+
+            var assets = context.Assets.Where(la => AssetsidsInPortfolio.Contains(la.AssetId));
+
+            var users = context.Users.ToList();
+            bool isSpecificType = false;
+
+            var assetList = assets.ToList();
+
+            assetList.ForEach(a =>
+            {
+
+                int units = 0;
+                int squareFeet = 0;
+                if (a.AssetType == AssetType.MultiFamily)
+                {
+                    var mf = a as MultiFamilyAsset;
+                    units = mf.TotalUnits;
+                }
+                else if (a.AssetType == AssetType.MHP)
+                {
+                    var mf = a as MultiFamilyAsset;
+                    units = mf.TotalUnits;
+                    units += a.NumberRentableSpace != null ? (int)a.NumberRentableSpace : 0;
+                    units += a.NumberNonRentableSpace != null ? (int)a.NumberNonRentableSpace : 0;
+                }
+                else
+                {
+                    var ca = a as CommercialAsset;
+                    squareFeet = ca.SquareFeet;
+                }
+
+                if (a != null)
+                {
+                    //-------
+                    var aoe = a.ProformaAnnualOperExpenses;
+                    var pagi = a.ProformaAnnualIncome;
+                    var pami = a.ProformaMiscIncome;
+                    var totalIncome = pagi + pami;
+                    var pvf = (a.ProformaVacancyFac / 100) * totalIncome;
+                    var proformaNOI = Math.Round((totalIncome - pvf) - aoe);
+                    var pretax = totalIncome - pvf - aoe;
+                    //-------
+
+                    list.Add(new AdminAssetQuickListModel()
+                    {
+                        AddressLine1 = a.PropertyAddress,
+                        AssetId = a.AssetId,
+                        AssetNumber = a.AssetNumber,
+                        City = a.City,
+                        Show = a.Show ? "Yes" : "No",
+                        State = a.State,
+                        Zip = a.Zip,
+                        Status = EnumHelper.GetEnumDescription(a.ListingStatus),
+                        Type = EnumHelper.GetEnumDescription(a.AssetType),
+                        //ControllingUserType = model.ControllingUserType,
+                        IsOnHold = a.HoldForUserId.HasValue,
+                        IsSampleAsset = a.IsSampleAsset,
+                        CreatedBy = context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault() != null
+                                  ? context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault().FullName + "~" +
+                                  context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault().Username : "",
+                        AssetName = a.ProjectName,
+                        SquareFeet = squareFeet,
+                        NumberOfUnits = units,
+                        isSpecificType = isSpecificType,
+                        CurrentVacancyFac = a.CurrentVacancyFac,
+                        LastReportedOccupancyDate = a.LastReportedOccupancyDate != null ? a.LastReportedOccupancyDate : a.OccupancyDate,
+                        ProformaAnnualIncome = a.ProformaAnnualIncome,
+                        ProformaNOI = proformaNOI,
+                        CashInvestmentApy = a.CashInvestmentApy,
+                        capRate = ((pretax / a.CurrentBpo) * 100),
+                        AskingPrice = a.AskingPrice,
+                        CurrentBpo = a.CurrentBpo,
+                        Portfolio = context.PortfolioAssets.Where(x => x.AssetId == a.AssetId).Any() ? true : false,
+
+                        /*Unknown 0,Yes 1,No 2	 */
+                        AssmFin = a.HasPositionMortgage == PositionMortgageType.Yes ? "Yes" : "No",
+                        UserType = context.Users.Where(us => us.UserId == a.ListedByUserId).FirstOrDefault().UserType,
+                        ListingStatus = a.ListingStatus,
+                        IsActive = a.IsActive,
+                        BusDriver = a.Show ? "CA" : "SUS"
+
+                    });
+
+                }
+            });
+            return list;
+
+        }
+
+        public bool CheckHCDate(DateTime date, Guid assetId)
+        {
+            var context = _factory.Create();
+            var assetHCO = context.AssetHCOwnership.Where(w => w.AssetId == assetId).OrderByDescending(w => w.CreateDate).FirstOrDefault();
+            if (assetHCO != null && assetHCO.ActualClosingDate != null && assetHCO.ActualClosingDate >= date)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 
@@ -8391,26 +8636,6 @@ namespace Inview.Epi.EpiFund.Business
         {
             var context = _factory.Create();
 
-            //var assetHCOwnership = (from item in context.AssetHCOwnership
-            //                        where item.AssetId == assetId
-            //                        orderby item.CreateDate
-            //                        select new {
-            //                            item.AssetHCOwnershipId,
-            //                            item.AssetId,
-            //                            item.HoldingCompanyId,
-            //                            item.CreateDate,
-            //                            item.Terms,
-            //                            item.ActualClosingDate,
-            //                            item.SalesPrice,
-            //                            item.SalesPriceNotProvided,
-            //                            item.CalculatedPPU,
-            //                            item.CalculatedPPSqFt,
-            //                            item.CashInvestmentApy,
-            //                            item.TermsOther,
-            //                            item.HoldingCompany,
-            //                            item.Asset
-            //                        }).ToList();
-
             var assetHCOwnership = context.AssetHCOwnership
                                     .Where(s => s.AssetId == assetId)
                                     .OrderByDescending(s => s.CreateDate).Select(a => new AssetHCOwnershipModel
@@ -8424,10 +8649,11 @@ namespace Inview.Epi.EpiFund.Business
                                         SalesPrice = a.SalesPrice,
                                         SalesPriceNotProvided = a.SalesPriceNotProvided,
                                         CalculatedPPU = a.CalculatedPPU,
+                                        CapRate = a.CapRate,
                                         CalculatedPPSqFt = a.CalculatedPPSqFt,
                                         CashInvestmentApy = a.CashInvestmentApy,
                                         TermsOther = a.TermsOther,
-                                        HCName = a.HoldingCompany.CompanyName
+                                        OwnerHoldingCompany = a.HoldingCompany.CompanyName
                                     }).ToList();
             return assetHCOwnership;
         }
@@ -8452,6 +8678,7 @@ namespace Inview.Epi.EpiFund.Business
                         assetHCO.CalculatedPPSqFt = assetHC.CalculatedPPSqFt;
                         assetHCO.CashInvestmentApy = assetHC.CashInvestmentApy;
                         assetHCO.HoldingCompanyId = assetHC.HoldingCompanyId;
+                        assetHCO.CapRate = assetHC.CapRate;
 
                         context.Entry(assetHCO).State = EntityState.Modified;
                         context.Save();
@@ -8956,7 +9183,7 @@ namespace Inview.Epi.EpiFund.Business
         public AssetHCOwnershipModel GetAssetHCByAssetHCOwnershipId(int assetHCOwnershipId)
         {
             var context = _factory.Create();
-            
+
             var assetHCOwnership = context.AssetHCOwnership
                                     .Where(s => s.AssetHCOwnershipId == assetHCOwnershipId)
                                     .OrderByDescending(s => s.CreateDate).Select(a => new AssetHCOwnershipModel
@@ -8973,12 +9200,218 @@ namespace Inview.Epi.EpiFund.Business
                                         CalculatedPPSqFt = a.CalculatedPPSqFt,
                                         CashInvestmentApy = a.CashInvestmentApy,
                                         TermsOther = a.TermsOther,
-                                        
-                                        HCName = a.HoldingCompany.CompanyName
+                                        CapRate = a.CapRate,
 
+                                        OwnerHoldingCompany = a.HoldingCompany.CompanyName,
+                                        OwnerISRA = a.HoldingCompany.ISRA,
+                                        OwnerHoldingCompanyEmail = a.HoldingCompany.Email,
+                                        OwnerHoldingCompanyFirst = a.HoldingCompany.FirstName,
+                                        OwnerHoldingCompanyLast = a.HoldingCompany.LastName,
+                                        OwnerHoldingCompanyAddressLine1 = a.HoldingCompany.AddressLine1,
+                                        OwnerHoldingCompanyAddressLine2 = a.HoldingCompany.AddressLine2,
+                                        OwnerHoldingCompanyCity = a.HoldingCompany.City,
+                                        OwnerHoldingCompanyState = a.HoldingCompany.State,
+                                        OwnerHoldingCompanyZip = a.HoldingCompany.Zip,
+                                        OwnerHoldingCompanyCountry = a.HoldingCompany.Country,
+                                        OwnerHoldingCompanyWorkPhone = a.HoldingCompany.WorkNumber,
+                                        OwnerHoldingCompanyCellPhone = a.HoldingCompany.CellNumber,
+
+                                        //OwnerHoldingCompanyFax = a.HoldingCompany.FaxNumber
+                                        OwnerHoldingCompanyLinkedIn = a.HoldingCompany.LinkedIn,
+                                        OwnerHoldingCompanyFacebook = a.HoldingCompany.Facebook,
+                                        OwnerHoldingCompanyInstagram = a.HoldingCompany.Instagram,
+                                        OwnerHoldingCompanyTwitter = a.HoldingCompany.Twitter
 
                                     }).FirstOrDefault();
             return assetHCOwnership;
         }
+
+        public List<AssetOCModel> GetAssetOCByAssetId(Guid assetId)
+        {
+            var context = _factory.Create();
+
+            var assetHCOwnership = context.AssetOC
+                                    .Where(s => s.AssetId == assetId)
+                                    .OrderByDescending(s => s.CreateDate).Select(a => new AssetOCModel
+                                    {
+                                        AssetOCId = a.AssetOCId,
+                                        AssetId = a.AssetId,
+                                        OperatingCompanyId = a.OperatingCompanyId,
+                                        CreateDate = a.CreateDate,
+
+                                        OwnerOperatingCompany = a.OperatingCompany.CompanyName,
+                                        FullName = a.OperatingCompany.LastName + ", " + a.OperatingCompany.FirstName,
+                                        City = a.OperatingCompany.City,
+                                        State = a.OperatingCompany.State,
+                                        Zip = a.OperatingCompany.Zip
+
+                                    }).ToList();
+            return assetHCOwnership;
+        }
+
+        public void SaveUpdateAssetOC(HCCAssetOC assetOC)
+        {
+            if (assetOC != null)
+            {
+                var context = _factory.Create();
+                if (assetOC.AssetOCId > 0)
+                {
+
+                }
+                else
+                {
+                    AssetOC model = new AssetOC();
+                    model.AssetId = assetOC.AssetId;
+                    model.OperatingCompanyId = assetOC.OperatingCompanyId;
+                    model.CreateDate = DateTime.Now;
+
+                    context.AssetOC.Add(model);
+                    context.Save();
+                }
+            }
+        }
+
+        public AssetOCModel GetAssetOCByAssetOCId(int assetOCId)
+        {
+            var context = _factory.Create();
+
+            var assetOC = context.AssetOC
+                                    .Where(s => s.AssetOCId == assetOCId)
+                                    .OrderByDescending(s => s.CreateDate).Select(a => new AssetOCModel
+                                    {
+                                        AssetOCId = a.AssetOCId,
+                                        AssetId = a.AssetId,
+                                        OperatingCompanyId = a.OperatingCompanyId,
+                                        CreateDate = a.CreateDate,
+                                        OwnerOperatingCompany = a.OperatingCompany.CompanyName,
+                                        FirstName = a.OperatingCompany.FirstName,
+                                        LastName = a.OperatingCompany.LastName,
+                                        Email = a.OperatingCompany.Email,
+                                        AddressLine1 = a.OperatingCompany.AddressLine1,
+                                        AddressLine2 = a.OperatingCompany.AddressLine2,
+                                        City = a.OperatingCompany.City,
+                                        State = a.OperatingCompany.State,
+                                        Zip = a.OperatingCompany.Zip,
+                                        Country = a.OperatingCompany.Country,
+                                        WorkNumber = a.OperatingCompany.WorkNumber,
+                                        CellNumber = a.OperatingCompany.CellNumber,
+                                        //FaxNumber = a.OperatingCompany.FaxNumber
+
+                                        LinkedIn = a.OperatingCompany.LinkedIn,
+                                        Facebook = a.OperatingCompany.Facebook,
+                                        Instagram = a.OperatingCompany.Instagram,
+                                        Twitter = a.OperatingCompany.Twitter
+
+                                    }).FirstOrDefault();
+            return assetOC;
+        }
+
+        public AssetOCAddressModel GetHCAddressByAssetId(Guid assetId)
+        {
+            var context = _factory.Create();
+
+            var assetHCAddress = context.AssetHCOwnership.Where(s => s.AssetId == assetId)
+                                    .OrderByDescending(s => s.CreateDate).Select(a => new AssetOCAddressModel
+                                    {
+                                        AddressLine1= a.HoldingCompany.AddressLine1,
+                                        AddressLine2 = a.HoldingCompany.AddressLine2,
+                                        City = a.HoldingCompany.City,
+                                        State = a.HoldingCompany.State,
+                                        Zip = a.HoldingCompany.Zip,
+
+                                        Country = a.HoldingCompany.Country,
+                                        WorkNumber = a.HoldingCompany.WorkNumber,
+                                        CellNumber = a.HoldingCompany.CellNumber,
+                                        //FaxNumber = a.HoldingCompany.FaxNumber
+                                        LinkedIn = a.HoldingCompany.LinkedIn,
+                                        Facebook = a.HoldingCompany.Facebook,
+                                        Instagram = a.HoldingCompany.Instagram,
+                                        Twitter = a.HoldingCompany.Twitter
+
+                                    }).FirstOrDefault();
+            return assetHCAddress;
+        }
+
+        public List<ChainOfTitleQuickListModel> GetChainOfTitleByAssetId(string AssetId)
+        {
+            var list = new List<ChainOfTitleQuickListModel>();
+            var context = _factory.Create();
+            Guid assetId = new Guid(AssetId);
+
+            var asset = context.Assets.Where(x => x.AssetId== assetId).FirstOrDefault();
+            var assetHC = context.AssetHCOwnership.Where(x => x.AssetId == assetId).OrderByDescending(x=>x.CreateDate).ToList();
+            var assetOC = context.AssetOC.Where(x => x.AssetId == assetId).OrderByDescending(x => x.CreateDate).ToList();
+
+            var count = assetHC.Count() > assetOC.Count() ? assetHC.Count() : assetOC.Count();
+
+            int units = 0;
+            int squareFeet = 0;
+            if (asset.AssetType == AssetType.MultiFamily)
+            {
+                var mf = asset as MultiFamilyAsset;
+                units = mf.TotalUnits;
+            }
+            else if (asset.AssetType == AssetType.MHP)
+            {
+                var mf = asset as MultiFamilyAsset;
+                units = mf.TotalUnits;
+                units += asset.NumberRentableSpace != null ? (int)asset.NumberRentableSpace : 0;
+                units += asset.NumberNonRentableSpace != null ? (int)asset.NumberNonRentableSpace : 0;
+            }
+            else
+            {
+                var ca = asset as CommercialAsset;
+                squareFeet = ca.SquareFeet;
+            }
+
+
+            for (int i = 0; i < count; i++) 
+            {
+                var item = new ChainOfTitleQuickListModel();
+
+                item.AssetId = assetId;
+                item.AssetName = asset.ProjectName;
+                item.AssetNumber = asset.AssetNumber;
+                item.City= asset.City;
+                item.State = asset.State;
+                item.Type = EnumHelper.GetEnumDescription(asset.AssetType);
+                item.SquareFeet = squareFeet;
+                item.NumberOfUnits = units;
+                item.County = asset.County;
+                item.IsActive = asset.IsActive;
+
+                item.Show = asset.Show ? "Yes" : "No";
+
+                item.Portfolio = context.PortfolioAssets.Where(x => x.AssetId == asset.AssetId).Any() ? true : false;
+                item.UserType = context.Users.Where(us => us.UserId == asset.ListedByUserId).FirstOrDefault().UserType;
+                item.ListingStatus = asset.ListingStatus;                
+                item.BusDriver = asset.Show ? "CA" : "SUS";
+
+
+                if (i < assetHC.Count && assetHC[i] != null)
+                {
+                    var hcId = assetHC[i].HoldingCompanyId;
+                    var hc = context.HoldingCompanies.Where(a => a.HoldingCompanyId == hcId).FirstOrDefault();
+
+                    item.HCID = assetHC[i].HoldingCompanyId;
+                    item.HCName = hc.CompanyName;
+                    item.Date = assetHC[i].ActualClosingDate;
+                    item.Pricing = assetHC[i].SalesPrice ?? 0;
+                    item.Terms = assetHC[i].Terms;
+                    item.CAP = assetHC[i].CapRate ?? 0;
+                }
+                if (i < assetOC.Count && assetOC[i] != null)
+                {
+                    var ocId = assetOC[i].OperatingCompanyId;
+                    var oc = context.OperatingCompanies.Where(a => a.OperatingCompanyId == ocId).FirstOrDefault();
+
+                    item.OCID = assetOC[i].OperatingCompanyId;
+                    item.OCName = oc.CompanyName;
+                }
+                list.Add(item);
+            }
+            return list;
+        }
+
     }
 }

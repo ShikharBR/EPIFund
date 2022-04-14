@@ -1,0 +1,66 @@
+﻿
+@model Inview.Epi.EpiFund.Domain.Entity.OperatingCompany
+
+<style>
+
+    table { width:100%}
+
+</style>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">[ @Model.CompanyName]</h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="panel panel-default" style="border: 1px solid #B1A795;">
+            @if (Model != null)
+            {
+                <table class="table table-striped" id="tbAssets" cellpadding="1" cellspacing="1"
+                           style="font-size: 10px !important; padding: 1px; vertical-align: middle;">
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>@Model.CompanyName</td>
+                                    <td>@Model.AddressLine1</td>
+                                    <td>@Model.AddressLine2</td>
+                                    <td>@Model.City</td>
+                                    <td>@Model.State</td>
+                                    <td>@Model.Zip</td>
+                                    <td>@Model.Country</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>@(Model.FirstName +" "+ Model.LastName)</td>
+                                    <td>@Model.Email</td>
+                                    <td>@Model.WorkNumber</td>
+                                    <td>@Model.CellNumber</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>@Model.LinkedIn</td>
+                                    <td>@Model.Facebook</td>
+                                    <td>@Model.Instagram</td>
+                                    <td>@Model.Twitter</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+            }
+        </div>
+    </div>
+</div>
+

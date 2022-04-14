@@ -126,6 +126,23 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
             set;
         }
 
+
+		public string County
+		{
+			get;
+			set;
+		}
+		public string ListAgentCompanyName
+		{
+			get;
+			set;
+		}
+		public string ListAgentName
+		{
+			get;
+			set;
+		}
+
 		public ManageAssetsModel()
 		{
 		}

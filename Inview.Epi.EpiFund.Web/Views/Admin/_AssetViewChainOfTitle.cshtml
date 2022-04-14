@@ -1,0 +1,252 @@
+﻿@using PagedList.Mvc
+@model List<Inview.Epi.EpiFund.Domain.ViewModel.ChainOfTitleQuickListModel>
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">[ @Model.Count.ToString() result(s) found]</h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="panel panel-default" style="border: 1px solid #B1A795;">
+            @if (Model != null && Model.Count > 0)
+            {
+                <div class="overflow short-xs">
+                    <table class="table table-striped" id="tbAssets" cellpadding="1" cellspacing="1"
+                           style="font-size: 10px !important; padding: 1px; vertical-align: middle;">
+                        <thead>
+                            
+                            <tr>
+                                <th><b>Asset<br />ID#</b></th>
+                                <th><b>City/<br />State</b></th>
+                                <th><b>Asset<br />Type</b></th>
+                                <th><b>#Units<br />Sq.Ft</b></th>
+                                <th><b>Asset<br />Name</b></th>
+                                <th><b>County</b></th>
+                            
+                                <th colspan="4" >
+                                    <table width="100%">
+                                        <tr>                                            
+                                            <td colspan="4" align="center"><b>Transfer</b></td>                                            
+                                        </tr>
+                                        <tr>
+                                            <th><b>Date</b></th>
+                                            <th><b>Price</b></th>
+                                            <th><b>Term</b></th>
+                                            <th><b>CAP</b></th>
+                                        </tr>
+                                    </table>
+                                </th>   
+                                <th><b>Holding Company</b></th>
+                                <th><b>Operating Company</b></th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < @Model.Count; i++)
+                            {
+
+                                if (i == 0)
+                                {
+                                    <tr id="@Model[i].AssetId">
+
+                                        <td>
+                                            <a href="@Url.Action("ViewAsset", "DataPortal", new { id = @Model[i].AssetId, fromManageAssets = true })">
+                                                @Model[i].AssetNumber
+                                            </a>
+                                        </td>
+                                        <td style="word-wrap: break-word;">
+                                            <div style="margin-bottom: -3px !important;" class="AssetName" title="@Model[i].City"> @Model[i].City</div><br />@Model[i].State
+                                        </td>                                   
+                                        <td>
+                                            @Model[i].Type
+                                        </td>
+                                        <td>
+                                            <span class="padNumber">@(Model[i].SquareFeet > 0 ? Model[i].SquareFeet.ToString() : Model[i].NumberOfUnits.ToString())</span>
+                                        </td>
+                                        <td style="word-wrap: break-word;">
+                                            <span class="AssetName" title="@Model[i].AssetName">@Model[i].AssetName</span>
+                                        </td>
+                                        <td style="word-wrap:break-word;">
+                                            <span class="AssetName" title="@Model[i].County">
+                                                @Model[i].County
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @(Model[i].Date.HasValue ? Model[i].Date.Value.ToString("MM/dd/yy"): "N/A" )
+                                        </td>
+                                        <td>
+                                            <span class="padmoney">@Model[i].Pricing.ToString("C0")</span>
+                                        </td>
+                                        <td>
+                                            @(Model[i].Terms=="0"?"--": Model[i].Terms)
+                                        </td>
+                                        <td>
+                                            @((Model[i].CAP / 100).ToString("P2"))
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("UpdateHoldingCompany", "Admin",new { id = @Model[i].HCID })">
+                                                @Model[i].HCName
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @if (Model[i].OCID != null && Model[i].OCID != Guid.Empty)
+                                            {
+                                                <a href="@Url.Action("UpdateOperatingCompany", "Admin", new { id = @Model[i].OCID })">
+                                                    @(Model[i].OCName)
+                                                </a>
+                                            }
+                                            else {
+                                               @Html.Raw("N/A")
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                                <td colspan="10">
+                                                </td>
+                                                <td colspan="2" align="right" >
+                                                    <table width="100%" align="right" >
+                                                        <tr>
+                                                            <td>
+                                                                @if (Model[i].Portfolio)
+                                                                {
+                                                                    <span class="glyphicon glyphicon-book" title="Portfolio" style="cursor:pointer" onclick="Viewportfolio_ChainOfTitle('@Model[i].AssetId.ToString()',this)"></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.Raw("--")
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                @{
+                                                                    var uType = "";
+                                                                    if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin)
+                                                                    {
+                                                                        uType = "ICA";
+                                                                    }
+                                                                    else if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+                                                                    {
+                                                                        uType = "CA";
+                                                                    }
+                                                                    else if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.Investor)
+                                                                    {
+                                                                        uType = "PI";
+                                                                    }
+                                                                    else if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ListingAgent)
+                                                                    {
+                                                                        uType = "LA";
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        uType = "--";
+                                                                    }
+                                                                    @Html.Raw(uType)
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                @{
+                                                                    var lstStatus = "";
+                                                                    if (Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Available)
+                                                                    {
+                                                                        lstStatus = "A";
+                                                                    }
+                                                                    else if (Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Pending)
+                                                                    {
+                                                                        lstStatus = "P";
+                                                                    }
+                                                                    else if (Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldNotClosed
+                                                                           || Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldAndClosed
+                                                                           || Model[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Withdrawn)
+                                                                    {
+                                                                        lstStatus = "U";
+                                                                    }
+                                                                    @Html.Raw(lstStatus)
+                                                                }
+                                                            </td>
+                                                            <td title="Who’s Driving the Bus">
+                                                                @if (Model[i].BusDriver == "SUS")
+                                                                {
+                                                                    <span class="red">@Model[i].BusDriver</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@Model[i].BusDriver</span>
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                [<a onclick="EditAsset('@Model[i].AssetId')" style="cursor:pointer" title="edit">
+                                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                                </a>
+                                                                <a href="@Url.Action("AssetEscrowProcess", "Admin", new { id = @Model[i].AssetId })" title="escrow">
+                                                                    <span class="glyphicon glyphicon-usd"></span>
+                                                                </a>
+                                                                @if (Model[i].Show == "Yes")
+                                                                {
+                                                                    <a href="@Url.Action("UnPublishAsset", "Admin", new { id = @Model[i].AssetId })" title="unpublish" onclick="return confirm('Are you sure you wish to unpublish this asset?');">
+                                                                        <span class="fa fa-lock" style="font-size: 13px; margin-top: 1px;"></span>
+                                                                    </a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="@Url.Action("PublishAsset", "Admin", new { id = @Model[i].AssetId })" title="publish" onclick="return confirm('Are you sure you wish to publish this asset?');">
+                                                                        <span class="glyphicon glyphicon-globe"></span>
+                                                                    </a>
+                                                                }
+                                                                @if (Model[i].IsActive)
+                                                                {
+                                                                    <a href="@Url.Action("DeActivateAsset", "Admin", new { id = @Model[i].AssetId })" title="deactive asset" onclick="return confirm('Are you sure you wish to make this asset deactive?');">
+                                                                        <span class="glyphicon glyphicon-arrow-down" style="font-size: 12px;"></span>
+                                                                    </a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="@Url.Action("ActivateAsset", "Admin", new { id = @Model[i].AssetId })" title="active asset" onclick="return confirm('Are you sure you wish to make this asset active?');">
+                                                                        <span class="glyphicon glyphicon-arrow-up" style="font-size: 12px;"></span>
+                                                                    </a>
+                                                                }
+                                                                
+                                                                ]
+
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                     </tr>
+
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="6"></td>
+                                        <td>
+                                            @(Model[i].Date.HasValue ? Model[i].Date.Value.ToString("MM/dd/yy"): "N/A" )
+                                        </td>
+                                        <td>
+                                            <span class="padmoney">@Model[i].Pricing.ToString("C0")</span>
+                                        </td>
+                                        <td>@(Model[i].Terms=="0"?"--": Model[i].Terms)</td>
+                                        <td>
+                                            @((Model[i].CAP / 100).ToString("P2"))
+                                        </td>
+
+                                        <td>
+                                            <a href="@Url.Action("UpdateHoldingCompany", "Admin",new { id = @Model[i].HCID })">
+                                                @Model[i].HCName
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("UpdateHoldingCompany", "Admin",new { id = @Model[i].OCID })">
+                                                @Model[i].OCName
+                                            </a>
+                                        </td>
+                                    </tr>
+                                 }                                   
+                             }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

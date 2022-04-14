@@ -9,7 +9,8 @@
         <table class="table table-striped" style="font-size: 10px !important; padding: 5px; vertical-align: middle; ">
             <tr>
                 <td colspan="18" align="center" style="text-align: center;">
-                    <b>PORTFOLIO TABLE SUMMARY FOR ANY ASSET IN MASTER db THAT IS PART OF A PORTFOLIO</b>
+                    <b>PORTFOLIO TABLE SUMMARY FOR ANY ASSET IN MASTER db THAT IS PART OF A PORTFOLIO (@Model[0].NumberOfAssets) </b>
+                    
                 </td>
             </tr>
             <tr>
@@ -84,7 +85,7 @@
 
                         @*action*@
                         <td>
-                            <span class="glyphicon glyphicon-folder-open" title="Portfolio" style="cursor:pointer" onclick="ViewRelatedAssets('@portItem.PortfolioId.ToString()')"></span>
+                            <span class="glyphicon glyphicon-folder-open" title="Portfolio" style="cursor:pointer" onclick="ViewRelatedAssets('@portItem.PortfolioId.ToString()',this)"></span>
                         </td>
                         <td>
                             @{

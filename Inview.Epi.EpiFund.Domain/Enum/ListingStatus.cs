@@ -5,6 +5,9 @@ namespace Inview.Epi.EpiFund.Domain.Enum
 {
 	public enum ListingStatus
 	{
+		[Description("NoStatus")]
+		None = 0,
+
 		[Description("Available")]
 		Available = 1,
 

@@ -222,6 +222,8 @@
     <Compile Include="Controllers\InvestorsController.cs" />
     <Compile Include="Controllers\PortfolioController.cs" />
     <Compile Include="Controllers\RecordsController.cs" />
+    <Compile Include="Models\AdminOperatingCompanySearchResultsModel.cs" />
+    <Compile Include="Models\AdminHoldingCompanySearchResultsModel.cs" />
     <Compile Include="Models\AdminPortfolioResultsModel.cs" />
     <Compile Include="Models\AssetAssignmentModel.cs" />
     <Compile Include="Models\BaseSearchResultsModel.cs" />
@@ -935,7 +937,6 @@
     <Content Include="Views\ICA\_ICAPFAssetListView.cshtml" />
     <Content Include="Views\ICA\ICACache.cshtml" />
     <Content Include="Views\Admin\ManageHoldingCompanies.cshtml" />
-    <Content Include="Views\Admin\ManageHoldingCompany.cshtml" />
     <Content Include="Views\Admin\ManageAssets.cshtml" />
     <Content Include="Views\Admin\_AdminAssetListView.cshtml" />
     <Content Include="Views\Admin\_AssetPortfolioListView.cshtml" />
@@ -943,6 +944,11 @@
     <Content Include="Views\DataPortal\AssetSearch.cshtml" />
     <Content Include="Views\DataPortal\AssetSearchView.cshtml" />
     <Content Include="Views\Shared\_LayoutSearch.cshtml" />
+    <Content Include="Views\Admin\_AssetViewChainOfTitle.cshtml" />
+    <Content Include="Views\Admin\_AdminHoldingCompanyListView.cshtml" />
+    <Content Include="Views\Admin\_HoldingComapnyDeatails.cshtml" />
+    <Content Include="Views\Admin\_OpertingComapnyDeatails.cshtml" />
+    <Content Include="Views\Admin\_AdminOperatingCompanyListView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

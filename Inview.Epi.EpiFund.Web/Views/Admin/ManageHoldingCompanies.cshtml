@@ -1,94 +1,396 @@
-﻿@model List<Inview.Epi.EpiFund.Domain.ViewModel.HoldingCompanyViewModel>
+﻿@model Inview.Epi.EpiFund.Web.Models.AdminHoldingCompanySearchResultsModel
 @{
     ViewBag.Title = "Manage Holding Companies";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    @section JqueryDataTableCss {
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.2/r-2.2.2/datatables.min.css" />
-    }
-    @section JqueryDataTableJs {
-        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.2/r-2.2.2/datatables.min.js"></script>
-    }
+
 }
 <style>
+    .header {
+        margin: 1px;
+        color: #fff;
+        padding: 3px 10px;
+        cursor: pointer;
+        position: relative;
+        background-color: #B1A795 !important;
+    }
+
+    .kill-width-for-td-address {
+        max-width: 79px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        padding: 6px;
+        text-align: left;
+    }
+
+    .AssetName {
+        display: inline-block;
+        width: 50px;
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+    }
+
+    input[type="text"] { height:25px;  padding: 0px 2px;}
+
+    .panel-body table {
+        width: 100%;
+    }
+    .panel-body label {
+        font-size: 11px;
+    }
+    .panel-body td { 
+        padding :0px 5px;
+    }
+
+    .panel-body table tbody tr td table tbody tr td {
+        border-bottom: 2px dotted #fff;
+        padding: 10px 0px;
+    }
+    label { 
+        padding: 0px 5px;
+    }
 
 </style>
 
-<h2 style="text-align:center;padding-bottom:100px;">Manage Holding Companies</h2>
+<h3>Manage Holding Companies</h3>
 
-<table id="holdingCompanyTable" class="display compact" style="width:100%">
-    <thead>
-        <tr>
-            <th>Company Name</th>
-            <th>Operating<br />Company</th>
-            <th>PI Name</th>
-            <th>City</th>
-            <th>ST</th>
-            <th>Date of<br />Registration</th>
-            <th>Register<br />Docs</th>
-            <th>Referred<br />by JVMP</th>
-            <th># of<br />Assets</th>
-            <th># of Pub<br />Assets</th>
-            <th></th>
-        </tr>
-    </thead>
-</table>
+<div style="float:right;">
+    <select id="ddlRowCount" onchange="changeResults()">
+        <option value="25">25</option>
+        <option value="50" selected="selected">50</option>
+        <option value="75">75</option>
+        <option value="100">100</option>
+    </select>
+</div>
+<br />
+<br />
+@using (Html.BeginForm("ManageHoldingCompanies", "Admin", FormMethod.Post, new { id = "searchForm" }))
+{
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default" style="border: 1px solid #B1A795;">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#searchbox">
+                        <button class="btn btn-default btn-xs" style="border: 1px solid #888">
+                            Search Holding Companies
+                        </button>
+                    </a>
+                </h4>
+            </div>
+
+            <div id="searchbox" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <table>
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td> @Html.LabelFor(s => s.HCName)</td>
+                                        <td> @Html.TextBoxFor(s => s.HCName)</td>
+                                        <td> (aka “Contract Owner of Asset”)</td>
+                                        <td> @Html.LabelFor(s => s.ISRA)</td>
+                                        <td> @Html.CheckBoxFor(s => s.ISRA)</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td width="112px"> @Html.LabelFor(s => s.HCEmail)</td>
+                                        <td>@Html.TextBoxFor(s => s.HCEmail)</td>
+
+                                        <td width="150px"> @Html.LabelFor(s => s.HCFirstName)</td>
+                                        <td> @Html.TextBoxFor(s => s.HCFirstName)</td>
+
+                                        <td width="150px"> @Html.LabelFor(s => s.HCLastName)</td>
+                                        <td>@Html.TextBoxFor(s => s.HCLastName)</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td width="85px"> @Html.LabelFor(s => s.LinkedInurl)</td>
+                                        <td> @Html.TextBoxFor(s => s.LinkedInurl)</td>
+
+                                        <td width="100px"> @Html.LabelFor(s => s.Facebookurl)</td>
+                                        <td> @Html.TextBoxFor(s => s.Facebookurl)</td>
+
+                                        <td width="100x"> @Html.LabelFor(s => s.Instagramurl)</td>
+                                        <td> @Html.TextBoxFor(s => s.Instagramurl)</td>
+
+                                        <td width="85px"> @Html.LabelFor(s => s.Twitterurl)</td>
+                                        <td>  @Html.TextBoxFor(s => s.Twitterurl)</td>
+
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td>@Html.LabelFor(s => s.AssetNumber)</td>
+                                        <td>@Html.TextBoxFor(s => s.AssetNumber)</td>
+
+                                        <td> @Html.LabelFor(s => s.AssetName)</td>
+                                        <td>@Html.TextBoxFor(s => s.AssetName)</td>
+
+                                        <td>@Html.LabelFor(s => s.AddressLine1)</td>
+                                        <td>@Html.TextBoxFor(s => s.AddressLine1)</td>
+
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td>@Html.LabelFor(s => s.City)</td>
+                                        <td>@Html.TextBoxFor(s => s.City)</td>
+
+                                        <td> @Html.LabelFor(s => s.State)</td>
+                                        <td>  @Html.DropDownListFor(s => s.State, @Model.States)</td>
+
+                                        <td> @Html.LabelFor(s => s.ZipCode)</td>
+                                        <td> @Html.TextBoxFor(s => s.ZipCode)</td>
+
+                                        <td width="90px">@Html.LabelFor(s => s.ApnNumber)</td>
+                                        <td> @Html.TextBoxFor(s => s.ApnNumber)</td>
+
+                                        <td width="60px"> @Html.LabelFor(s => s.IsPaper)</td>
+                                        <td> @Html.CheckBoxFor(s => s.IsPaper)</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td> @Html.LabelFor(s => s.County)</td>
+                                        <td> @Html.TextBoxFor(s => s.County)</td>
+
+                                        <td>@Html.LabelFor(s => s.ListAgentName)</td>
+                                        <td> @Html.TextBoxFor(s => s.ListAgentName)</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>                    
+                    
+                    <div class="row asset-list-form">
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                @Html.HiddenFor(model => Model.Page)
+                                @Html.HiddenFor(model => Model.RowCount)
+                                <input type="submit" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto;" onclick="clearSearchValues()" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="input-group">                                                     
+                                <input type="button" value="Clear"  class="btn btn-primary proceed" style="width: 200px; margin: 30px auto;"  onclick="ClearHCSearch()"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@{ Html.RenderPartial("_AdminHoldingCompanyListView", Model.HcList); }
+
+
+<div class="modal fade" id="portfholioAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewPortfolio">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="chainOfTitleAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewchainOfTitle">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="HCDetails" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divHCDetails">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="OCDetails" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divOCDetails">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="hcAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewHC">
+
+        </div>
+    </div>
+</div>
+
+
 <script>
-    $(document).ready(function () {
-        var model = @Html.Raw(Json.Encode(Model));
-        var data = [];
-        for (var i = 0; i < model.length; i++) {
-            // get published asset count
-            var publishedAssets = 0;
-            for (var j = 0; j < model[i].Assets.length; j++) { if (model[i].Assets[j].Published) publishedAssets += 1; }
-            var item = {
-                id: model[i].HoldingCompanyId,
-                companyName: model[i].CompanyName,
-                piName: `${model[i].FirstName} ${model[i].LastName}`,
-                operatingCompanyName: 'N/A',
-                city: model[i].City,
-                state: model[i].State,
-                dateOfRegistration: 'N/A',
-                registeredDocs: 'N/A',
-                referredByJvmp: 'N/A',
-                assetCount: model[i].Assets.length,
-                publishedAssetCount: publishedAssets,
+
+    function ViewRelatedAssets(PortfolioId) {
+        //alert(PortfolioId);
+        /*show model popup
+         bind data as per the assets list*/
+        $.ajax({
+            url: "@Url.Action("GetAssetsbyPortfolioId", "Admin")",
+            data: { portfolioId: PortfolioId },
+            success: function (data) {
+                $("#divAssetViewPortfolio").html(data);
+                $("#portfholioAssets").modal();
+
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
             }
-            if (model[i].OperatingCompanies && model[i].OperatingCompanies.length > 0) {
-                // TODO: get the proper operating company from this array instead of the first?
-                var selectedOperatingCompany = model[i].OperatingCompanies[0];
-                item.operatingCompanyName = selectedOperatingCompany.CompanyName;
-                item.piName = `${selectedOperatingCompany.FirstName} ${selectedOperatingCompany.LastName}`;
-                item.dateOfRegistration = selectedOperatingCompany.DateOfRegistration;
-                if (selectedOperatingCompany.RegisteredDocs === true || selectedOperatingCompany.RegisteredDocs === false) item.registeredDocs = selectedOperatingCompany.RegisteredDocs ? 'yes' : 'no';
-                if (selectedOperatingCompany.ReferredByJvmp === true || selectedOperatingCompany.ReferredByJvmp === false) item.referredByJvmp = selectedOperatingCompany.ReferredByJvmp ? 'yes' : 'no';
-            }
-            data.push(item);
+        });
+    }
+
+    function changeResults() {
+        $('#RowCount').val($('#ddlRowCount').val());
+        $('#searchForm').submit();
+    }
+
+    function Viewportfolio(assetId, curretntSpan) {
+        if ($("#" + assetId + "_portfolio").length) {
+            $("#" + assetId + "_portfolio").remove();
         }
-        var table = $('#holdingCompanyTable').DataTable({
-            data: data,
-            columns: [
-                { data: 'companyName' },
-                { data: 'operatingCompanyName' },
-                { data: 'piName' },
-                { data: 'city' },
-                { data: 'state' },
-                { data: 'dateOfRegistration' },
-                { data: 'registeredDocs' },
-                { data: 'referredByJvmp' },
-                { data: 'assetCount' },
-                { data: 'publishedAssetCount' },
-                {
-                    targets: -1,
-                    data: null,
-                    orderable: false,
-                    defaultContent: '<button>Edit</button>'
+        else {
+            $.ajax({
+                url: "@Url.Action("GetRelatedPortfolio", "Admin")",
+                data: { assetId: assetId },
+                async: false,
+                success: function (data) {
+                    $(curretntSpan).closest('tr').after("<tr id='" + assetId + "_portfolio' >" + data + "</tr>");
+                    //add comma
+                    $('.padNumber').each(function (index) {
+                        padCommas(this, false);
+                    });
                 }
-            ],
-            order: [[1, 'asc']]
-        })
-        $('#holdingCompanyTable tbody').on('click', 'button', function () {
-            var data = table.row($(this).parents('tr')).data();
-            window.location.href = `/Admin/UpdateHoldingCompany/${data.id}`;
-        })
-    })
+            });
+        }
+    }
+
+    function ViewChainOfTitle(assetId) {
+        $.ajax({
+            url: "@Url.Action("GetChainOfTitle", "Admin")",
+            data: { assetId: assetId },
+            success: function (data) {
+                $("#divAssetViewchainOfTitle").html(data);
+                $("#chainOfTitleAssets").modal();
+
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
+
+    function HoldingCoRelatedAsset(HCID) {       
+        /*show model popup
+         bind data as per the assets list*/
+        $.ajax({
+            url: "@Url.Action("GetAssetsbyHCId", "Admin")",
+            data: { HcId: HCID },
+            success: function (data) {
+                $("#divAssetViewHC").html(data);
+                $("#hcAssets").modal();
+
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
+
+    function HoldingCoDetail(HCID) {
+         $.ajax({
+            url: "@Url.Action("GetHoldingCompanybyId", "Admin")",
+             data: { id: HCID },
+            success: function (data) {
+                $("#divHCDetails").html(data);
+                $("#HCDetails").modal();
+            }
+        });
+    }
+
+    function OperatingCoDetail(OCID) {
+        $.ajax({
+            url: "@Url.Action("GetOpertingCompanybyId", "Admin")",
+            data: { id: OCID },
+            success: function (data) {
+                $("#divOCDetails").html(data);
+                $("#OCDetails").modal();
+            }
+        });
+    }
+
+    $('.pagination li a').click(function () {
+        var href = $(this).attr('href');
+        if (typeof href !== typeof undefined && href !== false) {
+            var page = parseInt(getPageNumber(href));
+            $('#Page').val(page);
+            $('#searchForm').submit();
+            return false;
+        }
+    });
+
+    function ClearHCSearch() {
+
+        $("#HCName").val('');
+        $('#ISRA').prop('checked', false);
+
+        $("#HCEmail").val('');
+        $("#HCFirstName").val('');
+        $("#HCLastName").val('');
+        $("#LinkedInurl").val('');
+        $("#Facebookurl").val('');
+        $("#Instagramurl").val('');
+        $("#Twitterurl").val('');
+
+        $("#AssetNumber").val('');
+        $("#AssetName").val('');
+        $("#AddressLine1").val('');
+        $("#City").val('');
+        $("#State").val('');
+        $("#ZipCode").val('');
+        $("#ApnNumber").val('');
+        $('#IsPaper').prop('checked', false);
+       
+
+        $("#County").val('');
+        $("#ListAgentName").val('');
+    }
+
 </script>
