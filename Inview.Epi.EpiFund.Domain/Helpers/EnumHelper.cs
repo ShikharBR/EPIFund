@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Inview.Epi.EpiFund.Domain.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -28,6 +29,83 @@ namespace Inview.Epi.EpiFund.Domain.Helpers
             catch
             {
                 return "";
+            }
+        }
+        public static string GetAbbreviation(this AssetType assetType)
+        {
+            switch (assetType)
+            {
+                case AssetType.Retail:
+                    return "Ret";
+                case AssetType.Office:
+                    return "Off";
+                case AssetType.MultiFamily:
+                    return "MF";
+                case AssetType.Industrial:
+                    return "Ind";
+                case AssetType.MHP:
+                    return "MHP";
+                case AssetType.ConvenienceStoreFuel:
+                    return "FS";
+                case AssetType.Medical:
+                    return "Med";
+                case AssetType.MixedUse:
+                    return "Mix";
+                case AssetType.Hotel:
+                    return "Hot";
+                case AssetType.FracturedCondominiumPortfolio:
+                    return "FCP";
+                case AssetType.ParkingGarageProperty:
+                    return "PG";
+                case AssetType.MiniStorageProperty:
+                    return "MS";
+                case AssetType.Land:
+                    return "Land";
+                case AssetType.SecuredPaper:
+                    return "Note";
+                case AssetType.Other:
+                    return "OT";
+                default:
+                    return EnumHelper.GetEnumDescription(assetType);
+            }
+        }
+
+        public static string GetAssetTypeShorthand(AssetType assetType)
+        {
+            switch (assetType)
+            {
+                case AssetType.Retail:
+                    return "Retail";
+                case AssetType.Office:
+                    return "Office";
+                case AssetType.MultiFamily:
+                    return "Multi Family";
+                case AssetType.Industrial:
+                    return "Industrial";
+                case AssetType.MHP:
+                    return "MHP";
+                case AssetType.ConvenienceStoreFuel:
+                    return "Fuel Service Retail";
+                case AssetType.Medical:
+                    return "Medical";
+                case AssetType.MixedUse:
+                    return "Mixed Use";
+                case AssetType.Hotel:
+                    return "Hotel";
+                case AssetType.FracturedCondominiumPortfolio:
+                    return "Fractured Condominium";
+                case AssetType.ParkingGarageProperty:
+                    return "Parking Garage";
+                case AssetType.MiniStorageProperty:
+                    return "Mini-Storage";
+                case AssetType.Land:
+                    return "Land";
+                case AssetType.SecuredPaper:
+                    return "Note";
+                case AssetType.Other:
+                    return "Other";
+                default:
+                    return EnumHelper.GetEnumDescription(assetType);
             }
         }
 

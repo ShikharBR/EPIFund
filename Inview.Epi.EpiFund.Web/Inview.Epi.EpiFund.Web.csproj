@@ -941,6 +941,9 @@
     <Content Include="Views\Admin\_AdminAssetListView.cshtml" />
     <Content Include="Views\Admin\_AssetPortfolioListView.cshtml" />
     <Content Include="Views\Admin\_AssetViewPortfolio.cshtml" />
+    <Content Include="Views\DataPortal\AssetSearch.cshtml" />
+    <Content Include="Views\DataPortal\AssetSearchView.cshtml" />
+    <Content Include="Views\Shared\_LayoutSearch.cshtml" />
     <Content Include="Views\Admin\_AssetViewChainOfTitle.cshtml" />
     <Content Include="Views\Admin\_AdminHoldingCompanyListView.cshtml" />
     <Content Include="Views\Admin\_HoldingComapnyDeatails.cshtml" />
@@ -949,6 +952,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ClientApp\build\" />
     <Folder Include="Content\.sass-cache\04517dcf1647d19b131cc7211d3283eb3a59f326\" />
     <Folder Include="Views\Admin\DisplayTemplates\" />
     <Folder Include="Views\Investors\DisplayTemplates\" />
