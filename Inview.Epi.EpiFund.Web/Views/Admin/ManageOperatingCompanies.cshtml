@@ -294,6 +294,7 @@
             $.ajax({
                 url: "@Url.Action("GetRelatedPortfolio", "Admin")",
                 data: { assetId: assetId },
+                async: false,
                 success: function (data) {
                     $(curretntSpan).closest('tr').after("<tr id='" + assetId + "_portfolio' >" + data + "</tr>");
                     //add comma
