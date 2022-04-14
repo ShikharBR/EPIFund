@@ -1,0 +1,59 @@
+@import '../app.scss';
+
+.contacts-panel {
+
+    .panel-body {
+        min-height: 800px;
+        padding: 20px;
+
+        .list-wrapper {
+            border-right: 1px dashed $folder-blue;
+            padding-right: 10px;
+
+            ul {
+                width: 100%;
+                margin: unset;
+                padding: unset;
+                padding-right: 10px;
+                height: 800px;
+                overflow-y: auto;
+
+                li {
+                    margin: unset;
+                    padding: unset;
+                    padding: 10px;
+                    list-style: none;
+                    min-height: 80px;
+                    width: 100%;
+                    border-bottom: 1px solid grey;
+                    cursor:pointer;
+
+                    &:hover {
+                        border-left: 3px solid $folder-blue;
+                        border-bottom: 1px solid $folder-blue;
+                    }
+
+                    .profile-image {
+                        margin-top: 10px;
+                    }
+
+                    .name {
+                        font-weight: bold;
+                        font-size: 15px;
+                    }
+
+                    .phone,
+                    .email {
+                        font-size: 16px;
+                        color: grey;
+                        margin-right: 10px;
+
+                        &:hover {
+                            color: $folder-blue;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

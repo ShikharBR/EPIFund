@@ -579,7 +579,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                     asset.isARM = new int?(1);
                     goto Label0;
                 }
-                Label1:
+            Label1:
                 isMortgageAnARM = asset.IsMortgageAnARM;
                 if (isMortgageAnARM.HasValue)
                 {
@@ -589,7 +589,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                         asset.isARM = new int?(0);
                     }
                 }
-                Label0:
+            Label0:
                 if (userByUsername.UserType == UserType.CorpAdmin)
                 {
                     UserType userType = userByUsername.UserType;
@@ -904,7 +904,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                         }
                         return action;
                     }
-                    Label0:
+                Label0:
                     base.TempData["MDAAssets"] = base.TempData["MDAAssets"];
                 }
                 else if (base.TempData[string.Concat(userByUsername.UserId.ToString(), "Assets")] != null)
@@ -3142,7 +3142,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                 }
                 return base.View("ViewPaperAsset", asset);
             }
-            Label1:
+        Label1:
             isMortgageAnARM = asset.IsMortgageAnARM;
             if (isMortgageAnARM.HasValue)
             {
@@ -3692,13 +3692,20 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 
         #region Assests Search 
         [HttpGet]
-        public ActionResult AssetSearchView()
+        public ActionResult AssetSearchView(string filter = null)
         {
-            return View();
+            if (!string.IsNullOrEmpty(filter))
+            {
+                var e = (AssetType)Enum.Parse(typeof(AssetType), filter);
+                TempData["AssetTypeFilter"] = (int)e;
+                ViewBag.AssetTypeFilter = (int)e;
+            }
+
+            return View("AssetSearchView", "_Layout", filter);
         }
 
         [HttpGet]
-        public ActionResult AssetSearch()
+        public ActionResult AssetSearch(string filter = null)
         {
             // Create a new SavedAssetSearchViewModel object to hold information that will be displayed to the user
             SavedAssetSearchViewModel model = new SavedAssetSearchViewModel();
@@ -3713,6 +3720,12 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                 //model.SavedSearches = _assetManager.GetSavedSearchesForUser(userByUsername.UserId);
             }
 
+            //if (!string.IsNullOrEmpty(filter))
+            //{
+            //    var e = (AssetType)Enum.Parse(typeof(AssetType), filter);
+            //    TempData["AssetTypeFilter"] = (int)e;
+            //}
+
             // Return this information to the view
             return View(model);
         }
@@ -3725,6 +3738,16 @@ namespace Inview.Epi.EpiFund.Web.Controllers
         [HttpPost]
         public JsonResult SearchAssets(SearchAssetModel model)
         {
+            int? assetTypeFilter = TempData["AssetTypeFilter"] as int?;
+            if (assetTypeFilter.HasValue)
+            {
+                if (model.AssetTypes == null)
+                {
+                    model.AssetTypes = new List<int>();
+                }
+                model.AssetTypes.Add(assetTypeFilter.Value);
+            }
+
             UserModel userByUsername = _user.GetUserByUsername(base.User.Identity.Name);
             int? userId = (userByUsername == null) ? null : (int?)userByUsername.UserId;
             var data = _asset.SearchAssetsForSearch(model, userId);

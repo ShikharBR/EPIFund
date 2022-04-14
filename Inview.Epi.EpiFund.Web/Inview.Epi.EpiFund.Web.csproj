@@ -946,6 +946,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ClientApp\build\" />
     <Folder Include="Content\.sass-cache\04517dcf1647d19b131cc7211d3283eb3a59f326\" />
     <Folder Include="Views\Admin\DisplayTemplates\" />
     <Folder Include="Views\Investors\DisplayTemplates\" />
