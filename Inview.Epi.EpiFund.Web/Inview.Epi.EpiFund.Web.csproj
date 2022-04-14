@@ -363,6 +363,22 @@
       <Link>PrintHook64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ClientApp\build\admin-components.js" />
+    <Content Include="ClientApp\build\affiliations.js" />
+    <Content Include="ClientApp\build\assetSearch.js" />
+    <Content Include="ClientApp\build\basic-components.js" />
+    <Content Include="ClientApp\build\commissioner-calculator.js" />
+    <Content Include="ClientApp\build\commons.js" />
+    <Content Include="ClientApp\build\footer.js" />
+    <Content Include="ClientApp\build\intra-site-communication-component.js" />
+    <Content Include="ClientApp\build\main.js" />
+    <Content Include="ClientApp\build\navmain.js" />
+    <Content Include="ClientApp\build\service-provider-components.js" />
+    <Content Include="ClientApp\build\topnav.js" />
+    <Content Include="ClientApp\build\user-basic-components.js" />
+    <Content Include="ClientApp\build\vendors.js" />
+    <Content Include="ClientApp\build\view-asset.js" />
+    <Content Include="ClientApp\build\view-sample-asset.js" />
     <Content Include="Content\bootstrap-lightbox.min.css" />
     <Content Include="Content\bootstrap-lightbox.min.js" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -952,7 +968,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ClientApp\build\" />
     <Folder Include="Content\.sass-cache\04517dcf1647d19b131cc7211d3283eb3a59f326\" />
     <Folder Include="Views\Admin\DisplayTemplates\" />
     <Folder Include="Views\Investors\DisplayTemplates\" />

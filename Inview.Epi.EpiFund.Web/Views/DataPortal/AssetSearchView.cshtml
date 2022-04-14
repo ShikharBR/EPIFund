@@ -40,7 +40,7 @@
             }
         }
         else if (filterId != "empty") {
-            var  selectedAssetType=@ViewBag.AssetTypeFilter;
+            var  selectedAssetType='@ViewBag.AssetTypeFilter';
             document.getElementById('assetSearchIFrame').src = "/DataPortal/AssetSearch?filter=" + selectedAssetType;
         }
 
