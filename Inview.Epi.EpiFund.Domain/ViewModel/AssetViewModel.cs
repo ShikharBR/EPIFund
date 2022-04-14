@@ -1759,9 +1759,14 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
         public Guid? OwnerHoldingCompanyId { get; set; }
         public Guid? OwnerHoldingCompanyNewId { get; set; }
         public bool OwnerHoldingCompanyIsActive { get; set; }
+
         [Display(Name = "Contract Owner of Asset(Holding Company)")]
         public string OwnerHoldingCompany { get; set; }
-        [Display(Name = "Contract Owner Holding Company Address Line 1")]
+
+		[Display(Name = "Is RA")]
+		public bool OwnerISRA { get; set; }
+
+		[Display(Name = "Contract Owner Holding Company Address Line 1")]
         public string OwnerHoldingCompanyAddressLine1 { get; set; }
         [Display(Name = "Contract Owner Holding Company Address Line 2")]
         public string OwnerHoldingCompanyAddressLine2 { get; set; }
@@ -3024,6 +3029,12 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 		//added new logic of Chain of title START
 
 		public List<AssetHCOwnershipModel> AssetHCOwnershipLst
+		{
+			get;
+			set;
+		}
+
+		public List<AssetOCModel> AssetOCLst
 		{
 			get;
 			set;

@@ -33,19 +33,22 @@
             }
         }
     }
-    else if (Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin || Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.SiteAdmin || Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin2)
+    else if (Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin ||
+             Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.SiteAdmin ||
+             Model.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin2)
     {
         <li><a href="@Url.Action("ManageAssets", "Admin")">Manage Assets</a></li>
         <li><a href="@Url.Action("ManagePortfolios", "Portfolio")">Manage Portfolios</a></li>
-        <li><a href="@Url.Action("ManagePrincipalInvestorsReg", "Admin")">Manage Principal Investors</a></li>
+        <li><a href="@Url.Action("ManagePrincipalInvestorsReg", "Admin")">Manage PI Users</a></li>
 
-        @*<li><a href="@Url.Action("ManageHoldingCompanies", "Admin")">Manage Holding Companies</a></li>*@
-        <li><a href="@Url.Action("ManageHoldingCompany", "Admin")">Manage Holding Companies</a></li>
+        <li><a href="@Url.Action("ManageHoldingCompanies", "Admin")">Manage Holding Companies</a></li>
+
+        <li><a href="@Url.Action("ManageOperatingCompanies", "Admin")">Manage Operating Companies</a></li>
 
         <li><a href="@Url.Action("ManageAssetNarMembers", "Admin")">Manage NAR Members</a></li>
         <li><a href="@Url.Action("ManageMBAMembersReg", "Admin")">Manage MBA Members</a></li>
         <li><a href="@Url.Action("ManageJVMAParticipants", "Admin")">Manage JVMA Participants</a></li>
-        <li><a href="@Url.Action("ManageICAdmins", "Admin")">Manage IC Admins</a></li>
+        <li><a href="@Url.Action("ManageICAdmins", "Admin")">Manage ICA's</a></li>
         <li><a href="@Url.Action("ManageTitleCompanies", "Admin")">Manage Title Companies</a></li>
         <li><a href="@Url.Action("ManageInsuranceCompanies", "Insurance")">Manage Insurance Companies</a></li>
         <li><a href="@Url.Action("ExtractImagesFromBrochure", "Admin")">Extract Images From Brochure</a></li>

@@ -45,7 +45,7 @@ namespace Inview.Epi.EpiFund.Domain.Entity
             get;
             set;
         }
-        public int? Terms
+        public string Terms
         {
             get;
             set;
@@ -85,6 +85,8 @@ namespace Inview.Epi.EpiFund.Domain.Entity
             get;
             set;
         }
+
+        public double? CapRate{get;set;}
 
         public AssetHCOwnership()
         {

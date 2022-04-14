@@ -147,7 +147,8 @@
         </div>
     </div>
 </div>
-<div class="row">
+
+<div class="row" style="display:none;">
     <div class="col-sm-6">
         <div class="input-group">
             @Html.LabelFor(s => s.FaxNumber, new { @class = "control-label", style = "font-weight:bold;" })
@@ -159,87 +160,56 @@
         </div>
     </div>
 </div>
-<div style="padding-top:30px">
-    <label>Holding Companies:</label>
-    <div class="overflow short-xs" id="HoldingCompanyView">
-        <table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="padding: 5px; font-size: 10px !important; vertical-align: middle;">
-            <thead>
-                <tr>
-                    <td>
-                        <b>Company Name</b>
-                    </td>
-                    <td>
-                        <b>Assets</b>
-                    </td>
-                    <td>
-                        <b>Email</b>
-                    </td>
-                    <td>
-                        <b>State/Region/Province</b>
-                    </td>
-                    <td>
-                        <b>Country</b>
-                    </td>
-                    <td>
-                        <b>Active?</b>
-                    </td>
-                    <td colspan="2"></td>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in @Model.HoldingCompanies)
-                {
-                <tr id="@item.HoldingCompanyId">
-                    <td>
-                        @item.CompanyName
-                    </td>
-                    <td>
-                        @if (item.Assets.Count > 0)
-                        {
-                            for (int i = 0; i < item.Assets.Count; i++)
-                            {
-                                <a href="/Admin/UpdateAsset/@item.Assets[i].AssetId">@item.Assets[i].AssetNumber&nbsp;</a>
-                            }
-                        }
-                        else
-                        {
-                            <span style="font-weight:bold">No Assets</span>
-                        }
-                    </td>
-                    <td>
-                        @item.Email
-                    </td>
-                    <td>
-                        @item.State
-                    </td>
-                    <td>
-                        @item.Country
-                    </td>
-                    <td>
-                        @(item.IsActive ? "Yes" : "No")
-                    </td>
-                    <td style="text-align: center;">
-                        <a href="@Url.Action("UpdateHoldingCompany", "Admin", new { id = @item.HoldingCompanyId })" title="edit">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </a>
-                    </td>
-                    <td>
-                        @if (item.IsActive)
-                        {
-                            <a href="@Url.Action("DeactivateHoldingCompany", "Admin", new { id = @item.HoldingCompanyId, ocId = Model.OperatingCompanyId })" title="deactivate" onclick="return confirm('Are you sure you wish to deactivate this Holding Company?');">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </a>
-                        }
-                        else
-                        {
-                            <a href="@Url.Action("ReactivateHoldingCompany", "Admin", new { id = @item.HoldingCompanyId, ocId = Model.OperatingCompanyId })" title="reactivate" onclick="return confirm('Are you sure you wish to reactivate this Holding Company?');">
-                                <span class="glyphicon glyphicon-ok"></span>
-                            </a>
-                        }
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.LinkedIn, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.LinkedIn)@Html.ValidationMessageFor(s => s.LinkedIn, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Facebook, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Facebook)@Html.ValidationMessageFor(s => s.Facebook, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Instagram, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Instagram)@Html.ValidationMessageFor(s => s.Instagram, "")
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.LabelFor(s => s.Twitter, new { @class = "control-label", style = "font-weight:bold;" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="input-group">
+            @Html.TextBoxFor(s => s.Twitter)@Html.ValidationMessageFor(s => s.Twitter, "")
+        </div>
     </div>
 </div>

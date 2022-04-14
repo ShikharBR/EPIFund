@@ -249,13 +249,7 @@ namespace Inview.Epi.EpiFund.Domain
 
 		bool VerifyNarMember(NarMemberViewModel model);
         
-        HoldingCompanyViewModel GetHoldingCompany(Guid holdingCompanyId);
 
-		List<HoldingCompanyViewModel> GetHoldingCompaniesNew();
-
-		List<HoldingCompanyViewModel> GetHoldingCompanies();
-
-        List<HoldingCompanyViewModel> GetHoldingCompaniesForOperatingCompany(Guid id);
 
         bool CreateHoldingCompany(HoldingCompanyViewModel model);
 
@@ -281,5 +275,25 @@ namespace Inview.Epi.EpiFund.Domain
 
         IEnumerable<SelectListItem> PopulateStateList();
 
-    }
+
+		HoldingCompanyViewModel GetHoldingCompany(Guid holdingCompanyId);
+
+		List<HoldingCompanyViewModel> GetHoldingCompaniesNew();
+
+		List<HoldingCompanyViewModel> GetHoldingCompaniesForOperatingCompany(Guid id);
+
+		List<HoldingCompanyList> GetHoldingCompanies(ManageHoldingCompanyModel model);
+
+		List<HoldingCompanyList> GetHoldingCompany(ManageHoldingCompanyModel model);
+
+		HoldingCompany GetHoldingCompanybyId(Guid id);
+
+		OperatingCompany GetOpertingCompanybyId(Guid id);
+
+		List<OperatingCompanyList> GetOperataingCompany(ManageOperatingCompanyModel model);
+
+		OperatingCompanyViewModel GetOPeratingCompany(Guid operatingCompanyId);
+
+
+	}
 }

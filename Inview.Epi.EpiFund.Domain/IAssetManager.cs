@@ -212,9 +212,24 @@ namespace Inview.Epi.EpiFund.Domain
 		void DeActivateAsset(string assetId);
 
         List<AssetHCOwnershipModel> GetAssetHCByAssetId(Guid assetId);
-
-        void SaveUpdateAssetHC(AssetHCOwnership assetHC);
+        void SaveUpdateAssetHC(AssetHCOwnership assetHC);		
 		AssetHCOwnershipModel GetAssetHCByAssetHCOwnershipId(int assetHCOwnershipId);
+
+		List<AssetOCModel> GetAssetOCByAssetId(Guid assetId);
+
+		void SaveUpdateAssetOC(HCCAssetOC assetOC);
+
+		AssetOCModel GetAssetOCByAssetOCId(int assetOCId);
+
+		AssetOCAddressModel GetHCAddressByAssetId(Guid assetId);
+
+		List<ChainOfTitleQuickListModel> GetChainOfTitleByAssetId(string AssetId);
+
+		List<AdminAssetQuickListModel> GetAssetsbyHCId(string HcId);
+
+		List<AdminAssetQuickListModel> GetAssetsbyOCId(string OcId);
+
+		bool CheckHCDate(DateTime date, Guid assetId);
 
 	}
 }

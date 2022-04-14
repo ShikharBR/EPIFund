@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Inview.Epi.EpiFund.Domain.Entity
 {
@@ -20,5 +21,13 @@ namespace Inview.Epi.EpiFund.Domain.Entity
         public virtual string CellNumber { get; set; }
         public virtual string FaxNumber { get; set; }
         public virtual bool IsActive { get; set; }
+
+        public virtual string LinkedIn { get; set; }
+        public virtual string Facebook { get; set; }
+        public virtual string Instagram { get; set; }
+        public virtual string Twitter { get; set; }
+
+        public bool ISRA { get; set; }
+
     }
 }

@@ -163,8 +163,29 @@ namespace Inview.Epi.EpiFund.Web.Models
             get;
             set;
         }
- 
-        public AdminAssetSearchResultsModel()
+
+		[Display(Name = "County")]
+		public string County
+		{
+			get;
+			set;
+		}
+
+		[Display(Name = "List Agent Company Name")]
+		public string ListAgentCompanyName
+		{
+			get;
+			set;
+		}
+
+		[Display(Name = "List Agent Name")]
+		public string ListAgentName
+		{
+			get;
+			set;
+		}
+
+		public AdminAssetSearchResultsModel()
 		{
 			this.AssetTypes = new List<SelectListItem>()
 			{
