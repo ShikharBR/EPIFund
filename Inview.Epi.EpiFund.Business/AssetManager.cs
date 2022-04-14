@@ -2488,7 +2488,9 @@ namespace Inview.Epi.EpiFund.Business
                             ProformaAnnualIncome = a.ProformaAnnualIncome,
                             ProformaNOI = proformaNOI,
                             CashInvestmentApy = a.CashInvestmentApy,
+                            
                             capRate = ((pretax / a.CurrentBpo) * 100),
+
                             AskingPrice = a.AskingPrice,
                             CurrentBpo = a.CurrentBpo,
                             Portfolio = portfolioAssets.Where(x => x.AssetId == a.AssetId).Any() ? true : false,
@@ -2533,6 +2535,8 @@ namespace Inview.Epi.EpiFund.Business
                 {
                     PortfolioQuickListModel pfModel = new PortfolioQuickListModel();
                     var portfolio = context.Portfolios.Where(x => x.PortfolioId == item.PortfolioId).FirstOrDefault();
+
+                    pfModel.NumberOfAssets = context.PortfolioAssets.Where(x => x.PortfolioId == portfolio.PortfolioId).ToList().Count();
 
                     pfModel.PortfolioId = portfolio.PortfolioId;
                     pfModel.PortfolioName = portfolio.PortfolioName;
