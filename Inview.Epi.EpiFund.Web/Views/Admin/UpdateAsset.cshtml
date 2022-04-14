@@ -17,7 +17,7 @@
 }
 <h3>Edit Asset: @string.Format("{0}: {1} {2}, {3} {4}", Model.ProjectName, Model.PropertyAddress, Model.City, Model.State, Model.Zip)</h3>
 
-@using (Html.BeginForm("updateasset", "admin", FormMethod.Post, new { id = "assetform", onchange="return formValidation()" }))
+@using (Html.BeginForm("updateasset", "admin", FormMethod.Post, new { id = "assetform" }))
 {
     @Html.ValidationSummary()
     <br />
