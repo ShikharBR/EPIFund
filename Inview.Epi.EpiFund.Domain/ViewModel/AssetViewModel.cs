@@ -2791,31 +2791,31 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			SelectListItem selectListItem88 = new SelectListItem()
 			{
 				Value = "10",
-				Text = "10"
+				Text = "10 Years"
 			};
 			selectListItems12.Add(selectListItem88);
 			SelectListItem selectListItem89 = new SelectListItem()
 			{
 				Value = "15",
-				Text = "15"
+				Text = "15 Years"
 			};
 			selectListItems12.Add(selectListItem89);
 			SelectListItem selectListItem90 = new SelectListItem()
 			{
 				Value = "20",
-				Text = "20"
+				Text = "20 Years"
 			};
 			selectListItems12.Add(selectListItem90);
 			SelectListItem selectListItem91 = new SelectListItem()
 			{
 				Value = "25",
-				Text = "25"
+				Text = "25 Years"
 			};
 			selectListItems12.Add(selectListItem91);
 			SelectListItem selectListItem92 = new SelectListItem()
 			{
 				Value = "30",
-				Text = "30"
+				Text = "30 Years"
 			};
 			selectListItems12.Add(selectListItem92);
 			this.AmortizationScheduleList = selectListItems12;

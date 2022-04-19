@@ -169,7 +169,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 					var portfolioId = this._portfolio.CreatePortfolio(model, userByUsername.UserId);
 					base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Portfolio successfully created.");
 					return base.RedirectToAction("ManagePortfolios", "Portfolio", new { portfolioNumber = portfolioId.ToString() });
-                }
+				}
 			}
 			catch (Exception exception1)
 			{
@@ -227,12 +227,12 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 		[Authorize]
 		public ActionResult ManagePortfolios(AdminPortfolioResultsModel model, string sortOrder, int? page, string portfolioNumber = null)
 		{
-            // default sort order is now name
-            if(sortOrder == null)
-                model.SortOrder = "name";
+			// default sort order is now name
+			if (sortOrder == null)
+				model.SortOrder = "name";
 
-            int value;
-            this._user.RemoveUserAssetLocks(base.User.Identity.Name);
+			int value;
+			this._user.RemoveUserAssetLocks(base.User.Identity.Name);
 			List<PortfolioQuickListViewModel> portfolioQuickListViewModels = new List<PortfolioQuickListViewModel>();
 			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
 			this.GetLayout(userByUsername);
@@ -244,7 +244,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			model.ControllingUserType = new UserType?(userByUsername.UserType);
 			ManagePortfoliosModel managePortfoliosModel = new ManagePortfoliosModel()
 			{
-                PortfolioId = portfolioNumber == null ? Guid.Empty : new Guid(portfolioNumber),
+				PortfolioId = portfolioNumber == null ? Guid.Empty : new Guid(portfolioNumber),
 				AddressLine1 = model.AddressLine1,
 				City = model.City,
 				APNNumber = model.APN,
@@ -256,33 +256,33 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				AssetType = model.SelectedAssetType.GetValueOrDefault(0),
 				AssetName = model.AssetName,
 				ControllingUserType = userByUsername.UserType,
-                IsSearching = model.IsSearching
+				IsSearching = model.IsSearching
 			};
 			portfolioQuickListViewModels = this._portfolio.GetSearchPortfolios(managePortfoliosModel);
 			((dynamic)base.ViewBag).CurrentSort = model.SortOrder;
 			base.ViewBag.PortfolioIdSortParm = (model.SortOrder == "assetId" ? "assetId_desc" : "assetId");
 			base.ViewBag.NameSortParm = (model.SortOrder == "name" ? "name_desc" : "name");
-            base.ViewBag.NumberSortParm = (model.SortOrder == "number" ? "number_desc" : "number");
+			base.ViewBag.NumberSortParm = (model.SortOrder == "number" ? "number_desc" : "number");
 			string str = model.SortOrder;
 			if (str == "name_desc")
 			{
-                // Trim the portfolio names eliminating any spaces that could meddle with the sort
-                // Sort portfolios by PortfolioName in descending order
-                portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
-                portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, true);
-            }
-            else if (str == "name")
+				// Trim the portfolio names eliminating any spaces that could meddle with the sort
+				// Sort portfolios by PortfolioName in descending order
+				portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
+				portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, true);
+			}
+			else if (str == "name")
 			{
-                // Trim the portfolio names eliminating any spaces that could meddle with the sort
-                // Sort portfolios by PortfolioName 
-                portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
-                portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, false);
-                
+				// Trim the portfolio names eliminating any spaces that could meddle with the sort
+				// Sort portfolios by PortfolioName 
+				portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
+				portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, false);
+
 			}
 			else if (str == "number_desc")
 			{
-                
-                portfolioQuickListViewModels = (
+
+				portfolioQuickListViewModels = (
 					from s in portfolioQuickListViewModels
 					orderby s.PortfolioAssets.Count descending
 					select s).ToList<PortfolioQuickListViewModel>();
@@ -292,7 +292,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				portfolioQuickListViewModels = (
 					from w in portfolioQuickListViewModels
 					orderby w.PortfolioAssets.Count
-                    select w).ToList<PortfolioQuickListViewModel>();
+					select w).ToList<PortfolioQuickListViewModel>();
 			}
 			else if (str == "assetId_desc")
 			{
@@ -303,33 +303,33 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			}
 			else
 			{
-                // by default sort by name ascending 
-                portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
-                portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, false);
-            }
-            int num = 0;
-            TempDataDictionary tempData = base.TempData;
-            int? rowCount = model.RowCount;
-            if (rowCount.HasValue)
-            {
-                rowCount = model.RowCount;
-                value = rowCount.Value;
-            }
-            else
-            {
-                value = 50;
-            }
-            num = value;
-            tempData["RowCount"] = value;
-            base.TempData.Keep("RowCount");
-            rowCount = model.Page;
-            if (rowCount.GetValueOrDefault(0) > 0)
-            {
-                page = model.Page;
-            }
-            rowCount = page;
-            int num1 = (rowCount.HasValue ? rowCount.GetValueOrDefault() : 1);
-            model.Portfolios = portfolioQuickListViewModels.ToPagedList<PortfolioQuickListViewModel>(num1, num);
+				// by default sort by name ascending 
+				portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
+				portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, false);
+			}
+			int num = 0;
+			TempDataDictionary tempData = base.TempData;
+			int? rowCount = model.RowCount;
+			if (rowCount.HasValue)
+			{
+				rowCount = model.RowCount;
+				value = rowCount.Value;
+			}
+			else
+			{
+				value = 50;
+			}
+			num = value;
+			tempData["RowCount"] = value;
+			base.TempData.Keep("RowCount");
+			rowCount = model.Page;
+			if (rowCount.GetValueOrDefault(0) > 0)
+			{
+				page = model.Page;
+			}
+			rowCount = page;
+			int num1 = (rowCount.HasValue ? rowCount.GetValueOrDefault() : 1);
+			model.Portfolios = portfolioQuickListViewModels.ToPagedList<PortfolioQuickListViewModel>(num1, num);
 			return base.View(model);
 		}
 
@@ -377,7 +377,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			{
 				portfolioQuickListViewModels = this._portfolio.GetUserPortfolios(userByUsername.UserId);
 			}
-			return 
+			return
 				from userPf in portfolioQuickListViewModels
 				select new SelectListItem()
 				{
@@ -460,173 +460,173 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			switch (SortOrder)
 			{
 				case "assetName_desc":
-				{
-					assets = (
-						from a in assets
-						orderby a.AssetName descending
-						select a).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from a in assets
+							orderby a.AssetName descending
+							select a).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "assetName":
-				{
-					assets = (
-						from a in assets
-						orderby a.AssetName
-						select a).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from a in assets
+							orderby a.AssetName
+							select a).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "createdBy_desc":
-				{
-					assets = (
-						from s in assets
-						orderby s.CreatedBy descending
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.CreatedBy descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "createdBy":
-				{
-					assets = (
-						from s in assets
-						orderby s.CreatedBy
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.CreatedBy
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "type_desc":
-				{
-					assets = (
-						from s in assets
-						orderby s.Type descending
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.Type descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "type":
-				{
-					assets = (
-						from s in assets
-						orderby s.Type
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.Type
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "show_desc":
-				{
-					assets = (
-						from s in assets
-						orderby s.Show descending
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.Show descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "show":
-				{
-					assets = (
-						from s in assets
-						orderby s.Show
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.Show
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "city_desc":
-				{
-					assets = (
-						from s in assets
-						orderby s.City descending
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.City descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "city":
-				{
-					assets = (
-						from w in assets
-						orderby w.City
-						select w).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from w in assets
+							orderby w.City
+							select w).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "state_desc":
-				{
-					assets = (
-						from s in assets
-						orderby s.State descending
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.State descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "state":
-				{
-					assets = (
-						from w in assets
-						orderby w.State
-						select w).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from w in assets
+							orderby w.State
+							select w).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "address_desc":
-				{
-					assets = (
-						from s in assets
-						orderby s.AddressLine1 descending
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.AddressLine1 descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "address":
-				{
-					assets = (
-						from w in assets
-						orderby w.AddressLine1
-						select w).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from w in assets
+							orderby w.AddressLine1
+							select w).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "assetId_desc":
-				{
-					assets = (
-						from s in assets
-						orderby s.AssetNumber descending
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.AssetNumber descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "assetId":
-				{
-					assets = (
-						from w in assets
-						orderby w.AssetNumber
-						select w).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from w in assets
+							orderby w.AssetNumber
+							select w).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "status_desc":
-				{
-					assets = (
-						from s in assets
-						orderby s.Status descending
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.Status descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "status":
-				{
-					assets = (
-						from s in assets
-						orderby s.Status
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.Status
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "zip_desc":
-				{
-					assets = (
-						from s in assets
-						orderby s.Zip descending
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.Zip descending
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				case "zip":
-				{
-					assets = (
-						from w in assets
-						orderby w.Zip
-						select w).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from w in assets
+							orderby w.Zip
+							select w).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 				default:
-				{
-					assets = (
-						from s in assets
-						orderby s.AssetNumber
-						select s).ToList<AdminAssetQuickListModel>();
-					break;
-				}
+					{
+						assets = (
+							from s in assets
+							orderby s.AssetNumber
+							select s).ToList<AdminAssetQuickListModel>();
+						break;
+					}
 			}
 			return assets;
 		}
@@ -697,12 +697,24 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			PortfolioViewModel portfolio = this._portfolio.GetPortfolio(id);
 			portfolio.ControllingUserType = new UserType?(userByUsername.UserType);
 			portfolio = this.PopulateAssetList(portfolio);
+			portfolio.ListingStatusAll = GetAllListingStatus();
 			portfolio.isIntial = true;
 			this.SearchAssets(portfolio);
-            if (HttpRuntime.Cache["AssetList"] != null) HttpRuntime.Cache.Remove("AssetList");
-            return base.View(portfolio);
+			if (HttpRuntime.Cache["AssetList"] != null) HttpRuntime.Cache.Remove("AssetList");
+			return base.View(portfolio);
 		}
+		public List<SelectListItem> GetAllListingStatus()
+		{
+			List<SelectListItem> items = new List<SelectListItem>();
 
+			items.Add(new SelectListItem { Text = "---", Value = "0" });
+
+			items.Add(new SelectListItem { Text = "Available", Value = "1" });
+
+			items.Add(new SelectListItem { Text = "Pending: Accepting B/U FPA’s", Value = "2" });
+
+			return items;
+		}
 		[Authorize]
 		[HttpPost]
 		[ValidateInput(false)]
@@ -790,15 +802,15 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				}
 				else
 				{
-                    if (model.CallforOfferDate.HasValue) model.hasOffersDate = true;
-                    else model.hasOffersDate = false;
+					if (model.CallforOfferDate.HasValue) model.hasOffersDate = true;
+					else model.hasOffersDate = false;
 
-                    this._portfolio.UpdatePortfolio(model, userByUsername.UserId);
+					this._portfolio.UpdatePortfolio(model, userByUsername.UserId);
 					base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Portfolio successfully updated.");
 
-                    if (HttpRuntime.Cache["AssetList"] != null) HttpRuntime.Cache.Remove("AssetList");
+					if (HttpRuntime.Cache["AssetList"] != null) HttpRuntime.Cache.Remove("AssetList");
 
-                    return base.RedirectToAction("ManagePortfolios", "Portfolio", new { PortfolioNumber = model.PortfolioId.ToString() });
+					return base.RedirectToAction("ManagePortfolios", "Portfolio", new { PortfolioNumber = model.PortfolioId.ToString() });
 				}
 			}
 			catch (Exception exception1)

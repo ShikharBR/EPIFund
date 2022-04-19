@@ -23,14 +23,14 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Address Line 1")]
+		[Display(Name = "Address Line 1")]
 		public string AddressLine1
 		{
 			get;
 			set;
 		}
 
-		[Display(Name="APN Number")]
+		[Display(Name = "APN Number")]
 		public string APN
 		{
 			get;
@@ -43,14 +43,14 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Asset Name")]
+		[Display(Name = "Asset Name")]
 		public string AssetName
 		{
 			get;
 			set;
 		}
 
-		[Display(Name="Asset #")]
+		[Display(Name = "Asset #")]
 		public string AssetNumber
 		{
 			get;
@@ -75,7 +75,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Proforma VF and Offsets (Averaged)")]
+		[Display(Name = "Proforma VF and Offsets (Averaged)")]
 		public double AvgProformaVF
 		{
 			get;
@@ -88,14 +88,21 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Auction/Call for Offer Date")]
+		[Display(Name = "Auction/Call for Offer Date")]
 		public DateTime? CallforOfferDate
 		{
 			get;
 			set;
 		}
+		[Display(Name = "Listing Status of all Assets within the Portfolio")]
+		public Inview.Epi.EpiFund.Domain.Enum.ListingStatus ListingStatus
+		{
 
-		[Display(Name="City")]
+			get; set;
+		}
+
+
+		[Display(Name = "City")]
 		public string City
 		{
 			get;
@@ -108,21 +115,21 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Current Annualized Gross Income")]
+		[Display(Name = "Current Annualized Gross Income")]
 		public double CumiAnnualGrossIncome
 		{
 			get;
 			set;
 		}
 
-		[Display(Name="Independent Appraisal/BPO (Cumulative)")]
+		[Display(Name = "Independent Appraisal/BPO (Cumulative)")]
 		public double CumiBPO
 		{
 			get;
 			set;
 		}
 
-		[Display(Name="Independent Appraisal/BPO CAP Rate")]
+		[Display(Name = "Independent Appraisal/BPO CAP Rate")]
 		public double CumiBPOCapRate
 		{
 			get;
@@ -147,7 +154,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Listed Price CAP Rate (Cumulative)")]
+		[Display(Name = "Listed Price CAP Rate (Cumulative)")]
 		public double CumiLPCapRate
 		{
 			get;
@@ -166,28 +173,28 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Proforma AOE (Cumulative)")]
+		[Display(Name = "Proforma AOE (Cumulative)")]
 		public double CumiProformaAOE
 		{
 			get;
 			set;
 		}
 
-		[Display(Name="Proforma CAM / AMI  Income")]
+		[Display(Name = "Proforma CAM / AMI  Income")]
 		public double CumiProformaCAM
 		{
 			get;
 			set;
 		}
 
-		[Display(Name="Proforma Pre Tax NOI (Cumulative)")]
+		[Display(Name = "Proforma Pre Tax NOI (Cumulative)")]
 		public double CumiProformaNOI
 		{
 			get;
 			set;
 		}
 
-		[Display(Name="Proforma SGI (Cumulative)")]
+		[Display(Name = "Proforma SGI (Cumulative)")]
 		public double CumiProformaSGI
 		{
 			get;
@@ -218,14 +225,14 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Asset Entered End Date")]
+		[Display(Name = "Asset Entered End Date")]
 		public DateTime? EndDate
 		{
 			get;
 			set;
 		}
 
-		[Display(Name="Estimated Deferred Maintenance")]
+		[Display(Name = "Estimated Deferred Maintenance")]
 		public int EstDeferredMaintenance
 		{
 			get;
@@ -244,8 +251,8 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Does Portfolio have a CALL FOR OFFERS DATE?")]
-		[Required(ErrorMessage="Does Portfolio have a CALL FOR OFFERS DATE is Required")]
+		[Display(Name = "Does Portfolio have a CALL FOR OFFERS DATE?")]
+		[Required(ErrorMessage = "Does Portfolio have a CALL FOR OFFERS DATE is Required")]
 		public bool hasOffersDate
 		{
 			get;
@@ -276,15 +283,22 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Is Portfolio Subject to Auction?")]
-		[Required(ErrorMessage="Is Portfolio Subject to Auction is Required")]
+		[Display(Name = "Is Portfolio Subject to Auction?")]
+		[Required(ErrorMessage = "Is Portfolio Subject to Auction is Required")]
 		public bool isSubjectToAuction
 		{
 			get;
 			set;
 		}
+		[Display(Name = "Must Portfolio be Sold All Assets Inclusive?")]
+		[Required(ErrorMessage = "Must Portfolio be Sold All Assets Inclusive?")]
+		public bool IsAssetInclusive
+		{
+			get;
+			set;
+		}
 
-		[Display(Name="Last Reported Occupancy")]
+		[Display(Name = "Last Reported Occupancy")]
 		public DateTime? LastReportedOccupancyDate
 		{
 			get;
@@ -303,7 +317,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Number of Assets")]
+		[Display(Name = "Number of Assets")]
 		public int NumberofAssets
 		{
 			get;
@@ -322,7 +336,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Proforma AOE as % of SGI")]
+		[Display(Name = "Proforma AOE as % of SGI")]
 		public double PFProformaAoeFactorAsPerOfSGI
 		{
 			get;
@@ -335,15 +349,15 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Listed/Asking Price: ")]
+		[Display(Name = "Listed/Asking Price: ")]
 		public double PortfolioListedPrice
 		{
 			get;
 			set;
 		}
 
-		[Display(Name="Portfolio Name")]
-		[Required(ErrorMessage="Portfolio Name is Required")]
+		[Display(Name = "Portfolio Name")]
+		[Required(ErrorMessage = "Portfolio Name is Required")]
 		public string PortfolioName
 		{
 			get;
@@ -374,7 +388,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Asset Type")]
+		[Display(Name = "Asset Type")]
 		public AssetType? SelectedAssetType
 		{
 			get;
@@ -387,14 +401,15 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Asset Entered Start Date")]
+		[Display(Name = "Asset Entered Start Date")]
 		public DateTime? StartDate
 		{
 			get;
 			set;
 		}
 
-		[Display(Name="State")]
+
+		[Display(Name = "State")]
 		public string State
 		{
 			get;
@@ -405,6 +420,19 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 		{
 			get;
 			set;
+		}
+
+		public new List<SelectListItem> ListingStatusAll
+		{
+			get;
+			set;
+		}
+
+		[Display(Name = "Pricing Display Option for Portfolio")]
+		public Inview.Epi.EpiFund.Domain.Enum.PricingDisplay PricingDisplay
+		{
+
+			get; set;
 		}
 
 		public int UserId
@@ -419,13 +447,24 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Zip")]
+		[Display(Name = "Zip")]
 		public string ZipCode
 		{
 			get;
 			set;
 		}
-
+		[Display(Name = "Define Sale Terms of Portfolio Acceptable by Selle")]
+		public string DefineSaleTermsPortfolio
+		{
+			get;
+			set;
+		}		
+		[Display(Name = "Is there a Call for Offers Date for the Portfolio")]
+		public string IsCallDatePortfolio
+		{
+			get;
+			set;
+		}		
 		public PortfolioViewModel()
 		{
 			this.Images = new List<AssetImage>();

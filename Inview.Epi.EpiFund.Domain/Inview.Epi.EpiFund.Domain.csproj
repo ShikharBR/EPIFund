@@ -215,6 +215,7 @@
     <Compile Include="Enum\PreferredMethod.cs" />
     <Compile Include="Entity\ReportedOccupancy.cs" />
     <Compile Include="Entity\User.cs" />
+    <Compile Include="Enum\PricingDisplay.cs" />
     <Compile Include="Enum\PrincipalInvestorContractAssetType.cs" />
     <Compile Include="Enum\SellerTerms.cs" />
     <Compile Include="Enum\StatesOfUS.cs" />
