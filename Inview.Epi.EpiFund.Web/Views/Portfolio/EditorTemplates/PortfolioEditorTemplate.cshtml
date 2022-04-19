@@ -155,72 +155,6 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="input-group">
-                    @Html.LabelFor(model => model.IsAssetInclusive) <span style="color: red;">*</span>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.RadioButtonFor(s => s.IsAssetInclusive, "true") Yes
-                    @Html.RadioButtonFor(s => s.IsAssetInclusive, "false") No
-
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.LabelFor(model => model.DefineSaleTermsPortfolio)
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.EnumDropDownList("ListingStatus", Model.ListingStatus, "---")
-
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.LabelFor(model => model.ListingStatus)
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.EnumDropDownList("ListingStatus", Model.ListingStatus, "---")
-
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.LabelFor(model => model.LastReportedOccupancyDate)
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.TextBoxFor(s => s.LastReportedOccupancyDate, new { @class = "datepicker" }) <em>MM/dd/yyyy</em>
-                  
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.LabelFor(model => model.PricingDisplay)
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.EnumDropDownList("PricingDisplay", Model.PricingDisplay, "---")
-
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="input-group">
                     @Html.LabelFor(model => model.isSubjectToAuction) <span style="color: red;">*</span>
                 </div>
             </div>
@@ -228,20 +162,7 @@
                 <div class="input-group">
                     @Html.RadioButtonFor(s => s.isSubjectToAuction, "true") Yes
                     @Html.RadioButtonFor(s => s.isSubjectToAuction, "false") No
-
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.LabelFor(model => model.IsCallDatePortfolio) <span style="color: red;">*</span>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.RadioButtonFor(s => s.IsCallDatePortfolio, "true") Yes
-                    @Html.RadioButtonFor(s => s.IsCallDatePortfolio, "false") No
+                    @Html.ValidationMessageFor(model => model.isSubjectToAuction)
                 </div>
             </div>
         </div>
@@ -330,11 +251,11 @@
                                                 <span title="inaccessible" class="glyphicon glyphicon-ban-circle"></span>
                                             </td>
                                         }
-                                        <td style="text-align: center;">
-                                            <a href="@Url.Action("DeactivateAssetfromPortfolio", "Portfolio", new { id = @Model.PortfolioProperties[i].AssetId, pfId = @Model.PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove the Asset from this Portfolio?');">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
-                                        </td>
+                                            <td style="text-align: center;">
+                                                <a href="@Url.Action("DeactivateAssetfromPortfolio", "Portfolio", new { id = @Model.PortfolioProperties[i].AssetId, pfId = @Model.PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove the Asset from this Portfolio?');">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </a>
+                                            </td>
                                     }
                                     else
                                     {
