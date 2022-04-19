@@ -1,0 +1,64 @@
+﻿@model object
+@{
+    ViewBag.Title = "Asset Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .main-content {
+        padding: 60px 0px !important
+    }
+
+    #assetSearchIFrame {
+        position: static;
+    }
+
+    .main-content {
+        padding: 0;
+    }
+</style>
+
+<iframe id="assetSearchIFrame" src="@Url.Action("AssetSearch", "DataPortal", new { filter = Model })" width="850" height="1650"></iframe>
+
+
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', (event) => {
+        var favGroupId = getUrlParam('favGroupId', 'empty');
+        var savedSearchId = getUrlParam('savedSearchId', 'empty');
+        var advancedSearchPopUp = getUrlParam('advancedSearchPopUp', 'empty');
+        var filterId = getUrlParam('filter', 'empty');
+
+        if (favGroupId != "empty") {
+            document.getElementById('assetSearchIFrame').src = "/DataPortal/AssetSearch?favGroupId=" + favGroupId;
+        }
+        else if (savedSearchId != "empty") {
+            if (advancedSearchPopUp != "False") {
+                document.getElementById('assetSearchIFrame').src = "/DataPortal/AssetSearch?savedSearchId=" + savedSearchId + "&advancedSearchPopUp=True";
+            }
+            else {
+                document.getElementById('assetSearchIFrame').src = "/DataPortal/AssetSearch?savedSearchId=" + savedSearchId + "&advancedSearchPopUp=False";
+            }
+        }
+        else if (filterId != "empty") {
+            var  selectedAssetType='@ViewBag.AssetTypeFilter';
+            document.getElementById('assetSearchIFrame').src = "/DataPortal/AssetSearch?filter=" + selectedAssetType;
+        }
+
+    });
+
+    function getUrlParam(parameter, defaultValue) {
+        var urlparameter = defaultValue;
+        if (window.location.href.indexOf(parameter) > -1) {
+            urlparameter = getUrlVars()[parameter];
+        }
+        return urlparameter;
+    }
+
+    function getUrlVars() {
+        var vars = {};
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+            vars[key] = value;
+        });
+        return vars;
+    }
+</script>

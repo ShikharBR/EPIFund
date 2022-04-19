@@ -2488,7 +2488,9 @@ namespace Inview.Epi.EpiFund.Business
                             ProformaAnnualIncome = a.ProformaAnnualIncome,
                             ProformaNOI = proformaNOI,
                             CashInvestmentApy = a.CashInvestmentApy,
+                            
                             capRate = ((pretax / a.CurrentBpo) * 100),
+
                             AskingPrice = a.AskingPrice,
                             CurrentBpo = a.CurrentBpo,
                             Portfolio = portfolioAssets.Where(x => x.AssetId == a.AssetId).Any() ? true : false,
@@ -2533,6 +2535,8 @@ namespace Inview.Epi.EpiFund.Business
                 {
                     PortfolioQuickListModel pfModel = new PortfolioQuickListModel();
                     var portfolio = context.Portfolios.Where(x => x.PortfolioId == item.PortfolioId).FirstOrDefault();
+
+                    pfModel.NumberOfAssets = context.PortfolioAssets.Where(x => x.PortfolioId == portfolio.PortfolioId).ToList().Count();
 
                     pfModel.PortfolioId = portfolio.PortfolioId;
                     pfModel.PortfolioName = portfolio.PortfolioName;
@@ -8687,6 +8691,494 @@ namespace Inview.Epi.EpiFund.Business
                 }
             }
         }
+        public AssetDynamicViewModel SearchAssetsForSearch(SearchAssetModel searchModel, int? userId)
+        {
+            var context = _factory.Create();
+            var queryBuilder = new List<string>();
+            var model = new AssetDynamicViewModel();
+            // search wont initiate until iteration
+            #region Filtering
+            var dbEntities = context.Assets.Where(a => a.IsActive/* && a.IsPublished == true*/);// && a.Latitude.HasValue && a.Longitude.HasValue);
+
+            //check search bar input (it could be address, asset name, asset id)
+            if (!string.IsNullOrWhiteSpace(searchModel.SearchBarInput))
+            {
+                //create a union holder
+                List<IQueryable<Asset>> searchBarSearches = new List<IQueryable<Asset>>();
+
+                //asset id 
+                Guid aId = Guid.Empty;
+                if (Guid.TryParse(searchModel.SearchBarInput, out aId))
+                {
+                    var idSearch = dbEntities.Where(d => d.AssetId == aId);
+                    searchBarSearches.Add(idSearch);
+                }
+                else
+                {
+                    //name search 
+                    //assume if there is no comma, that's an asset name search
+                    if (searchModel.SearchBarInput.IndexOf(",") == -1)
+                    {
+                        searchModel.AssetName = searchModel.SearchBarInput; //<-- this will be searched later
+                    }
+                    else
+                    {
+                        //TODO: asset number search?
+                    }
+                }
+
+
+                if (searchBarSearches.Count() > 0)
+                {
+                    var unionSearch = searchBarSearches[0];
+                    for (int i = 1; i < searchBarSearches.Count; i++)
+                    {
+                        var search = searchBarSearches[i];
+                        unionSearch = unionSearch.Union(search);
+                    }
+
+                    dbEntities = unionSearch.AsQueryable();
+                }
+            }
+
+
+
+            // AssetTypes trump AssetType
+            List<AssetType> selectedAssetTypes = new List<AssetType>();
+            List<AssetSubType> selectedAssetSubTypes = new List<AssetSubType>();
+
+            // Generate list of asset types to filter by
+            if (searchModel.AssetTypes != null && searchModel.AssetTypes.Count > 0)
+            {
+                foreach (var atInt in searchModel.AssetTypes)
+                {
+                    // not sure why we need a try/catch clause here but leaving this for now
+                    try
+                    {
+                        var assetType = (AssetType)Enum.ToObject(typeof(AssetType), atInt);
+                        selectedAssetTypes.Add(assetType);
+                    }
+                    catch { }
+                }
+            }
+
+            // Generate list of asset sub types to filer by
+            if (searchModel.AssetSubTypes != null && searchModel.AssetSubTypes.Count > 0)
+            {
+                foreach (var atInt in searchModel.AssetSubTypes)
+                {
+                    // not sure why we need a try/catch clause here but leaving this for now
+                    try
+                    {
+                        var assetSubType = (AssetSubType)Enum.ToObject(typeof(AssetSubType), atInt);
+                        selectedAssetSubTypes.Add(assetSubType);
+                    }
+                    catch { }
+                }
+            }
+            // perform asset filters for both asset types and asset subtypes
+            if (selectedAssetTypes.Count > 0 || selectedAssetSubTypes.Count > 0)
+            {
+                var isPaper = selectedAssetTypes.Contains(AssetType.SecuredPaper);
+                dbEntities = dbEntities.AddSearchParameter(true, a => selectedAssetTypes.Contains(a.AssetType)
+                    //|| selectedAssetSubTypes.Contains(a.AssetSubType.Value) -- ToDo: Assest Sub Type need to check
+                    || isPaper && a.IsPaper);
+            }
+
+            if (searchModel.GradeClassifications != null && searchModel.GradeClassifications.Count > 0)
+            {
+                // since an enum doesnt exist, create a list to validate against. Of course that means multiple places to update if it changes(shouldnt change much)
+                var gcArr = new List<string>() { "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D" };
+                var validatedGradeClassifications = new List<string>();
+                foreach (var gc in searchModel.GradeClassifications) { if (gcArr.Contains(gc)) validatedGradeClassifications.Add(gc); }
+                if (validatedGradeClassifications.Count == 1)
+                {
+                    var gc = validatedGradeClassifications.First();
+                    dbEntities = dbEntities.AddSearchParameter(true, a => a.GradeClassification == gc);
+                }
+                else if (validatedGradeClassifications.Count > 0) { dbEntities = dbEntities.AddSearchParameter(true, a => validatedGradeClassifications.Contains(a.GradeClassification)); }
+            }
+
+            if (searchModel.OperatingStatus.HasValue && Enum.IsDefined(typeof(OperatingStatus), searchModel.OperatingStatus.Value))
+            {
+                try
+                {
+                    var operatingStatus = (OperatingStatus)Enum.ToObject(typeof(OperatingStatus), searchModel.OperatingStatus.Value);
+                    dbEntities = dbEntities.AddSearchParameter(true, a => a.OperatingStatus == operatingStatus);
+                }
+                catch { }
+            }
+            if (!string.IsNullOrEmpty(searchModel.ListingType))
+            {
+                // Listed Price vs Auction ddl. No representation in our stack, I think
+                // TODO: learn what auction means/how to determine if an asset is up for auction
+                if (searchModel.ListingType == "listedPrice") { dbEntities = dbEntities.AddSearchParameter(true, a => a.AskingPrice > 0); } // might be missing auction exlusion
+                else if (searchModel.ListingType == "action")
+                {
+                    // dont know yet
+                }
+            }
+
+            // Checking the VacancyFactor parameter
+            if (searchModel.VacancyFactor != null && searchModel.VacancyFactor.Count > 0)
+            {
+                // TODO: Should make this whole thing a function later on for multi level filtering as we will be utilizing multi level filtering numerous times
+                // assign the raw db entities before filters
+
+                dbEntities = from a in dbEntities
+                             where (searchModel.VacancyFactor.Contains(0)) && (a.CurrentVacancyFac < 10)
+                               || (searchModel.VacancyFactor.Contains(10)) && ((a.CurrentVacancyFac >= 10) && (a.CurrentVacancyFac < 15))
+                               || (searchModel.VacancyFactor.Contains(15)) && ((a.CurrentVacancyFac >= 15) && (a.CurrentVacancyFac < 20))
+                               || (searchModel.VacancyFactor.Contains(20)) && ((a.CurrentVacancyFac >= 20) && (a.CurrentVacancyFac < 30))
+                               || (searchModel.VacancyFactor.Contains(30)) && ((a.CurrentVacancyFac >= 30) && (a.CurrentVacancyFac < 40))
+                               || (searchModel.VacancyFactor.Contains(40)) && (a.CurrentVacancyFac >= 40)
+                             select a;
+            }
+
+            // Checking the RentableSpace parameter
+            if (searchModel.RentableSpace != null && searchModel.RentableSpace.Count > 0)
+            {
+                dbEntities = from a in dbEntities
+                             where (searchModel.RentableSpace.Contains(0)) && (a.NumberRentableSpace <= 99)
+                               || (searchModel.RentableSpace.Contains(100)) && ((a.NumberRentableSpace >= 100) && (a.NumberRentableSpace <= 199))
+                               || (searchModel.RentableSpace.Contains(200)) && ((a.NumberRentableSpace >= 200) && (a.NumberRentableSpace <= 399))
+                               || (searchModel.RentableSpace.Contains(400)) && (a.NumberRentableSpace >= 400)
+                             select a;
+            }
+
+            // City, state, county
+            dbEntities = dbEntities.AddSearchParameter(searchModel.City != null, x => x.City.Contains(searchModel.City.Trim()));
+            dbEntities = dbEntities.AddSearchParameter(searchModel.State != null, x => x.State.Contains(searchModel.State.Trim()));
+            dbEntities = dbEntities.AddSearchParameter(searchModel.County != null, x => x.County.Contains(searchModel.County.ToLower().Replace("county", "").Trim()));
+
+            // Sam - Modified the min/max calculation to take into account whether to use BPO or Asking Price
+            if (searchModel.PriceSearchType != null)
+            {
+                switch (searchModel.PriceSearchType)
+                {
+                    case 1: // listing price
+                        dbEntities = dbEntities.AddSearchParameter(searchModel.Min.HasValue && searchModel.Min.Value > 0, a => (a.AskingPrice >= searchModel.Min.Value));
+                        dbEntities = dbEntities.AddSearchParameter(searchModel.Max.HasValue && searchModel.Max.Value > 0, a => (a.AskingPrice <= searchModel.Max.Value));
+                        break;
+                    case 2: // BPO
+                        dbEntities = dbEntities.AddSearchParameter(searchModel.Min.HasValue && searchModel.Min.Value > 0, a => (a.CurrentBpo >= searchModel.Min.Value));
+                        dbEntities = dbEntities.AddSearchParameter(searchModel.Max.HasValue && searchModel.Max.Value > 0, a => (a.CurrentBpo <= searchModel.Max.Value));
+                        break;
+                    case 3: // Both
+                        dbEntities = dbEntities.AddSearchParameter(searchModel.Min.HasValue && searchModel.Min.Value > 0, a => (a.CurrentBpo >= searchModel.Min.Value) || (a.AskingPrice >= searchModel.Min.Value));
+                        dbEntities = dbEntities.AddSearchParameter(searchModel.Max.HasValue && searchModel.Max.Value > 0, a => (a.CurrentBpo <= searchModel.Max.Value) || (a.AskingPrice <= searchModel.Max.Value));
+                        break;
+                }
+            }
+            else
+            {
+                // Since there's no price search type selected, filter based on listing price if there is a min or a max value defined
+                dbEntities = dbEntities.AddSearchParameter(searchModel.Min.HasValue && searchModel.Min.Value > 0, a => (a.AskingPrice >= searchModel.Min.Value));
+                dbEntities = dbEntities.AddSearchParameter(searchModel.Max.HasValue && searchModel.Max.Value > 0, a => (a.AskingPrice <= searchModel.Max.Value));
+            }
+            dbEntities = dbEntities.AddSearchParameter(searchModel.CapRate.HasValue && searchModel.CapRate.Value > 0, a => a.CashInvestmentApy >= searchModel.CapRate.Value);
+            dbEntities = dbEntities.AddSearchParameter(searchModel.YearBuilt.HasValue && searchModel.YearBuilt > 0, a => a.YearBuilt >= searchModel.YearBuilt.Value);
+            dbEntities = dbEntities.AddSearchParameter(searchModel.UnitsMin.HasValue && searchModel.UnitsMin.Value > 0, a => (a as MultiFamilyAsset).TotalUnits >= searchModel.UnitsMin.Value);
+            dbEntities = dbEntities.AddSearchParameter(searchModel.UnitsMax.HasValue && searchModel.UnitsMax.Value > 0, a => (a as MultiFamilyAsset).TotalUnits <= searchModel.UnitsMax.Value);
+
+            // Sam - Addition of dbEntities
+            dbEntities = dbEntities.AddSearchParameter(searchModel.SquareFeetMin.HasValue && searchModel.SquareFeetMin.Value > 0, a => a.SquareFeet >= searchModel.SquareFeetMin.Value);
+            dbEntities = dbEntities.AddSearchParameter(searchModel.SquareFeetMax.HasValue && searchModel.SquareFeetMax.Value > 0, a => a.SquareFeet <= searchModel.SquareFeetMax.Value);
+            dbEntities = dbEntities.AddSearchParameter(searchModel.NOI.HasValue && searchModel.NOI.Value > 0, a => (a as CommercialAsset).ProformaAnnualNoi >= searchModel.NOI.Value);
+            dbEntities = dbEntities.AddSearchParameter(searchModel.SGI.HasValue && searchModel.SGI.Value > 0, a => (a as CommercialAsset).ProformaSgi >= searchModel.SGI.Value);
+            dbEntities = dbEntities.AddSearchParameter(searchModel.OccPerc.HasValue && searchModel.OccPerc.Value > 0, a => (a as CommercialAsset).OccupancyPercentage >= searchModel.OccPerc.Value);
+
+
+            // Min year updated (not sure if correct column)
+            dbEntities = dbEntities.AddSearchParameter(searchModel.IsUpdatedChecked.HasValue && searchModel.IsUpdatedChecked.Value
+                && searchModel.YearUpdated.HasValue && searchModel.YearUpdated > 0,
+                a => a.PropLastUpdated.HasValue && a.PropLastUpdated.Value.Year > searchModel.YearUpdated.Value);
+
+            // Updated/Renovated by owner
+            dbEntities = dbEntities.AddSearchParameter(searchModel.IsUpdatedChecked.HasValue && searchModel.IsUpdatedChecked.Value
+                && searchModel.IsUpdatedByOwner.HasValue && searchModel.IsUpdatedByOwner.Value,
+                a => a.RenovatedByOwner == true);
+
+            // Major Tenant
+            dbEntities = dbEntities.AddSearchParameter(!string.IsNullOrWhiteSpace(searchModel.MajorTenant),
+                a => (a as CommercialAsset).NameOfAAARatedMajorTenant.Contains(searchModel.MajorTenant));
+
+            // Major Tenant Occ Percent
+            // Assuming that major tenant occ percent is relative to total sq feet
+            dbEntities = dbEntities.AddSearchParameter(searchModel.MajorTenantOccuPerc.HasValue && searchModel.MajorTenantOccuPerc > 0,
+                a => a.SquareFeet > 0 && ((a as CommercialAsset).LeasedSquareFootageByMajorTenant / a.SquareFeet) * 100 > searchModel.MajorTenantOccuPerc.Value);
+
+            // Major Tenant Lease Expiration (not sure if correct column)
+            // Also not sure if it's supposed to be a dropdown of checkboxes 
+            dbEntities = dbEntities.AddSearchParameter(searchModel.MajorTenantLeaseExp.HasValue && searchModel.MajorTenantLeaseExp.Value > 0,
+                a => a.LeaseholdMaturityDate.HasValue && a.LeaseholdMaturityDate.Value.Year > searchModel.MajorTenantLeaseExp.Value);
+
+            // UMR Utilities
+            //InteriorRoadType
+            dbEntities = dbEntities.AddSearchParameter(searchModel.InteriorRoadTypes != null && searchModel.InteriorRoadTypes.Count > 0,
+                a => a.InteriorRoadTypeId.HasValue && searchModel.InteriorRoadTypes.Contains((int)a.InteriorRoadTypeId.Value));
+            //AccessRoadType
+            dbEntities = dbEntities.AddSearchParameter(searchModel.AccessRoadTypes != null && searchModel.AccessRoadTypes.Count > 0,
+                a => a.AccessRoadTypeId.HasValue && searchModel.AccessRoadTypes.Contains((int)a.AccessRoadTypeId.Value));
+            //WasteWaterType
+            dbEntities = dbEntities.AddSearchParameter(searchModel.WasteWaterTypes != null && searchModel.WasteWaterTypes.Count > 0,
+                a => a.WasteWaterTypeId.HasValue && searchModel.WasteWaterTypes.Contains((int)a.WasteWaterTypeId.Value));
+            //WaterServType
+            dbEntities = dbEntities.AddSearchParameter(searchModel.WaterServTypes != null && searchModel.WaterServTypes.Count > 0,
+                a => a.WaterServTypeId.HasValue && searchModel.WaterServTypes.Contains((int)a.WaterServTypeId.Value));
+            //GasMeteringMethod
+            dbEntities = dbEntities.AddSearchParameter(searchModel.GasMeteringMethods != null && searchModel.GasMeteringMethods.Count > 0,
+                a => searchModel.GasMeteringMethods.Contains((int)(a as MultiFamilyAsset).GasMeterMethod));
+            //ElectricMeteringMethod
+            dbEntities = dbEntities.AddSearchParameter(searchModel.ElectricMeteringMethods != null && searchModel.ElectricMeteringMethods.Count > 0,
+                a => searchModel.ElectricMeteringMethods.Contains((int)(a as MultiFamilyAsset).ElectricMeterMethod));
+
+            // TODO: UMR Occu Perc
+            // TODO: UMR Max FC Perc
+
+            // TODO: SMR Park Owned Units
+            if (searchModel.SmrParkOwnedUnits.HasValue)
+            {
+                // if this field is set
+                if (searchModel.SmrParkOwnedUnits == 2)
+                {
+                    // park owned units for space mix ratios is set to Yes
+                }
+            }
+
+            // TODO: SMR Property with Undeveloped Acres
+            // TODO: SMR % of undev. land to total acerage
+
+            //Asset Name
+            if (!string.IsNullOrWhiteSpace(searchModel.AssetName))
+            {
+                var name = (searchModel.AssetName.ToLower()).Replace(" ", "").Replace("\'", "").Replace(",", "").Replace("-", "");
+                dbEntities = dbEntities.AddSearchParameter(name.Length > 0,
+                    a => a.ProjectName.ToLower().Replace(" ", "").Replace("\'", "").Replace(",", "").Replace("-", "").Contains(name));
+            }
+
+            // Unit Specifications for Multifamily
+            // Probably needs to be more efficient
+            if (searchModel.Umr1BdPct.HasValue && searchModel.Umr1BdPct.Value > 0 ||
+                searchModel.Umr2Bd1BaPct.HasValue && searchModel.Umr2Bd1BaPct.Value > 0 ||
+                searchModel.Umr2Bd2BaPct.HasValue && searchModel.Umr2Bd2BaPct.Value > 0 ||
+                searchModel.Umr3BdPct.HasValue && searchModel.Umr3BdPct.Value > 0 ||
+                searchModel.UmrStudioPct.HasValue && searchModel.UmrStudioPct.Value > 0)
+            {
+                var unitSpecs = context.AssetUnitSpecifications.Where(us => us.AssetId != null).GroupBy(us => us.AssetId);
+
+                var studioPct = searchModel.UmrStudioPct.HasValue ? (decimal)searchModel.UmrStudioPct.Value / 100 : new decimal(0);
+                var oneBdPct = searchModel.Umr1BdPct.HasValue ? (decimal)searchModel.Umr1BdPct.Value / 100 : new decimal(0);
+                var twoBdOneBaPct = searchModel.Umr2Bd1BaPct.HasValue ? (decimal)searchModel.Umr2Bd1BaPct.Value / 100 : new decimal(0);
+                var twoBdTwoBaPct = searchModel.Umr2Bd2BaPct.HasValue ? (decimal)searchModel.Umr2Bd2BaPct.Value / 100 : new decimal(0);
+                var threeBdPct = searchModel.Umr3BdPct.HasValue ? (decimal)searchModel.Umr3BdPct.Value / 100 : new decimal(0);
+
+                dbEntities = from a in dbEntities
+                             where a.AssetType == AssetType.MultiFamily
+                             let unitCnt = (decimal)(a as MultiFamilyAsset).TotalUnits
+                             where unitCnt > 0
+                             from us in unitSpecs
+                             where us.Key == a.AssetId
+                             // Studio
+                             where !(studioPct > 0) ||
+                                    (from spec in us
+                                     where spec.BedCount == BedroomCount.Zero
+                                     select spec.CountOfUnits).DefaultIfEmpty(0).Sum() / unitCnt >= studioPct
+                             // 1 bed percent
+                             where !(oneBdPct > 0) ||
+                                    (from spec in us
+                                     where spec.BedCount == BedroomCount.One
+                                     select spec.CountOfUnits).DefaultIfEmpty(0).Sum() / unitCnt >= oneBdPct
+                             // 2 bed/1 bath percent
+                             where !(twoBdOneBaPct > 0) ||
+                                    (from spec in us
+                                     where spec.BedCount == BedroomCount.Two && spec.BathCount == BathroomCount.One
+                                     select spec.CountOfUnits).DefaultIfEmpty(0).Sum() / unitCnt >= twoBdOneBaPct
+                             // 2 bed/2 bath percent
+                             where !(twoBdTwoBaPct > 0) ||
+                                    (from spec in us
+                                     where spec.BedCount == BedroomCount.Two && spec.BathCount == BathroomCount.Two
+                                     select spec.CountOfUnits).DefaultIfEmpty(0).Sum() / unitCnt >= twoBdTwoBaPct
+                             // 3 bed percent
+                             where !(threeBdPct > 0) ||
+                                    (from spec in us
+                                     where spec.BedCount == BedroomCount.Three
+                                     select spec.CountOfUnits).DefaultIfEmpty(0).Sum() / unitCnt >= threeBdPct
+                             select a;
+            }
+
+            // Space Specifications for MHP
+            // Potential issue in database: 
+            // No MHP properties have "TotalUnits"
+            // No MHP specifications have "CountOfUnits"
+            if (searchModel.SmrSWidePct.HasValue && searchModel.SmrSWidePct.Value > 0 ||
+                searchModel.SmrDWidePct.HasValue && searchModel.SmrDWidePct.Value > 0 ||
+                searchModel.SmrTWidePct.HasValue && searchModel.SmrTWidePct.Value > 0 ||
+                searchModel.SmrParkOwnedMaxPct.HasValue && searchModel.SmrParkOwnedMaxPct.Value >= 0
+                    && searchModel.SmrParkOwnedMaxPct.Value <= 100)
+            {
+                var MHPSpecs = context.AssetMHPSpecifications.Where(ms => ms.AssetId != null);
+                var SWidePct = searchModel.SmrSWidePct.HasValue ? (decimal)searchModel.SmrSWidePct / 100 : new decimal(0);
+                var DWidePct = searchModel.SmrDWidePct.HasValue ? (decimal)searchModel.SmrDWidePct / 100 : new decimal(0);
+                var TWidePct = searchModel.SmrTWidePct.HasValue ? (decimal)searchModel.SmrTWidePct / 100 : new decimal(0);
+                var POMaxPct = searchModel.SmrParkOwnedMaxPct.HasValue && searchModel.SmrParkOwnedMaxPct >= 0 &&
+                    searchModel.SmrParkOwnedMaxPct <= 100 ? (decimal)searchModel.SmrParkOwnedMaxPct.Value / 100 : -1;
+
+                dbEntities = from a in dbEntities
+                             where a.AssetType == AssetType.MHP
+                             from ms in MHPSpecs
+                             let unitCnt = (decimal)(ms.NumberSingleWide + ms.NumberDoubleWide + ms.NumberTripleWide)
+                             where unitCnt > 0
+                             where ms.AssetId == a.AssetId
+                             where !(SWidePct > 0) ||
+                                    ms.NumberSingleWide / unitCnt >= SWidePct
+                             where !(DWidePct > 0) ||
+                                    ms.NumberDoubleWide / unitCnt >= DWidePct
+                             where !(TWidePct > 0) ||
+                                    ms.NumberTripleWide / unitCnt >= TWidePct
+                             where (POMaxPct == -1) ||
+                                    (ms.NumberSingleWideOwned + ms.NumberDoubleWideOwned + ms.NumberTripleWideOwned) / unitCnt <= POMaxPct
+                             select a;
+            }
+
+            // Radius (in KM) around an point. approximation
+            if (searchModel.Latitude.HasValue && Math.Abs(searchModel.Latitude.Value) <= 90 &&
+                searchModel.Longitude.HasValue && Math.Abs(searchModel.Longitude.Value) <= 180 &&
+                searchModel.SearchRadius.HasValue && searchModel.SearchRadius.Value > 0)
+            {
+                var lat = searchModel.Latitude.Value;
+                var cosLat = Math.Cos(lat * Math.PI / 180);
+                var lng = searchModel.Longitude.Value;
+                // Rough conversion of KM to lat/lng distance
+                var radius = Math.Pow(searchModel.SearchRadius.Value / 110.25, 2);
+                //dbEntities = dbEntities.AddSearchParameter(searchModel.SearchRadius.Value > 0,
+                //    a => radius > Math.Pow(a.Latitude.Value - lat, 2) + Math.Pow((a.Longitude.Value - lng) * cosLat, 2));
+            }
+
+            #endregion
+
+            // Getting generic statistics about the search result
+            var statSearch = dbEntities.GroupBy(c => 1)
+               .Select(col => new
+               {
+                   TotalAssets = col.Count(),
+                   //PublishAssets = col.Where(a => a.IsPublished).Count(), ToDo
+                   PublishAssets=0,
+                   TotalAssetValue = col.Sum(a => (long)(a.AskingPrice > 0 ? a.AskingPrice : a.CurrentBpo)),
+                   MultiFamUnits = col.Sum((a => (a.AssetType == AssetType.MultiFamily || a.AssetType == AssetType.MHP ? 1 : 0))),
+                   SquareFeet = col.Count() <= 0 ? 0 : col.Sum(a => a.AssetType != AssetType.MHP ? a.SquareFeet : 0)
+               }).FirstOrDefault();
+
+            model.GlobalPartDB = 0;
+            if (statSearch != null)
+            {
+                model.Total = statSearch.TotalAssets;
+                model.PublishedAssets = statSearch.PublishAssets;
+                model.TotalAssetVal = statSearch.TotalAssetValue;
+                model.MultiFamUnits = statSearch.MultiFamUnits;
+                model.TotalSqFt = statSearch.SquareFeet;
+            }
+            else
+            {
+                model.Total = 0;
+                model.PublishedAssets = 0;
+                model.TotalAssetVal = 0;
+                model.MultiFamUnits = 0;
+                model.TotalSqFt = 0;
+            }
+
+            // Get list of portfolios
+            List<PortfolioAsset> PortfolioAssetList = new List<PortfolioAsset>();
+            PortfolioAssetList = context.PortfolioAssets.ToList();
+
+            foreach (var entity in dbEntities.OrderBy(a => a.ProjectName).Skip(searchModel.Skip).Take(searchModel.Take).ToList())
+            {
+                var lastReportedOccupancyYear = entity.LastReportedOccupancyDate.HasValue ? entity.LastReportedOccupancyDate.Value.ToString("yyyy") : "N/A";
+                var lastReportedOccupancyDate = entity.LastReportedOccupancyDate.HasValue ? entity.LastReportedOccupancyDate.Value.ToString("MM/yyyy") : "N/A";
+                bool offersDateSoon = (entity.CallforOffersDate.HasValue && entity.CallforOffersDate < DateTime.Now.AddDays(30) && entity.CallforOffersDate > DateTime.Now) ? true : false;
+
+                PortfolioAsset assetPF = PortfolioAssetList.Where(x => x.AssetId == entity.AssetId).FirstOrDefault();
+                Portfolio _portfolio = new Portfolio();
+                if (assetPF != null)
+                {
+                    _portfolio = context.Portfolios.Where(x => x.PortfolioId == assetPF.PortfolioId && x.UserId == userId).FirstOrDefault();
+                }
+                else
+                {
+                    _portfolio = null;
+                }
+
+                var adavm = new AssetDynamicAssetViewModel
+                {
+                    AssetId = entity.AssetId,
+                    ProjectName = entity.ProjectName,
+                    YearBuilt = entity.YearBuilt,
+                    AddressLine1 = entity.PropertyAddress,
+                    AddressLine2 = entity.PropertyAddress2,
+                    State = entity.State,
+                    City = entity.City,
+                    Zip = entity.Zip,
+                    //Longitude = entity.Longitude.GetValueOrDefault(),
+                    //Latitude = entity.Latitude.GetValueOrDefault(),
+                    AskingPrice = entity.AskingPrice,
+                    CurrentBpo = entity.CurrentBpo,
+                    AssetType = (int)entity.AssetType,
+                    SquareFeet = entity.SquareFeet,
+                    ListingStatus = (int)entity.ListingStatus,
+                    ProformaAOE = entity.ProformaAnnualOperExpenses,
+                    ProformaAI = entity.ProformaAnnualIncome,
+                    ProformaMI = entity.ProformaMiscIncome,
+                    ProformaVF = entity.ProformaVacancyFac,
+                    OccupancyRate = ((100 - entity.CurrentVacancyFac) / 100).ToString("P0"),
+                    OccupancyYear = lastReportedOccupancyYear,
+                    OccupancyDate = lastReportedOccupancyDate,
+                    SalesPrice = entity.SalesPrice,
+                    AuctionDate = entity.AuctionDate.HasValue ? entity.AuctionDate.Value.ToString("MM/dd/yy") : "N/A",
+                    CallforOffersDate = entity.CallforOffersDate.HasValue ? entity.CallforOffersDate.Value.ToString("MM/dd/yy") : "N/A",
+                    CallforOffersDateSoon = offersDateSoon,
+                    AssmFinancing = entity.MortgageLienAssumable.ToString(),
+                    IsPartOfPortfolio = (_portfolio == null) ? false : true,
+                    PortfolioId = (_portfolio == null) ? Guid.Empty : _portfolio.PortfolioId,
+                };
+                if (entity.AssetType == AssetType.MultiFamily || entity.AssetType == AssetType.MHP)
+                {
+                    var converted = entity as MultiFamilyAsset;
+                    adavm.TotalUnits = converted.TotalUnits;
+                    adavm.Description = string.Format("{0} unit {1} property in {2}, {3}", converted.TotalUnits, EnumHelper.GetEnumDescription(entity.AssetType), entity.City, entity.State);
+                }
+                else
+                {
+                    var converted = entity as CommercialAsset;
+                    // remove letters from lotsize
+                    string newLotSize = string.Empty;
+                    if (!string.IsNullOrEmpty(converted.LotSize))
+                    {
+                        char[] arr = converted.LotSize.ToCharArray();
+                        arr = Array.FindAll<char>(arr, (c => (char.IsDigit(c)
+                            || c == '.'
+                            || c == '-'
+                            || char.IsWhiteSpace(c))));
+                        newLotSize = new String(arr);
+                    }
+                    adavm.NewLotSize = newLotSize;
+                    adavm.EstDeferredMaintenance = converted.EstDeferredMaintenance;
+                    adavm.Description = string.Format("{0} acre {1} property in {2}, {3}", newLotSize, EnumHelper.GetEnumDescription(entity.AssetType), entity.City, entity.State);
+                }
+                // literally for tonight, just get the main image in this loop. TODO: turn this method back into a one DB call asap
+                var imageEntity = context.AssetImages.FirstOrDefault(x => x.IsMainImage && x.AssetId == entity.AssetId);
+                if (imageEntity != null)
+                {
+                    adavm.Image = new AssetDynamicImageViewModel
+                    {
+                        FileName = imageEntity.FileName,
+                        ContentType = imageEntity.ContentType
+                    };
+                }
+                model.Assets.Add(adavm);
+            }
+            return model;
+        }
+
 
         public AssetHCOwnershipModel GetAssetHCByAssetHCOwnershipId(int assetHCOwnershipId)
         {

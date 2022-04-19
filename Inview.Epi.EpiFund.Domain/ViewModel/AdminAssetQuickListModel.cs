@@ -296,6 +296,12 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			get;
 			set;
 		}
+
+		public int? NumberOfAssets
+		{
+			get;
+			set;
+		}
 	}
 	public class ChainOfTitleQuickListModel
 	{

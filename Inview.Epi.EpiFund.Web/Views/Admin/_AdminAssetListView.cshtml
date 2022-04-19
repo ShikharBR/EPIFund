@@ -103,7 +103,14 @@
                                     <span class="padmoney">@Model[i].ProformaNOI.ToString("C0")</span>
                                 </td>
                                 <td>
-                                    @((Model[i].capRate / 100).ToString("P2"))
+                                    @if (Model[i].AskingPrice > 0)
+                                    {
+                                        @((Model[i].CashInvestmentApy / 100).ToString("P2"))
+                                    }
+                                    else
+                                    {
+                                        @((Model[i].capRate / 100).ToString("P2"))
+                                    }
                                 </td>
                                 <td>
                                     @Model[i].AssmFin

@@ -9,6 +9,7 @@ namespace Inview.Epi.EpiFund.Domain
 {
 	public interface IAssetManager
 	{
+		AssetDynamicViewModel SearchAssetsForSearch(SearchAssetModel searchModel, int? userId);
 		void AddAssetIdsToMDA(int userId, List<Guid> assetIds);
 
 		void AddAssetIdToMDA(int userId, Guid assetId);
