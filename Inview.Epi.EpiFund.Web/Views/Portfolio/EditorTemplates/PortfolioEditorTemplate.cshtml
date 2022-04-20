@@ -139,19 +139,71 @@
                 </div>
             </div>
         </div>
-        @* <div class="row">
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        @Html.LabelFor(model => model.LastReportedOccupancyDate) <span style="color: red;">*</span>
-                    </div>
+         <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.LastReportedOccupancyDate)
                 </div>
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        @Html.TextBoxFor(s => s.LastReportedOccupancyDate, new { @class = "datepicker" }) <em>MM/dd/yyyy</em>
-                        @Html.ValidationMessageFor(model => model.LastReportedOccupancyDate)
-                    </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.LastReportedOccupancyDate, new { @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                    @Html.ValidationMessageFor(model => model.LastReportedOccupancyDate)
                 </div>
-            </div>*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.MustPortfolioAssetsInclusive) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.MustPortfolioAssetsInclusive, "true") Yes
+                    @Html.RadioButtonFor(s => s.MustPortfolioAssetsInclusive, "false") No
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.SalePortfolioAcceptableSeller) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.EnumDropDownList("ListingStatus", Model.ListingStatus, "---")
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.ListingStatus) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.EnumDropDownList("ListingStatus", Model.ListingStatus, "---")                 
+                </div>
+            </div>
+        </div>
+       
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.PricingDisplayOption)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.EnumDropDownList("ListingStatus", Model.ListingStatus, "---")
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="input-group">
@@ -163,6 +215,20 @@
                     @Html.RadioButtonFor(s => s.isSubjectToAuction, "true") Yes
                     @Html.RadioButtonFor(s => s.isSubjectToAuction, "false") No
                     @Html.ValidationMessageFor(model => model.isSubjectToAuction)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.IsCallOffersDate) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.IsCallOffersDate, "true") Yes
+                    @Html.RadioButtonFor(s => s.IsCallOffersDate, "false") No
+                  
                 </div>
             </div>
         </div>
@@ -451,8 +517,7 @@
 @Html.HiddenFor(model => Model.HasDeferredMaintenance)
 @Html.HiddenFor(model => Model.hasOffersDate)
 @Html.HiddenFor(model => Model.isSubjectToAuction)
-
-@Html.HiddenFor(model => Model.LastReportedOccupancyDate)
+@Html.HiddenFor(s => s.LastReportedOccupancyDate)
 @Html.HiddenFor(model => Model.NumberofAssets)
 @Html.HiddenFor(model => Model.PortfolioId)
 @Html.HiddenFor(model => Model.UserId)
