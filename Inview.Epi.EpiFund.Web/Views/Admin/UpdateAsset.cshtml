@@ -15,7 +15,14 @@
         <link rel="stylesheet" href="@Url.Content("~/Scripts/dropzone/dropzone.css")" />
     }
 }
-<h3>Edit Asset: @string.Format("{0}: {1} {2}, {3} {4}", Model.ProjectName, Model.PropertyAddress, Model.City, Model.State, Model.Zip)</h3>
+
+<div class="editAssetTop">
+    <h3>Edit Asset</h3>
+    <h5>@string.Format("{0}: {1} {2}, {3} {4}", Model.ProjectName, Model.PropertyAddress, Model.City, Model.State, Model.Zip)</h5>
+    <h5>Asset ID #: [@Model.AssetNumber]</h5>
+</div>
+
+@*<h3>Edit Asset: @string.Format("{0}: {1} {2}, {3} {4}", Model.ProjectName, Model.PropertyAddress, Model.City, Model.State, Model.Zip)</h3>*@
 
 @using (Html.BeginForm("updateasset", "admin", FormMethod.Post, new { id = "assetform" }))
 {
