@@ -284,13 +284,6 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Last Reported Occupancy")]
-		public DateTime? LastReportedOccupancyDate
-		{
-			get;
-			set;
-		}
-
 		public string MBAAgentName
 		{
 			get;
@@ -349,7 +342,45 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			get;
 			set;
 		}
-
+		[Display(Name = "Must Portfolio be Sold All Assets Inclusive")]
+	
+		public bool MustPortfolioAssetsInclusive
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Define Sale Terms of Portfolio Acceptable by Seller")]
+		
+		public string SalePortfolioAcceptableSeller
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Listing Status all")]
+		public Inview.Epi.EpiFund.Domain.Enum.ListingStatus ListingStatus
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Last Reported Occupancy")]
+		public DateTime? LastReportedOccupancyDate
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Pricing Display Option")]
+		public string PricingDisplayOption 
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Is Call for Offers Date")]
+		public bool IsCallOffersDate
+		{
+			get;
+			set;
+		}
+		
 		public List<AssetViewModel> PortfolioProperties
 		{
 			get;
@@ -847,7 +878,11 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			this.NumberofAssets = entity.NumberofAssets;
 			this.PortfolioName = entity.PortfolioName;
 			this.PortfolioId = entity.PortfolioId;
-			this.UserId = entity.UserId;
+			this.UserId = entity.UserId;			
+			this.MustPortfolioAssetsInclusive = entity.MustPortfolioAssetsInclusive;
+				 this.SalePortfolioAcceptableSeller = entity.SalePortfolioAcceptableSeller;
+				this.IsCallOffersDate = entity.IsCallOffersDate;
+			this.PricingDisplayOption = entity.PricingDisplayOption;
 			this.isActive = entity.isActive;
 			return this;
 		}
@@ -856,6 +891,10 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 		{
 			Portfolio portfolio = new Portfolio()
 			{
+				MustPortfolioAssetsInclusive=this.MustPortfolioAssetsInclusive,
+				SalePortfolioAcceptableSeller=this.SalePortfolioAcceptableSeller,
+				IsCallOffersDate=this.IsCallOffersDate,
+				PricingDisplayOption=this.PricingDisplayOption,
 				CallforOfferDate = this.CallforOfferDate,
 				hasOffersDate = this.hasOffersDate,
 				isSubjectToAuction = this.isSubjectToAuction,

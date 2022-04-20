@@ -64,6 +64,34 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			get;
 			set;
 		}
+		public int ListingStatus
+		{
+			get;
+			set;
+		}
+		public bool MustPortfolioAssetsInclusive
+		{
+			get;
+			set;
+		}
+
+		public string SalePortfolioAcceptableSeller
+		{
+			get;
+			set;
+		}
+
+		public string PricingDisplayOption
+		{
+			get;
+			set;
+		}
+		public bool IsCallOffersDate
+		{
+			get;
+			set;
+		}
+
 
 		public Portfolio()
 		{
