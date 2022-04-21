@@ -284,13 +284,6 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		[Display(Name="Last Reported Occupancy")]
-		public DateTime? LastReportedOccupancyDate
-		{
-			get;
-			set;
-		}
-
 		public string MBAAgentName
 		{
 			get;
@@ -349,7 +342,51 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			get;
 			set;
 		}
+		[Display(Name = "Must Portfolio be Sold All Assets Inclusive")]
+	
+		public bool MustPortfolioAssetsInclusive
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Define Sale Terms of Portfolio Acceptable by Seller")]
 
+		public Inview.Epi.EpiFund.Domain.Enum.SellerTerms SalePortfolioAcceptableSeller
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Listing Status all")]
+		public Inview.Epi.EpiFund.Domain.Enum.ListingStatusall ListingStatusall
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Last Reported Occupancy")]
+		public DateTime? LastReportedOccupancyDate
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Pricing Display Option")]
+		public Inview.Epi.EpiFund.Domain.Enum.PricingDisplay PricingDisplayOption 
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Cap Rate")]
+		public float CapRate
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Is Call for Offers Date")]
+		public bool IsCallOffersDate
+		{
+			get;
+			set;
+		}
+		
 		public List<AssetViewModel> PortfolioProperties
 		{
 			get;
@@ -835,7 +872,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 				Value = "WY"
 			};
 			selectListItems1.Add(selectListItem65);
-			this.States = selectListItems1;
+			this.States = selectListItems1;		
 		}
 
 		public PortfolioViewModel EntityToModel(Portfolio entity)
@@ -848,6 +885,10 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			this.PortfolioName = entity.PortfolioName;
 			this.PortfolioId = entity.PortfolioId;
 			this.UserId = entity.UserId;
+			this.MustPortfolioAssetsInclusive = entity.MustPortfolioAssetsInclusive;
+
+			this.IsCallOffersDate = entity.IsCallOffersDate;
+
 			this.isActive = entity.isActive;
 			return this;
 		}
@@ -856,6 +897,10 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 		{
 			Portfolio portfolio = new Portfolio()
 			{
+				MustPortfolioAssetsInclusive=this.MustPortfolioAssetsInclusive,
+			
+				IsCallOffersDate=this.IsCallOffersDate,
+				
 				CallforOfferDate = this.CallforOfferDate,
 				hasOffersDate = this.hasOffersDate,
 				isSubjectToAuction = this.isSubjectToAuction,

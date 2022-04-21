@@ -139,19 +139,88 @@
                 </div>
             </div>
         </div>
-        @* <div class="row">
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        @Html.LabelFor(model => model.LastReportedOccupancyDate) <span style="color: red;">*</span>
-                    </div>
+         <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.LastReportedOccupancyDate)
                 </div>
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        @Html.TextBoxFor(s => s.LastReportedOccupancyDate, new { @class = "datepicker" }) <em>MM/dd/yyyy</em>
-                        @Html.ValidationMessageFor(model => model.LastReportedOccupancyDate)
-                    </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.LastReportedOccupancyDate, new { @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                    @Html.ValidationMessageFor(model => model.LastReportedOccupancyDate)
                 </div>
-            </div>*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.MustPortfolioAssetsInclusive) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.MustPortfolioAssetsInclusive, "true") Yes
+                    @Html.RadioButtonFor(s => s.MustPortfolioAssetsInclusive, "false") No
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.SalePortfolioAcceptableSeller)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+
+                    @Html.EnumDropDownList("SalePortfolioAcceptableSeller", Model.SalePortfolioAcceptableSeller, "---")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.ListingStatusall) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                  @Html.EnumDropDownList("ListingStatusall", Model.ListingStatusall, "---")
+                   
+                </div>
+            </div>
+        </div>
+       
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.PricingDisplayOption)
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.EnumDropDownList("PricingDisplayOption", Model.PricingDisplayOption, "---")
+
+                </div>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group CapRate">
+                    @Html.LabelFor(model => model.CapRate)<span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group CapRate">
+                    @Html.EditorFor(model => model.CapRate, new { @style = "width:50%", @class = "control-label " }) %
+
+                </div>
+            </div>
+        </div>
+         
         <div class="row">
             <div class="col-sm-6">
                 <div class="input-group">
@@ -163,6 +232,20 @@
                     @Html.RadioButtonFor(s => s.isSubjectToAuction, "true") Yes
                     @Html.RadioButtonFor(s => s.isSubjectToAuction, "false") No
                     @Html.ValidationMessageFor(model => model.isSubjectToAuction)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.IsCallOffersDate) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.RadioButtonFor(s => s.IsCallOffersDate, "true") Yes
+                    @Html.RadioButtonFor(s => s.IsCallOffersDate, "false") No
+                  
                 </div>
             </div>
         </div>
@@ -451,8 +534,7 @@
 @Html.HiddenFor(model => Model.HasDeferredMaintenance)
 @Html.HiddenFor(model => Model.hasOffersDate)
 @Html.HiddenFor(model => Model.isSubjectToAuction)
-
-@Html.HiddenFor(model => Model.LastReportedOccupancyDate)
+@Html.HiddenFor(s => s.LastReportedOccupancyDate)
 @Html.HiddenFor(model => Model.NumberofAssets)
 @Html.HiddenFor(model => Model.PortfolioId)
 @Html.HiddenFor(model => Model.UserId)
@@ -496,7 +578,7 @@
         $('#Method').val(method);
         fixNumbers();
     }
-
+    
     function fixNumbers() {
         $("input.formatNumber").each(function (index) {
             $(this).val($(this).val().replace(/,/g, ""));
@@ -513,6 +595,7 @@
     // For PW-324, to fix issue where clicking back via the browser from Manage Assets tab on
     // Update Portfolio Page brings you to Primary Info tab
     $(document).ready(function () {
+      
         if (location.hash.substr(0, 2) == "#!") {
 
             $("a[href='#" + location.hash.substr(2) + "']").tab("show");
@@ -525,6 +608,18 @@
             }
         });
     });
+    debugger;
+    $('#PricingDisplayOption').change(function () {
+        debugger;
+        if ($(this).val() === 'Cmv')
+            $('.CapRate').show();
+        else { $('.CapRate').hide(); }
+           
+    });
+    $('.CapRate').hide();
+
+    
+    
 
     function nextTab(button) {
         $('.nav li.active').removeClass('active');
@@ -534,6 +629,8 @@
         nextId.addClass('active');
         var tabLink = '#' + nextId.attr('id');
         $("[href = '" + tabLink + "']").closest('li').addClass('active');
+        
+       
     }
 
     function backTab(button) {
@@ -559,7 +656,9 @@
         var fileName = path.match(/[^\/\\]+$/);
         readIMG(this, fileName);
     });
-
+    $('#CapRate').on('blur', function () {
+        $(this).val(parseFloat($(this).val()).toFixed(2))
+    });
     function fillUserInformation() {
         $.ajax({
             type: "POST",

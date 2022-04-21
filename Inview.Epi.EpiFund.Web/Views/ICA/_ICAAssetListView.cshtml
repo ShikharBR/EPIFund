@@ -1,7 +1,7 @@
 ﻿@using PagedList.Mvc
 @model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.AdminAssetQuickListModel>
 @{
-    bool showCreatedBy = false;   
+    bool showCreatedBy = false;
 }
 
 @Html.PagedListPager(Model, page => Url.Action(ViewBag.PostUrl,
@@ -39,16 +39,16 @@
                         {
                             if (Model.First().SquareFeet > 0)
                             {
-                            <td>
-                                <b>Sq.Ft.</b>
-                            </td>
+                                <td>
+                                    <b>Sq.Ft.</b>
+                                </td>
                             }
                             else
                             {
-                            <td>
-                                <b>Units</b>
-                            </td>
-                                
+                                <td>
+                                    <b>Units</b>
+                                </td>
+
                             }
                         }
                         else
@@ -63,11 +63,19 @@
                         <td>
                             <b><a style="cursor: pointer" onclick="postForm('@ViewBag.ShowSortParm')">Public?</a></b>
                         </td>
-                        @if(!ViewBag.IsMasterDBSearch){
-                        <td>
-                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.CreatedSortParm')">Created By</a></b>
-                        </td>
+                        @if (!ViewBag.IsMasterDBSearch)
+                        {
+                            <td>
+                                <b><a style="cursor: pointer" onclick="postForm('@ViewBag.CreatedSortParm')">Created By</a></b>
+                            </td>
+
                         }
+                        <td>
+                            <b><a style="cursor: pointer">Action</a></b>
+                        </td>
+                        <td>
+                            <b><a style="cursor: pointer">Manage</a></b>
+                        </td>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,63 +88,152 @@
                             username = Model[i].CreatedBy.Split('~')[0];
                             email = Model[i].CreatedBy.Split('~')[1];
                         }
-                    <tr id="@Model[i].AssetId">
-                        <td style="width: 200px;">
+                        <tr id="@Model[i].AssetId">
+                            <td style="width: 200px;">
+                                @if (!ViewBag.IsMasterDBSearch)
+                                {
+                                    <a href="@Url.Action("ViewAsset", "DataPortal", new { id = @Model[i].AssetId, fromManageAssets = true })">
+                                        @Model[i].AssetNumber
+                                    </a>
+                                }
+                                else
+                                {
+                                    @Model[i].AssetNumber
+                                }
+                            </td>
+                            <td style="width: 200px;">
+                                @Model[i].Type
+                            </td>
+                            <td style="width: 200px;word-wrap: break-word;" class="kill-width-for-td-address">
+                                @Model[i].AddressLine1
+                            </td>
+                            <td style="width: 100px;word-wrap: break-word;">
+                                @Model[i].City
+                            </td>
+                            <td style="width: 100px;">
+                                @Model[i].State
+                            </td>
+                            <td style="width: 100px;word-wrap: break-word;">
+                                @Model[i].AssetName
+                            </td>
+                            <td style="width: 100px;">
+                                <span class="padNumber">@(Model[i].SquareFeet > 0 ? Model[i].SquareFeet.ToString() : Model[i].NumberOfUnits.ToString())</span>
+                            </td>
+                            <td style="width: 100px;">
+                                @Model[i].Status
+                            </td>
+                            <td style="width: 100px;">
+                                @Model[i].Show
+                            </td>
                             @if (!ViewBag.IsMasterDBSearch)
                             {
-                                <a href="@Url.Action("ViewAsset", "DataPortal", new { id = @Model[i].AssetId, fromManageAssets = true })">
-                                    @Model[i].AssetNumber
-                                </a>
+                                <td>
+                                    <label title="@email" style="font-size:10px;font-weight:initial;">@username</label>
+                                </td>
+                                if (Model[i].Show == "No")
+                                {
+                                    <td style="text-align: center;">
+                                        <a onclick="EditAsset('@Model[i].AssetId')" style="cursor:pointer" title="edit">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </a>
+                                    </td>
+                                }
+                            }
+                            @if (Model[i].Show == "Yes")
+                            {
+                                <td style="text-align: center;">
+                                    @if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+                                    {
+                                        <a href="@Url.Action("UnPublishAsset", "Admin", new { id = @Model[i].AssetId })" title="unpublish" onclick="return confirm('Are you sure you wish to unpublish this asset?');">
+                                            <span class="fa fa-lock" style="font-size: 13px; margin-top: 1px;"></span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#" title="unpublish">
+                                            <span class="fa fa-lock" style="font-size: 13px; margin-top: 1px;"></span>
+                                        </a>
+                                    }
+                                </td>
                             }
                             else
                             {
-                                @Model[i].AssetNumber
+                                if (Model[i].IsActive)
+                                {
+                                    <td style="text-align: center;">
+                                        @if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+                                        {
+                                            <a href="@Url.Action("PublishAsset", "Admin", new { id = @Model[i].AssetId })" title="publish" onclick="return confirm('Are you sure you wish to publish this asset?');">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="#" title="publish">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                            </a>
+                                        }
+                                    </td>
+                                }
+
+                                else
+                                {
+                                    <td style="text-align: center;">
+                                        @if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+                                        {
+                                            <spane style="cursor:pointer;" title="publish" onclick="alert('You need to active this asset first.');">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                            </spane>
+                                        }
+                                        else
+                                        {
+                                            <spane style="cursor:pointer;" title="publish">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                            </spane>
+                                        }
+                                    </td>
+                                }
                             }
-                        </td>
-                        <td style="width: 200px;">
-                            @Model[i].Type
-                        </td>
-                        <td style="width: 200px;word-wrap: break-word;" class="kill-width-for-td-address">
-                            @Model[i].AddressLine1
-                        </td>
-                        <td style="width: 100px;word-wrap: break-word;">
-                            @Model[i].City
-                        </td>
-                        <td style="width: 100px;">
-                            @Model[i].State
-                        </td>
-                        <td style="width: 100px;word-wrap: break-word;">
-                            @Model[i].AssetName
-                        </td>
-                        <td style="width: 100px;">
-                            <span class="padNumber">@(Model[i].SquareFeet > 0 ? Model[i].SquareFeet.ToString() : Model[i].NumberOfUnits.ToString())</span>
-                        </td>
-                        <td style="width: 100px;">
-                            @Model[i].Status
-                        </td>
-                        <td style="width: 100px;">
-                            @Model[i].Show
-                        </td>
-                        @if (!ViewBag.IsMasterDBSearch)
-                        {
-                            <td>
-                                <label title="@email" style="font-size:10px;font-weight:initial;">@username</label>
-                            </td>
-                            if (Model[i].Show == "No")
+                            @if (Model[i].IsActive)
                             {
                                 <td style="text-align: center;">
-                                    <a onclick="EditAsset('@Model[i].AssetId')" style="cursor:pointer" title="edit">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </a>
+                                    @if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+                                    {
+                                        <a href="@Url.Action("DeActivateAsset", "Admin", new { id = @Model[i].AssetId })" title="deactive asset" onclick="return confirm('Are you sure you wish to make this asset deactive?');">
+                                            <span class="glyphicon glyphicon-arrow-up" style="font-size: 12px; color:blue"></span>
+                                        </a>
+                                    }
+                                    else
+                                    { <a href="#" title="deactive asset">
+                                            <span class="glyphicon glyphicon-arrow-up" style="font-size: 12px; color:blue"></span>
+                                        </a>
+                                    }
+                                </td>
+
+                            }
+                            else
+                            {
+                                <td style="text-align: center;">
+                                    @if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+                                    {
+                                        <a href="@Url.Action("ActivateAsset", "Admin", new { id = @Model[i].AssetId })" title="active asset" onclick="return confirm('Are you sure you wish to make this asset active?');">
+                                            <span class="glyphicon glyphicon-arrow-down" style="font-size: 12px; color:red"></span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#" title="active asset">
+                                            <span class="glyphicon glyphicon-arrow-down" style="font-size: 12px; color:red"></span>
+                                        </a>
+                                    }
                                 </td>
                             }
-                        }
-                    </tr>
+                        </tr>
                     }
                 </tbody>
             </table>
         </div>
-        }
+    }
 </div>
 
 <br />

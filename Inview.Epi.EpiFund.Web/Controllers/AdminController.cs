@@ -10115,7 +10115,8 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully published.");
 			if (userByUsername.UserType != UserType.CREBroker && userByUsername.UserType != UserType.CRELender && userByUsername.UserType != UserType.Investor)
 			{
-				return base.RedirectToAction("ManageAssets", "Admin");
+				//return base.RedirectToAction("ManageAssets", "Admin");
+				return base.RedirectToAction("ICACache", "ICA");
 			}
 			return base.RedirectToAction("SellerManageAssets", "Investors");
 		}
