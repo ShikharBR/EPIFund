@@ -350,14 +350,14 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 		[Display(Name = "Define Sale Terms of Portfolio Acceptable by Seller")]
-		
-		public string SalePortfolioAcceptableSeller
+
+		public Inview.Epi.EpiFund.Domain.Enum.SellerTerms SalePortfolioAcceptableSeller
 		{
 			get;
 			set;
 		}
 		[Display(Name = "Listing Status all")]
-		public Inview.Epi.EpiFund.Domain.Enum.ListingStatus ListingStatus
+		public Inview.Epi.EpiFund.Domain.Enum.ListingStatusall ListingStatusall
 		{
 			get;
 			set;
@@ -369,7 +369,13 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 		[Display(Name = "Pricing Display Option")]
-		public string PricingDisplayOption 
+		public Inview.Epi.EpiFund.Domain.Enum.PricingDisplay PricingDisplayOption 
+		{
+			get;
+			set;
+		}
+		[Display(Name = "Cap Rate")]
+		public float CapRate
 		{
 			get;
 			set;
@@ -866,7 +872,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 				Value = "WY"
 			};
 			selectListItems1.Add(selectListItem65);
-			this.States = selectListItems1;
+			this.States = selectListItems1;		
 		}
 
 		public PortfolioViewModel EntityToModel(Portfolio entity)
@@ -878,11 +884,11 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			this.NumberofAssets = entity.NumberofAssets;
 			this.PortfolioName = entity.PortfolioName;
 			this.PortfolioId = entity.PortfolioId;
-			this.UserId = entity.UserId;			
+			this.UserId = entity.UserId;
 			this.MustPortfolioAssetsInclusive = entity.MustPortfolioAssetsInclusive;
-				 this.SalePortfolioAcceptableSeller = entity.SalePortfolioAcceptableSeller;
-				this.IsCallOffersDate = entity.IsCallOffersDate;
-			this.PricingDisplayOption = entity.PricingDisplayOption;
+
+			this.IsCallOffersDate = entity.IsCallOffersDate;
+
 			this.isActive = entity.isActive;
 			return this;
 		}
@@ -892,9 +898,9 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			Portfolio portfolio = new Portfolio()
 			{
 				MustPortfolioAssetsInclusive=this.MustPortfolioAssetsInclusive,
-				SalePortfolioAcceptableSeller=this.SalePortfolioAcceptableSeller,
+			
 				IsCallOffersDate=this.IsCallOffersDate,
-				PricingDisplayOption=this.PricingDisplayOption,
+				
 				CallforOfferDate = this.CallforOfferDate,
 				hasOffersDate = this.hasOffersDate,
 				isSubjectToAuction = this.isSubjectToAuction,

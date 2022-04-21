@@ -91,6 +91,11 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			get;
 			set;
 		}
+		public float CapRete
+		{
+			get;
+			set;
+		}
 
 
 		public Portfolio()

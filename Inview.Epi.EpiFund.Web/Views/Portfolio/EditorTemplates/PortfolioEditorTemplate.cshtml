@@ -169,25 +169,26 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="input-group">
-                    @Html.LabelFor(model => model.SalePortfolioAcceptableSeller) <span style="color: red;">*</span>
+                    @Html.LabelFor(model => model.SalePortfolioAcceptableSeller)
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="input-group">
-                    @Html.EnumDropDownList("ListingStatus", Model.ListingStatus, "---")
 
+                    @Html.EnumDropDownList("SalePortfolioAcceptableSeller", Model.SalePortfolioAcceptableSeller, "---")
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="input-group">
-                    @Html.LabelFor(model => model.ListingStatus) <span style="color: red;">*</span>
+                    @Html.LabelFor(model => model.ListingStatusall) <span style="color: red;">*</span>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="input-group">
-                    @Html.EnumDropDownList("ListingStatus", Model.ListingStatus, "---")                 
+                  @Html.EnumDropDownList("ListingStatusall", Model.ListingStatusall, "---")
+                   
                 </div>
             </div>
         </div>
@@ -200,10 +201,26 @@
             </div>
             <div class="col-sm-6">
                 <div class="input-group">
-                    @Html.EnumDropDownList("ListingStatus", Model.ListingStatus, "---")
+                    @Html.EnumDropDownList("PricingDisplayOption", Model.PricingDisplayOption, "---")
+
+                </div>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group CapRate">
+                    @Html.LabelFor(model => model.CapRate)<span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group CapRate">
+                    @Html.EditorFor(model => model.CapRate, new { @style = "width:50%", @class = "control-label " }) %
+
                 </div>
             </div>
         </div>
+         
         <div class="row">
             <div class="col-sm-6">
                 <div class="input-group">
@@ -561,7 +578,7 @@
         $('#Method').val(method);
         fixNumbers();
     }
-
+    
     function fixNumbers() {
         $("input.formatNumber").each(function (index) {
             $(this).val($(this).val().replace(/,/g, ""));
@@ -578,6 +595,7 @@
     // For PW-324, to fix issue where clicking back via the browser from Manage Assets tab on
     // Update Portfolio Page brings you to Primary Info tab
     $(document).ready(function () {
+      
         if (location.hash.substr(0, 2) == "#!") {
 
             $("a[href='#" + location.hash.substr(2) + "']").tab("show");
@@ -590,6 +608,18 @@
             }
         });
     });
+    debugger;
+    $('#PricingDisplayOption').change(function () {
+        debugger;
+        if ($(this).val() === 'Cmv')
+            $('.CapRate').show();
+        else { $('.CapRate').hide(); }
+           
+    });
+    $('.CapRate').hide();
+
+    
+    
 
     function nextTab(button) {
         $('.nav li.active').removeClass('active');
@@ -599,6 +629,8 @@
         nextId.addClass('active');
         var tabLink = '#' + nextId.attr('id');
         $("[href = '" + tabLink + "']").closest('li').addClass('active');
+        
+       
     }
 
     function backTab(button) {
@@ -624,7 +656,9 @@
         var fileName = path.match(/[^\/\\]+$/);
         readIMG(this, fileName);
     });
-
+    $('#CapRate').on('blur', function () {
+        $(this).val(parseFloat($(this).val()).toFixed(2))
+    });
     function fillUserInformation() {
         $.ajax({
             type: "POST",

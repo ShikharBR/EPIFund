@@ -424,7 +424,15 @@ namespace Inview.Epi.EpiFund.Business
 				isSubjectToAuction = model.isSubjectToAuction,
 				LastReportedOccupancyDate = model.LastReportedOccupancyDate,
 				NumberofAssets = model.NumberofAssets,
-				PortfolioName = model.PortfolioName
+				PortfolioName = model.PortfolioName,
+				PricingDisplayOption=model.PricingDisplayOption.ToString(),
+				CapRete=model.CapRate,
+				IsCallOffersDate=model.IsCallOffersDate,
+				ListingStatus= (int)model.ListingStatusall,
+				MustPortfolioAssetsInclusive=model.MustPortfolioAssetsInclusive,
+				SalePortfolioAcceptableSeller=model.SalePortfolioAcceptableSeller.ToString(),
+
+
 			};
 			portfolio.NumberofAssets = model.SelectedAssets.Count<Guid>();
 			portfolio.UserId = UserId;
