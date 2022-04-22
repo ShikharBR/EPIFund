@@ -139,27 +139,33 @@
                 </div>
             </div>
         </div>
-         <div class="row">
+        <div class="row">
             <div class="col-sm-6">
                 <div class="input-group">
                     @Html.LabelFor(model => model.LastReportedOccupancyDate)
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-3">
                 <div class="input-group">
-                    @Html.TextBoxFor(s => s.LastReportedOccupancyDate, new { @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                    @Html.TextBoxFor(s => s.LastReportedOccupancyDate, new { @class = "datepicker" })
                     @Html.ValidationMessageFor(model => model.LastReportedOccupancyDate)
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group" style="float:left">
+                    <em>MM/dd/yyyy</em>
+
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <div class="input-group">
                     @Html.LabelFor(model => model.MustPortfolioAssetsInclusive) <span style="color: red;">*</span>
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="input-group">
+                <div class="input-group" style=" margin-left: 35px;">
                     @Html.RadioButtonFor(s => s.MustPortfolioAssetsInclusive, "true") Yes
                     @Html.RadioButtonFor(s => s.MustPortfolioAssetsInclusive, "false") No
 
@@ -174,8 +180,8 @@
             </div>
             <div class="col-sm-6">
                 <div class="input-group">
-
-                    @Html.EnumDropDownList("SalePortfolioAcceptableSeller", Model.SalePortfolioAcceptableSeller, "---")
+                    @Html.EnumDropDownListFor(s => s.SalePortfolioAcceptableSeller, new { @style = "width:137%" })
+                  
                 </div>
             </div>
         </div>
@@ -187,8 +193,8 @@
             </div>
             <div class="col-sm-6">
                 <div class="input-group">
-                  @Html.EnumDropDownList("ListingStatusall", Model.ListingStatusall, "---")
-                   
+                    @Html.EnumDropDownListFor(s => s.ListingStatusall, new { @style = "width:211%" })                 
+
                 </div>
             </div>
         </div>
@@ -201,8 +207,8 @@
             </div>
             <div class="col-sm-6">
                 <div class="input-group">
-                    @Html.EnumDropDownList("PricingDisplayOption", Model.PricingDisplayOption, "---")
-
+                  
+                    @Html.EnumDropDownListFor(s => s.PricingDisplayOption, new { @style = "width:168%", @class= "PricingDisplayOption" })
                 </div>
             </div>
             
@@ -222,30 +228,30 @@
         </div>
          
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <div class="input-group">
                     @Html.LabelFor(model => model.isSubjectToAuction) <span style="color: red;">*</span>
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="input-group">
+                <div class="input-group" style=" margin-left: 35px;">
                     @Html.RadioButtonFor(s => s.isSubjectToAuction, "true") Yes
                     @Html.RadioButtonFor(s => s.isSubjectToAuction, "false") No
-                    @Html.ValidationMessageFor(model => model.isSubjectToAuction)
+
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <div class="input-group">
                     @Html.LabelFor(model => model.IsCallOffersDate) <span style="color: red;">*</span>
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="input-group">
+                <div class="input-group" style=" margin-left: 35px;">
                     @Html.RadioButtonFor(s => s.IsCallOffersDate, "true") Yes
                     @Html.RadioButtonFor(s => s.IsCallOffersDate, "false") No
-                  
+
                 </div>
             </div>
         </div>
@@ -255,10 +261,16 @@
                     @Html.LabelFor(model => model.CallforOfferDate)
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-3">
                 <div class="input-group">
-                    @Html.TextBoxFor(s => s.CallforOfferDate, new { @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                    @Html.TextBoxFor(s => s.CallforOfferDate, new { @class = "datepicker" })
                     @Html.ValidationMessageFor(model => model.CallforOfferDate)
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group" style="float:left">
+                   <em>MM/dd/yyyy</em>
+                 
                 </div>
             </div>
         </div>
@@ -591,11 +603,13 @@
     function goBack() {
         window.location.href = "/Portfolio/ManagePortfolios";
     }
-
+   
     // For PW-324, to fix issue where clicking back via the browser from Manage Assets tab on
     // Update Portfolio Page brings you to Primary Info tab
     $(document).ready(function () {
-      
+        $('.CapRate').val("");
+       
+        $('#LastReportedOccupancyDate').val("");
         if (location.hash.substr(0, 2) == "#!") {
 
             $("a[href='#" + location.hash.substr(2) + "']").tab("show");
@@ -608,15 +622,17 @@
             }
         });
     });
+    $('.CapRate').hide();
     debugger;
-    $('#PricingDisplayOption').change(function () {
+    $('.PricingDisplayOption').change(function () {
         debugger;
-        if ($(this).val() === 'Cmv')
-            $('.CapRate').show();
+        if ($(this).val() === '3')
+            $('.CapRate').show();        
         else { $('.CapRate').hide(); }
            
     });
-    $('.CapRate').hide();
+   
+   
 
     
     
@@ -659,6 +675,7 @@
     $('#CapRate').on('blur', function () {
         $(this).val(parseFloat($(this).val()).toFixed(2))
     });
+   
     function fillUserInformation() {
         $.ajax({
             type: "POST",
