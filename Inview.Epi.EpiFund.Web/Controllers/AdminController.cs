@@ -1347,6 +1347,13 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				assetViewModel.CorporateOwnershipOfficer = userByUsername.FullName;
 			}
 			assetViewModel.FromCreateMethod = true;
+
+			List<AssetHCOwnershipModel> assetHCOwnershipModel = new List<AssetHCOwnershipModel>();
+			List<AssetOCModel> assetOCModel = new List<AssetOCModel>();
+
+			assetViewModel.AssetHCOwnershipLst = assetHCOwnershipModel;
+			assetViewModel.AssetOCLst = assetOCModel;
+
 			return base.View(assetViewModel);
 		}
 
