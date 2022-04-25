@@ -217,8 +217,9 @@
             <div class="col-sm-6">
                 <div class="input-group CapRate">
                     @Html.LabelFor(model => model.CapRate)
+                    
+                    </div>
                 </div>
-            </div>
             <div class="col-sm-6">
                 <div class="input-group CapRate">
                     @Html.EditorFor(model => model.CapRate, new { @style = "width:50%", @class = "control-label " }) %
@@ -233,53 +234,56 @@
                     @Html.LabelFor(model => model.isSubjectToAuction)
                 </div>
             </div>
-            <div class="input-group rdMandatory" style=" margin-left: 66px;">
-                @Html.RadioButtonFor(s => s.isSubjectToAuction, "true") Yes
-                @Html.RadioButtonFor(s => s.isSubjectToAuction, "false") No
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-5">
-                <div class="input-group">
-                    @Html.LabelFor(model => model.IsCallOffersDate) <span style="color: red;">*</span>
-                </div>
-            </div>
             <div class="col-sm-6">
-                <div class="input-group rdMandatory " style=" margin-left: 66px;">
-                    @Html.RadioButtonFor(s => s.IsCallOffersDate, "true") Yes
-                    @Html.RadioButtonFor(s => s.IsCallOffersDate, "false") No
+                <div class="input-group rdMandatory" style=" margin-left: 66px;">
+                    @Html.RadioButtonFor(s => s.isSubjectToAuction, "true") Yes
+                    @Html.RadioButtonFor(s => s.isSubjectToAuction, "false") No
 
                 </div>
+               
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.LabelFor(model => model.CallforOfferDate)
+            </div>
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.IsCallOffersDate) <span style="color: red;">*</span>
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="input-group">
-                    @Html.TextBoxFor(s => s.CallforOfferDate, new { @class = "datepicker" })
-                    @Html.ValidationMessageFor(model => model.CallforOfferDate)
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="input-group" style="float:left">
-                   <em>MM/dd/yyyy</em>
-                 
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage portfolios page.')) goBack()" value="Cancel" />
-                <input type="button" class="btn btn-primary" onclick="nextTab($(this));" value="Next" />
-            </div>
-        </div>
+                <div class="col-sm-6">
+                    <div class="input-group rdMandatory " style=" margin-left: 66px;">
+                        @Html.RadioButtonFor(s => s.IsCallOffersDate, "true") Yes
+                        @Html.RadioButtonFor(s => s.IsCallOffersDate, "false") No
 
-    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.CallforOfferDate)
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        @Html.TextBoxFor(s => s.CallforOfferDate, new { @class = "datepicker" })
+                        @Html.ValidationMessageFor(model => model.CallforOfferDate)
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group" style="float:left">
+                        <em>MM/dd/yyyy</em>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage portfolios page.')) goBack()" value="Cancel" />
+                    <input type="button" class="btn btn-primary" onclick="nextTab($(this));" value="Next" />
+                </div>
+            </div>
+
+        </div>
 
     <div class="tab-pane" id="assets">
         <h3>Manage Assets</h3>
@@ -344,11 +348,11 @@
                                                 <span title="inaccessible" class="glyphicon glyphicon-ban-circle"></span>
                                             </td>
                                         }
-                                            <td style="text-align: center;">
-                                                <a href="@Url.Action("DeactivateAssetfromPortfolio", "Portfolio", new { id = @Model.PortfolioProperties[i].AssetId, pfId = @Model.PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove the Asset from this Portfolio?');">
-                                                    <span class="glyphicon glyphicon-remove"></span>
-                                                </a>
-                                            </td>
+                                        <td style="text-align: center;">
+                                            <a href="@Url.Action("DeactivateAssetfromPortfolio", "Portfolio", new { id = @Model.PortfolioProperties[i].AssetId, pfId = @Model.PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove the Asset from this Portfolio?');">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </a>
+                                        </td>
                                     }
                                     else
                                     {
@@ -362,19 +366,19 @@
 
             }
             @*<div class="panel-heading" style="background-color: #428bca">
-                    <span style="font-weight: bold;">Add Assets to the portfolio</span>
+                <span style="font-weight: bold;">Add Assets to the portfolio</span>
+            </div>
+            <div class="overflow short-xs">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.AssetList)
                 </div>
-                <div class="overflow short-xs">
-                    <div class="input-group">
-                        @Html.LabelFor(model => model.AssetList)
-                    </div>
+            </div>
+            <div class="overflow short-xs">
+                <div class="input-group">
+                    @Html.ListBoxFor(model => model.SelectedAssets, Model.AssetList as IEnumerable<SelectListItem>, new { style = "width:300px;" })
+                    <em>To make multiple selections hold down your CONTROL key as you click a selection.</em>
                 </div>
-                <div class="overflow short-xs">
-                    <div class="input-group">
-                        @Html.ListBoxFor(model => model.SelectedAssets, Model.AssetList as IEnumerable<SelectListItem>, new { style = "width:300px;" })
-                        <em>To make multiple selections hold down your CONTROL key as you click a selection.</em>
-                    </div>
-                </div>*@
+            </div>*@
 
             <div class="panel-group" id="accordion">
                 <div class="panel panel-default">
@@ -520,19 +524,24 @@
 
 
         </div>
-
+       
+        <div class="validation-summary-errors" data-valmsg-summary="true">
+            <div id="divError" style="display:none;color:red;font-weight:bold;"></div>
+        </div>
+        <br />
+        
         <div class="row">
             <div class="col-sm-12">
                 <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage portfolios page.')) goBack()" value="Cancel" />
                 @*@if (Model.PortfolioId != null || Model.PortfolioId != Guid.Empty)
-                    {
-                        <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="updatePortfolio()" />
-                    }
-                    else if (Model.PortfolioId == null || Model.PortfolioId == Guid.Empty)
-                    {
-                        <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="createPortfolio()" />
-                    }*@
-                <input type="submit" class="btn btn-primary" value="Save Portfolio">
+                {
+                    <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="updatePortfolio()" />
+                }
+                else if (Model.PortfolioId == null || Model.PortfolioId == Guid.Empty)
+                {
+                    <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="createPortfolio()" />
+                }*@
+                <input type="submit" id="btnSubmit" class="btn btn-primary" value="Save Portfolio">
             </div>
         </div>
 
@@ -567,9 +576,18 @@
             }
         });
     }
-
+    
+    $('#btnSubmit').click(function (e) {
+        let isSuccess = formValidation('Primary Info');
+        if (!isSuccess) {
+            e.preventDefault();
+            $('#divError').show();
+        }
+    });
     function formValidation(tabText) {
         valErrorMSg = '';
+        $('#divError').html('');
+        $('#divError').hide();
         let input = document.getElementsByTagName('input');
         let select = document.getElementsByTagName('select');
         $('.rdMandatory').css("border", "none");
@@ -592,7 +610,8 @@
                 valErrorMSg += $("label[for='" + $('#MustPortfolioAssetsInclusive').attr('id') + "']").text() + ' is required <br/>';
                 isValidForm = false;
                 onInputBlur("MustPortfolioAssetsInclusive");
-            }  
+            }
+            $('#divError').html(valErrorMSg);
         }
         return isValidForm;
     }
