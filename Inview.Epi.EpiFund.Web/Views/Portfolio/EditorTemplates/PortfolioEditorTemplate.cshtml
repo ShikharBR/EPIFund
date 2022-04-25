@@ -165,7 +165,7 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="input-group" style=" margin-left: 35px;">
+                <div class="input-group rdMandatory" style=" margin-left: 66px;">
                     @Html.RadioButtonFor(s => s.MustPortfolioAssetsInclusive, "true") Yes
                     @Html.RadioButtonFor(s => s.MustPortfolioAssetsInclusive, "false") No
 
@@ -188,7 +188,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="input-group">
-                    @Html.LabelFor(model => model.ListingStatusall) <span style="color: red;">*</span>
+                    @Html.LabelFor(model => model.ListingStatusall) 
                 </div>
             </div>
             <div class="col-sm-6">
@@ -216,7 +216,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="input-group CapRate">
-                    @Html.LabelFor(model => model.CapRate)<span style="color: red;">*</span>
+                    @Html.LabelFor(model => model.CapRate)
                 </div>
             </div>
             <div class="col-sm-6">
@@ -230,15 +230,13 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="input-group">
-                    @Html.LabelFor(model => model.isSubjectToAuction) <span style="color: red;">*</span>
+                    @Html.LabelFor(model => model.isSubjectToAuction)
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div class="input-group" style=" margin-left: 35px;">
-                    @Html.RadioButtonFor(s => s.isSubjectToAuction, "true") Yes
-                    @Html.RadioButtonFor(s => s.isSubjectToAuction, "false") No
+            <div class="input-group rdMandatory" style=" margin-left: 66px;">
+                @Html.RadioButtonFor(s => s.isSubjectToAuction, "true") Yes
+                @Html.RadioButtonFor(s => s.isSubjectToAuction, "false") No
 
-                </div>
             </div>
         </div>
         <div class="row">
@@ -248,7 +246,7 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="input-group" style=" margin-left: 35px;">
+                <div class="input-group rdMandatory " style=" margin-left: 66px;">
                     @Html.RadioButtonFor(s => s.IsCallOffersDate, "true") Yes
                     @Html.RadioButtonFor(s => s.IsCallOffersDate, "false") No
 
@@ -557,7 +555,47 @@
 <input type="hidden" value="@(Model.GetType())" name="TypeOfAsset" />
 
 <script>
+    var isValidForm = true;
+    var valErrorMSg = '';
+    function onInputBlur(ctrl) {
+        $("#" + ctrl).blur(x => {
+            if ($(x.target.id).val() === '') {
+                $("#" + x.target.id).attr('style', 'border-color:red')
+            }
+            else {
+                $("#" + x.target.id).attr('style', 'border-color:none')
+            }
+        });
+    }
 
+    function formValidation(tabText) {
+        valErrorMSg = '';
+        let input = document.getElementsByTagName('input');
+        let select = document.getElementsByTagName('select');
+        $('.rdMandatory').css("border", "none");
+        isValidForm = true;
+        $(input).css("borderColor", "#B1A795");
+        $(select).css("borderColor", "#B1A795");
+
+        if (tabText === 'Primary Info') {
+
+            if ($('#PortfolioName').val() === '') {
+                $('#PortfolioName').css("borderColor", "red");
+                valErrorMSg += $("label[for='" + $('#PortfolioName').attr('id') + "']").text() + ' is required <br/>';
+                isValidForm = false;
+                onInputBlur("PortfolioName");
+            }
+
+            if (!$('#MustPortfolioAssetsInclusive').is(':checked')) {
+                $('.rdMandatory').css("border", "1px solid red");
+               
+                valErrorMSg += $("label[for='" + $('#MustPortfolioAssetsInclusive').attr('id') + "']").text() + ' is required <br/>';
+                isValidForm = false;
+                onInputBlur("MustPortfolioAssetsInclusive");
+            }  
+        }
+        return isValidForm;
+    }
     window.setInterval(function () {
         getAssetList();
     }, 500);
@@ -638,14 +676,16 @@
     
 
     function nextTab(button) {
-        $('.nav li.active').removeClass('active');
-        var currentId = button.closest('.tab-pane');
-        var nextId = button.closest('.tab-pane').next('.tab-pane');
-        currentId.removeClass('active');
-        nextId.addClass('active');
-        var tabLink = '#' + nextId.attr('id');
-        $("[href = '" + tabLink + "']").closest('li').addClass('active');
-        
+        if (formValidation($('.nav li.active').text())) {
+            $('.nav li.active').removeClass('active');
+            var currentId = button.closest('.tab-pane');
+            var nextId = button.closest('.tab-pane').next('.tab-pane');
+            currentId.removeClass('active');
+            nextId.addClass('active');
+            var tabLink = '#' + nextId.attr('id');
+
+            $("[href = '" + tabLink + "']").closest('li').addClass('active');
+        }
        
     }
 

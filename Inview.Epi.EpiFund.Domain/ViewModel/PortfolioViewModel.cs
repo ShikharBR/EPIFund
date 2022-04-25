@@ -343,7 +343,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
             set;
         }
         [Display(Name = "Must Portfolio be Sold All Assets Inclusive")]
-
+        [Required(ErrorMessage = "Must Portfolio be Sold All Assets Inclusive")]
         public bool? MustPortfolioAssetsInclusive
         {
             get;
