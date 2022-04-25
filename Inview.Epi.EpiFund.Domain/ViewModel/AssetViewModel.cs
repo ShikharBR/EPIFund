@@ -2790,55 +2790,61 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			List<SelectListItem> selectListItems12 = new List<SelectListItem>();
 			SelectListItem selectListItem88 = new SelectListItem()
 			{
-				Value = "10",
-				Text = "10 Years"
+				Value = "0",
+				Text = "0"
 			};
 			selectListItems12.Add(selectListItem88);
 			SelectListItem selectListItem89 = new SelectListItem()
 			{
-				Value = "15",
-				Text = "15 Years"
+				Value = "10",
+				Text = "10"
 			};
 			selectListItems12.Add(selectListItem89);
 			SelectListItem selectListItem90 = new SelectListItem()
 			{
-				Value = "20",
-				Text = "20 Years"
+				Value = "15",
+				Text = "15"
 			};
 			selectListItems12.Add(selectListItem90);
 			SelectListItem selectListItem91 = new SelectListItem()
 			{
-				Value = "25",
-				Text = "25 Years"
+				Value = "20",
+				Text = "20"
 			};
 			selectListItems12.Add(selectListItem91);
 			SelectListItem selectListItem92 = new SelectListItem()
 			{
-				Value = "30",
-				Text = "30 Years"
+				Value = "25",
+				Text = "25"
 			};
 			selectListItems12.Add(selectListItem92);
+			SelectListItem selectListItem93 = new SelectListItem()
+			{
+				Value = "30",
+				Text = "30"
+			};
+			selectListItems12.Add(selectListItem93);
 			this.AmortizationScheduleList = selectListItems12;
 			List<SelectListItem> selectListItems13 = new List<SelectListItem>();
-			SelectListItem selectListItem93 = new SelectListItem()
+			SelectListItem selectListItem94 = new SelectListItem()
 			{
 				Value = "0",
 				Text = "---",
 				Selected = true
 			};
-			selectListItems13.Add(selectListItem93);
-			SelectListItem selectListItem94 = new SelectListItem()
+			selectListItems13.Add(selectListItem94);
+			SelectListItem selectListItem95 = new SelectListItem()
 			{
 				Value = "1",
 				Text = "Fee Simple Title"
 			};
-			selectListItems13.Add(selectListItem94);
-			SelectListItem selectListItem95 = new SelectListItem()
+			selectListItems13.Add(selectListItem95);
+			SelectListItem selectListItem96 = new SelectListItem()
 			{
 				Value = "2",
 				Text = "Leasehold Title"
 			};
-			selectListItems13.Add(selectListItem95);
+			selectListItems13.Add(selectListItem96);
 			this.PropHoldTypes = selectListItems13;
 			List<SelectListItem> selectListItems14 = new List<SelectListItem>();
             /* // Removing PropHoldTypes default option at request
