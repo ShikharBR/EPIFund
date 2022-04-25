@@ -250,6 +250,12 @@
         float: left;
     }
 
+    .validation-summary-errors {
+        background-color: #f2dede;
+        border: 1px solid #ebccd1;
+        padding: 10px;
+    }
+
     #selectPIModal .modal-body .col-sm-6,
     #selectCompanyModal .modal-body .col-sm-6,
     #selectPIModal .modal-body .col-sm-6 .input-group,
@@ -4951,7 +4957,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="input-group">
-                        @Html.TextBoxFor(s => s.CurrentPrincipalBalance, new { @class = "control-label formatNumber ConvertToDoller" })
+                        @Html.TextBoxFor(s => s.CurrentPrincipalBalance, new { @class = "control-label formatNumber" })
                     </div>
                 </div>
             </div>
@@ -4977,7 +4983,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="input-group">
-                        @Html.TextBoxFor(s => s.MonthlyPayment, new { @class = "control-label formatNumber ConvertToDoller" })
+                        @Html.TextBoxFor(s => s.MonthlyPayment, new { @class = "control-label formatNumber" })
                     </div>
                 </div>
             </div>
@@ -5001,8 +5007,9 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="input-group">
-                    
+
                         @Html.TextBoxFor(s => s.InterestRate, new { @class = "control-label inputDecimalNumber" }) %
+
                     </div>
                 </div>
             </div>
@@ -5016,8 +5023,8 @@
                 <div class="col-sm-6">
                     <div class="input-group rdMandatory">
                         @Html.RadioButtonFor(model => model.IsMortgageAnARM, "true") Yes
-                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "false") No
-                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "false") Unknown
+                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "tru") No
+                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "tru") Unknown
                         @*@Html.RadioButtonFor(s => s.IsMortgageAnARM, "Yes") Yes
                             @Html.RadioButtonFor(s => s.IsMortgageAnARM, "No") No
                             @Html.RadioButtonFor(s => s.IsMortgageAnARM, "Unknown") Unknown*@
@@ -5027,24 +5034,34 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="input-group">
-                        @Html.LabelFor(s => s.MortgageAdjustIfARM, new { @class = "control-label" }) 
+                        @Html.LabelFor(s => s.MortgageAdjustIfARM, new { @class = "control-label" })
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <div class="input-group">
                         @Html.TextBoxFor(s => s.MortgageAdjustIfARM, new { @class = "control-label datepicker" })
                     </div>
                 </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <em>MM/dd/yyyy</em>
+                    </div>
+                </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-sm-6">
                     <div class="input-group">
                         @Html.LabelFor(s => s.BalloonDateOfNote, new { @class = "control-label" })
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-sm-3">
                     <div class="input-group">
-                        @Html.TextBoxFor(s => s.BalloonDateOfNote, new { @class = "control-label datepicker" }) <em>MM/dd/yyyy</em>
+                        @Html.TextBoxFor(s => s.BalloonDateOfNote, new { @class = "control-label datepicker" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <em>MM/dd/yyyy</em>
                     </div>
                 </div>
             </div>
@@ -6158,7 +6175,9 @@
 
     <div class="tab-pane" id="finish">
         <h3 style="border-bottom: 0 !important">End</h3>
-        <div id="divError" style="display:none;color:red;font-weight:bold;"></div>
+        <div class="validation-summary-errors" data-valmsg-summary="true">
+            <div id="divError" style="display:none;color:red;font-weight:bold;"></div>
+        </div>
         <br />
         @if (Model.User.UserType == UserType.CREBroker || Model.User.UserType == UserType.CRELender || Model.User.UserType == UserType.Investor)
         {
@@ -6637,7 +6656,7 @@
         $("#CashInvestmentApy").val("");
         $("#TermsOther").val("");
         $("#CapRate").val("");
-    } 
+    }
 
     $('.ConvertToDoller').on('input', function () {
         if ($(this).val().trim() != '') {
@@ -6645,9 +6664,21 @@
             $(this).val(dolNum == '$' ? '' : dolNum)
         }
     })
-    $('.inputDecimalNumber').on('blur', function () {
-       
-        $(this).val(parseFloat($(this).val()).toFixed(2))
+    //$('.inputDecimalNumber').on('input', function () {
+
+    //    $(this).val(parseFloat($(this).val()).toFixed(2))
+    //});
+
+    $(".inputDecimalNumber").keyup(function () {
+        if ($(this).val().length > 2 && $(this).val().charAt(2) != '.') {
+            $(this).val($(this).val().substr(0, $(this).val().length - 1))
+            return;
+        }
+        var number = ($(this).val().split('.'));
+        if (number[1].length > 2) {
+            var salary = parseFloat($("#InterestRate").val());
+            $("#InterestRate").val(salary.toFixed(2));
+        }
     });
     function EditHC(AssetHCOwnershipId) {
 
