@@ -5008,7 +5008,7 @@
                 <div class="col-sm-6">
                     <div class="input-group">
 
-                        @Html.TextBoxFor(s => s.InterestRate, new { @class = "control-label inputDecimalNumber" }) %
+                        @Html.TextBoxFor(s => s.InterestRate,"{0:n2}", new { @class = "control-label inputDecimalNumber" }) %
 
                     </div>
                 </div>
@@ -5023,8 +5023,8 @@
                 <div class="col-sm-6">
                     <div class="input-group rdMandatory">
                         @Html.RadioButtonFor(model => model.IsMortgageAnARM, "true") Yes
-                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "tru") No
-                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "tru") Unknown
+                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "true") No
+                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "true") Unknown
                         @*@Html.RadioButtonFor(s => s.IsMortgageAnARM, "Yes") Yes
                             @Html.RadioButtonFor(s => s.IsMortgageAnARM, "No") No
                             @Html.RadioButtonFor(s => s.IsMortgageAnARM, "Unknown") Unknown*@
@@ -5056,7 +5056,7 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="input-group">
-                        @Html.TextBoxFor(s => s.BalloonDateOfNote, new { @class = "control-label datepicker" })
+                        @Html.TextBoxFor(s => s.BalloonDateOfNote, "{0:MM/dd/yyyy}", new { @class = "control-label datepicker" })
                     </div>
                 </div>
                 <div class="col-sm-3">
@@ -6175,9 +6175,12 @@
 
     <div class="tab-pane" id="finish">
         <h3 style="border-bottom: 0 !important">End</h3>
+
         <div class="validation-summary-errors" data-valmsg-summary="true">
+            <h5 class="text-center">Required Fields</h5>
             <div id="divError" style="display:none;color:red;font-weight:bold;"></div>
         </div>
+
         <br />
         @if (Model.User.UserType == UserType.CREBroker || Model.User.UserType == UserType.CRELender || Model.User.UserType == UserType.Investor)
         {
@@ -6270,7 +6273,7 @@
                     isValidForm = false;
                     onInputBlur("InterestRate");
                 }
-                if (!$('#IsMortgageAnARM').is(':checked')) {
+                if (!$('input[name="IsMortgageAnARM"]').is(':checked')) {
                     $('.rdMandatory').css("border", "1px solid red");
                     valErrorMSg += $("label[for='" + $('#IsMortgageAnARM').attr('id') + "']").text() + ' is required <br/>';
                     isValidForm = false;
@@ -6669,17 +6672,49 @@
     //    $(this).val(parseFloat($(this).val()).toFixed(2))
     //});
 
-    $(".inputDecimalNumber").keyup(function () {
-        if ($(this).val().length > 2 && $(this).val().charAt(2) != '.') {
-            $(this).val($(this).val().substr(0, $(this).val().length - 1))
+    $(".inputDecimalNumber").keydown(function (e) {
+        // if other than number press any key return
+        var isNumeric = false;
+        var data = $(".inputDecimalNumber").val();
+        var charCode = (e.which) ? e.which : e.keyCode;
+        if (charCode == 8 || charCode == 46) {
             return;
         }
-        var number = ($(this).val().split('.'));
-        if (number[1].length > 2) {
-            var salary = parseFloat($("#InterestRate").val());
-            $("#InterestRate").val(salary.toFixed(2));
+        if (data.indexOf('.') == -1 && (charCode == 190 || charCode == 110)) {
+            return;
+        }
+        if ((charCode >= 48 && charCode <= 57) || (charCode >= 96 && charCode <= 105)) {
+            isNumeric = true;
+        }
+        if (isNumeric) {
+            if (data.length <= 1) {
+                return;
+            }
+            else if (data.length > 1 && data.indexOf('.') == -1) {
+                if (data.substring(2).length > 2) {
+                    e.preventDefault();
+                }
+                data = data.substring(0, 2) + '.' + data.substring(2);
+                $(".inputDecimalNumber").val(data);
+
+            }
+
+            if (data.length >= 5) {
+                e.preventDefault();
+            }
+        }
+        else {
+            e.preventDefault();
+        }
+
+    });
+
+    $(".inputDecimalNumber").blur(function () {
+        if ($(".inputDecimalNumber").val() != '') {
+            $(this).val(parseFloat($(this).val()).toFixed(2));
         }
     });
+
     function EditHC(AssetHCOwnershipId) {
 
         $.ajax({
@@ -8287,7 +8322,11 @@
                 $('#divError').html('');
                 if (!isValidForm) {
                     $('#divError').html(valErrorMSg);
+                    $('#finish .validation-summary-errors').show();
                     $('#divError').show();
+                }
+                else {
+                    $('#finish .validation-summary-errors').hide();
                 }
             }
         });
