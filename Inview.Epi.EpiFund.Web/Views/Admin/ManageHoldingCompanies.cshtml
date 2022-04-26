@@ -220,9 +220,7 @@
 <div class="modal fade" id="chainOfTitleAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
     <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
         <!-- Modal content-->
-        <div class="modal-content" id="divAssetViewchainOfTitle">
-
-        </div>
+        <div class="modal-content" id="divAssetViewchainOfTitle"></div>
     </div>
 </div>
 
@@ -256,17 +254,31 @@
 
 <script>
 
-    function ViewRelatedAssets(PortfolioId) {
+   
+    function ViewRelatedAssets(PortfolioId, curretntSpan) {       
         //alert(PortfolioId);
         /*show model popup
          bind data as per the assets list*/
         $.ajax({
             url: "@Url.Action("GetAssetsbyPortfolioId", "Admin")",
             data: { portfolioId: PortfolioId },
-            success: function (data) {
-                $("#divAssetViewPortfolio").html(data);
-                $("#portfholioAssets").modal();
+            success: function (data) {               
+                if ($("#divAssetViewchainOfTitle").html().length > 0 && $('#divAssetViewchainOfTitle').is(':visible')) {
 
+                    var ID = $(curretntSpan).closest('tr').parent().closest('tr').attr("id");
+
+                    if ($('#' + PortfolioId + '_AssetsinPortfolio').length) {
+                        $('#' + PortfolioId + '_AssetsinPortfolio').remove();
+                    }
+                    else {
+                        data = data.replace("<button", "<button style='display:none;'")
+                        $('#' + ID).after("<tr id='" + PortfolioId + "_AssetsinPortfolio'> <td colspan='18'>" + data + "</td></tr>");
+                    }
+
+                } else {
+                    $("#divAssetViewPortfolio").html(data);
+                    $("#portfholioAssets").modal();
+                }
                 //add comma
                 $('.padNumber').each(function (index) {
                     padCommas(this, false);
@@ -274,6 +286,7 @@
             }
         });
     }
+
 
     function changeResults() {
         $('#RowCount').val($('#ddlRowCount').val());
@@ -316,7 +329,7 @@
         });
     }
 
-    function HoldingCoRelatedAsset(HCID) {       
+    function HoldingCoRelatedAsset(HCID) {
         /*show model popup
          bind data as per the assets list*/
         $.ajax({
@@ -387,10 +400,30 @@
         $("#ZipCode").val('');
         $("#ApnNumber").val('');
         $('#IsPaper').prop('checked', false);
-       
+
 
         $("#County").val('');
         $("#ListAgentName").val('');
+    }
+
+
+     function Viewportfolio_ChainOfTitle(assetId, curretntSpan) {
+        if ($("#" + assetId + "_portfolio").length) {
+            $("#" + assetId + "_portfolio").remove();
+        }
+        else {
+            $.ajax({
+                url: "@Url.Action("GetRelatedPortfolio", "Admin")",
+                data: { assetId: assetId },
+                success: function (data) {
+                    $(curretntSpan).closest('tr').parent().closest('tr').after("<tr id='" + assetId + "_portfolio' >" + data + "</tr>");
+                    //add comma
+                    $('.padNumber').each(function (index) {
+                        padCommas(this, false);
+                    });
+                }
+            });
+        }
     }
 
 </script>
