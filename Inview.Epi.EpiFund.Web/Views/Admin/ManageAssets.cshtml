@@ -487,17 +487,17 @@
             data: { portfolioId: PortfolioId },
             success: function (data) {
 
-                debugger;
-                if ($("#divAssetViewchainOfTitle").html().length > 0) {
-                    debugger;
+                
+                if ($("#divAssetViewchainOfTitle").html().length > 0 && $('#divAssetViewchainOfTitle').is(':visible')) {
+                
                     var ID = $(curretntSpan).closest('tr').parent().closest('tr').attr("id");
 
                     if ($('#' + PortfolioId + '_AssetsinPortfolio').length) {
                         $('#' + PortfolioId + '_AssetsinPortfolio').remove();
                     }
-                    else {                        
+                    else {
                         data = data.replace("<button", "<button style='display:none;'")
-                        $('#' + ID).after("<tr id='" + PortfolioId + "_AssetsinPortfolio'> <td colspan='18'>" + data + "</td></tr>");                     
+                        $('#' + ID).after("<tr id='" + PortfolioId + "_AssetsinPortfolio'> <td colspan='18'>" + data + "</td></tr>");
                     }
 
                 } else {
@@ -511,6 +511,7 @@
             }
         });
     }
+
     function ViewChainOfTitle(assetId) {
         $.ajax({
             url: "@Url.Action("GetChainOfTitle", "Admin")",
@@ -519,6 +520,21 @@
                 $("#divAssetViewchainOfTitle").html(data);
                 $("#chainOfTitleAssets").modal();
 
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
+
+    function ViewChainOfTitleAssetViewPortfolio(assetId) {        
+        $.ajax({
+            url: "@Url.Action("GetChainOfTitle", "Admin")",
+            data: { assetId: assetId },
+            success: function (data) {
+                $("#divAssetViewchainOfTitle").html(data);
+                $("#chainOfTitleAssets").modal();
                 //add comma
                 $('.padNumber').each(function (index) {
                     padCommas(this, false);
