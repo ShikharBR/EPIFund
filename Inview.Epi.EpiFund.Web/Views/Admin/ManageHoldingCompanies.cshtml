@@ -262,9 +262,7 @@
         $.ajax({
             url: "@Url.Action("GetAssetsbyPortfolioId", "Admin")",
             data: { portfolioId: PortfolioId },
-            success: function (data) {
-                debugger;
-
+            success: function (data) {               
                 if ($("#divAssetViewchainOfTitle").html().length > 0 && $('#divAssetViewchainOfTitle').is(':visible')) {
 
                     var ID = $(curretntSpan).closest('tr').parent().closest('tr').attr("id");
