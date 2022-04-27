@@ -64,38 +64,24 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			get;
 			set;
 		}
-		public int ListingStatus
-		{
-			get;
-			set;
-		}
-		public bool MustPortfolioAssetsInclusive
-		{
-			get;
-			set;
-		}
 
-		public string SalePortfolioAcceptableSeller
-		{
-			get;
-			set;
-		}
-
-		public string PricingDisplayOption
-		{
-			get;
-			set;
-		}
 		public bool IsCallOffersDate
 		{
 			get;
 			set;
 		}
-		public float CapRete
+		public float? CapRete
 		{
 			get;
 			set;
 		}
+
+
+		public bool MustPortfolioAssetsInclusive { get; set; }
+
+		public Inview.Epi.EpiFund.Domain.Enum.ListingStatusall? ListingStatusall { get; set; }
+		public Inview.Epi.EpiFund.Domain.Enum.SellerTerms? SalePortfolioAcceptableSeller { get; set; }
+		public Inview.Epi.EpiFund.Domain.Enum.PricingDisplay? PricingDisplayOption { get; set; }
 
 
 		public Portfolio()
