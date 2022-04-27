@@ -405,6 +405,8 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 		}
 
 		[Display(Name="Balloon Date of Note (if applicable)")]
+		
+         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
 		public DateTime? BalloonDateOfNote
 		{
 			get;

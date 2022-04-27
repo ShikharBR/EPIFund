@@ -6269,18 +6269,21 @@ namespace Inview.Epi.EpiFund.Business
 
         public double GetPublishedCommercialAssetValue()
         {
+            double a = 0;
+            return a;
             //var context = _factory.Create();
             //return context.Assets.Where(a => a.AssetType != AssetType.Other && a.AssetType != AssetType.MHP && a.AssetType != AssetType.MultiFamily).Sum(s => s.AskingPrice);
-            IEPIRepository ePIRepository = this._factory.Create();
-            double num = (
-                from a in ePIRepository.Assets
-                where !a.IsTBDMarket
-                select a).Sum<Asset>((Asset s) => s.AskingPrice);
-            double num1 = (
-                from a in ePIRepository.Assets
-                where a.IsTBDMarket
-                select a).Sum<Asset>((Asset s) => s.CurrentBpo);
-            return num + num1;
+            
+            //IEPIRepository ePIRepository = this._factory.Create();
+            //double num = (
+            //    from a in ePIRepository.Assets
+            //    where !a.IsTBDMarket
+            //    select a).Sum<Asset>((Asset s) => s.AskingPrice);
+            //double num1 = (
+            //    from a in ePIRepository.Assets
+            //    where a.IsTBDMarket
+            //    select a).Sum<Asset>((Asset s) => s.CurrentBpo);
+            //return num + num1;
         }
 
         public int GetTotalNumberOfMultiFamilyUnits()
