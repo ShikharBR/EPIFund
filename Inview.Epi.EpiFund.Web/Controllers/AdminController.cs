@@ -9876,11 +9876,20 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				ControllingUserType = userByUsername.UserType,
 				IsPaper = model.IsPaper,
 				ApnNumber = model.ApnNumber,
-
 				County = model.County,
 				ListAgentCompanyName = model.ListAgentCompanyName,
 				ListAgentName = model.ListAgentName
 			};
+
+            if (model.AssmFin == AssmFin.Yes)
+            {
+				manageAssetsModel.HasPositionMortgage = PositionMortgageType.Yes;
+            }
+			else if (model.AssmFin == AssmFin.No)
+			{
+				manageAssetsModel.HasPositionMortgage = PositionMortgageType.No;
+			}
+
 			adminAssetQuickListModels = this._asset.GetManageAssetsQuickList(manageAssetsModel);
 			
 			((dynamic)base.ViewBag).CurrentSort = model.SortOrder;

@@ -2293,6 +2293,11 @@ namespace Inview.Epi.EpiFund.Business
             var context = _factory.Create();
             var assets = context.Assets.Where(w => w.IsActive || w.IsActive == false);
 
+            if (model.HasPositionMortgage.HasValue)
+            {
+                assets = assets.Where(x => x.HasPositionMortgage == model.HasPositionMortgage.Value);
+            }
+
             if (model.IsPaper)
             {
                 // Only filtering if this is true. If we filtered when this value is false, we would exclude paper assets by default
