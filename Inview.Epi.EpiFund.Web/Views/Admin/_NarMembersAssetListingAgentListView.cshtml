@@ -10,25 +10,34 @@
             <thead>
                 <tr>
                     <td>
-                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.FirstNameSortParm')">First Name</a></b>
+                        <b><a style="cursor: pointer; color:black" onclick="postForm('@ViewBag.FirstNameSortParm')">Name of Agent</a></b>
                     </td>
-                    <td>
-                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.LastNameSortParm')">Last Name</a></b>
-                    </td>
-                    <td>
+                    @*<td>
+            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.LastNameSortParm')">Last Name</a></b>
+        </td>*@
+                    @*<td>
                         <b>Asset Numbers</b>
+                    </td>*@
+
+                    <td>
+                        <b><a style="cursor: pointer; color: black" onclick="postForm('@ViewBag.CompanyNameSortParm')">Company Name</a></b>
                     </td>
                     <td>
-                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.EmailSortParm')">Email</a></b>
+                        @*<b><a style="cursor: pointer" onclick="postForm('@ViewBag.CompanyNameSortParm')">Carporate Address</a></b>*@
+                        <b><a style="cursor: pointer; color: black">Corporate Address</a></b>
                     </td>
                     <td>
-                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.CompanyNameSortParm')">Company Name</a></b>
+                        <b><a style="cursor: pointer; color: black" onclick="postForm('@ViewBag.StateSortParm')">City / St</a></b>
                     </td>
                     <td>
-                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.StateSortParm')">State</a></b>
+                        <b><a style="cursor: pointer; color: black" onclick="postForm('@ViewBag.EmailSortParm')">E mail</a></b>
                     </td>
+                    @*<td>
+            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.IsActiveParm')">Active?</a></b>
+        </td>*@
                     <td>
-                        <b><a style="cursor: pointer" onclick="postForm('@ViewBag.IsActiveParm')">Active?</a></b>
+                        @*<b><a style="cursor: pointer" onclick="postForm('@ViewBag.StateSortParm')">Manage</a></b>*@
+                        <b><a style="cursor: pointer; color: black">Manage</a></b>
                     </td>
                     <td colspan="2"></td>
                 </tr>
@@ -36,39 +45,53 @@
             <tbody>
                 @foreach (var item in @Model)
                 {
-                    <tr id="@item.NarMemberId">
-                        <td>
-                            @item.FirstName
-                        </td>
-                        <td>
-                            @item.LastName
-                        </td>
-                        <td>
-                            <span class="glyphicon glyphicon-plus" title="@item.AssetNumbers" style="cursor:pointer;width:100px;" onclick="toggleAssetNumbers('@item.NarMemberId', this)">
-                                <span style="display:none;white-space:normal;word-break:break-word" id="asset-@item.NarMemberId">@item.AssetNumbers</span>
-                            </span>
-                        </td>
-                        <td>
-                            @item.Email
-                        </td>
-                        <td>
-                            @item.CompanyName
-                        </td>
-                        <td>
-                            @item.State
-                        </td>
-                        <td>
-                            @(item.IsActive ? "Yes" : "No")
-                        </td>
-                        <td style="text-align: center;">
-                            <a href="@Url.Action("UpdateNARMember", "Admin", new { id = @item.NarMemberId })" title="edit">
-                                <span class="glyphicon glyphicon-pencil"></span></a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick = "return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
-                                <span class="glyphicon glyphicon-remove"></span></a>
-                        </td>
-                    </tr>
+                <tr id="@item.NarMemberId">
+                    <td>
+                        @item.LastName, @item.FirstName
+                    </td>
+                    @*<td>
+            @item.LastName
+        </td>*@
+                    @*<td>
+                        <span class="glyphicon glyphicon-plus" title="@item.AssetNumbers" style="cursor:pointer;width:100px;" onclick="toggleAssetNumbers('@item.NarMemberId', this)">
+                            <span style="display:none;white-space:normal;word-break:break-word" id="asset-@item.NarMemberId">@item.AssetNumbers</span>
+                        </span>
+                    </td>*@
+
+                    <td>
+                        @item.CompanyName
+                    </td>
+                    <td>
+                        @item.AddressLine1 @item.AddressLine2
+                    </td>
+                    <td>
+                        @item.City, @item.State
+                    </td>
+                    <td>
+                        @item.Email
+                    </td>
+                    @*<td>
+            @(item.IsActive ? "Yes" : "No")
+        </td>*@
+                    <td style="text-align: center;">
+                        <a href="@Url.Action("UpdateNARMember", "Admin", new { id = @item.NarMemberId })" title="edit">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+
+                        <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
+                            <span class="glyphicon glyphicon-arrow-up"></span>
+                        </a>
+
+                        @*else
+            <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
+                <span class="glyphicon glyphicon-arrow-up"></span>
+            </a>*@
+                    </td>
+                    @*<td>
+            <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick = "return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
+                <span class="glyphicon glyphicon-remove"></span></a>
+        </td>*@
+                </tr>
                 }
             </tbody>
         </table>
