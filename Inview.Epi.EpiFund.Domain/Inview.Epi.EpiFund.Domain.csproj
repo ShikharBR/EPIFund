@@ -186,6 +186,7 @@
     <Compile Include="Entity\AssetUnitSpecification.cs" />
     <Compile Include="Entity\CommercialAsset.cs" />
     <Compile Include="Enum\AssetSubType.cs" />
+    <Compile Include="Enum\AssmFin.cs" />
     <Compile Include="Enum\ContractFeePayoutType.cs" />
     <Compile Include="Enum\DefineSellTerm.cs" />
     <Compile Include="Enum\InteriorRoadType.cs" />

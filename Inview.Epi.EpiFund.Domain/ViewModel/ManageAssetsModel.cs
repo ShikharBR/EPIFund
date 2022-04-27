@@ -143,6 +143,8 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
+		public PositionMortgageType? HasPositionMortgage { get; set; }
+
 		public ManageAssetsModel()
 		{
 		}

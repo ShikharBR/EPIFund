@@ -183,26 +183,29 @@
                         <div class="col-sm-3">
                             <div class="input-group text-right">
                                 @Html.LabelFor(s => s.IsPaper, new { @style = "line-height: 32px; margin:0" })
+
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="input-group">
                                 @Html.CheckBoxFor(s => s.IsPaper, new { @style = "" })
+
                             </div>
                         </div>
+
                     </div>
                     @*<div class="row asset-list-form">
-                        <div class="col-sm-3">
-                            <div class="input-group text-right">
-                                @Html.LabelFor(s => s.ApnNumber, new { @style = "line-height: 32px; margin:0" })
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="input-group">
-                                @Html.TextBoxFor(s => s.ApnNumber, new { @style = "width: 100%" })
-                            </div>
-                        </div>
-                    </div>*@
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.ApnNumber, new { @style = "line-height: 32px; margin:0" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.ApnNumber, new { @style = "width: 100%" })
+                </div>
+            </div>
+        </div>*@
                     <div class="row asset-list-form">
                         <div class="col-sm-3">
                             <div class="input-group text-right">
@@ -251,28 +254,42 @@
                         </div>
                     </div>
 
+                    <div class="row asset-list-form">
+                       
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.AssmFin, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.EnumDropDownListFor(s => s.AssmFin, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+
                     @*<div class="row asset-list-form">
-                        <div class="col-sm-3">
-                            <div class="input-group text-right">
-                                @Html.LabelFor(s => s.AccListPrice, new { @style = "line-height: 32px; margin:0" })
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="input-group">
-                                @Html.TextBoxFor(s => s.AccListPrice, new { @style = "width: 100%" })
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="input-group text-right">
-                                @Html.LabelFor(s => s.AccUnits, new { @style = "line-height: 32px; margin:0" })
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="input-group">
-                                @Html.TextBoxFor(s => s.AccUnits, new { @style = "width: 100%" })
-                            </div>
-                        </div>
-                    </div>*@
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.AccListPrice, new { @style = "line-height: 32px; margin:0" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.AccListPrice, new { @style = "width: 100%" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.AccUnits, new { @style = "line-height: 32px; margin:0" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.AccUnits, new { @style = "width: 100%" })
+                </div>
+            </div>
+        </div>*@
                     <div class="row asset-list-form">
 
                         <div class="col-sm-3">
