@@ -425,12 +425,15 @@ namespace Inview.Epi.EpiFund.Business
                 LastReportedOccupancyDate = model.LastReportedOccupancyDate,
                 NumberofAssets = model.NumberofAssets,
                 PortfolioName = model.PortfolioName,
-                PricingDisplayOption = model.PricingDisplayOption.ToString(),
+                
                 CapRete = model.CapRate,
                 IsCallOffersDate = model.IsCallOffersDate.HasValue ? model.IsCallOffersDate.Value : false,
-                ListingStatus = (int)model.ListingStatusall,
+                
                 MustPortfolioAssetsInclusive = model.MustPortfolioAssetsInclusive.HasValue ? model.MustPortfolioAssetsInclusive.Value : false,
-                SalePortfolioAcceptableSeller = model.SalePortfolioAcceptableSeller.ToString(),
+
+                ListingStatusall = model.ListingStatusall,
+                SalePortfolioAcceptableSeller = model.SalePortfolioAcceptableSeller,
+                PricingDisplayOption = model.PricingDisplayOption,
 
 
             };
@@ -518,18 +521,23 @@ namespace Inview.Epi.EpiFund.Business
                 from x in ePIRepository.Portfolios
                 where x.PortfolioId == PortfolioId
                 select x).First<Portfolio>();
+
             PortfolioViewModel portfolioViewModel = new PortfolioViewModel();
+
             portfolioViewModel = portfolioViewModel.EntityToModel(portfolio);
+
             List<PortfolioAsset> list = (
                 from x in ePIRepository.PortfolioAssets
                 where x.PortfolioId == PortfolioId
                 select x).ToList<PortfolioAsset>();
+
             foreach (PortfolioAsset portfolioAsset in list)
             {
                 AssetViewModel asset = this._asset.GetAsset(portfolioAsset.AssetId, false);
                 asset.IsActive = portfolioAsset.isActive;
                 portfolioViewModel.PortfolioProperties.Add(asset);
             }
+
             foreach (AssetViewModel portfolioProperty1 in portfolioViewModel.PortfolioProperties)
             {
                 if ((
@@ -543,6 +551,7 @@ namespace Inview.Epi.EpiFund.Business
                         select x).First<AssetImage>());
                 }
             }
+
             foreach (AssetViewModel assetViewModel in portfolioViewModel.PortfolioProperties)
             {
                 portfolioViewModel.DeferredMaintenanceItems = this.CumulativeDefMaintainance(portfolioViewModel.DeferredMaintenanceItems, assetViewModel.DeferredMaintenanceItems);
@@ -556,11 +565,14 @@ namespace Inview.Epi.EpiFund.Business
                     estDeferredMaintenance.EstDeferredMaintenance = estDeferredMaintenance.EstDeferredMaintenance + Convert.ToInt32(deferredMaintenanceItem.UnitCost * deferredMaintenanceItem.NumberOfUnits);
                 }
             }
+
             if (portfolioViewModel.EstDeferredMaintenance > 0)
             {
                 portfolioViewModel.HasDeferredMaintenance = true;
             }
+
             portfolioViewModel = this.CalculateAccumulativeValues(portfolioViewModel);
+
             return portfolioViewModel;
         }
 
@@ -896,10 +908,15 @@ namespace Inview.Epi.EpiFund.Business
                 ePIRepository.PortfolioAssets.Add(portfolioAsset);
             }
             Portfolio entity = model.ModelToEntity();
+            
+
+
+
             int num = (
                 from x in ePIRepository.PortfolioAssets
                 where x.PortfolioId == model.PortfolioId
                 select x).Count<PortfolioAsset>();
+
             entity.NumberofAssets = num + model.SelectedAssets.Count<Guid>();
             entity.isActive = true;
             ePIRepository.Entry(entity).State = EntityState.Modified;
@@ -920,7 +937,6 @@ namespace Inview.Epi.EpiFund.Business
             return input;
         }
 
-
         public List<PortfolioQuickListViewModel> SortPortfoliosModel(List<PortfolioQuickListViewModel> input, bool descending)
         {
             // Sort the portfolio names
@@ -940,8 +956,6 @@ namespace Inview.Epi.EpiFund.Business
 
             return sortedList;
         }
-
-
 
     }
 
