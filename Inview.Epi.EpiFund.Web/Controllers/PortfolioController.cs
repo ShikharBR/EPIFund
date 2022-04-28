@@ -801,7 +801,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                     else model.hasOffersDate = false;
 
                     this._portfolio.UpdatePortfolio(model, userByUsername.UserId);
-					base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Portfolio successfully updated.");
+					base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Portfolio and related assets successfully updated.");
 
                     if (HttpRuntime.Cache["AssetList"] != null) HttpRuntime.Cache.Remove("AssetList");
 

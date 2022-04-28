@@ -168,7 +168,7 @@
                                     [<a onclick="EditAsset('@Model[i].AssetId')" style="cursor:pointer" title="edit">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </a>
-                                    <a href="@Url.Action("AssetEscrowProcess", "Admin", new { id = @Model[i].AssetId })" title="escrow">
+                                    <a href="@Url.Action("AssetEscrowProcess", "Admin", new { id = @Model[i].AssetId })" title="accounting">
                                         <span class="glyphicon glyphicon-usd"></span>
                                     </a>
                                     @if (Model[i].Show == "Yes")
