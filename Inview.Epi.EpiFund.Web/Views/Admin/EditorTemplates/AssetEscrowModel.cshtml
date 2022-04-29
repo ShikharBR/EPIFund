@@ -5,6 +5,7 @@
 @Html.HiddenFor(s => s.IsClosing)
 
 <style>
+    /*changes in design*/
     table {
         width: 100%;
     }
@@ -14,10 +15,13 @@
         padding: 5px;
         vertical-align: top;
     }
-
     .control-label {
         font-size: 10px;
     }
+    .panel-default .panel-body {
+        background-color: #fff;
+    }
+
 </style>
 
 <div class="panel panel-default">
@@ -43,33 +47,49 @@
                 </tr>
                 <tr>
                     <td>Line 2</td>
-                    <td>
-                        @Html.LabelFor(s => s.HoldingCompany, new { @class = "control-label" })  :
-                    <a href="javascript:void(0)" onclick="HoldingCoDetail('@Model.HoldingCompanyId')">@Html.DisplayFor(s => s.HoldingCompany)</a>
-                </td>
-                <td>[xxxxxxxxxxxxxx]</td>
-                <td>
-                    @Html.LabelFor(s => s.OperatingCompany, new { @class = "control-label" })  :
-                <a href="javascript:void(0)" onclick="OperatingCoDetail('@Model.OperatingCompanyId')">@Html.DisplayFor(s => s.OperatingCompany)</a>
-            </td>
+                    <td colspan="3">
+                        <table>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(s => s.HoldingCompany, new { @class = "control-label" })  :
+                                    <a href="javascript:void(0)" onclick="HoldingCoDetail('@Model.HoldingCompanyId')">@Html.DisplayFor(s => s.HoldingCompany)</a>
+                                </td>
+                                <td>
+                                    @Html.LabelFor(s => s.OperatingCompany, new { @class = "control-label" })  :
+                                    <a href="javascript:void(0)" onclick="OperatingCoDetail('@Model.OperatingCompanyId')">@Html.DisplayFor(s => s.OperatingCompany)</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>                  
+          
             <td>@Html.LabelFor(s => s.AssetPublished, new { @class = "control-label" })  :  @(Model.AssetPublished ? "Yes" : "No")</td>
             <td>@Html.LabelFor(s => s.LoginHistory, new { @class = "control-label" })  : @(Model.LoginHistory.HasValue ? Model.LoginHistory.Value.ToString("MM/dd/yyyy") : "")</td>
         </tr>
-        <tr>
-            <td>Line 3</td>
-            <td>
-                @Html.LabelFor(s => s.PublishedAmount, new { @class = "control-label" })  :  @Html.DisplayFor(s => s.PublishedAmount)
-            </td>
-            <td>
-                <img style="height:16px;" src="~/Content/images/bus.png" /> @Html.DisplayFor(s => s.BusDriver)
-            </td>
-            <td>
-                <span style="cursor:pointer" title="Chain Of Title" onclick="ViewChainOfTitle('@Model.AssetId.ToString()')">
-                    <img title="Chain of Title" style="width:12px;" src="~/Content/images/tringle.png" />Chain of <Title></Title>
-                </span>
-            </td>
-            <td></td>
-        </tr>
+                <tr>
+                    <td>Line 3</td>
+                    <td>
+                        @Html.LabelFor(s => s.PublishedAmount, new { @class = "control-label" })  :  @Html.DisplayFor(s => s.PublishedAmount)
+                    </td>
+                    <td>
+                        <img style="height:16px;" src="~/Content/images/bus.png" /> @Html.DisplayFor(s => s.BusDriver)
+                    </td>
+                    <td>
+                        @if (Model.Portfolio)
+                        {
+                            <span class="glyphicon glyphicon-book" title="Portfolio" style="cursor:pointer" onclick="Viewportfolio('@Model.AssetId.ToString()',this)"></span> @Html.Raw("Yes")
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-book" title="Portfolio"></span> @Html.Raw("No")
+                        }
+                    </td>
+                    <td>
+                        <span style="cursor:pointer" title="Chain Of Title" onclick="ViewChainOfTitle('@Model.AssetId.ToString()')">
+                            <img title="Chain of Title" style="width:12px;" src="~/Content/images/tringle.png" />Chain of <Title></Title>
+                        </span>
+                    </td>
+
+                </tr>
         <tr>
             <td colspan="6">
                 <label class="control-label">
@@ -87,8 +107,7 @@
         </tr>
         <tr>
             <td>Line 2 (Tx)</td>
-            <td>Buyer Holding Co:</td>
-            <td>[xxxxxxxxxxxxxx]</td>
+            <td colspan="2" >Buyer Holding Co : [xxxxxxxxxxxxxx]</td>
             <td>Buyer Operating Co: [xxxxxxx]</td>
             <td>Is Buyer a [PI]: [Y N]</td>
             <td>Send all [PI’s] Notification</td>
@@ -339,6 +358,26 @@
                 });
             }
         });
+    }
+
+    function Viewportfolio(assetId, curretntSpan) {
+        if ($("#" + assetId + "_portfolio").length) {
+            $("#" + assetId + "_portfolio").remove();
+        }
+        else {
+            $.ajax({
+                url: "@Url.Action("GetRelatedPortfolio", "Admin")",
+                data: { assetId: assetId },
+                async: false,
+                success: function (data) {
+                    $(curretntSpan).closest('tr').after("<tr id='" + assetId + "_portfolio' >" + data + "</tr>");
+                    //add comma
+                    $('.padNumber').each(function (index) {
+                        padCommas(this, false);
+                    });
+                }
+            });
+        }
     }
 
 </script>
