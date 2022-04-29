@@ -4506,9 +4506,6 @@ namespace Inview.Epi.EpiFund.Business
             }
             return null;
         }
-
-       
-
         public void DeleteHoldingCompany(Guid holdingCompanyId)
         {
             var context = _factory.Create();
@@ -4519,9 +4516,6 @@ namespace Inview.Epi.EpiFund.Business
                 context.Save();
             }
         }
-
-        
-
         public Dictionary<string, string> SearchCompanies(string term, string type)
         {
             // Settled with this simple string only search implementation against two separate entities since there isnt

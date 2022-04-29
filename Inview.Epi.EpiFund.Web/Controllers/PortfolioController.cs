@@ -82,6 +82,9 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			portfolioViewModel = this.PopulateAssetList(portfolioViewModel);
 			portfolioViewModel.ControllingUserType = new UserType?(userByUsername.UserType);
 			portfolioViewModel.isIntial = true;
+
+			portfolioViewModel.LastReportedOccupancyDate = null;
+
 			this.SearchAssets(portfolioViewModel);
 			this.GetLayout(userByUsername);
 			return base.View(portfolioViewModel);
@@ -122,6 +125,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 					}
 				}
 				model.LastReportedOccupancyDate = new DateTime?(new DateTime(2015, 1, 1));
+
 			Label1:
 				if (HttpRuntime.Cache["AssetList"] != null)
 				{
@@ -735,6 +739,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 					}
 				}
 				model.LastReportedOccupancyDate = new DateTime?(new DateTime(2015, 1, 1));
+
 			Label1:
 				if (model.AssetList == null)
 				{
@@ -748,11 +753,13 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				{
 					model.PortfolioProperties = this._portfolio.GetPortfolioProperties(model.PortfolioId);
 				}
+
 				model.SelectedAssets = (
 					from w in model.Assets
 					where w.IsSelected
 					select w into s
 					select s.AssetId).ToList<Guid>();
+
 				if (!base.ModelState.IsValid)
 				{
 					foreach (ModelError list in base.ModelState.Values.SelectMany<System.Web.Mvc.ModelState, ModelError>((System.Web.Mvc.ModelState v) => v.Errors).ToList<ModelError>())
@@ -794,7 +801,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                     else model.hasOffersDate = false;
 
                     this._portfolio.UpdatePortfolio(model, userByUsername.UserId);
-					base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Portfolio successfully updated.");
+					base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Portfolio and related assets successfully updated.");
 
                     if (HttpRuntime.Cache["AssetList"] != null) HttpRuntime.Cache.Remove("AssetList");
 

@@ -3,39 +3,137 @@
 @Html.HiddenFor(s => s.AssetNumber)
 @Html.HiddenFor(s => s.AssetDescription)
 @Html.HiddenFor(s => s.IsClosing)
+
+<style>
+    table {
+        width: 100%;
+    }
+
+    td {
+        font-size: 10px;
+        padding: 5px;
+        vertical-align: top;
+    }
+
+    .control-label {
+        font-size: 10px;
+    }
+</style>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         Asset Details
     </div>
     <div class="panel-body">
+
         <div class="row">
-            <div class="col-lg-12">
-                <div class="input-group">
-                    @Html.LabelFor(s => s.AssetNumber, new { @class = "control-label" })
-                    @Html.DisplayFor(s => s.AssetNumber)
-                    @Html.HiddenFor(x => x.AssetNumber)
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="input-group">
-                    @Html.LabelFor(s => s.AssetDescription, new { @class = "control-label" })
-                    @Html.DisplayFor(s => s.AssetDescription)
-                    @Html.HiddenFor(x => x.AssetDescription)
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="input-group">
-                    @Html.LabelFor(s => s.ListingPrice, new { @class = "control-label" })
-                    @Model.ListingPrice.ToString("C")
-                    @Html.HiddenFor(x => x.ListingPrice)
-                </div>
+            <table border="1">
+                <tr>
+                    <td colspan="6">
+                        <label class="control-label">Asset Details</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Line 1</td>
+                    <td>@Html.LabelFor(s => s.AssetNumber, new { @class = "control-label" })  : @Html.DisplayFor(s => s.AssetNumber)</td>
+                    <td>@Html.LabelFor(s => s.AssetType, new { @class = "control-label" })  : @Html.DisplayFor(s => s.AssetType)</td>
+                    <td>@Html.LabelFor(s => s.AssetName, new { @class = "control-label" })  : @Html.DisplayFor(s => s.AssetName)</td>
+                    <td>@Html.LabelFor(s => s.Address, new { @class = "control-label" })  : @Html.DisplayFor(s => s.Address)</td>
+                    <td>@Html.DisplayFor(s => s.City) &nbsp; @Html.DisplayFor(s => s.State)&nbsp;@Html.DisplayFor(s => s.ZipCode)</td>
+                </tr>
+                <tr>
+                    <td>Line 2</td>
+                    <td>
+                        @Html.LabelFor(s => s.HoldingCompany, new { @class = "control-label" })  :
+                    <a href="javascript:void(0)" onclick="HoldingCoDetail('@Model.HoldingCompanyId')">@Html.DisplayFor(s => s.HoldingCompany)</a>
+                </td>
+                <td>[xxxxxxxxxxxxxx]</td>
+                <td>
+                    @Html.LabelFor(s => s.OperatingCompany, new { @class = "control-label" })  :
+                <a href="javascript:void(0)" onclick="OperatingCoDetail('@Model.OperatingCompanyId')">@Html.DisplayFor(s => s.OperatingCompany)</a>
+            </td>
+            <td>@Html.LabelFor(s => s.AssetPublished, new { @class = "control-label" })  :  @(Model.AssetPublished ? "Yes" : "No")</td>
+            <td>@Html.LabelFor(s => s.LoginHistory, new { @class = "control-label" })  : @(Model.LoginHistory.HasValue ? Model.LoginHistory.Value.ToString("MM/dd/yyyy") : "")</td>
+        </tr>
+        <tr>
+            <td>Line 3</td>
+            <td>
+                @Html.LabelFor(s => s.PublishedAmount, new { @class = "control-label" })  :  @Html.DisplayFor(s => s.PublishedAmount)
+            </td>
+            <td>
+                <img style="height:16px;" src="~/Content/images/bus.png" /> @Html.DisplayFor(s => s.BusDriver)
+            </td>
+            <td>
+                <span style="cursor:pointer" title="Chain Of Title" onclick="ViewChainOfTitle('@Model.AssetId.ToString()')">
+                    <img title="Chain of Title" style="width:12px;" src="~/Content/images/tringle.png" />Chain of <Title></Title>
+                </span>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <label class="control-label">
+                    Pending Sale Details
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>Line 1 (Tx)</td>
+            <td><a title="LOI Summary">LOI Summary</a></td>
+            <td><a title="FPA Summary">FPA Summary</a></td>
+            <td>FPA Title Co: [xxxxxxxxxxxxxx]</td>
+            <td>Is Title Co an [SP]:  [Y No]</td>
+            <td>Send Title IPA Notification</td>
+        </tr>
+        <tr>
+            <td>Line 2 (Tx)</td>
+            <td>Buyer Holding Co:</td>
+            <td>[xxxxxxxxxxxxxx]</td>
+            <td>Buyer Operating Co: [xxxxxxx]</td>
+            <td>Is Buyer a [PI]: [Y N]</td>
+            <td>Send all [PI’s] Notification</td>
+        </tr>
+        <tr>
+            <td>Line 3 (Tx)</td>
+            <td>FPA SP: [$x,xxx,xxx]</td>
+            <td></td>
+            <td>Projected COE Date: [xx/xx/xx]</td>
+            <td>[PI-S] 1% Fee: [$xxx,xxx]</td>
+            <td>[PI-B] 1% Fee: [$xxx,xxx]</td>
+        </tr>
+    </table>
+
+</div>
+
+@*<div class="row">
+        <div class="col-lg-12">
+            <div class="input-group">
+                @Html.LabelFor(s => s.AssetNumber, new { @class = "control-label" })
+                @Html.DisplayFor(s => s.AssetNumber)
+                @Html.HiddenFor(x => x.AssetNumber)
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="input-group">
+                @Html.LabelFor(s => s.AssetDescription, new { @class = "control-label" })
+                @Html.DisplayFor(s => s.AssetDescription)
+                @Html.HiddenFor(x => x.AssetDescription)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="input-group">
+                @Html.LabelFor(s => s.ListingPrice, new { @class = "control-label" })
+                @Model.ListingPrice.ToString("C")
+                @Html.HiddenFor(x => x.ListingPrice)
+            </div>
+        </div>
+    </div>*@
+
+</div>
 </div>
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -105,6 +203,37 @@
     </div>
 }
 
+<div class="modal fade" id="portfholioAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewPortfolio">
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="chainOfTitleAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewchainOfTitle"></div>
+    </div>
+</div>
+<div class="modal fade" id="HCDetails" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divHCDetails">
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="OCDetails" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divOCDetails">
+
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
         $("input.formatNumber").each(function (index) {
@@ -122,4 +251,94 @@
             $(this).val($(this).val().replace(/,/g, ""));
         });
     };
+     function ViewChainOfTitle(assetId) {
+        $.ajax({
+            url: "@Url.Action("GetChainOfTitle", "Admin")",
+            data: { assetId: assetId },
+            success: function (data) {
+                $("#divAssetViewchainOfTitle").html(data);
+                $("#chainOfTitleAssets").modal();
+
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
+
+    function HoldingCoDetail(HCID) {
+         $.ajax({
+            url: "@Url.Action("GetHoldingCompanybyId", "Admin")",
+             data: { id: HCID },
+            success: function (data) {
+                $("#divHCDetails").html(data);
+                $("#HCDetails").modal();
+            }
+        });
+    }
+
+    function OperatingCoDetail(OCID) {
+        $.ajax({
+            url: "@Url.Action("GetOpertingCompanybyId", "Admin")",
+            data: { id: OCID },
+            success: function (data) {
+                $("#divOCDetails").html(data);
+                $("#OCDetails").modal();
+            }
+        });
+    }
+
+        function Viewportfolio_ChainOfTitle(assetId, curretntSpan) {
+        if ($("#" + assetId + "_portfolio").length) {
+            $("#" + assetId + "_portfolio").remove();
+        }
+        else {
+            $.ajax({
+                url: "@Url.Action("GetRelatedPortfolio", "Admin")",
+                data: { assetId: assetId },
+                success: function (data) {
+                    $(curretntSpan).closest('tr').parent().closest('tr').after("<tr id='" + assetId + "_portfolio' >" + data + "</tr>");
+                    //add comma
+                    $('.padNumber').each(function (index) {
+                        padCommas(this, false);
+                    });
+                }
+            });
+        }
+    }
+    function ViewRelatedAssets(PortfolioId, curretntSpan) {
+        //alert(PortfolioId);
+        /*show model popup
+         bind data as per the assets list*/
+        $.ajax({
+            url: "@Url.Action("GetAssetsbyPortfolioId", "Admin")",
+            data: { portfolioId: PortfolioId },
+            success: function (data) {
+
+                debugger;
+                if ($("#divAssetViewchainOfTitle").html().length > 0) {
+                    debugger;
+                    var ID = $(curretntSpan).closest('tr').parent().closest('tr').attr("id");
+
+                    if ($('#' + PortfolioId + '_AssetsinPortfolio').length) {
+                        $('#' + PortfolioId + '_AssetsinPortfolio').remove();
+                    }
+                    else {
+                        data = data.replace("<button", "<button style='display:none;'")
+                        $('#' + ID).after("<tr id='" + PortfolioId + "_AssetsinPortfolio'> <td colspan='18'>" + data + "</td></tr>");
+                    }
+
+                } else {
+                    $("#divAssetViewPortfolio").html(data);
+                    $("#portfholioAssets").modal();
+                }
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
+
 </script>

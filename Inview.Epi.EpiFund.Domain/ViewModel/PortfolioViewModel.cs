@@ -278,7 +278,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 
         [Display(Name = "Is Portfolio Subject to Auction?")]
         [Required(ErrorMessage = "Is Portfolio Subject to Auction is Required")]
-        public bool? isSubjectToAuction
+        public bool? IsTBDMarket
         {
             get;
             set;
@@ -349,38 +349,23 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
             get;
             set;
         }
-        [Display(Name = "Define Sale Terms of Portfolio Acceptable by Seller")]
 
-        public Inview.Epi.EpiFund.Domain.Enum.SellerTerms SalePortfolioAcceptableSeller
-        {
-            get;
-            set;
-        }
-        [Display(Name = "Listing Status all")]
-        public Inview.Epi.EpiFund.Domain.Enum.ListingStatusall ListingStatusall
-        {
-            get;
-            set;
-        }
+        
+
         [Display(Name = "Last Reported Occupancy")]
         public DateTime? LastReportedOccupancyDate
         {
             get;
             set;
         }
-        [Display(Name = "Pricing Display Option")]
-        public Inview.Epi.EpiFund.Domain.Enum.PricingDisplay PricingDisplayOption
-        {
-            get;
-            set;
-        }
+        
         [Display(Name = "Cap Rate")]
-        public float CapRate
+        public float? CapRate
         {
             get;
             set;
         }
-        [Display(Name = "Is Call for Offers Date")]
+        [Display(Name = "Is there a Call for Offers Date?")]
         public bool? IsCallOffersDate
         {
             get;
@@ -463,6 +448,19 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
             set;
         }
 
+        [Display(Name = "Pricing Display Option")]
+        public Inview.Epi.EpiFund.Domain.Enum.PricingDisplay PricingDisplayOption { get; set; }
+
+        [Display(Name = "Define Sale Terms of Portfolio Acceptable by Seller")]
+        public Inview.Epi.EpiFund.Domain.Enum.SellerTerms SellerTerms { get; set; }
+
+        [Display(Name = "Other")]
+        public string SellerTermsOther { get; set; }
+
+        [Display(Name = "Listing Status all")]
+        public Inview.Epi.EpiFund.Domain.Enum.ListingStatusall ListingStatus { get; set; }
+
+
         public PortfolioViewModel()
         {
             this.Images = new List<AssetImage>();
@@ -471,6 +469,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
             this.PortfolioProperties = new List<AssetViewModel>();
             this.SelectedAssets = new List<Guid>();
             this.LastReportedOccupancyDate = new DateTime?(DateTime.MinValue);
+
             List<SelectListItem> selectListItems = new List<SelectListItem>();
             SelectListItem selectListItem = new SelectListItem()
             {
@@ -558,6 +557,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
             };
             selectListItems.Add(selectListItem13);
             this.AssetTypes = selectListItems;
+
             List<SelectListItem> selectListItems1 = new List<SelectListItem>();
             SelectListItem selectListItem14 = new SelectListItem()
             {
@@ -879,7 +879,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
         {
             this.CallforOfferDate = entity.CallforOfferDate;
             this.hasOffersDate = entity.hasOffersDate;
-            this.isSubjectToAuction = entity.isSubjectToAuction;
+            this.IsTBDMarket = entity.IsTBDMarket;
             this.LastReportedOccupancyDate = entity.LastReportedOccupancyDate;
             this.NumberofAssets = entity.NumberofAssets;
             this.PortfolioName = entity.PortfolioName;
@@ -890,6 +890,13 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
             this.IsCallOffersDate = entity.IsCallOffersDate;
 
             this.isActive = entity.isActive;
+
+            this.CapRate = entity.CapRete;
+            this.ListingStatus = entity.ListingStatus??0;
+            this.PricingDisplayOption = entity.PricingDisplayOption??0;
+            this.SellerTerms = entity.SellerTerms ?? 0;
+            this.SellerTermsOther = entity.SellerTermsOther;
+
             return this;
         }
 
@@ -903,13 +910,18 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 
                 CallforOfferDate = this.CallforOfferDate,
                 hasOffersDate = this.hasOffersDate,
-                isSubjectToAuction = this.isSubjectToAuction.HasValue ? this.isSubjectToAuction.Value : false,
+                IsTBDMarket = this.IsTBDMarket.HasValue ? this.IsTBDMarket.Value : false,
                 LastReportedOccupancyDate = this.LastReportedOccupancyDate,
                 NumberofAssets = this.NumberofAssets,
                 PortfolioName = this.PortfolioName,
                 PortfolioId = this.PortfolioId,
                 UserId = this.UserId,
-                isActive = this.isActive
+                isActive = this.isActive,
+                CapRete = this.CapRate,
+                ListingStatus = this.ListingStatus,
+                PricingDisplayOption = this.PricingDisplayOption,
+                SellerTerms = this.SellerTerms,
+                SellerTermsOther = this.SellerTermsOther
             };
             return portfolio;
         }
