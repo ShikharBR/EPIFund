@@ -24,6 +24,8 @@ using WebSupergoo.ABCpdf9.Operations;
 using System.Threading;
 
 
+
+
 namespace Inview.Epi.EpiFund.Business
 {
     public class PDFService : IPDFService
@@ -938,66 +940,7 @@ namespace Inview.Epi.EpiFund.Business
             saveEnvelope(DocumentType.JVAgreement, sendToDocusign(ms, "JVAgreement.pdf", xmlBody), signingUserId, null);
         }
 
-        public List<ExtractedImageModel> GetBitmapImagesFromPDF(byte[] pdf, string guidId)
-        {
-            string path = Path.Combine(ConfigurationManager.AppSettings["DataRoot"], "ImportFiles", guidId);
-            var list = new List<ExtractedImageModel>();
-            int i = 0;
-            try
-            {
-                using (var doc = new Doc())
-                {
-                    doc.Read(pdf);
-                    var pix = doc.ObjectSoup.ToList();
-                    ExtractorContext c = new ExtractorContext();
-                    foreach (var pic in pix)
-                    {
-                        try
-                        {
-                            if (pic.GetType() != null && pic.GetType().ToString() == "WebSupergoo.ABCpdf9.Objects.PixMap")
-                            {
-                                string tempPath = path;
-                                var extractor = ObjectExtractor.FromIndirectObject(pic, c);
-                                //list.Add(extractor.GetBitmap());
-                                var image = extractor.GetBitmap();
-                                byte[] byteArray = new byte[0];
-                                using (MemoryStream stream = new MemoryStream())
-                                {
-                                    image.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                                    stream.Close();
-
-                                    byteArray = stream.ToArray();
-                                }
-                                var filename = Guid.NewGuid() + ".jpg";
-                                tempPath = Path.Combine(path, filename);
-                                File.WriteAllBytes(tempPath, byteArray);
-                                list.Add(new ExtractedImageModel()
-                                {
-                                    Image = tempPath,
-                                    IsSelected = false,
-                                    //FileByteArray = _fileManager.ConvertImageToBytes(f),
-                                    //ThumbnailByte = thumbnail,
-                                    //ThumbnailByteBase64 = Convert.ToBase64String(thumbnail),
-                                    OrderTemp = i,
-                                    Height = image.Height.ToString(),
-                                    Width = image.Width.ToString()
-                                });
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            // don't break the entire process because of one embedded image that we can't get
-                        }
-                        i++;
-                    }
-                    return list;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+       
 
         public void GetBitmapImagesFromPDFForLocalComp(byte[] pdf, string folderName)
         {
@@ -3753,5 +3696,67 @@ namespace Inview.Epi.EpiFund.Business
             }
 
         }
+
+        public List<ExtractedImageModel> GetBitmapImagesFromPDF(byte[] pdf, string guidId)
+        {
+            string path = Path.Combine(ConfigurationManager.AppSettings["DataRoot"], "ImportFiles", guidId);
+            var list = new List<ExtractedImageModel>();
+            int i = 0;
+            try
+            {
+                using (var doc = new Doc())
+                {
+                    doc.Read(pdf);
+                    var pix = doc.ObjectSoup.ToList();
+                    ExtractorContext c = new ExtractorContext();
+                    foreach (var pic in pix)
+                    {
+                        try
+                        {
+                            if (pic.GetType() != null && pic.GetType().ToString() == "WebSupergoo.ABCpdf9.Objects.PixMap")
+                            {
+                                string tempPath = path;
+                                var extractor = ObjectExtractor.FromIndirectObject(pic, c);
+                                //list.Add(extractor.GetBitmap());
+                                var image = extractor.GetBitmap();
+                                byte[] byteArray = new byte[0];
+                                using (MemoryStream stream = new MemoryStream())
+                                {
+                                    image.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                                    stream.Close();
+
+                                    byteArray = stream.ToArray();
+                                }
+                                var filename = Guid.NewGuid() + ".jpg";
+                                tempPath = Path.Combine(path, filename);
+                                File.WriteAllBytes(tempPath, byteArray);
+                                list.Add(new ExtractedImageModel()
+                                {
+                                    Image = tempPath,
+                                    IsSelected = false,
+                                    //FileByteArray = _fileManager.ConvertImageToBytes(f),
+                                    //ThumbnailByte = thumbnail,
+                                    //ThumbnailByteBase64 = Convert.ToBase64String(thumbnail),
+                                    OrderTemp = i,
+                                    Height = image.Height.ToString(),
+                                    Width = image.Width.ToString()
+                                });
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // don't break the entire process because of one embedded image that we can't get
+                        }
+                        i++;
+                    }
+                    return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+               
     }
 }

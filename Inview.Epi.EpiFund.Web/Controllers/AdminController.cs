@@ -28,6 +28,7 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using AutoMapper;
 
+
 namespace Inview.Epi.EpiFund.Web.Controllers
 {
 	[LayoutActionFilter]
@@ -8854,9 +8855,13 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 
             model.Assets = new List<SelectListItem>();
             model.FilePath = filepath;
+
             var list = new List<ExtractedImageModel>();
-            list.AddRange(_pdf.GetBitmapImagesFromPDF(getBytesFromFile(filepath), model.GuidId));
-            model.ExtractedImages = list;
+			list.AddRange(_pdf.GetBitmapImagesFromPDF(getBytesFromFile(filepath), model.GuidId));
+			//list.AddRange(ExtractImagesfromPDF(filepath));
+
+			model.ExtractedImages = list;
+
             foreach (var asset in assets.OrderBy(x => x.AssetNumber))
             {
                 model.Assets.Add(new SelectListItem() { Text = string.Format("ID# {0} --- {1},{2} {3}", asset.AssetNumber, asset.AddressLine1, asset.City, asset.State), Value = asset.AssetId.ToString() });
@@ -10637,6 +10642,9 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 		}
 
 		#endregion
+
+
+		
 
 	}
 	public class JqueryDatatableParam
