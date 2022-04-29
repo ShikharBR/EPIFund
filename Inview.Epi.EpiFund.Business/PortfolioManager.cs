@@ -421,7 +421,7 @@ namespace Inview.Epi.EpiFund.Business
                 PortfolioId = Guid.NewGuid(),
                 CallforOfferDate = model.CallforOfferDate,
                 hasOffersDate = model.hasOffersDate,
-                isSubjectToAuction = model.isSubjectToAuction.HasValue ? model.isSubjectToAuction.Value : false,
+                IsTBDMarket = model.IsTBDMarket.HasValue ? model.IsTBDMarket.Value : false,
                 LastReportedOccupancyDate = model.LastReportedOccupancyDate,
                 NumberofAssets = model.NumberofAssets,
                 PortfolioName = model.PortfolioName,
@@ -431,8 +431,9 @@ namespace Inview.Epi.EpiFund.Business
                 
                 MustPortfolioAssetsInclusive = model.MustPortfolioAssetsInclusive.HasValue ? model.MustPortfolioAssetsInclusive.Value : false,
 
-                ListingStatusall = model.ListingStatusall,
-                SalePortfolioAcceptableSeller = model.SalePortfolioAcceptableSeller,
+                ListingStatus = model.ListingStatus,
+                SellerTerms = model.SellerTerms,
+                SellerTermsOther = model.SellerTermsOther,
                 PricingDisplayOption = model.PricingDisplayOption,
 
 
@@ -907,17 +908,45 @@ namespace Inview.Epi.EpiFund.Business
                 };
                 ePIRepository.PortfolioAssets.Add(portfolioAsset);
             }
-            Portfolio entity = model.ModelToEntity();
-            
 
 
+            //update related Assets as suggested at time of update porfoliyo          
+            var assets = (from x in ePIRepository.PortfolioAssets where x.PortfolioId == model.PortfolioId select x.Asset);
+            foreach (Asset asset in assets)
+            {
+                //Asset asset = (from x in ePIRepository.Assets where x.AssetId == selectedAsset select x).First<Asset>();
 
-            int num = (
-                from x in ePIRepository.PortfolioAssets
-                where x.PortfolioId == model.PortfolioId
-                select x).Count<PortfolioAsset>();
+                asset.LastReportedOccupancyDate = model.LastReportedOccupancyDate;
+                asset.SellerTerms = model.SellerTerms;
+                asset.SellerTermsOther = model.SellerTermsOther;
 
-            entity.NumberofAssets = num + model.SelectedAssets.Count<Guid>();
+                //as per current logic
+                if (model.ListingStatus == ListingStatusall.Available)
+                    asset.ListingStatus = ListingStatus.Available;
+                else if (model.ListingStatus == ListingStatusall.Pending)
+                    asset.ListingStatus = ListingStatus.Pending;
+
+                asset.IsTBDMarket = model.IsTBDMarket ?? false;
+
+                if (model.IsTBDMarket ?? false)
+                {
+                    asset.AuctionDate = model.CallforOfferDate;
+                }
+                if (model.IsCallOffersDate ?? false)
+                {
+                    asset.CallforOffersDate = model.CallforOfferDate;
+                }
+                if ((!model.IsTBDMarket ?? false) && (!model.IsCallOffersDate ?? false))
+                {
+                    asset.CallforOffersDate = null;
+                }                
+                ePIRepository.Entry(asset).State = EntityState.Modified;                
+            }
+
+            Portfolio entity = model.ModelToEntity();            
+            //int num = (from x in ePIRepository.PortfolioAssets  where x.PortfolioId == model.PortfolioId select x).Count<PortfolioAsset>();
+
+            entity.NumberofAssets = assets.Count() + model.SelectedAssets.Count<Guid>();
             entity.isActive = true;
             ePIRepository.Entry(entity).State = EntityState.Modified;
             ePIRepository.Save();

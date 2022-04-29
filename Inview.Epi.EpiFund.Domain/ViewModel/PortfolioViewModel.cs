@@ -278,7 +278,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 
         [Display(Name = "Is Portfolio Subject to Auction?")]
         [Required(ErrorMessage = "Is Portfolio Subject to Auction is Required")]
-        public bool? isSubjectToAuction
+        public bool? IsTBDMarket
         {
             get;
             set;
@@ -365,7 +365,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
             get;
             set;
         }
-        [Display(Name = "Is Call for Offers Date")]
+        [Display(Name = "Is there a Call for Offers Date?")]
         public bool? IsCallOffersDate
         {
             get;
@@ -452,17 +452,14 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
         public Inview.Epi.EpiFund.Domain.Enum.PricingDisplay PricingDisplayOption { get; set; }
 
         [Display(Name = "Define Sale Terms of Portfolio Acceptable by Seller")]
-        public Inview.Epi.EpiFund.Domain.Enum.SellerTerms SalePortfolioAcceptableSeller { get; set; }
+        public Inview.Epi.EpiFund.Domain.Enum.SellerTerms SellerTerms { get; set; }
+
+        [Display(Name = "Other")]
+        public string SellerTermsOther { get; set; }
 
         [Display(Name = "Listing Status all")]
-        public Inview.Epi.EpiFund.Domain.Enum.ListingStatusall ListingStatusall { get; set; }
+        public Inview.Epi.EpiFund.Domain.Enum.ListingStatusall ListingStatus { get; set; }
 
-        //[Display(Name = "Listing Status all")]
-        //public string ListingStatusall { get; set; }
-        //[Display(Name = "Pricing Display Option")]
-        //public string PricingDisplayOption { get; set; }
-        //[Display(Name = "Define Sale Terms of Portfolio Acceptable by Seller")]
-        //public string SalePortfolioAcceptableSeller { get; set; }
 
         public PortfolioViewModel()
         {
@@ -882,7 +879,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
         {
             this.CallforOfferDate = entity.CallforOfferDate;
             this.hasOffersDate = entity.hasOffersDate;
-            this.isSubjectToAuction = entity.isSubjectToAuction;
+            this.IsTBDMarket = entity.IsTBDMarket;
             this.LastReportedOccupancyDate = entity.LastReportedOccupancyDate;
             this.NumberofAssets = entity.NumberofAssets;
             this.PortfolioName = entity.PortfolioName;
@@ -895,9 +892,10 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
             this.isActive = entity.isActive;
 
             this.CapRate = entity.CapRete;
-            this.ListingStatusall = entity.ListingStatusall??0;
+            this.ListingStatus = entity.ListingStatus??0;
             this.PricingDisplayOption = entity.PricingDisplayOption??0;
-            this.SalePortfolioAcceptableSeller = entity.SalePortfolioAcceptableSeller??0;
+            this.SellerTerms = entity.SellerTerms ?? 0;
+            this.SellerTermsOther = entity.SellerTermsOther;
 
             return this;
         }
@@ -912,7 +910,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 
                 CallforOfferDate = this.CallforOfferDate,
                 hasOffersDate = this.hasOffersDate,
-                isSubjectToAuction = this.isSubjectToAuction.HasValue ? this.isSubjectToAuction.Value : false,
+                IsTBDMarket = this.IsTBDMarket.HasValue ? this.IsTBDMarket.Value : false,
                 LastReportedOccupancyDate = this.LastReportedOccupancyDate,
                 NumberofAssets = this.NumberofAssets,
                 PortfolioName = this.PortfolioName,
@@ -920,9 +918,10 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
                 UserId = this.UserId,
                 isActive = this.isActive,
                 CapRete = this.CapRate,
-                ListingStatusall = this.ListingStatusall,
+                ListingStatus = this.ListingStatus,
                 PricingDisplayOption = this.PricingDisplayOption,
-                SalePortfolioAcceptableSeller = this.SalePortfolioAcceptableSeller
+                SellerTerms = this.SellerTerms,
+                SellerTermsOther = this.SellerTermsOther
             };
             return portfolio;
         }

@@ -23,7 +23,7 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			set;
 		}
 
-		public bool isSubjectToAuction
+		public bool IsTBDMarket
 		{
 			get;
 			set;
@@ -79,8 +79,9 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 
 		public bool MustPortfolioAssetsInclusive { get; set; }
 
-		public Inview.Epi.EpiFund.Domain.Enum.ListingStatusall? ListingStatusall { get; set; }
-		public Inview.Epi.EpiFund.Domain.Enum.SellerTerms? SalePortfolioAcceptableSeller { get; set; }
+		public Inview.Epi.EpiFund.Domain.Enum.ListingStatusall? ListingStatus { get; set; }
+		public Inview.Epi.EpiFund.Domain.Enum.SellerTerms? SellerTerms { get; set; }
+		public string SellerTermsOther { get;set;}
 		public Inview.Epi.EpiFund.Domain.Enum.PricingDisplay? PricingDisplayOption { get; set; }
 
 
