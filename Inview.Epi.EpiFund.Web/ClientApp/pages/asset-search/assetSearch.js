@@ -284,6 +284,7 @@ async function getAssetsFromUserLocation() {
         Longitude: position.coords.longitude,
         SearchRadius: 25, // Kilometers
       };
+
       response = await comm.getAssets(searchCriteria);
       util.global.assets = response.Assets;
       util.getStatsFromAssetSearch(response)

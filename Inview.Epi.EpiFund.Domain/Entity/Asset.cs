@@ -1496,7 +1496,24 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			get;
 			set;
 		}
-		
+
+		public bool IsPublished
+		{
+			get;
+			set;
+		}
+
+		public float? Longitude
+		{
+			get;
+			set;
+		}
+		public float? Latitude
+		{
+			get;
+			set;
+		}
+
 		public Asset()
 		{
 			this.ListingStatus = Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Pending;

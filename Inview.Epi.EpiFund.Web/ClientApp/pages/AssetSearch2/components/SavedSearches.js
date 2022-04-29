@@ -79,7 +79,6 @@ class SavedSearches extends Component {
     removedSavedSearch(search) {
         ////pass in your search id here...
         //savedSearchService.removeSavedSearch(search.Id).then(r => {
-        //    debugger;
         //    //do your things
         //});
     }

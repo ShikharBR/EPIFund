@@ -364,11 +364,17 @@ export const util = {
       if (arr[i].Image != null)
         image = `https://images.uscreonline.com/${arr[i].AssetId}/${arr[i].Image.FileName}`;
 
+      var address = arr[i].AddressLine1;
+      if (arr[i].AddressLine2) {
+        address = address + " " + arr[i].AddressLine2;
+      }
+
       var item = {
         assetId: arr[i].AssetId,
         asset: arr[i],
         assetName: arr[i].ProjectName,
-        assetCityState: arr[i].City + ", " + arr[i].State,
+        assetAddress: address,
+        assetCityState: arr[i].City + ", " + arr[i].State + ", " + arr[i].Zip,
         assetType: util.enum.assetType[arr[i].AssetType.toString()].asset,
         availability: listingStatus,
         pricingCMV: price,
@@ -398,7 +404,6 @@ export const util = {
     if (util.global.assets) {
       arr = util.global.assets;
     }
-
     $('table.assetSearchOneLineSummariesTable').DataTable();
 
     return util.parseSearchResultAssets(arr);

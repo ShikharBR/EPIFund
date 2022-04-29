@@ -9062,8 +9062,7 @@ namespace Inview.Epi.EpiFund.Business
                .Select(col => new
                {
                    TotalAssets = col.Count(),
-                   //PublishAssets = col.Where(a => a.IsPublished).Count(), ToDo
-                   PublishAssets=0,
+                   PublishAssets = col.Where(a => a.IsPublished).Count(),
                    TotalAssetValue = col.Sum(a => (long)(a.AskingPrice > 0 ? a.AskingPrice : a.CurrentBpo)),
                    MultiFamUnits = col.Sum((a => (a.AssetType == AssetType.MultiFamily || a.AssetType == AssetType.MHP ? 1 : 0))),
                    SquareFeet = col.Count() <= 0 ? 0 : col.Sum(a => a.AssetType != AssetType.MHP ? a.SquareFeet : 0)
@@ -9118,8 +9117,8 @@ namespace Inview.Epi.EpiFund.Business
                     State = entity.State,
                     City = entity.City,
                     Zip = entity.Zip,
-                    //Longitude = entity.Longitude.GetValueOrDefault(),
-                    //Latitude = entity.Latitude.GetValueOrDefault(),
+                    Longitude = entity.Longitude.GetValueOrDefault(),
+                    Latitude = entity.Latitude.GetValueOrDefault(),
                     AskingPrice = entity.AskingPrice,
                     CurrentBpo = entity.CurrentBpo,
                     AssetType = (int)entity.AssetType,

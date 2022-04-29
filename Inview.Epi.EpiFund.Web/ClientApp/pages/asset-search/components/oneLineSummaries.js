@@ -61,10 +61,9 @@ export class OneLineSummariesComponent extends Component {
   drawOneLineSummaries() {
     var self = this;
     var data = util.getDataForDataTable();
-
     // Initialize the DataTable
     var table = $('#assetSearchOneLineSummariesTable').DataTable({
-      searching: false, 
+      searching: false,
       info: false,
       paging: true,
       ordering: true,
@@ -85,6 +84,7 @@ export class OneLineSummariesComponent extends Component {
             return `<a class="viewAsset" href="/DataPortal/ViewAsset/${row.assetId}" target="_parent" style="cursor:pointer;color:#428bca;text-align:center;" title="view">${data}</a>`;
           }
         },
+        { data: 'assetAddress' },
         { data: 'assetCityState' },
         { data: 'assetType' },
         {
@@ -167,15 +167,15 @@ export class OneLineSummariesComponent extends Component {
           "searchable": true,
         },
         {
-          "targets": [6, 8, 9, 12],
+          "targets": [7, 9, 10, 13],
           className: 'dt-body-right',
         },
         {
           "orderData": [12, 11],
-          "targets": 12,
+          "targets": 13,
         },
         {
-          "targets": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+          "targets": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
           className: 'dt-head-right',
         },
       ],
