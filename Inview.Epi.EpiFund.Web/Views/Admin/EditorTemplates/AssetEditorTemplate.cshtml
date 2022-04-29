@@ -250,6 +250,12 @@
         float: left;
     }
 
+    .validation-summary-errors {
+        background-color: #f2dede;
+        border: 1px solid #ebccd1;
+        padding: 10px;
+    }
+
     #selectPIModal .modal-body .col-sm-6,
     #selectCompanyModal .modal-body .col-sm-6,
     #selectPIModal .modal-body .col-sm-6 .input-group,
@@ -2516,7 +2522,7 @@
                 {
                     <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage assets page.')) goBack()" value="Cancel" />
                 }
-                <input type="button" class="btn btn-primary" onclick="nextTab($(this));" value="Next" />
+                <input type="button" class="btn btn-primary" href="#nextTab" onclick="nextTab($(this));" value="Next" />
             </div>
         </div>
     </div>
@@ -5001,7 +5007,9 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="input-group">
-                        @Html.TextBoxFor(s => s.InterestRate, new { @class = "control-label" }) %
+
+                        @Html.TextBoxFor(s => s.InterestRate,"{0:n2}", new { @class = "control-label inputDecimalNumber" }) %
+
                     </div>
                 </div>
             </div>
@@ -5015,8 +5023,8 @@
                 <div class="col-sm-6">
                     <div class="input-group rdMandatory">
                         @Html.RadioButtonFor(model => model.IsMortgageAnARM, "true") Yes
-                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "false") No
-                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "false") Unknown
+                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "true") No
+                        @Html.RadioButtonFor(model => model.IsMortgageAnARM, "true") Unknown
                         @*@Html.RadioButtonFor(s => s.IsMortgageAnARM, "Yes") Yes
                             @Html.RadioButtonFor(s => s.IsMortgageAnARM, "No") No
                             @Html.RadioButtonFor(s => s.IsMortgageAnARM, "Unknown") Unknown*@
@@ -5026,24 +5034,34 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="input-group">
-                        @Html.LabelFor(s => s.MortgageAdjustIfARM, new { @class = "control-label" }) <span style="color: red;">*</span>
+                        @Html.LabelFor(s => s.MortgageAdjustIfARM, new { @class = "control-label" })
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <div class="input-group">
                         @Html.TextBoxFor(s => s.MortgageAdjustIfARM, new { @class = "control-label datepicker" })
                     </div>
                 </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <em>MM/dd/yyyy</em>
+                    </div>
+                </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-sm-6">
                     <div class="input-group">
                         @Html.LabelFor(s => s.BalloonDateOfNote, new { @class = "control-label" })
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-sm-3">
                     <div class="input-group">
-                        @Html.TextBoxFor(s => s.BalloonDateOfNote, new { @class = "control-label datepicker" }) <em>MM/dd/yyyy</em>
+                        @Html.TextBoxFor(s => s.BalloonDateOfNote, "{0:MM/dd/yyyy}", new { @class = "control-label datepicker" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <em>MM/dd/yyyy</em>
                     </div>
                 </div>
             </div>
@@ -6157,7 +6175,11 @@
 
     <div class="tab-pane" id="finish">
         <h3 style="border-bottom: 0 !important">End</h3>
-        <div id="divError" style="display:none;color:red;font-weight:bold;"></div>
+
+        <div class="validation-summary-errors" data-valmsg-summary="true" id="divError" style="display:none;color:red;font-weight:bold;">
+            
+        </div>
+
         <br />
         @if (Model.User.UserType == UserType.CREBroker || Model.User.UserType == UserType.CRELender || Model.User.UserType == UserType.Investor)
         {
@@ -6215,51 +6237,55 @@
         isValidForm = true;
         $(input).css("borderColor", "#B1A795");
         $(select).css("borderColor", "#B1A795");
-        if (tabText === 'Existing Mortgages' || tabText === 'Finish' || tabText === '#finish') {
-            if ($('#CurrentPrincipalBalance').val() === '') {
-                $('#CurrentPrincipalBalance').css("borderColor", "red");
-                valErrorMSg += $("label[for='" + $('#CurrentPrincipalBalance').attr('id') + "']").text() + ' is required <br/>';
-                isValidForm = false;
+        if ($('#HasPositionMortgage').is(':checked')) {
+            valErrorMSg = '<h5 class="text-center" style="color:blue;">Existing Mortgages</h5><ul>';
+            if (tabText === 'Existing Mortgages' || tabText === 'Finish' || tabText === '#finish') {
+                if ($('#CurrentPrincipalBalance').val() === '') {
+                    $('#CurrentPrincipalBalance').css("borderColor", "red");
+                    valErrorMSg += '<li>' + $("label[for='" + $('#CurrentPrincipalBalance').attr('id') + "']").text() + ' is required </li>';
+                    isValidForm = false;
 
-                onInputBlur("CurrentPrincipalBalance");
-            }
+                    onInputBlur("CurrentPrincipalBalance");
+                }
 
-            if ($('#SelectedAmortSchedule option:selected').val() === '') {
-                $('#SelectedAmortSchedule').css('borderColor', 'red');
-                valErrorMSg += $("label[for='" + $('#SelectedAmortSchedule').attr('id') + "']").text() + ' is required <br/>';
-                isValidForm = false;
-                onInputBlur("SelectedAmortSchedule");
-            }
+                if ($('#SelectedAmortSchedule option:selected').val() === '') {
+                    $('#SelectedAmortSchedule').css('borderColor', 'red');
+                    valErrorMSg += '<li>' + $("label[for='" + $('#SelectedAmortSchedule').attr('id') + "']").text() + ' is required </li>';
+                    isValidForm = false;
+                    onInputBlur("SelectedAmortSchedule");
+                }
 
-            if ($('#MonthlyPayment').val() === '') {
-                $('#MonthlyPayment').css("borderColor", "red");
-                valErrorMSg += $("label[for='" + $('#MonthlyPayment').attr('id') + "']").text() + ' is required <br/>';
-                isValidForm = false;
-                onInputBlur("MonthlyPayment");
-            }
-            if ($('#PaymentIncludes option:selected').val() === '') {
-                $('#PaymentIncludes').css("borderColor", "red");
-                valErrorMSg += $("label[for='" + $('#PaymentIncludes').attr('id') + "']").text() + ' is required <br/>';
-                isValidForm = false;
-                onInputBlur("PaymentIncludes");
-            }
-            if ($('#InterestRate').val() === '') {
-                $('#InterestRate').css("borderColor", "red");
-                valErrorMSg += $("label[for='" + $('#InterestRate').attr('id') + "']").text() + ' is required <br/>';
-                isValidForm = false;
-                onInputBlur("InterestRate");
-            }
-            if (!$('#IsMortgageAnARM').is(':checked')) {
-                $('.rdMandatory').css("border", "1px solid red");
-                valErrorMSg += $("label[for='" + $('#IsMortgageAnARM').attr('id') + "']").text() + ' is required <br/>';
-                isValidForm = false;
-                onInputBlur("IsMortgageAnARM");
-            }
-            if ($('#MortgageAdjustIfARM').val() === '') {
-                $('#MortgageAdjustIfARM').css("borderColor", "red");
-                valErrorMSg += $("label[for='" + $('#MortgageAdjustIfARM').attr('id') + "']").text();
-                isValidForm = false;
-                onInputBlur("MortgageAdjustIfARM");
+                if ($('#MonthlyPayment').val() === '') {
+                    $('#MonthlyPayment').css('borderColor', 'red');
+                    valErrorMSg += '<li>' + $("label[for='" + $('#MonthlyPayment').attr('id') + "']").text() + ' is required </li>';
+                    isValidForm = false;
+                    onInputBlur("MonthlyPayment");
+                }
+                if ($('#PaymentIncludes option:selected').val() === '') {
+                    $('#PaymentIncludes').css("borderColor", "red");
+                    valErrorMSg += '<li>' + $("label[for='" + $('#PaymentIncludes').attr('id') + "']").text() + ' is required </li>';;
+                    isValidForm = false;
+                    onInputBlur("PaymentIncludes");
+                }
+                if ($('#InterestRate').val() === '') {
+                    $('#InterestRate').css("borderColor", "red");
+                    valErrorMSg += '<li>' + $("label[for='" + $('#InterestRate').attr('id') + "']").text() + ' is required </li>';
+                    isValidForm = false;
+                    onInputBlur("InterestRate");
+                }
+                if (!$('input[name="IsMortgageAnARM"]').is(':checked')) {
+                    $('.rdMandatory').css("border", "1px solid red");
+                    valErrorMSg += '<li>' + $("label[for='" + $('#IsMortgageAnARM').attr('id') + "']").text() + ' is required </li>';
+                    isValidForm = false;
+                    onInputBlur("IsMortgageAnARM");
+                }
+                //if ($('#MortgageAdjustIfARM').val() === '') {
+                //    $('#MortgageAdjustIfARM').css("borderColor", "red");
+                //    valErrorMSg += $("label[for='" + $('#MortgageAdjustIfARM').attr('id') + "']").text();
+                //    isValidForm = false;
+                //    onInputBlur("MortgageAdjustIfARM");
+                //}
+                valErrorMSg + '</ul>';
             }
         }
         return isValidForm;
@@ -6635,6 +6661,60 @@
         $("#TermsOther").val("");
         $("#CapRate").val("");
     }
+
+    $('.ConvertToDoller').on('input', function () {
+        if ($(this).val().trim() != '') {
+            var dolNum = '$' + $(this).val().replace('$', '');
+            $(this).val(dolNum == '$' ? '' : dolNum)
+        }
+    })
+    //$('.inputDecimalNumber').on('input', function () {
+
+    //    $(this).val(parseFloat($(this).val()).toFixed(2))
+    //});
+
+    $(".inputDecimalNumber").keydown(function (e) {
+        // if other than number press any key return
+        var isNumeric = false;
+        var data = $(".inputDecimalNumber").val();
+        var charCode = (e.which) ? e.which : e.keyCode;
+        if (charCode == 8 || charCode == 46) {
+            return;
+        }
+        if (data.indexOf('.') == -1 && (charCode == 190 || charCode == 110)) {
+            return;
+        }
+        if ((charCode >= 48 && charCode <= 57) || (charCode >= 96 && charCode <= 105)) {
+            isNumeric = true;
+        }
+        if (isNumeric) {
+            if (data.length <= 1) {
+                return;
+            }
+            else if (data.length > 1 && data.indexOf('.') == -1) {
+                if (data.substring(2).length > 2) {
+                    e.preventDefault();
+                }
+                data = data.substring(0, 2) + '.' + data.substring(2);
+                $(".inputDecimalNumber").val(data);
+
+            }
+
+            if (data.length >= 5) {
+                e.preventDefault();
+            }
+        }
+        else {
+            e.preventDefault();
+        }
+
+    });
+
+    $(".inputDecimalNumber").blur(function () {
+        if ($(".inputDecimalNumber").val() != '') {
+            $(this).val(parseFloat($(this).val()).toFixed(2));
+        }
+    });
 
     function EditHC(AssetHCOwnershipId) {
 
@@ -8243,7 +8323,13 @@
                 $('#divError').html('');
                 if (!isValidForm) {
                     $('#divError').html(valErrorMSg);
+                    $('#finish .validation-summary-errors').show();
+                    
                     $('#divError').show();
+                }
+                else {
+                    $('#finish .validation-summary-errors').hide();
+                    
                 }
             }
         });

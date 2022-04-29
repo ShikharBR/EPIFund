@@ -115,6 +115,11 @@
     .ui-progressbar .ui-progressbar-value {
         height: 20px;
     }
+
+    select {
+        width: 155px;
+    }
+
 </style>
 <!-- Nav tabs -->
 <ul class="nav nav-pills">
@@ -135,47 +140,152 @@
             <div class="col-sm-6">
                 <div class="input-group" style="padding-top: 10px">
                     @Html.EditorFor(model => model.PortfolioName)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.LastReportedOccupancyDate)
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(model => model.LastReportedOccupancyDate, "{0:MM/dd/yyyy}", new { @class = "datepicker" })
+                    @Html.ValidationMessageFor(model => model.LastReportedOccupancyDate)
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group" style="float:left">
+                    <em>MM/dd/yyyy</em>
 
                 </div>
             </div>
         </div>
-        @* <div class="row">
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        @Html.LabelFor(model => model.LastReportedOccupancyDate) <span style="color: red;">*</span>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        @Html.TextBoxFor(s => s.LastReportedOccupancyDate, new { @class = "datepicker" }) <em>MM/dd/yyyy</em>
-                        @Html.ValidationMessageFor(model => model.LastReportedOccupancyDate)
-                    </div>
-                </div>
-            </div>*@
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <div class="input-group">
-                    @Html.LabelFor(model => model.isSubjectToAuction) <span style="color: red;">*</span>
+                    @Html.LabelFor(model => model.MustPortfolioAssetsInclusive) <span style="color: red;">*</span>
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="input-group">
-                    @Html.RadioButtonFor(s => s.isSubjectToAuction, "true") Yes
-                    @Html.RadioButtonFor(s => s.isSubjectToAuction, "false") No
-                    @Html.ValidationMessageFor(model => model.isSubjectToAuction)
+                <div class="input-group rdMandatory divMustPortfolioAssetsInclusive" style=" margin-left: 66px;">
+                    @Html.RadioButtonFor(model => model.MustPortfolioAssetsInclusive, "true") Yes
+                    @Html.RadioButtonFor(model => model.MustPortfolioAssetsInclusive, "false") No
+
                 </div>
             </div>
         </div>
         <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.SellerTerms)<span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.EnumDropDownList("SellerTerms", Model.SellerTerms, "---")
+                </div>
+            </div>
+        </div>
+
+        <div class="row divSellerTermsOther" style="display:@(Model.SellerTerms.ToString()=="Other" ? "block":"none")">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.SellerTermsOther)<span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.EditorFor(model => model.SellerTermsOther)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.ListingStatus) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.EnumDropDownList("ListingStatus", Model.ListingStatus, "---")
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.PricingDisplayOption)<span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.EnumDropDownList("PricingDisplayOption", Model.PricingDisplayOption, "---")
+                </div>
+            </div>
+        </div>
+
+        <div class="row CapRate" style="display:@(Model.PricingDisplayOption.ToString()=="Cmv" ? "block":"none")">
+            <div class="col-sm-6">
+                <div class="input-group ">
+                    @Html.LabelFor(model => model.CapRate) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    @Html.EditorFor(model => model.CapRate, new { @style = "width:50%", @class = "control-label" }) %
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.IsTBDMarket) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group rdMandatory divisSubjectToAuction" style=" margin-left: 66px;">
+                    @Html.RadioButtonFor(model => model.IsTBDMarket, "true", new { onchange = "isAuctionCall()" }) Yes
+                    @Html.RadioButtonFor(model => model.IsTBDMarket, "false", new { onchange = "isAuctionCall()" }) No
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.IsCallOffersDate) <span style="color: red;">*</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group rdMandatory divIsCallOffersDate" style=" margin-left: 66px;">
+                    @Html.RadioButtonFor(model => model.IsCallOffersDate, "true", new { onchange = "isAuctionCall()" }) Yes
+                    @Html.RadioButtonFor(model => model.IsCallOffersDate, "false", new { onchange = "isAuctionCall()" }) No
+
+                </div>
+            </div>
+        </div>
+        <div class="row divCallforOfferDate">
             <div class="col-sm-6">
                 <div class="input-group">
                     @Html.LabelFor(model => model.CallforOfferDate)
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-3">
                 <div class="input-group">
-                    @Html.TextBoxFor(s => s.CallforOfferDate, new { @class = "datepicker" }) <em>MM/dd/yyyy</em>
+                    @Html.TextBoxFor(model => model.CallforOfferDate, "{0:MM/dd/yyyy}", new { @class = "datepicker" })
                     @Html.ValidationMessageFor(model => model.CallforOfferDate)
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group" style="float:left">
+                    <em>MM/dd/yyyy</em>
                 </div>
             </div>
         </div>
@@ -251,11 +361,11 @@
                                                 <span title="inaccessible" class="glyphicon glyphicon-ban-circle"></span>
                                             </td>
                                         }
-                                            <td style="text-align: center;">
-                                                <a href="@Url.Action("DeactivateAssetfromPortfolio", "Portfolio", new { id = @Model.PortfolioProperties[i].AssetId, pfId = @Model.PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove the Asset from this Portfolio?');">
-                                                    <span class="glyphicon glyphicon-remove"></span>
-                                                </a>
-                                            </td>
+                                        <td style="text-align: center;">
+                                            <a href="@Url.Action("DeactivateAssetfromPortfolio", "Portfolio", new { id = @Model.PortfolioProperties[i].AssetId, pfId = @Model.PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove the Asset from this Portfolio?');">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </a>
+                                        </td>
                                     }
                                     else
                                     {
@@ -268,21 +378,7 @@
                 </div>
 
             }
-            @*<div class="panel-heading" style="background-color: #428bca">
-                    <span style="font-weight: bold;">Add Assets to the portfolio</span>
-                </div>
-                <div class="overflow short-xs">
-                    <div class="input-group">
-                        @Html.LabelFor(model => model.AssetList)
-                    </div>
-                </div>
-                <div class="overflow short-xs">
-                    <div class="input-group">
-                        @Html.ListBoxFor(model => model.SelectedAssets, Model.AssetList as IEnumerable<SelectListItem>, new { style = "width:300px;" })
-                        <em>To make multiple selections hold down your CONTROL key as you click a selection.</em>
-                    </div>
-                </div>*@
-
+           
             <div class="panel-group" id="accordion">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="background-color: #428bca">
@@ -427,19 +523,24 @@
 
 
         </div>
-
+       
+        <div id="divError" style="display:none;color:red;font-weight:bold;" class="validation-summary-errors" data-valmsg-summary="true">
+            
+        </div>
+        <br />
+        
         <div class="row">
             <div class="col-sm-12">
                 <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage portfolios page.')) goBack()" value="Cancel" />
                 @*@if (Model.PortfolioId != null || Model.PortfolioId != Guid.Empty)
-                    {
-                        <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="updatePortfolio()" />
-                    }
-                    else if (Model.PortfolioId == null || Model.PortfolioId == Guid.Empty)
-                    {
-                        <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="createPortfolio()" />
-                    }*@
-                <input type="submit" class="btn btn-primary" value="Save Portfolio">
+                {
+                    <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="updatePortfolio()" />
+                }
+                else if (Model.PortfolioId == null || Model.PortfolioId == Guid.Empty)
+                {
+                    <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="createPortfolio()" />
+                }*@
+                <input type="submit" id="btnSubmit" class="btn btn-primary" value="Save Portfolio">
             </div>
         </div>
 
@@ -450,9 +551,8 @@
 @Html.HiddenFor(model => Model.EstDeferredMaintenance)
 @Html.HiddenFor(model => Model.HasDeferredMaintenance)
 @Html.HiddenFor(model => Model.hasOffersDate)
-@Html.HiddenFor(model => Model.isSubjectToAuction)
-
-@Html.HiddenFor(model => Model.LastReportedOccupancyDate)
+@Html.HiddenFor(model => Model.IsTBDMarket)
+@Html.HiddenFor(s => s.LastReportedOccupancyDate)
 @Html.HiddenFor(model => Model.NumberofAssets)
 @Html.HiddenFor(model => Model.PortfolioId)
 @Html.HiddenFor(model => Model.UserId)
@@ -463,6 +563,108 @@
 <input type="hidden" value="@(Model.GetType())" name="TypeOfAsset" />
 
 <script>
+    var isValidForm = true;
+    var valErrorMSg = '';
+    function onInputBlur(ctrl) {
+        $("#" + ctrl).blur(x => {
+            if ($(x.target.id).val() === '') {
+                $("#" + x.target.id).attr('style', 'border-color:red')
+            }
+            else {
+                $("#" + x.target.id).attr('style', 'border-color:none')
+            }
+        });
+    }
+    
+    $('#btnSubmit').click(function (e) {
+        let isSuccess = formValidation('Primary Info');
+        if (!isSuccess) {
+            e.preventDefault();
+            $('#divError').show();
+        }
+    });
+
+    function formValidation(tabText) {
+        valErrorMSg = '';
+        $('#divError').html('');
+        $('#divError').hide();
+        let input = document.getElementsByTagName('input');
+        let select = document.getElementsByTagName('select');
+        $('.rdMandatory').css("border", "none");
+        isValidForm = true;
+        $(input).css("borderColor", "#B1A795");
+        $(select).css("borderColor", "#B1A795");
+
+        if (tabText === 'Primary Info') {
+
+            if ($('#PortfolioName').val() === '') {
+                $('#PortfolioName').css("borderColor", "red");
+                valErrorMSg += $("label[for='" + $('#PortfolioName').attr('id') + "']").text() + ' is required <br/>';
+                isValidForm = false;
+                onInputBlur("PortfolioName");
+            }
+
+            
+
+            if ($('#SellerTerms').val() === '---') {
+                $('#SellerTerms').css("borderColor", "red");
+                valErrorMSg += $("label[for='" + $('#SellerTerms').attr('id') + "']").text() + ' is required <br/>';
+                isValidForm = false;
+                onInputBlur("SellerTerms");
+            }
+
+            if ($('#SellerTerms').val() === 'Other' && $('#SellerTermsOther').val() == '') {
+                $('#SellerTermsOther').css("borderColor", "red");
+                valErrorMSg += $("label[for='" + $('#SellerTermsOther').attr('id') + "']").text() + ' is required <br/>';
+                isValidForm = false;
+                onInputBlur("SellerTermsOther");
+            }
+
+            if ($('#ListingStatusall').val() === '---') {
+                $('#ListingStatusall').css("borderColor", "red");
+                valErrorMSg += $("label[for='" + $('#ListingStatusall').attr('id') + "']").text() + ' is required <br/>';
+                isValidForm = false;
+                onInputBlur("ListingStatusall");
+            }
+
+            if ($('#PricingDisplayOption').val() === '---') {
+                $('#PricingDisplayOption').css("borderColor", "red");
+                valErrorMSg += $("label[for='" + $('#PricingDisplayOption').attr('id') + "']").text() + ' is required <br/>';
+                isValidForm = false;
+                onInputBlur("PricingDisplayOption");
+            }
+
+            if ($('#PricingDisplayOption').val() === 'Cmv' && $('#CapRate').val() === '') {
+                $('#CapRate').css("borderColor", "red");
+                valErrorMSg += $("label[for='" + $('#CapRate').attr('id') + "']").text() + ' is required <br/>';
+                isValidForm = false;
+                onInputBlur("CapRate");
+            }
+             
+            if ($('input[name=MustPortfolioAssetsInclusive]:checked').length <= 0) {           
+                $('.divMustPortfolioAssetsInclusive').css("border", "1px solid red");
+                valErrorMSg += $("label[for='" + $('#MustPortfolioAssetsInclusive').attr('id') + "']").text() + ' is required <br/>';
+                isValidForm = false;
+                onInputBlur("MustPortfolioAssetsInclusive");
+            }
+
+            if ($('input[name=IsCallOffersDate]:checked').length <= 0) {
+                $('.divIsCallOffersDate').css("border", "1px solid red");
+                valErrorMSg += $("label[for='" + $('#IsCallOffersDate').attr('id') + "']").text() + ' is required <br/>';
+                isValidForm = false;
+                onInputBlur("IsCallOffersDate");
+            }
+
+            if ($('input[name=IsTBDMarket]:checked').length <= 0) {
+                $('.divisSubjectToAuction').css("border", "1px solid red");
+                valErrorMSg += $("label[for='" + $('#IsTBDMarket').attr('id') + "']").text() + ' is required <br/>';
+                isValidForm = false;
+                onInputBlur("IsTBDMarket");
+            }
+            $('#divError').html(valErrorMSg);
+        }
+        return isValidForm;
+    }
 
     window.setInterval(function () {
         getAssetList();
@@ -485,8 +687,6 @@
         //$('#hdnAssetList').val('@Model.Assets');
     }
 
-
-
     function addCommasToInputAndCalculate(control, index) {
         $(control).val(addCommas($(control).val(), false));
         calculateEstimatedDeferredMaintenance(index);
@@ -496,7 +696,7 @@
         $('#Method').val(method);
         fixNumbers();
     }
-
+    
     function fixNumbers() {
         $("input.formatNumber").each(function (index) {
             $(this).val($(this).val().replace(/,/g, ""));
@@ -509,15 +709,12 @@
     function goBack() {
         window.location.href = "/Portfolio/ManagePortfolios";
     }
+   
 
-    // For PW-324, to fix issue where clicking back via the browser from Manage Assets tab on
-    // Update Portfolio Page brings you to Primary Info tab
-    $(document).ready(function () {
+    $(document).ready(function () {       
         if (location.hash.substr(0, 2) == "#!") {
-
             $("a[href='#" + location.hash.substr(2) + "']").tab("show");
         }
-
         $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
             var hash = $(e.target).attr("href");
             if (hash.substr(0, 1) == "#") {
@@ -526,14 +723,35 @@
         });
     });
 
+    $('#PricingDisplayOption').change(function () {       
+        if ($(this).val() === 'Cmv') {
+            $('.CapRate').show();
+        }
+        else {
+            $('.CapRate').hide();
+        }           
+    });
+
+    $('#SellerTerms').change(function () {
+        if ($(this).val() === 'Other') {
+            $('.divSellerTermsOther').show();
+        }
+        else {
+            $('.divSellerTermsOther').hide();
+        }
+    });
+
     function nextTab(button) {
-        $('.nav li.active').removeClass('active');
-        var currentId = button.closest('.tab-pane');
-        var nextId = button.closest('.tab-pane').next('.tab-pane');
-        currentId.removeClass('active');
-        nextId.addClass('active');
-        var tabLink = '#' + nextId.attr('id');
-        $("[href = '" + tabLink + "']").closest('li').addClass('active');
+        if (formValidation($('.nav li.active').text())) {
+            $('.nav li.active').removeClass('active');
+            var currentId = button.closest('.tab-pane');
+            var nextId = button.closest('.tab-pane').next('.tab-pane');
+            currentId.removeClass('active');
+            nextId.addClass('active');
+            var tabLink = '#' + nextId.attr('id');
+
+            $("[href = '" + tabLink + "']").closest('li').addClass('active');
+        }       
     }
 
     function backTab(button) {
@@ -560,6 +778,23 @@
         readIMG(this, fileName);
     });
 
+    $('#CapRate').on('blur', function () {
+       
+        var val = parseFloat($(this).val());
+        if (val > 100) {
+            $(this).val('');
+        }
+        else if ($(this).val() == '' || val == 0) {
+            $(this).val('');
+        }
+        else if ($(this).val() == '100') {            
+        }
+        else {
+            $(this).val(parseFloat($(this).val()).toFixed(2))
+        }
+
+    });
+   
     function fillUserInformation() {
         $.ajax({
             type: "POST",
@@ -579,7 +814,6 @@
             }
         });
     }
-
 
     function searchAssets() {
         var tab = $("ul.nav li.active a").text();
@@ -645,9 +879,6 @@
             });
         }
 
-
-
-
     function getAssetList() {
         var tab = $("ul.nav li.active a").text();
         if (tab != "Images" && tab != "Documents" && tab != "Videos" && tab != "Finish") {
@@ -668,7 +899,6 @@
             });
         }
     }
-
 
     //Prepare Image and Document index
     $(document).ready(function () {
@@ -708,13 +938,27 @@
         $(function () {
             $(".datepicker").datepicker();
         });
+
+        //CapRate
+        var val = parseFloat($('#CapRate').val());
+        if (val > 100) {
+            $('#CapRate').val('');
+        }
+        else if ($('#CapRate').val() == '' || val == 0) {
+            $('#CapRate').val('');
+        }
+        else if ($('#CapRate').val() == '100') {
+        }
+        else {
+            $('#CapRate').val(parseFloat($('#CapRate').val()).toFixed(2))
+        }
+
     });
-
-
 
     function show(id) {
         $('#' + id).show();
     }
+
     function hide(id) {
         $('#' + id).hide();
     }
@@ -755,6 +999,22 @@
             failure: function (response) {
             }
         });
-}
+    }
+
+    function isAuctionCall() {
+
+        var valisSubjectToAuction = $("input[name='IsTBDMarket']:checked").val()
+        var valIsCallOffersDate = $("input[name='IsCallOffersDate']:checked").val()
+
+        debugger;
+
+        if (valisSubjectToAuction === "false" && valIsCallOffersDate === "false") {
+            $(".divCallforOfferDate").hide();
+            $("#CallforOfferDate").val('');
+        }
+        else {
+            $(".divCallforOfferDate").show();
+        }
+    }
 
 </script>

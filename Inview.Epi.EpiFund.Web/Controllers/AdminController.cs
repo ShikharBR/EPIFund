@@ -223,19 +223,76 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 		public ViewResult AssetEscrowProcess(Guid id)
 		{
 			AssetViewModel asset = this._asset.GetAsset(id, false);
-			return base.View(new AssetEscrowModel()
+
+			AssetEscrowModel assetEscrowModel = new AssetEscrowModel();
+
+
+			assetEscrowModel.AssetId = asset.AssetId;
+			assetEscrowModel.AssetNumber = asset.AssetNumber;
+			assetEscrowModel.ProjectedClosingDate = asset.ClosingDate;
+			assetEscrowModel.ActualClosingDate = asset.ActualClosingDate;
+			assetEscrowModel.AssetDescription = asset.Description;
+			assetEscrowModel.ContractBuyer = asset.OwnerHoldingCompany;
+			assetEscrowModel.ContractBuyerAddress = asset.OwnerHoldingCompanyAddress;
+			assetEscrowModel.PrincipalContactOfContractBuyer = $"{asset.OwnerHoldingCompanyFirst} {asset.OwnerHoldingCompanyLast}";
+			assetEscrowModel.ListingPrice = asset.AskingPrice;
+			assetEscrowModel.ClosingPrice = new double?(asset.ClosingPrice);
+
+			// newly added fields
+			assetEscrowModel.AssetType = EnumHelper.GetEnumDescription(asset.AssetType);
+			assetEscrowModel.AssetName = asset.ProjectName;
+			assetEscrowModel.Address = asset.PropertyAddress;
+
+			assetEscrowModel.City = asset.City;
+			assetEscrowModel.State = asset.State;
+			assetEscrowModel.ZipCode = asset.Zip;
+
+
+			var hcList = this._asset.GetAssetHCByAssetId(id);
+			var ocList = this._asset.GetAssetOCByAssetId(id);
+
+			assetEscrowModel.HoldingCompanyId = hcList.Any() ? hcList.FirstOrDefault().HoldingCompanyId : null;
+			if (assetEscrowModel.HoldingCompanyId != null && assetEscrowModel.HoldingCompanyId != Guid.Empty)
 			{
-				AssetId = id,
-				AssetNumber = asset.AssetNumber,
-				ProjectedClosingDate = asset.ClosingDate,
-				ActualClosingDate = asset.ActualClosingDate,
-				AssetDescription = asset.Description,
-				ContractBuyer = asset.OwnerHoldingCompany,
-				ContractBuyerAddress = asset.OwnerHoldingCompanyAddress,
-				PrincipalContactOfContractBuyer = $"{asset.OwnerHoldingCompanyFirst} {asset.OwnerHoldingCompanyLast}",
-				ListingPrice = asset.AskingPrice,
-				ClosingPrice = new double?(asset.ClosingPrice)
-			});
+				assetEscrowModel.HoldingCompany = _user.GetHoldingCompany(assetEscrowModel.HoldingCompanyId ?? Guid.Empty).CompanyName;
+			}
+
+			assetEscrowModel.OperatingCompanyId = ocList.Any() ? ocList.FirstOrDefault().OperatingCompanyId : null;
+			if (assetEscrowModel.OperatingCompanyId != null && assetEscrowModel.OperatingCompanyId != Guid.Empty)
+			{
+				assetEscrowModel.OperatingCompany = _user.GetOPeratingCompany(assetEscrowModel.OperatingCompanyId ?? Guid.Empty).CompanyName;
+			}
+
+			//assetEscrowModel.HoldingCompanyId = asset.AssetHCOwnershipLst.OrderByDescending(a => a.AssetHCOwnershipId).Any() ?
+			//	asset.AssetHCOwnershipLst.OrderByDescending(a => a.AssetHCOwnershipId).FirstOrDefault().HoldingCompanyId : Guid.Empty;
+			//if (assetEscrowModel.HoldingCompanyId == null && assetEscrowModel.HoldingCompanyId == Guid.Empty)
+			//{
+			//	assetEscrowModel.HoldingCompany = _user.GetHoldingCompany(assetEscrowModel.HoldingCompanyId??Guid.Empty).CompanyName;
+			//}
+
+			//assetEscrowModel.OperatingCompanyId = asset.AssetOCLst.OrderByDescending(a => a.AssetOCId).Any() ?
+			//	asset.AssetOCLst.OrderByDescending(a => a.AssetOCId).FirstOrDefault().OperatingCompanyId : Guid.Empty;
+			//if (assetEscrowModel.OperatingCompanyId == null && assetEscrowModel.OperatingCompanyId == Guid.Empty)
+			//{
+			//	assetEscrowModel.OperatingCompany = _user.GetHoldingCompany(assetEscrowModel.OperatingCompanyId ?? Guid.Empty).CompanyName;
+			//}
+
+			assetEscrowModel.AssetPublished = asset.Show;
+			assetEscrowModel.LoginHistory = Convert.ToDateTime("04/22/2022");
+
+			if (asset.AskingPrice > 0)
+			{
+				assetEscrowModel.PublishedAmount = asset.AskingPrice.ToString("C0") + " LP";
+			}
+			else
+			{
+				assetEscrowModel.PublishedAmount = asset.CurrentBpo.ToString("C0") + " CMV";
+			}
+			assetEscrowModel.BusDriver = asset.Show ? "CA" : "SUS";
+			assetEscrowModel.Portfolio = this._asset.GetAssetRealetdPortfolioList(asset.AssetId.ToString()).Any() ? true : false;
+
+
+			return base.View(assetEscrowModel);
 		}
 
 		[Authorize]
@@ -1347,6 +1404,13 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				assetViewModel.CorporateOwnershipOfficer = userByUsername.FullName;
 			}
 			assetViewModel.FromCreateMethod = true;
+
+			List<AssetHCOwnershipModel> assetHCOwnershipModel = new List<AssetHCOwnershipModel>();
+			List<AssetOCModel> assetOCModel = new List<AssetOCModel>();
+
+			assetViewModel.AssetHCOwnershipLst = assetHCOwnershipModel;
+			assetViewModel.AssetOCLst = assetOCModel;
+
 			return base.View(assetViewModel);
 		}
 
@@ -3650,8 +3714,6 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                 Data = new { AssetTypeList = populateAssetTypeDDL(), PortfolioList = populatePortfolioListDDL().OrderBy(x => x.Text).ToList(), StateList = _user.PopulateStateList() }
             };
         }
-
-		
 		
 
 		[Authorize]
@@ -8224,11 +8286,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			}
 			return base.View(model);
 		}
-
-
-
-       
-
+		
         [HttpGet]
 		public ActionResult UpdateTitleCompanyUser(int id)
 		{
@@ -9182,8 +9240,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
             }
             return invalid;
         }
-
-        
+		       
 
         public static void WriteLog(string strLog)
 		{
@@ -9869,11 +9926,20 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				ControllingUserType = userByUsername.UserType,
 				IsPaper = model.IsPaper,
 				ApnNumber = model.ApnNumber,
-
 				County = model.County,
 				ListAgentCompanyName = model.ListAgentCompanyName,
 				ListAgentName = model.ListAgentName
 			};
+
+            if (model.AssmFin == AssmFin.Yes)
+            {
+				manageAssetsModel.HasPositionMortgage = PositionMortgageType.Yes;
+            }
+			else if (model.AssmFin == AssmFin.No)
+			{
+				manageAssetsModel.HasPositionMortgage = PositionMortgageType.No;
+			}
+
 			adminAssetQuickListModels = this._asset.GetManageAssetsQuickList(manageAssetsModel);
 			
 			((dynamic)base.ViewBag).CurrentSort = model.SortOrder;
@@ -10115,7 +10181,8 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Asset successfully published.");
 			if (userByUsername.UserType != UserType.CREBroker && userByUsername.UserType != UserType.CRELender && userByUsername.UserType != UserType.Investor)
 			{
-				return base.RedirectToAction("ManageAssets", "Admin");
+				//return base.RedirectToAction("ManageAssets", "Admin");
+				return base.RedirectToAction("ICACache", "ICA");
 			}
 			return base.RedirectToAction("SellerManageAssets", "Investors");
 		}

@@ -186,8 +186,11 @@
     <Compile Include="Entity\AssetUnitSpecification.cs" />
     <Compile Include="Entity\CommercialAsset.cs" />
     <Compile Include="Enum\AssetSubType.cs" />
+    <Compile Include="Enum\AssmFin.cs" />
     <Compile Include="Enum\ContractFeePayoutType.cs" />
+    <Compile Include="Enum\DefineSellTerm.cs" />
     <Compile Include="Enum\InteriorRoadType.cs" />
+    <Compile Include="Enum\ListingStatusall.cs" />
     <Compile Include="Enum\MasterCommercialPropertyDetails.cs" />
     <Compile Include="Enum\MasterMultiFamilyPropertyDetails.cs" />
     <Compile Include="Enum\MobileHomePropertyDetails.cs" />
@@ -216,6 +219,7 @@
     <Compile Include="Enum\PreferredMethod.cs" />
     <Compile Include="Entity\ReportedOccupancy.cs" />
     <Compile Include="Entity\User.cs" />
+    <Compile Include="Enum\PricingDisplay.cs" />
     <Compile Include="Enum\PrincipalInvestorContractAssetType.cs" />
     <Compile Include="Enum\SellerTerms.cs" />
     <Compile Include="Enum\StatesOfUS.cs" />

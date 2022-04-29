@@ -3730,10 +3730,6 @@ namespace Inview.Epi.EpiFund.Web.Controllers
             return View(model);
         }
 
-
-
-
-
         [AllowAnonymous]
         [HttpPost]
         public JsonResult SearchAssets(SearchAssetModel model)
@@ -3754,6 +3750,31 @@ namespace Inview.Epi.EpiFund.Web.Controllers
             data.SearchId = Guid.NewGuid();
 
             return new JsonResult() { Data = data };
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult GetFavoriteGroups()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                //UserModel userByUsername = _userManager.GetUserByUsername(base.User.Identity.Name);
+
+                //var favoriteGroups = _assetManager.GetUserFavoriteGroups(userByUsername.UserId);
+
+                //if (favoriteGroups != null)
+                //{
+                //    return new JsonResult()
+                //    {
+                //        Data = new { success = true, favGrps = favoriteGroups }
+                //    };
+                //}
+            }
+
+            return new JsonResult()
+            {
+                Data = new { success = false }
+            };
         }
         #endregion
     }

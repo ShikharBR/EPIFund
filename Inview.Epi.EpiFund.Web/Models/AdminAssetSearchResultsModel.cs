@@ -46,6 +46,15 @@ namespace Inview.Epi.EpiFund.Web.Models
 			set;
 		}
 
+
+		[Display(Name = "AssmFin")]
+		[Required(ErrorMessage = "AssmFin is required")]
+		public Inview.Epi.EpiFund.Domain.Enum.AssmFin AssmFin
+		{
+			get;
+			set;
+		}
+
 		public PagedList.IPagedList<AdminAssetQuickListModel> Assets
 		{
 			get;
@@ -145,8 +154,22 @@ namespace Inview.Epi.EpiFund.Web.Models
             set;
         }
 
+		[Display(Name = "Yes")]
+		public bool AssmFinYes
+		{
+			get;
+			set;
+		}
 
-        public List<SelectListItem> States
+		[Display(Name = "No")]
+		public bool AssmFinNo
+		{
+			get;
+			set;
+		}
+
+
+		public List<SelectListItem> States
         {
             get;
             set;
@@ -272,6 +295,9 @@ namespace Inview.Epi.EpiFund.Web.Models
                 }
             };
             this.States = Common.GetSelectListItemsOfStates(true);
+
+
+
 		}
 	}
 }

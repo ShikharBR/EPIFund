@@ -183,26 +183,29 @@
                         <div class="col-sm-3">
                             <div class="input-group text-right">
                                 @Html.LabelFor(s => s.IsPaper, new { @style = "line-height: 32px; margin:0" })
+
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="input-group">
                                 @Html.CheckBoxFor(s => s.IsPaper, new { @style = "" })
+
                             </div>
                         </div>
+
                     </div>
                     @*<div class="row asset-list-form">
-                        <div class="col-sm-3">
-                            <div class="input-group text-right">
-                                @Html.LabelFor(s => s.ApnNumber, new { @style = "line-height: 32px; margin:0" })
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="input-group">
-                                @Html.TextBoxFor(s => s.ApnNumber, new { @style = "width: 100%" })
-                            </div>
-                        </div>
-                    </div>*@
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.ApnNumber, new { @style = "line-height: 32px; margin:0" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.ApnNumber, new { @style = "width: 100%" })
+                </div>
+            </div>
+        </div>*@
                     <div class="row asset-list-form">
                         <div class="col-sm-3">
                             <div class="input-group text-right">
@@ -251,28 +254,42 @@
                         </div>
                     </div>
 
+                    <div class="row asset-list-form">
+                       
+                        <div class="col-sm-3">
+                            <div class="input-group text-right">
+                                @Html.LabelFor(s => s.AssmFin, new { @style = "line-height: 32px;" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                @Html.EnumDropDownListFor(s => s.AssmFin, new { @style = "width: 100%" })
+                            </div>
+                        </div>
+                    </div>
+
                     @*<div class="row asset-list-form">
-                        <div class="col-sm-3">
-                            <div class="input-group text-right">
-                                @Html.LabelFor(s => s.AccListPrice, new { @style = "line-height: 32px; margin:0" })
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="input-group">
-                                @Html.TextBoxFor(s => s.AccListPrice, new { @style = "width: 100%" })
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="input-group text-right">
-                                @Html.LabelFor(s => s.AccUnits, new { @style = "line-height: 32px; margin:0" })
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="input-group">
-                                @Html.TextBoxFor(s => s.AccUnits, new { @style = "width: 100%" })
-                            </div>
-                        </div>
-                    </div>*@
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.AccListPrice, new { @style = "line-height: 32px; margin:0" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.AccListPrice, new { @style = "width: 100%" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group text-right">
+                    @Html.LabelFor(s => s.AccUnits, new { @style = "line-height: 32px; margin:0" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    @Html.TextBoxFor(s => s.AccUnits, new { @style = "width: 100%" })
+                </div>
+            </div>
+        </div>*@
                     <div class="row asset-list-form">
 
                         <div class="col-sm-3">
@@ -487,17 +504,17 @@
             data: { portfolioId: PortfolioId },
             success: function (data) {
 
-                debugger;
-                if ($("#divAssetViewchainOfTitle").html().length > 0) {
-                    debugger;
+                
+                if ($("#divAssetViewchainOfTitle").html().length > 0 && $('#divAssetViewchainOfTitle').is(':visible')) {
+                
                     var ID = $(curretntSpan).closest('tr').parent().closest('tr').attr("id");
 
                     if ($('#' + PortfolioId + '_AssetsinPortfolio').length) {
                         $('#' + PortfolioId + '_AssetsinPortfolio').remove();
                     }
-                    else {                        
+                    else {
                         data = data.replace("<button", "<button style='display:none;'")
-                        $('#' + ID).after("<tr id='" + PortfolioId + "_AssetsinPortfolio'> <td colspan='18'>" + data + "</td></tr>");                     
+                        $('#' + ID).after("<tr id='" + PortfolioId + "_AssetsinPortfolio'> <td colspan='18'>" + data + "</td></tr>");
                     }
 
                 } else {
@@ -511,6 +528,7 @@
             }
         });
     }
+
     function ViewChainOfTitle(assetId) {
         $.ajax({
             url: "@Url.Action("GetChainOfTitle", "Admin")",
@@ -519,6 +537,21 @@
                 $("#divAssetViewchainOfTitle").html(data);
                 $("#chainOfTitleAssets").modal();
 
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
+
+    function ViewChainOfTitleAssetViewPortfolio(assetId) {        
+        $.ajax({
+            url: "@Url.Action("GetChainOfTitle", "Admin")",
+            data: { assetId: assetId },
+            success: function (data) {
+                $("#divAssetViewchainOfTitle").html(data);
+                $("#chainOfTitleAssets").modal();
                 //add comma
                 $('.padNumber').each(function (index) {
                     padCommas(this, false);
