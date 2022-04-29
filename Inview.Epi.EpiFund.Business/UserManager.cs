@@ -2109,6 +2109,7 @@ namespace Inview.Epi.EpiFund.Business
             foreach (var anmGroup in groups)
             {
                 var anm = anmGroup.First();
+                int totalPublished = anmGroup.Where(x => x.Asset.IsPublished).Count();
                 members.Add(new NarMemberViewModel()
                 {
                     AssetNumbers = string.Join(" ", anmGroup.OrderBy(x => x.Asset.AssetNumber).Select(x => x.Asset.AssetNumber)),
@@ -2130,7 +2131,9 @@ namespace Inview.Epi.EpiFund.Business
                     CommissionAmount = anm.NARMember.CommissionAmount,
                     DateOfCsaConfirm = anm.NARMember.DateOfCsaConfirm,
                     AssetId = anm.AssetId,
-                    AssetNARMemberId = anm.AssetNARMemberId
+                    AssetNARMemberId = anm.AssetNARMemberId,
+                    TotalAssests = anmGroup.Count(),
+                    TotalPublished = totalPublished
                 });
             }
 

@@ -20,7 +20,9 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		public Guid? AssetId
+        public bool IsPublished { get; set; }
+
+        public Guid? AssetId
 		{
 			get;
 			set;
@@ -172,5 +174,8 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 		{
 			this.IsActive = true;
 		}
+        public int TotalAssests { get; set; }
+		public int TotalPublished { get; set; }
+
 	}
 }

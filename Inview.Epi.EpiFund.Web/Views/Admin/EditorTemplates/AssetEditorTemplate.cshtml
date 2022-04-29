@@ -4801,13 +4801,11 @@
 
     <div class="tab-pane" id="mortgage">
         <div class="row">
-            <div class="col-lg-6">
-                <div class="input-group">
+                            <div class="input-group">
+            <div class="col-lg-8">
                     @Html.LabelFor(s => s.HasPositionMortgage, new { @class = "control-label" }) <span style="color: red;">*</span>
-                </div>
             </div>
-            <div class="col-lg-6">
-                <div class="input-group">
+            <div class="col-lg-4">
                     @Html.RadioButtonFor(s => s.HasPositionMortgage, Inview.Epi.EpiFund.Domain.Enum.PositionMortgageType.Yes, new { onchange = "toggleMortgage(1)" }) Yes
                     @Html.RadioButtonFor(s => s.HasPositionMortgage, Inview.Epi.EpiFund.Domain.Enum.PositionMortgageType.No, new { onchange = "toggleMortgage(4)" }) No
                     @Html.RadioButtonFor(s => s.HasPositionMortgage, Inview.Epi.EpiFund.Domain.Enum.PositionMortgageType.Unknown, new { onchange = "toggleMortgage(4)" }) Unknown

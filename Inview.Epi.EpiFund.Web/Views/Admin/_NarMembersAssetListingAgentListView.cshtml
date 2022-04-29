@@ -6,93 +6,157 @@
         <span style="font-weight: bold;">@Model.TotalItemCount result(s) found</span>
     </div>
     <div class="overflow short-xs">
-        <table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="padding: 5px; font-size: 10px !important; vertical-align: middle;">
+        @*<table class="table table-striped" id="tbUsers" cellpadding="5" cellspacing="5" style="padding: 5px; font-size: 10px !important; vertical-align: middle;">*@
+        <table class="table table-striped" id="tbAssets" cellpadding="1" cellspacing="1"
+               style="font-size: 10px !important; padding: 1px; vertical-align: middle;">
             <thead>
                 <tr>
-                    <td>
-                        <b><a style="cursor: pointer; color:black" onclick="postForm('@ViewBag.FirstNameSortParm')">Name of Agent</a></b>
-                    </td>
+                    <th><b>Agent<br />Name</b></th>
                     @*<td>
-            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.LastNameSortParm')">Last Name</a></b>
-        </td>*@
+                            <b><a style="cursor: pointer; color:black" onclick="postForm('@ViewBag.FirstNameSortParm')">Name of Agent</a></b>
+                        </td>*@
                     @*<td>
-                        <b>Asset Numbers</b>
-                    </td>*@
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.LastNameSortParm')">Last Name</a></b>
+                        </td>*@
+                    @*<td>
+                            <b>Asset Numbers</b>
+                        </td>*@
 
-                    <td>
-                        <b><a style="cursor: pointer; color: black" onclick="postForm('@ViewBag.CompanyNameSortParm')">Company Name</a></b>
-                    </td>
-                    <td>
-                        @*<b><a style="cursor: pointer" onclick="postForm('@ViewBag.CompanyNameSortParm')">Carporate Address</a></b>*@
-                        <b><a style="cursor: pointer; color: black">Corporate Address</a></b>
-                    </td>
-                    <td>
-                        <b><a style="cursor: pointer; color: black" onclick="postForm('@ViewBag.StateSortParm')">City / St</a></b>
-                    </td>
-                    <td>
-                        <b><a style="cursor: pointer; color: black" onclick="postForm('@ViewBag.EmailSortParm')">E mail</a></b>
-                    </td>
                     @*<td>
-            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.IsActiveParm')">Active?</a></b>
-        </td>*@
-                    <td>
-                        @*<b><a style="cursor: pointer" onclick="postForm('@ViewBag.StateSortParm')">Manage</a></b>*@
-                        <b><a style="cursor: pointer; color: black">Manage</a></b>
-                    </td>
+                            <b><a style="cursor: pointer; color: black" onclick="postForm('@ViewBag.CompanyNameSortParm')">Company Name</a></b>
+                        </td>*@
+                    <th><b>Comp.<br />Name</b></th>
+                    <!--<td>-->
+                    @*<b><a style="cursor: pointer" onclick="postForm('@ViewBag.CompanyNameSortParm')">Carporate Address</a></b>*@
+                    <!--<b><a style="cursor: pointer; color: black">Corporate Address</a></b>
+                    </td>-->
+                    <th><b>Corp.<br />Add.</b></th>
+                    @*<td>
+                            <b><a style="cursor: pointer; color: black" onclick="postForm('@ViewBag.StateSortParm')">City / St</a></b>
+                        </td>*@
+                    <th><b>City/<br />State</b></th>
+                    @*<td>
+                            <b><a style="cursor: pointer; color: black" onclick="postForm('@ViewBag.EmailSortParm')">E mail</a></b>
+                        </td>*@
+                    <th><b>Email</b></th>
+                    @*<td>
+                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.IsActiveParm')">Active?</a></b>
+                        </td>*@
+                    <!--<td>-->
+                    @*<b><a style="cursor: pointer" onclick="postForm('@ViewBag.StateSortParm')">Manage</a></b>*@
+                    @*<b><a style="cursor: pointer; color: black">Manage</a></b>*@
+                    <!--</td>-->
+                    <th>
+                        <b># Assets</b>
+                        @*<table>
+                                <tr>
+                                    <td># Assets<br />Pub</b></td>
+                                    <td>#Listed<br />Assets#s</b></td>
+                                </tr>
+                            </table>*@
+                    </th>
+                    @*<th><b>#A.<br />Pub</b></th>
+                        <th><b>#Listed<br />A.#s</b></th>*@
+                    <th><b>#MF</b></th>
+                    <th><b>#MHP</b></th>
+                    <th><b>#Ret</b></th>
+                    <th><b>#Off</b></th>
+                    <th><b>#Med</b></th>
+                    <th><b>#Ind</b></th>
+                    <th><b>#Fue</b></th>
+                    <th><b>#Notes</b></th>
+
+                    <th><b>Manage</b></th>
                     <td colspan="2"></td>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in @Model)
                 {
-                <tr id="@item.NarMemberId">
-                    <td>
-                        @item.LastName, @item.FirstName
-                    </td>
-                    @*<td>
-            @item.LastName
-        </td>*@
-                    @*<td>
-                        <span class="glyphicon glyphicon-plus" title="@item.AssetNumbers" style="cursor:pointer;width:100px;" onclick="toggleAssetNumbers('@item.NarMemberId', this)">
-                            <span style="display:none;white-space:normal;word-break:break-word" id="asset-@item.NarMemberId">@item.AssetNumbers</span>
-                        </span>
-                    </td>*@
+                    <tr id="@item.NarMemberId">
+                        <td style="word-wrap: break-word;">
+                            @*@item.LastName, @item.FirstName*@
+                            <span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
+                                  title="@item.LastName, @item.FirstName">@item.LastName, @item.FirstName</span>
+                            </td>
+                            @*<td>
+                                    @item.LastName
+                                </td>*@
+                            @*<td>
+                                    <span class="glyphicon glyphicon-plus" title="@item.AssetNumbers" style="cursor:pointer;width:100px;" onclick="toggleAssetNumbers('@item.NarMemberId', this)">
+                                        <span style="display:none;white-space:normal;word-break:break-word" id="asset-@item.NarMemberId">@item.AssetNumbers</span>
+                                    </span>
+                                </td>*@
 
-                    <td>
-                        @item.CompanyName
-                    </td>
-                    <td>
-                        @item.AddressLine1 @item.AddressLine2
-                    </td>
-                    <td>
-                        @item.City, @item.State
-                    </td>
-                    <td>
-                        @item.Email
-                    </td>
-                    @*<td>
-            @(item.IsActive ? "Yes" : "No")
-        </td>*@
-                    <td style="text-align: center;">
-                        <a href="@Url.Action("UpdateNARMember", "Admin", new { id = @item.NarMemberId })" title="edit">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </a>
+                            <td style="word-wrap: break-word; ">
+                                @*@item.CompanyName*@
+                                <span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
+                                      title="@item.CompanyName">@item.CompanyName</span>
+                                </td>
+                                <td style="word-wrap: break-word; ">
+                                    @*@item.AddressLine1 @item.AddressLine2*@
+                                    <span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
+                                          title="@item.AddressLine1@item.AddressLine2">@item.AddressLine1@item.AddressLine2</span>
+                                    </td>
+                                    <td style="word-wrap: break-word; ">
+                                        <span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
+                                              title="@item.City@item.State">@item.City@item.State</span>
+                                        </td>
+                                        <td style="word-wrap: break-word; ">
+                                            <span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
+                                                  title="@item.Email">@item.Email</span>
+                                                @*@item.Email*@
+                                            </td>
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            T-@item.TotalAssests
+                                                        </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                Pub-@item.TotalPublished
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            <td>
+                                            </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
 
-                        <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
-                            <span class="glyphicon glyphicon-arrow-up"></span>
-                        </a>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
 
-                        @*else
-            <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
-                <span class="glyphicon glyphicon-arrow-up"></span>
-            </a>*@
-                    </td>
-                    @*<td>
-            <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick = "return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
-                <span class="glyphicon glyphicon-remove"></span></a>
-        </td>*@
-                </tr>
-                }
+                                                <td></td>
+                                                
+
+                                                @*<td>
+                                                        @(item.IsActive ? "Yes" : "No")
+                                                    </td>*@
+                                                <td style="text-align: center;">
+                                                    <a href="@Url.Action("UpdateNARMember", "Admin", new { id = @item.NarMemberId })" title="edit">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                    </a>
+
+                                                    <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
+                                                        <span class="glyphicon glyphicon-arrow-up"></span>
+                                                    </a>
+
+                                                    @*else
+                                                        <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
+                                                            <span class="glyphicon glyphicon-arrow-up"></span>
+                                                        </a>*@
+                                                </td>
+                                                @*<td>
+                                                        <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick = "return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
+                                                            <span class="glyphicon glyphicon-remove"></span></a>
+                                                    </td>*@
+                                            </tr>
+                                        }
             </tbody>
         </table>
     </div>
