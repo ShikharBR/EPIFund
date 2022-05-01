@@ -455,6 +455,44 @@ namespace Inview.Epi.EpiFund.Business
                 ePIRepository.PortfolioAssets.Add(portfolioAsset);
             }
             ePIRepository.Save();
+
+
+            //update related Assets as suggested at time of update porfoliyo          
+            var assets = (from x in ePIRepository.PortfolioAssets where x.PortfolioId == portfolio.PortfolioId select x.Asset);
+            foreach (Asset asset in assets)
+            {
+                //Asset asset = (from x in ePIRepository.Assets where x.AssetId == selectedAsset select x).First<Asset>();
+
+                asset.LastReportedOccupancyDate = model.LastReportedOccupancyDate;
+                asset.OccupancyDate = model.LastReportedOccupancyDate;
+
+                asset.SellerTerms = model.SellerTerms;
+                asset.SellerTermsOther = model.SellerTermsOther;
+
+                //as per current logic
+                if (model.ListingStatus == ListingStatusall.Available)
+                    asset.ListingStatus = ListingStatus.Available;
+                else if (model.ListingStatus == ListingStatusall.Pending)
+                    asset.ListingStatus = ListingStatus.Pending;
+
+                asset.IsTBDMarket = model.IsTBDMarket ?? false;
+
+                if (model.IsTBDMarket ?? false)
+                {
+                    asset.AuctionDate = model.CallforOfferDate;
+                }
+                if (model.IsCallOffersDate ?? false)
+                {
+                    asset.CallforOffersDate = model.CallforOfferDate;
+                }
+                if ((!model.IsTBDMarket ?? false) && (!model.IsCallOffersDate ?? false))
+                {
+                    asset.CallforOffersDate = null;
+                }
+                ePIRepository.Entry(asset).State = EntityState.Modified;
+            }
+            ePIRepository.Save();
+
             return portfolio.PortfolioId;
         }
 
