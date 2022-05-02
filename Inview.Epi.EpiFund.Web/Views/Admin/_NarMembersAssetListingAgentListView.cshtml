@@ -111,52 +111,57 @@
                                                 <table>
                                                     <tr>
                                                         <td>
-                                                            T-@item.TotalAssests
+                                                            ToT-@item.TotalAssests
                                                         </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                Pub-@item.TotalPublished
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            <td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            Pub-@item.TotalPublished
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
 
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                            <td>@item.TotalAssetType_MF</td>
 
-                                                <td></td>
-                                                
+                                            <td>@item.TotalAssetType_MHP</td>
+                                            <td>@item.TotalAssetType_Retail</td>
+                                            <td>@item.TotalAssetType_Office</td>
 
-                                                @*<td>
-                                                        @(item.IsActive ? "Yes" : "No")
-                                                    </td>*@
-                                                <td style="text-align: center;">
-                                                    <a href="@Url.Action("UpdateNARMember", "Admin", new { id = @item.NarMemberId })" title="edit">
-                                                        <span class="glyphicon glyphicon-pencil"></span>
-                                                    </a>
+                                            <td>@item.TotalAssetType_Med</td>
+                                            <td>@item.TotalAssetType_Indus</td>
+                                            <td>@item.TotalAssetType_FuelS</td>
 
+
+                                            <td></td>
+
+
+
+
+                                            @*<td>
+                                                    @(item.IsActive ? "Yes" : "No")
+                                                </td>*@
+                                            <td style="text-align: center;">
+                                                <a href="@Url.Action("UpdateNARMember", "Admin", new { id = @item.NarMemberId })" title="edit">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                </a>
+
+                                                <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
+                                                    <span class="glyphicon glyphicon-arrow-up"></span>
+                                                </a>
+
+                                                @*else
                                                     <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
                                                         <span class="glyphicon glyphicon-arrow-up"></span>
-                                                    </a>
-
-                                                    @*else
-                                                        <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
-                                                            <span class="glyphicon glyphicon-arrow-up"></span>
-                                                        </a>*@
-                                                </td>
-                                                @*<td>
-                                                        <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick = "return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
-                                                            <span class="glyphicon glyphicon-remove"></span></a>
-                                                    </td>*@
-                                            </tr>
-                                        }
+                                                    </a>*@
+                                            </td>
+                                            @*<td>@item.AssetType</td>*@
+                                            @*<td>
+                                                    <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick = "return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
+                                                        <span class="glyphicon glyphicon-remove"></span></a>
+                                                </td>*@
+                                        </tr>
+                                    }
             </tbody>
         </table>
     </div>
