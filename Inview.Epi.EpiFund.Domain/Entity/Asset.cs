@@ -105,13 +105,13 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			set;
 		}
 
-        public string AmortOther
-        {
-            get;
-            set;
-        }
+		public string AmortOther
+		{
+			get;
+			set;
+		}
 
-        public double AnnualGrossIncome
+		public double AnnualGrossIncome
 		{
 			get;
 			set;
@@ -123,13 +123,13 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			set;
 		}
 
-        public string AppraisalOther
-        {
-            get;
-            set;
-        }
+		public string AppraisalOther
+		{
+			get;
+			set;
+		}
 
-        public bool Approved
+		public bool Approved
 		{
 			get;
 			set;
@@ -192,101 +192,102 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 				switch (this.AssetType)
 				{
 					case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.Retail:
-					{
-						str = "Com'l - R";
-						break;
-					}
+						{
+							str = "Com'l - R";
+							break;
+						}
 					case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.Office:
-					{
-						str = "Com'l - O";
-						break;
-					}
+						{
+							str = "Com'l - O";
+							break;
+						}
 					case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.MultiFamily:
-					{
-						str = "MF";
-						break;
-					}
+						{
+							str = "MF";
+							break;
+						}
 					case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.Industrial:
-					{
-						str = "Com'l - I";
-						break;
-					}
+						{
+							str = "Com'l - I";
+							break;
+						}
 					case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.MHP:
-					{
-						str = "MHP";
-						break;
-					}
+						{
+							str = "MHP";
+							break;
+						}
 					case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.ConvenienceStoreFuel:
-					{
-						str = "Com'l - S";
-						break;
-					}
+						{
+							str = "Com'l - S";
+							break;
+						}
 					case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.Medical:
-					{
-						str = "Com'l - M";
-						break;
-					}
+						{
+							str = "Com'l - M";
+							break;
+						}
 					case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.MixedUse:
-					{
-						str = "MU";
-						break;
-					}
+						{
+							str = "MU";
+							break;
+						}
 					case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.Retail | Inview.Epi.EpiFund.Domain.ViewModel.AssetType.MixedUse:
-					{
-						str = "";
-						break;
-					}
+						{
+							str = "";
+							break;
+						}
 					case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.Other:
-					{
-						str = "Com'l - Ot";
-						break;
-					}
+						{
+							str = "Com'l - Ot";
+							break;
+						}
 					default:
-					{
-						goto case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.Retail | Inview.Epi.EpiFund.Domain.ViewModel.AssetType.MixedUse;
-					}
+						{
+							goto case Inview.Epi.EpiFund.Domain.ViewModel.AssetType.Retail | Inview.Epi.EpiFund.Domain.ViewModel.AssetType.MixedUse;
+						}
 				}
 				return str;
 			}
 		}
 
-        public string AssetTypeAbbreviationForExport
-        {
-            get
-            {
-                switch (this.AssetType) {
-                    case AssetType.MultiFamily:
-                        return "MF";
-                    case AssetType.FracturedCondominiumPortfolio:
-                        return "FCP";
-                    case AssetType.MHP:
-                        return "MHP";
-                    case AssetType.Retail:
-                        return "Ret";
-                    case AssetType.Office:
-                        return "Off";
-                    case AssetType.Industrial:
-                        return "Indus";
-                    case AssetType.Medical:
-                        return "Med";
-                    case AssetType.ConvenienceStoreFuel:
-                        return "F/S";
-                    case AssetType.Hotel:
-                        return "R/H/M";
-                    case AssetType.ParkingGarageProperty:
-                        return "PG";
-                    case AssetType.MiniStorageProperty:
-                        return "MS";
-                    case AssetType.MixedUse:
-                        return "Mix";
-                    case AssetType.Land:
-                        return "Land";
-                    default:
-                        return "";
-                }
-            }
-        }
-        
+		public string AssetTypeAbbreviationForExport
+		{
+			get
+			{
+				switch (this.AssetType)
+				{
+					case AssetType.MultiFamily:
+						return "MF";
+					case AssetType.FracturedCondominiumPortfolio:
+						return "FCP";
+					case AssetType.MHP:
+						return "MHP";
+					case AssetType.Retail:
+						return "Ret";
+					case AssetType.Office:
+						return "Off";
+					case AssetType.Industrial:
+						return "Indus";
+					case AssetType.Medical:
+						return "Med";
+					case AssetType.ConvenienceStoreFuel:
+						return "F/S";
+					case AssetType.Hotel:
+						return "R/H/M";
+					case AssetType.ParkingGarageProperty:
+						return "PG";
+					case AssetType.MiniStorageProperty:
+						return "MS";
+					case AssetType.MixedUse:
+						return "Mix";
+					case AssetType.Land:
+						return "Land";
+					default:
+						return "";
+				}
+			}
+		}
+
 		public DateTime? AuctionDate
 		{
 			get;
@@ -642,13 +643,13 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			set;
 		}
 
-        public string FrequencyOther
-        {
-            get;
-            set;
-        }
+		public string FrequencyOther
+		{
+			get;
+			set;
+		}
 
-        [MaxLength]
+		[MaxLength]
 		public string GeneralComments
 		{
 			get;
@@ -734,13 +735,13 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			set;
 		}
 
-        public string InstrumentOther
-        {
-            get;
-            set;
-        }
+		public string InstrumentOther
+		{
+			get;
+			set;
+		}
 
-        public double? InterestRate
+		public double? InterestRate
 		{
 			get;
 			set;
@@ -1082,13 +1083,13 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			set;
 		}
 
-        public string PayHistoryOther
-        {
-            get;
-            set;
-        }
+		public string PayHistoryOther
+		{
+			get;
+			set;
+		}
 
-        public string PaymentIncludes
+		public string PaymentIncludes
 		{
 			get;
 			set;
@@ -1220,43 +1221,43 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			set;
 		}
 
-        public string ProposedBuyer
+		public string ProposedBuyer
 		{
 			get;
 			set;
 		}
 
-        public string ProposedBuyerAddress
-        {
-            get;
-            set;
-        }
-
-        public Guid? OwnerHoldingCompanyId
-        {
-            get;
-            set;
-        }
-
-        public Guid? OwnerOperatingCompanyId
-        {
-            get;
-            set;
-        }
-
-        public string ProposedBuyerContact
+		public string ProposedBuyerAddress
 		{
 			get;
 			set;
 		}
 
-        public DateTime? ProposedCOEDate
+		public Guid? OwnerHoldingCompanyId
 		{
 			get;
 			set;
 		}
 
-        public string RecentUpgradesRenovations
+		public Guid? OwnerOperatingCompanyId
+		{
+			get;
+			set;
+		}
+
+		public string ProposedBuyerContact
+		{
+			get;
+			set;
+		}
+
+		public DateTime? ProposedCOEDate
+		{
+			get;
+			set;
+		}
+
+		public string RecentUpgradesRenovations
 		{
 			get;
 			set;
@@ -1293,13 +1294,13 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			set;
 		}
 
-        public bool SalesPriceNotProvided
-        {
-            get;
-            set;
-        }
+		public bool SalesPriceNotProvided
+		{
+			get;
+			set;
+		}
 
-        public double? SecondInterestRateWRAP
+		public double? SecondInterestRateWRAP
 		{
 			get;
 			set;
@@ -1347,13 +1348,13 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			set;
 		}
 
-        public string SellerTermsOther
-        {
-            get;
-            set;
-        }
+		public string SellerTermsOther
+		{
+			get;
+			set;
+		}
 
-        public bool Show
+		public bool Show
 		{
 			get;
 			set;
@@ -1401,13 +1402,13 @@ namespace Inview.Epi.EpiFund.Domain.Entity
 			set;
 		}
 
-        public string TermsOther
-        {
-            get;
-            set;
-        }
+		public string TermsOther
+		{
+			get;
+			set;
+		}
 
-        public int? TitleCompanyId
+		public int? TitleCompanyId
 		{
 			get;
 			set;

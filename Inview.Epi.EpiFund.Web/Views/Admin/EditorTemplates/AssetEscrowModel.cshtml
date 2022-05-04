@@ -1,4 +1,6 @@
-﻿@model Inview.Epi.EpiFund.Domain.ViewModel.AssetEscrowModel
+﻿
+
+@model Inview.Epi.EpiFund.Domain.ViewModel.AssetEscrowModel
 @Html.HiddenFor(s => s.AssetId)
 @Html.HiddenFor(s => s.AssetNumber)
 @Html.HiddenFor(s => s.AssetDescription)
@@ -15,18 +17,19 @@
         padding: 5px;
         vertical-align: top;
     }
+
     .control-label {
         font-size: 10px;
     }
+
     .panel-default .panel-body {
         background-color: #fff;
     }
-
 </style>
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        Asset Details
+        Asset Accounting
     </div>
     <div class="panel-body">
 
@@ -43,116 +46,138 @@
                     <td>@Html.LabelFor(s => s.AssetType, new { @class = "control-label" })  : @Html.DisplayFor(s => s.AssetType)</td>
                     <td>@Html.LabelFor(s => s.AssetName, new { @class = "control-label" })  : @Html.DisplayFor(s => s.AssetName)</td>
                     <td>@Html.LabelFor(s => s.Address, new { @class = "control-label" })  : @Html.DisplayFor(s => s.Address)</td>
-                    <td>@Html.DisplayFor(s => s.City) &nbsp; @Html.DisplayFor(s => s.State)&nbsp;@Html.DisplayFor(s => s.ZipCode)</td>
+                    <td>@Html.DisplayFor(s => s.City)&nbsp;@Html.DisplayFor(s => s.State)&nbsp;@Html.DisplayFor(s => s.ZipCode)</td>
                 </tr>
                 <tr>
                     <td>Line 2</td>
                     <td colspan="3">
-                        <table>
-                            <tr>
-                                <td>
-                                    @Html.LabelFor(s => s.HoldingCompany, new { @class = "control-label" })  :
-                                    <a href="javascript:void(0)" onclick="HoldingCoDetail('@Model.HoldingCompanyId')">@Html.DisplayFor(s => s.HoldingCompany)</a>
-                                </td>
-                                <td>
-                                    @Html.LabelFor(s => s.OperatingCompany, new { @class = "control-label" })  :
-                                    <a href="javascript:void(0)" onclick="OperatingCoDetail('@Model.OperatingCompanyId')">@Html.DisplayFor(s => s.OperatingCompany)</a>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>                  
-          
-            <td>@Html.LabelFor(s => s.AssetPublished, new { @class = "control-label" })  :  @(Model.AssetPublished ? "Yes" : "No")</td>
-            <td>@Html.LabelFor(s => s.LoginHistory, new { @class = "control-label" })  : @(Model.LoginHistory.HasValue ? Model.LoginHistory.Value.ToString("MM/dd/yyyy") : "")</td>
-        </tr>
+                        @Html.LabelFor(s => s.HoldingCompany, new { @class = "control-label" })  :
+                        @if (!string.IsNullOrEmpty(Model.HoldingCompany))
+                        {
+                        <a href="javascript:void(0)" onclick="HoldingCoDetail('@Model.HoldingCompanyId')">@Model.HoldingCompany</a>
+                        }
+                        else
+                        {
+                        @Html.Raw("N/A")
+                        }
+                        <br />
+                        @Html.LabelFor(s => s.OperatingCompany, new { @class = "control-label" })  :
+                        @if (!string.IsNullOrEmpty(Model.OperatingCompany))
+                        {
+                        <a href="javascript:void(0)" onclick="OperatingCoDetail('@Model.OperatingCompanyId')">@Model.OperatingCompany</a>
+                        }
+                        else
+                        {
+                        @Html.Raw("N/A")
+                        }
+                    </td>
+
+                    <td width="160px">
+                        @Html.LabelFor(s => s.AssetPublished, new { @class = "control-label" })  :  @(Model.AssetPublished ? "Yes" : "No")
+                        <br />
+                        <label class="control-label">Last Activity Date</label>:01/05/2022
+                    </td>
+                    <td>@Html.LabelFor(s => s.LoginHistory, new { @class = "control-label" })  : @(Model.LoginHistory.HasValue ? Model.LoginHistory.Value.ToString("MM/dd/yyyy") : "")</td>
+                </tr>
                 <tr>
                     <td>Line 3</td>
                     <td>
                         @Html.LabelFor(s => s.PublishedAmount, new { @class = "control-label" })  :  @Html.DisplayFor(s => s.PublishedAmount)
                     </td>
                     <td>
-                        <img style="height:16px;" src="~/Content/images/bus.png" /> @Html.DisplayFor(s => s.BusDriver)
+                        <img style="width:15px;" title="Who’s Driving the Bus" src="~/Content/images/bus.png" />
+                        @if (Model.BusDriver == "SUS")
+                        {
+                        <span class="red">@Model.BusDriver</span>
+                        }
+                        else
+                        {
+                        <span>@Model.BusDriver</span>
+                        }
                     </td>
                     <td>
                         @if (Model.Portfolio)
                         {
-                            <span class="glyphicon glyphicon-book" title="Portfolio" style="cursor:pointer" onclick="Viewportfolio('@Model.AssetId.ToString()',this)"></span> @Html.Raw("Yes")
+                        <span style="font-size: 14px; cursor: pointer;" class="glyphicon glyphicon-book" title="Portfolio" onclick="Viewportfolio('@Model.AssetId.ToString()',this)"></span>  @Html.Raw("Yes")
                         }
                         else
                         {
-                            <span class="glyphicon glyphicon-book" title="Portfolio"></span> @Html.Raw("No")
+                        <span style="font-size:14px;" class="glyphicon glyphicon-book" title="Portfolio"></span>  @Html.Raw("No")
                         }
                     </td>
                     <td>
                         <span style="cursor:pointer" title="Chain Of Title" onclick="ViewChainOfTitle('@Model.AssetId.ToString()')">
-                            <img title="Chain of Title" style="width:12px;" src="~/Content/images/tringle.png" />Chain of <Title></Title>
+                            <img title="Chain of Title" style="width:16px;" src="~/Content/images/tringle.png" />Chain of Title
                         </span>
                     </td>
 
                 </tr>
-        <tr>
-            <td colspan="6">
-                <label class="control-label">
-                    Pending Sale Details
-                </label>
-            </td>
-        </tr>
-        <tr>
-            <td>Line 1 (Tx)</td>
-            <td><a title="LOI Summary">LOI Summary</a></td>
-            <td><a title="FPA Summary">FPA Summary</a></td>
-            <td>FPA Title Co: [xxxxxxxxxxxxxx]</td>
-            <td>Is Title Co an [SP]:  [Y No]</td>
-            <td>Send Title IPA Notification</td>
-        </tr>
-        <tr>
-            <td>Line 2 (Tx)</td>
-            <td colspan="2" >Buyer Holding Co : [xxxxxxxxxxxxxx]</td>
-            <td>Buyer Operating Co: [xxxxxxx]</td>
-            <td>Is Buyer a [PI]: [Y N]</td>
-            <td>Send all [PI’s] Notification</td>
-        </tr>
-        <tr>
-            <td>Line 3 (Tx)</td>
-            <td>FPA SP: [$x,xxx,xxx]</td>
-            <td></td>
-            <td>Projected COE Date: [xx/xx/xx]</td>
-            <td>[PI-S] 1% Fee: [$xxx,xxx]</td>
-            <td>[PI-B] 1% Fee: [$xxx,xxx]</td>
-        </tr>
-    </table>
+                <tr>
+                    <td colspan="6">
+                        <label class="control-label">
+                            Pending Sale Details
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Line 1 (Tx)</td>
+                    <td><a title="LOI Summary">LOI Summary</a></td>
+                    <td><a title="FPA Summary">FPA Summary</a></td>
+                    <td><label class="control-label">FPA Title Co</label>: [xxxxxxxxxxxxxx]</td>
+                    <td><label class="control-label">Is Title Co an [SP]</label> : Y</td>
+                    <td><label class="control-label">Send Title IPA Notification</label> : Y 05/01/2022</td>
+                </tr>
+                <tr>
+                    <td>Line 2 (Tx)</td>
+                    <td colspan="3">
+                        <label class="control-label">Buyer Holding Co</label> : [xxxxxxxxxxxxxx]
+                        <br />
+                        <label class="control-label">Buyer Operating Co</label> : [xxxxxxxxxxxxxx]
+                    </td>
+                    <td><label class="control-label">Is Buyer a [PI]</label> : Y</td>
+                    <td><label class="control-label">Send all [PI’s] Notification</label> : Y 05/01/2022</td>
+                </tr>
+                <tr>
+                    <td>Line 3 (Tx)</td>
+                    <td colspan="2"><label class="control-label">FPA SP</label>: [$x,xxx,xxx]</td>
+                    <td><label class="control-label">Projected COE Date</label>: [xx/xx/xx]</td>
+                    <td><label class="control-label">[PI-S] 1% Fee</label>: [$xxx,xxx]</td>
+                    <td><label class="control-label">[PI-B] 1% Fee</label>: [$xxx,xxx]</td>
 
-</div>
+                </tr>
+            </table>
 
-@*<div class="row">
-        <div class="col-lg-12">
-            <div class="input-group">
-                @Html.LabelFor(s => s.AssetNumber, new { @class = "control-label" })
-                @Html.DisplayFor(s => s.AssetNumber)
-                @Html.HiddenFor(x => x.AssetNumber)
-            </div>
         </div>
+
+        @*<div class="row">
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.AssetNumber, new { @class = "control-label" })
+                        @Html.DisplayFor(s => s.AssetNumber)
+                        @Html.HiddenFor(x => x.AssetNumber)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.AssetDescription, new { @class = "control-label" })
+                        @Html.DisplayFor(s => s.AssetDescription)
+                        @Html.HiddenFor(x => x.AssetDescription)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        @Html.LabelFor(s => s.ListingPrice, new { @class = "control-label" })
+                        @Model.ListingPrice.ToString("C")
+                        @Html.HiddenFor(x => x.ListingPrice)
+                    </div>
+                </div>
+            </div>*@
+
     </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="input-group">
-                @Html.LabelFor(s => s.AssetDescription, new { @class = "control-label" })
-                @Html.DisplayFor(s => s.AssetDescription)
-                @Html.HiddenFor(x => x.AssetDescription)
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="input-group">
-                @Html.LabelFor(s => s.ListingPrice, new { @class = "control-label" })
-                @Model.ListingPrice.ToString("C")
-                @Html.HiddenFor(x => x.ListingPrice)
-            </div>
-        </div>
-    </div>*@
-
-</div>
 </div>
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -172,54 +197,54 @@
 
 @if (Model.ProjectedClosingDate.HasValue)
 {
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            Closing Escrow
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Closing Escrow
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.ContractBuyer, new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.EditorFor(s => s.ContractBuyer)
+                </div>
+            </div>
         </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-lg-12">
-                    @Html.LabelFor(s => s.ContractBuyer, new { @class = "control-label" })
-                    <div class="input-group">
-                        @Html.EditorFor(s => s.ContractBuyer)
-                    </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.ContractBuyerAddress, new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.EditorFor(s => s.ContractBuyerAddress)
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    @Html.LabelFor(s => s.ContractBuyerAddress, new { @class = "control-label" })
-                    <div class="input-group">
-                        @Html.EditorFor(s => s.ContractBuyerAddress)
-                    </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.PrincipalContactOfContractBuyer, new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.EditorFor(s => s.PrincipalContactOfContractBuyer)
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    @Html.LabelFor(s => s.PrincipalContactOfContractBuyer, new { @class = "control-label" })
-                    <div class="input-group">
-                        @Html.EditorFor(s => s.PrincipalContactOfContractBuyer)
-                    </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.ActualClosingDate, new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.EditorFor(s => s.ActualClosingDate)
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    @Html.LabelFor(s => s.ActualClosingDate, new { @class = "control-label" })
-                    <div class="input-group">
-                        @Html.EditorFor(s => s.ActualClosingDate)
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    @Html.LabelFor(s => s.ClosingPrice, new { @class = "control-label" })
-                    <div class="input-group">
-                        <span class="input-group-addon">$</span>
-                        @Html.TextBoxFor(s => s.ClosingPrice, new { style = "width: 132px;", @class = "formatNumber" })
-                    </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.LabelFor(s => s.ClosingPrice, new { @class = "control-label" })
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    @Html.TextBoxFor(s => s.ClosingPrice, new { style = "width: 132px;", @class = "formatNumber" })
                 </div>
             </div>
         </div>
     </div>
+</div>
 }
 
 <div class="modal fade" id="portfholioAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">

@@ -6,7 +6,9 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 {
 	public class NarMemberViewModel : BaseModel
 	{
-		[Display(Name="Company Address Line 1")]
+        //public Inview.Epi.EpiFund.Domain.Enum.AssetType AssetType { get; set; }
+        public string AssetType { get; set; }
+        [Display(Name="Company Address Line 1")]
 		public string AddressLine1
 		{
 			get;
@@ -20,7 +22,9 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 
-		public Guid? AssetId
+        public bool IsPublished { get; set; }
+
+        public Guid? AssetId
 		{
 			get;
 			set;
@@ -172,5 +176,17 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 		{
 			this.IsActive = true;
 		}
+        public int TotalAssests { get; set; }
+		public int TotalPublished { get; set; }
+		public int TotalAssetType_MF { get; set; }
+		public int TotalAssetType_Office { get; set; }
+		public int TotalAssetType_MHP { get; set; }
+		public int TotalAssetType_Retail { get; set; }
+		public int TotalAssetType_Indus { get; set; }
+		public int TotalAssetType_FuelS { get; set; }
+		public int TotalAssetType_Med { get; set; }
+		
+
+
 	}
 }
