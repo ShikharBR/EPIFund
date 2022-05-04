@@ -27,16 +27,17 @@ namespace Inview.Epi.EpiFund.Web
                 return;
             }
 
-            var id = new Guid(context.Request.QueryString["id"]);
+            var id = context.Request.QueryString["id"];
             var name = context.Request.QueryString["name"];
             var width = Convert.ToInt32(context.Request.QueryString["width"]);
             var height = Convert.ToInt32(context.Request.QueryString["height"]);
 
             var fileManager = new FileManager();
-            var bytes = fileManager.GetScaledImageBytes(Domain.Enum.FileType.Image, id, name, width, height);
-
-            context.Response.ContentType = "image/jpg";
-            context.Response.BinaryWrite(bytes);
+            var bytes = fileManager.GetThumbnailByte(name, id, height, width);
+            if (bytes != null) {
+                context.Response.ContentType = "image/jpg";
+                context.Response.BinaryWrite(bytes);
+            }
         }
     }
 }

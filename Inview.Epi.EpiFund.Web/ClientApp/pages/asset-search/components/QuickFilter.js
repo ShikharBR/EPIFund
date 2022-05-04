@@ -244,7 +244,7 @@ export class QuickFilter extends React.Component {
           e('i', { id: "toggleOneLineSummariesIcon", className: 'fa fa-th-large fa-2x', style: { cursor: 'pointer', color: '#777', paddingLeft: '10px', fontSize: "36px" }, onClick: this.handleToggleOneLineSummaries }),
           e('i', { id: "toggleListIcon", className: 'fa fa-list-alt fa-2x', style: { cursor: 'pointer', color: '#777', paddingLeft: '10px', fontSize: "36px" }, onClick: this.handleToggleListClick }),
           e('i', { id: "toggleMapIcon", className: 'fa fa-align-justify fa-2x', style: { cursor: 'pointer', color: '#777', paddingLeft: '10px', fontSize: "36px" }, onClick: this.handleToggleMap }),
-          e('i', { id: "toggleFullScreenIcon", className: '', style: { cursor: 'pointer', paddingLeft: '10px' }, onClick: this.handleToggleFullScreenClick }, (this.state.isFullScreen) ? e('img', { src: 'https://s3-us-west-1.amazonaws.com/dev-uscreonline-content/toggleicons/minimize.png' }) : e('img', { src: 'https://s3-us-west-1.amazonaws.com/dev-uscreonline-content/toggleicons/maximize.png' }))
+          e('i', { id: "toggleFullScreenIcon", className: '', style: { cursor: 'pointer', paddingLeft: '10px' }, onClick: this.handleToggleFullScreenClick }, (this.state.isFullScreen) ? e('img', { src: '/Content/images/minimize.png' }) : e('img', { src: '/Content/images/maximize.png' }))
         )
       )
     )

@@ -9456,7 +9456,7 @@ namespace Inview.Epi.EpiFund.Business
                 string dataString = readStream.ReadToEnd();
 
                 var geoResponse = JsonConvert.DeserializeObject<GeoLocationResponse>(dataString);
-                if (geoResponse.results != null)
+                if (geoResponse.results != null && geoResponse.results.Count > 0)
                 {
                     model.Latitude = geoResponse.results[0].geometry.location.lat;
                     model.Longitude = geoResponse.results[0].geometry.location.lng;
