@@ -2105,13 +2105,63 @@ namespace Inview.Epi.EpiFund.Business
                 .Include(x => x.NARMember).ToList();
 
 
-            var groups = tempMembers.GroupBy(x => x.NarMemberId);
+            var groups = tempMembers.GroupBy(x =>new { x.NarMemberId });
+            string assetType = String.Empty;
+            string setAssetType = string.Empty;
             foreach (var anmGroup in groups)
             {
                 var anm = anmGroup.First();
+                int totalPublished = anmGroup.Where(x => x.Asset.IsPublished).Count();
+
+                int mf=0, retail=0, mhp=0,office=0, industrial=0, ConvenienceStoreFuel=0,med=0;
+
+                foreach (var at in anmGroup.GroupBy(info => info.Asset.AssetType)
+                        .Select(group => new
+                        {
+                            AssetType = group.Key,
+                            Count = group.Count()
+                        })
+                        .OrderBy(x => x.AssetType))
+                {
+                    string atype = at.AssetType.ToString();
+                    switch (atype)
+                    {
+                        case "MultiFamily":
+                            mf = at.Count;
+                            break;
+                        case "Retail":
+                            retail = at.Count;
+                            break;
+                        case "Office":
+                            office = at.Count;
+                            break;
+                        case "Industrial":
+                            industrial = at.Count;
+                            break;
+                        case "MHP":
+                            mhp = at.Count;
+                            break;
+                        case "ConvenienceStoreFuel":
+                            ConvenienceStoreFuel = at.Count;
+                            break;
+                        case "Medical":
+                            med = at.Count;
+                            break;
+                    }
+                }
+                   // assetType = string.Join(",", anmGroup.GroupBy(x =>new { x.AssetId, x.Asset.AssetType }).Count());
+
+                var assetTypeIds = assetType.Split(',');
+                foreach (string id in assetTypeIds)
+                    if (Enum.IsDefined(typeof(AssetType), id))
+                    {
+                        assetType =id.ToString();
+                        setAssetType += string.Join(" ", assetType);
+                    }
                 members.Add(new NarMemberViewModel()
                 {
                     AssetNumbers = string.Join(" ", anmGroup.OrderBy(x => x.Asset.AssetNumber).Select(x => x.Asset.AssetNumber)),
+                    AssetType = string.Join(" ", anmGroup.OrderBy(x => x.Asset.AssetType).Select(x => x.Asset.AssetType)),
                     CellPhoneNumber = anm.NARMember.CellPhoneNumber,
                     FaxNumber = anm.NARMember.FaxNumber,
                     WorkNumber = anm.NARMember.WorkPhoneNumber,
@@ -2130,9 +2180,22 @@ namespace Inview.Epi.EpiFund.Business
                     CommissionAmount = anm.NARMember.CommissionAmount,
                     DateOfCsaConfirm = anm.NARMember.DateOfCsaConfirm,
                     AssetId = anm.AssetId,
-                    AssetNARMemberId = anm.AssetNARMemberId
-                });
+                    AssetNARMemberId = anm.AssetNARMemberId,
+                    TotalAssests = anmGroup.Count(),
+                    TotalPublished = totalPublished,
+                    TotalAssetType_Retail = retail,
+                    TotalAssetType_MF=mf,
+                    TotalAssetType_MHP=mhp,
+                    TotalAssetType_Med=med,
+                    TotalAssetType_Indus=industrial,
+                    TotalAssetType_FuelS=ConvenienceStoreFuel,
+                    TotalAssetType_Office=office
+
+                    //AssetType=string.Join(" ", anmGroup.OrderBy(x=>x.Asset.AssetType).Select(x => x.Asset.AssetType))
+
+                }) ;
             }
+
 
             if (model.ShowActiveOnly)
             {
