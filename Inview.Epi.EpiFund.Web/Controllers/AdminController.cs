@@ -8862,7 +8862,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 
             var list = new List<ExtractedImageModel>();
 			
-			list.AddRange(_pdf.GetBitmapImagesFromPDF(getBytesFromFile(filepath), model.GuidId));
+			//list.AddRange(_pdf.GetBitmapImagesFromPDF(getBytesFromFile(filepath), model.GuidId));
 			list.AddRange(ExtractImagesFromPDF(filepath));
 
 			model.ExtractedImages = list;
