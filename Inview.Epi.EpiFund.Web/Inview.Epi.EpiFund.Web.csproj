@@ -222,6 +222,9 @@
     <Compile Include="Controllers\InvestorsController.cs" />
     <Compile Include="Controllers\PortfolioController.cs" />
     <Compile Include="Controllers\RecordsController.cs" />
+    <Compile Include="Image.ashx.cs">
+      <DependentUpon>Image.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Models\AdminOperatingCompanySearchResultsModel.cs" />
     <Compile Include="Models\AdminHoldingCompanySearchResultsModel.cs" />
     <Compile Include="Models\AdminPortfolioResultsModel.cs" />
@@ -522,6 +525,7 @@
     <Content Include="MBAImportTemplate.xlsx" />
     <Content Include="Content\responsive.scss" />
     <Content Include="PrincipalInvestorImportTemplate.xlsx" />
+    <Content Include="Image.ashx" />
     <None Include="Properties\PublishProfiles\DEVELOPMENT.pubxml" />
     <None Include="Properties\PublishProfiles\MYBOX.pubxml" />
     <None Include="Properties\PublishProfiles\PRODUCTION.pubxml" />
@@ -978,6 +982,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Inview.Epi.EpiFund.Business\Inview.Epi.EpiFund.Business.csproj">
+      <Project>{D0530939-4E6D-4D8A-BAA2-EC8DAF2468B6}</Project>
+      <Name>Inview.Epi.EpiFund.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Inview.Epi.EpiFund.CompositionRoot\Inview.Epi.EpiFund.CompositionRoot.csproj">
       <Project>{e30e1e0b-7f5c-451f-946d-5cfb7f865f5f}</Project>
       <Name>Inview.Epi.EpiFund.CompositionRoot</Name>

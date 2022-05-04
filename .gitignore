@@ -4,3 +4,4 @@ obj
 Logs
 Documents
 packages
+/Inview.Epi.EpiFund.Web/ClientApp/node_modules/.cache/terser-webpack-plugin

@@ -1,3 +1,6 @@
+using Amazon;
+using Amazon.S3;
+using Amazon.S3.Model;
 using Inview.Epi.EpiFund.Domain;
 using Inview.Epi.EpiFund.Domain.Entity;
 using Inview.Epi.EpiFund.Domain.Enum;
@@ -21,6 +24,10 @@ namespace Inview.Epi.EpiFund.Business
 {
 	public class FileManager : IFileManager
 	{
+		private IAmazonS3 _client;
+		private string _documentsBucketName;
+		private string _imagesBucketName;
+
 		private IEPIContextFactory _factory;
 
 		private string _fileRoot = ConfigurationManager.AppSettings["DataRoot"];
@@ -29,10 +36,13 @@ namespace Inview.Epi.EpiFund.Business
 
 		private static List<DirectoryInfo> folders;
 
-		static FileManager()
+		public FileManager()
 		{
-			FileManager.files = new List<FileInfo>();
-			FileManager.folders = new List<DirectoryInfo>();
+			var region = RegionEndpoint.GetBySystemName(ConfigurationManager.AppSettings["bucketRegion"]);
+			_client = new AmazonS3Client(region);
+
+			_documentsBucketName = ConfigurationManager.AppSettings["docsBucketName"];
+			_imagesBucketName = ConfigurationManager.AppSettings["imagesBucketName"];
 		}
 
 		public FileManager(IEPIContextFactory factory)
@@ -707,6 +717,96 @@ namespace Inview.Epi.EpiFund.Business
 				}
 			}
 			return bitmap;
+		}
+
+
+		public byte[] GetScaledImageBytes(FileType fileType, Guid id, string fileName, int maxWidth, int maxHeight)
+		{
+			if (fileType != FileType.Image && fileType != FileType.TempImage)
+			{
+				throw new Exception("fileType must be Image or TempImage");
+			}
+
+			var key = GenerateS3Key(fileType, id.ToString(), fileName);
+
+			var response = GetFile(_imagesBucketName, key);
+
+			var format = GetImageFormat(response.Headers["Content-Type"]);
+			Image image;
+
+			using (Stream responseStream = response.ResponseStream)
+			{
+				image = Image.FromStream(responseStream);
+			}
+
+			var scaledImage = ScaleImage(image, maxWidth, maxHeight);
+			var thumbnailName = String.Format("{0}-thumb{1}", Path.GetFileNameWithoutExtension(fileName), Path.GetExtension(fileName));
+
+			return ConvertImageToBytes(scaledImage, format);
+		}
+
+		private string GenerateS3Key(FileType type, string id, string name)
+		{
+			return (type == FileType.Image) ? String.Format("{0}/{1}", id, name) : String.Format("{0}/{1}", id, name);
+		}
+
+		private GetObjectResponse GetFile(string bucket, string key)
+		{
+			try
+			{
+				var req = new GetObjectRequest()
+				{
+					BucketName = bucket,
+					Key = key,
+				};
+
+				var response = _client.GetObject(req);
+
+				return response;
+			}
+			catch (AmazonS3Exception e)
+			{
+				Console.WriteLine("Error encountered ***. Message:'{0}' when reading an object", e.Message);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Unknown encountered on server. Message:'{0}' when reading an object", e.Message);
+			}
+
+			return null;
+		}
+
+		public ImageFormat GetImageFormat(string contentType)
+		{
+			switch (contentType)
+			{
+				case "image/bmp":
+					return ImageFormat.Bmp;
+				case "image/gif":
+					return ImageFormat.Gif;
+				case "image/x-icon":
+					return ImageFormat.Icon;
+				case "image/jpeg":
+					return ImageFormat.Jpeg;
+				case "image/png":
+					return ImageFormat.Png;
+				case "image/tiff":
+					return ImageFormat.Tiff;
+				default:
+					return null;
+			}
+		}
+		public byte[] ConvertImageToBytes(Image image, ImageFormat format)
+		{
+			byte[] array = new byte[0];
+
+			using (MemoryStream ms = new MemoryStream())
+			{
+				image.Save(ms, format);
+				array = ms.ToArray();
+			}
+
+			return array;
 		}
 	}
 }
