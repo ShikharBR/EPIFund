@@ -20,6 +20,8 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using OfficeOpenXml;
 using OfficeOpenXml.Table.PivotTable;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace Inview.Epi.EpiFund.Business
 {
@@ -2380,7 +2382,7 @@ namespace Inview.Epi.EpiFund.Business
             }
 
             if (!string.IsNullOrEmpty(model.County))
-            {                
+            {
                 assetList = (from a in assetList
                              where a.County != null && a.County.ToLower().Contains(model.County.ToLower())
                              select a).ToList();
@@ -2389,7 +2391,7 @@ namespace Inview.Epi.EpiFund.Business
             {
                 var NARMembersList = context.NarMembers.
                                      Where(a => a.CompanyName.ToLower().Contains(model.ListAgentCompanyName.ToLower())).
-                                     Select(a=>a.NarMemberId).ToList();
+                                     Select(a => a.NarMemberId).ToList();
 
                 var AssetNARMembersList = context.AssetNARMembers.Where(a => NARMembersList.Contains(a.NarMemberId)).Select(a => a.AssetId).ToList();
                 assetList = assetList.Where(a => AssetNARMembersList.Contains(a.AssetId)).ToList();
@@ -2397,7 +2399,7 @@ namespace Inview.Epi.EpiFund.Business
             if (!string.IsNullOrEmpty(model.ListAgentName))
             {
                 var NARMembersList = context.NarMembers.
-                                     Where(a => a.FirstName.ToLower().Contains(model.ListAgentName.ToLower()) 
+                                     Where(a => a.FirstName.ToLower().Contains(model.ListAgentName.ToLower())
                                      || a.LastName.ToLower().Contains(model.ListAgentName.ToLower())).
                                      Select(a => a.NarMemberId).ToList();
 
@@ -2493,7 +2495,7 @@ namespace Inview.Epi.EpiFund.Business
                             ProformaAnnualIncome = a.ProformaAnnualIncome,
                             ProformaNOI = proformaNOI,
                             CashInvestmentApy = a.CashInvestmentApy,
-                            
+
                             capRate = ((pretax / a.CurrentBpo) * 100),
 
                             AskingPrice = a.AskingPrice,
@@ -6278,7 +6280,7 @@ namespace Inview.Epi.EpiFund.Business
             return a;
             //var context = _factory.Create();
             //return context.Assets.Where(a => a.AssetType != AssetType.Other && a.AssetType != AssetType.MHP && a.AssetType != AssetType.MultiFamily).Sum(s => s.AskingPrice);
-            
+
             //IEPIRepository ePIRepository = this._factory.Create();
             //double num = (
             //    from a in ePIRepository.Assets
@@ -7669,7 +7671,7 @@ namespace Inview.Epi.EpiFund.Business
             var asset = context.Assets.SingleOrDefault(w => w.AssetId == asId);
             if (asset != null)
             {
-                asset.Show = false;                
+                asset.Show = false;
                 asset.IsActive = false;
                 context.Save();
 
@@ -9059,8 +9061,8 @@ namespace Inview.Epi.EpiFund.Business
                 var lng = searchModel.Longitude.Value;
                 // Rough conversion of KM to lat/lng distance
                 var radius = Math.Pow(searchModel.SearchRadius.Value / 110.25, 2);
-                //dbEntities = dbEntities.AddSearchParameter(searchModel.SearchRadius.Value > 0,
-                //    a => radius > Math.Pow(a.Latitude.Value - lat, 2) + Math.Pow((a.Longitude.Value - lng) * cosLat, 2));
+                dbEntities = dbEntities.AddSearchParameter(searchModel.SearchRadius.Value > 0,
+                    a => radius > Math.Pow(a.Latitude.Value - lat, 2) + Math.Pow((a.Longitude.Value - lng) * cosLat, 2));
             }
 
             #endregion
@@ -9320,7 +9322,7 @@ namespace Inview.Epi.EpiFund.Business
             var assetHCAddress = context.AssetHCOwnership.Where(s => s.AssetId == assetId)
                                     .OrderByDescending(s => s.CreateDate).Select(a => new AssetOCAddressModel
                                     {
-                                        AddressLine1= a.HoldingCompany.AddressLine1,
+                                        AddressLine1 = a.HoldingCompany.AddressLine1,
                                         AddressLine2 = a.HoldingCompany.AddressLine2,
                                         City = a.HoldingCompany.City,
                                         State = a.HoldingCompany.State,
@@ -9345,8 +9347,8 @@ namespace Inview.Epi.EpiFund.Business
             var context = _factory.Create();
             Guid assetId = new Guid(AssetId);
 
-            var asset = context.Assets.Where(x => x.AssetId== assetId).FirstOrDefault();
-            var assetHC = context.AssetHCOwnership.Where(x => x.AssetId == assetId).OrderByDescending(x=>x.CreateDate).ToList();
+            var asset = context.Assets.Where(x => x.AssetId == assetId).FirstOrDefault();
+            var assetHC = context.AssetHCOwnership.Where(x => x.AssetId == assetId).OrderByDescending(x => x.CreateDate).ToList();
             var assetOC = context.AssetOC.Where(x => x.AssetId == assetId).OrderByDescending(x => x.CreateDate).ToList();
 
             var count = assetHC.Count() > assetOC.Count() ? assetHC.Count() : assetOC.Count();
@@ -9372,14 +9374,14 @@ namespace Inview.Epi.EpiFund.Business
             }
 
 
-            for (int i = 0; i < count; i++) 
+            for (int i = 0; i < count; i++)
             {
                 var item = new ChainOfTitleQuickListModel();
 
                 item.AssetId = assetId;
                 item.AssetName = asset.ProjectName;
                 item.AssetNumber = asset.AssetNumber;
-                item.City= asset.City;
+                item.City = asset.City;
                 item.State = asset.State;
                 item.Type = EnumHelper.GetEnumDescription(asset.AssetType);
                 item.SquareFeet = squareFeet;
@@ -9391,7 +9393,7 @@ namespace Inview.Epi.EpiFund.Business
 
                 item.Portfolio = context.PortfolioAssets.Where(x => x.AssetId == asset.AssetId).Any() ? true : false;
                 item.UserType = context.Users.Where(us => us.UserId == asset.ListedByUserId).FirstOrDefault().UserType;
-                item.ListingStatus = asset.ListingStatus;                
+                item.ListingStatus = asset.ListingStatus;
                 item.BusDriver = asset.Show ? "CA" : "SUS";
 
 
@@ -9420,6 +9422,49 @@ namespace Inview.Epi.EpiFund.Business
             return list;
         }
 
+        public void GetAllAssets()
+        {
+            var context = _factory.Create();
+            var queryBuilder = new List<string>();
 
+            var dbEntities = context.Assets.Where(a => a.IsActive);
+
+            dbEntities.ToList().ForEach(x =>
+            {
+                GetLatLong(x);
+                if (x.Latitude.HasValue && x.Longitude.HasValue)
+                {
+                    context.Entry(x).State = EntityState.Modified;
+                }
+            });
+            context.Save();
+
+        }
+
+        public void GetLatLong(Asset model)
+        {
+            try
+            {
+                string googleAPIKey = "AIzaSyBV3nTZqDmBaifM8IRM_XHMTFeobjfckLw";
+                string address = string.Format("{0},+{1},+{2},+{3}", model.PropertyAddress, model.City, model.Zip, model.State);
+                string api = string.Format("https://maps.googleapis.com/maps/api/geocode/json?address={0},+CA&key={1}", address, googleAPIKey);
+                WebRequest request = HttpWebRequest.Create(api);
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream s = response.GetResponseStream();
+                StreamReader readStream = new StreamReader(s);
+                string dataString = readStream.ReadToEnd();
+
+                var geoResponse = JsonConvert.DeserializeObject<GeoLocationResponse>(dataString);
+                model.Latitude = geoResponse.results[0].geometry.location.lat;
+                model.Longitude = geoResponse.results[0].geometry.location.lng;
+                response.Close();
+                s.Close();
+                readStream.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

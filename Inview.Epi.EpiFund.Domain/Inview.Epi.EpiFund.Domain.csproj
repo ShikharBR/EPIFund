@@ -297,6 +297,7 @@
     <Compile Include="ViewModel\DueDiligenceOptionalModel.cs" />
     <Compile Include="ViewModel\ExtractedImageModel.cs" />
     <Compile Include="ViewModel\GeneralUploadUserFileModel.cs" />
+    <Compile Include="ViewModel\GeoLocationResponse.cs" />
     <Compile Include="ViewModel\HoldingCompanySearchModel.cs" />
     <Compile Include="ViewModel\HoldingCompanyUpdateResult.cs" />
     <Compile Include="ViewModel\ImportUserModel.cs" />

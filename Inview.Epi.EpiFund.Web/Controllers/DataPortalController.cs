@@ -3776,6 +3776,18 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                 Data = new { success = false }
             };
         }
+
+
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public JsonResult GetAllAssets()
+        {
+             _asset.GetAllAssets();
+
+            return new JsonResult();
+        }
         #endregion
     }
 }
