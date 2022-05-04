@@ -28,6 +28,10 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using AutoMapper;
 
+using System.Drawing.Imaging;
+using iTextSharp.text.pdf;
+using System.IO;
+
 
 namespace Inview.Epi.EpiFund.Web.Controllers
 {
@@ -8857,8 +8861,9 @@ namespace Inview.Epi.EpiFund.Web.Controllers
             model.FilePath = filepath;
 
             var list = new List<ExtractedImageModel>();
+			
 			list.AddRange(_pdf.GetBitmapImagesFromPDF(getBytesFromFile(filepath), model.GuidId));
-			//list.AddRange(ExtractImagesfromPDF(filepath));
+			list.AddRange(ExtractImagesFromPDF(filepath));
 
 			model.ExtractedImages = list;
 
@@ -10644,7 +10649,115 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 		#endregion
 
 
-		
+		#region ExtractImagesFromPDF
+		public List<ExtractedImageModel> ExtractImagesFromPDF(string sourcePdf)
+		{
+			List<ExtractedImageModel> lstExtractedImageModel = new List<ExtractedImageModel>();
+			string outputPath = Path.Combine(ConfigurationManager.AppSettings["DataRoot"], "ImportFiles", sourcePdf.TrimEnd('\\').Remove(sourcePdf.LastIndexOf('\\') + 1));
+
+			// NOTE:  This will only get the first image it finds per page.
+			PdfReader pdf = new PdfReader(sourcePdf);
+			RandomAccessFileOrArray raf = new iTextSharp.text.pdf.RandomAccessFileOrArray(sourcePdf);
+
+			try
+			{
+				int i = 0;
+
+				for (int pageNumber = 1; pageNumber <= pdf.NumberOfPages; pageNumber++)
+				{
+					PdfDictionary pg = pdf.GetPageN(pageNumber);
+					PdfDictionary res = (PdfDictionary)PdfReader.GetPdfObject(pg.Get(PdfName.RESOURCES));
+					PdfDictionary xobj = (PdfDictionary)PdfReader.GetPdfObject(res.Get(PdfName.XOBJECT));
+					if (xobj != null)
+					{
+						foreach (PdfName name in xobj.Keys)
+						{
+							PdfObject obj = xobj.Get(name);
+							if (obj.IsIndirect())
+							{
+								PdfDictionary tg = (PdfDictionary)PdfReader.GetPdfObject(obj);
+								PdfName type = (PdfName)PdfReader.GetPdfObject(tg.Get(PdfName.SUBTYPE));
+								if (PdfName.IMAGE.Equals(type))
+								{
+									int XrefIndex = Convert.ToInt32(((PRIndirectReference)obj).Number.ToString(System.Globalization.CultureInfo.InvariantCulture));
+									PdfObject pdfObj = pdf.GetPdfObject(XrefIndex);
+									PdfStream pdfStrem = (PdfStream)pdfObj;
+									byte[] bytes = PdfReader.GetStreamBytesRaw((PRStream)pdfStrem);
+									if ((bytes != null))
+									{
+										try
+										{
+											using (System.IO.MemoryStream memStream = new System.IO.MemoryStream(bytes))
+											{
+												memStream.Position = 0;
+												System.Drawing.Image img = System.Drawing.Image.FromStream(memStream);
+												// must save the file while stream is open.
+												if (!Directory.Exists(outputPath))
+												{
+													Directory.CreateDirectory(outputPath);
+												}
+												string path = Path.Combine(outputPath, String.Format(@"{0}.jpg", Guid.NewGuid()));
+												System.Drawing.Imaging.EncoderParameters parms = new System.Drawing.Imaging.EncoderParameters(1);
+												parms.Param[0] = new System.Drawing.Imaging.EncoderParameter(System.Drawing.Imaging.Encoder.Compression, 0);
+												// GetImageEncoder is found below this method
+												System.Drawing.Imaging.ImageCodecInfo jpegEncoder = GetImageEncoder("JPEG");
+												img.Save(path, jpegEncoder, parms);
+
+												lstExtractedImageModel.Add(new ExtractedImageModel()
+												{
+													Image = path,
+													IsSelected = false,
+													//FileByteArray = _fileManager.ConvertImageToBytes(f),
+													//ThumbnailByte = thumbnail,
+													//ThumbnailByteBase64 = Convert.ToBase64String(thumbnail),
+													OrderTemp = i,
+													Height = img.Height.ToString(),
+													Width = img.Width.ToString()
+												});
+												i++;
+											}
+										}
+										catch (Exception ex)
+										{
+											var msg = ex.Message;
+										}
+									}
+								}
+							}
+
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				var msg = ex.Message;
+			}
+			finally
+			{
+				pdf.Close();
+			}
+			return lstExtractedImageModel;
+		}
+		public static System.Drawing.Imaging.ImageCodecInfo GetImageEncoder(string imageType)
+		{
+			imageType = imageType.ToUpperInvariant();
+
+
+
+			foreach (ImageCodecInfo info in ImageCodecInfo.GetImageEncoders())
+			{
+				if (info.FormatDescription == imageType)
+				{
+					return info;
+				}
+			}
+
+			return null;
+		}
+		#endregion
+
+
 
 	}
 	public class JqueryDatatableParam
