@@ -9427,7 +9427,7 @@ namespace Inview.Epi.EpiFund.Business
             var context = _factory.Create();
             var queryBuilder = new List<string>();
 
-            var dbEntities = context.Assets.Where(a => a.IsActive);
+            var dbEntities = context.Assets.Where(a => a.IsActive && !a.Latitude.HasValue && !a.Longitude.HasValue);
 
             dbEntities.ToList().ForEach(x =>
             {
