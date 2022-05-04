@@ -9436,8 +9436,9 @@ namespace Inview.Epi.EpiFund.Business
                 {
                     context.Entry(x).State = EntityState.Modified;
                 }
+                context.Save();
+
             });
-            context.Save();
 
         }
 
@@ -9455,8 +9456,11 @@ namespace Inview.Epi.EpiFund.Business
                 string dataString = readStream.ReadToEnd();
 
                 var geoResponse = JsonConvert.DeserializeObject<GeoLocationResponse>(dataString);
-                model.Latitude = geoResponse.results[0].geometry.location.lat;
-                model.Longitude = geoResponse.results[0].geometry.location.lng;
+                if (geoResponse.results != null)
+                {
+                    model.Latitude = geoResponse.results[0].geometry.location.lat;
+                    model.Longitude = geoResponse.results[0].geometry.location.lng;
+                }
                 response.Close();
                 s.Close();
                 readStream.Close();
