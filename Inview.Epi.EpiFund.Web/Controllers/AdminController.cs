@@ -2136,13 +2136,13 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			return base.RedirectToAction("ManageMBAMembersImported");
 		}
 
-		[Authorize]
-		public ActionResult DeactivateNARMember(int id)
-		{
-			this._user.DeactiveNarMember(id);
-			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "NAR Member successfully deactivated.");
-			return base.RedirectToAction("ManageNarMembersImported");
-		}
+		//[Authorize]
+		//public ActionResult DeactivateNARMember(int id)
+		//{
+		//	this._user.DeactiveNarMember(id);
+		//	base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "NAR Member successfully deactivated.");
+		//	return base.RedirectToAction("ManageNarMembersImported");
+		//}
 
 		public ActionResult DeactivatePrincipalInvestor(int id)
 		{
@@ -9818,6 +9818,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 
 					OCViewModel.IsActive = true;
 
+
 					this._user.UpdateOperatingCompany(OCViewModel);
 				}
 				else
@@ -10173,7 +10174,18 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			}
 			return base.RedirectToAction("SellerManageAssets", "Investors");
 		}
-
+		public ActionResult ActivateNarMember(int id)
+		{
+			this._asset.ActivateNarMember(id);
+			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "NAR Member successfully Activated.");
+			return base.RedirectToAction("ManageAssetNarMembers", "Admin");
+		}
+		public ActionResult DeActivateNarMember(int id)
+		{
+			this._asset.DeActivateNarMember(id);
+			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "NAR Member successfully DeActivated.");
+			return base.RedirectToAction("ManageAssetNarMembers", "Admin");
+		}
 		public ActionResult PublishAsset(Guid id)
 		{
 			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);

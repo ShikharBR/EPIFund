@@ -2229,7 +2229,7 @@ namespace Inview.Epi.EpiFund.Business
             {
                 members = members.Where(w => !string.IsNullOrEmpty(w.CompanyName) && w.CompanyName.ToLower().Contains(model.CompanyName.ToLower())).ToList();
             }
-
+            members = members.OrderBy(x => x.FirstName).ThenBy(x => x.LastName).ThenBy(x => x.CompanyName).ToList();
             return members;
         }
 

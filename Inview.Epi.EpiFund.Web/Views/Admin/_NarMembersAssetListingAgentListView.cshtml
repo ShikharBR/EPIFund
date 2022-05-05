@@ -25,7 +25,7 @@
                     @*<td>
                             <b><a style="cursor: pointer; color: black" onclick="postForm('@ViewBag.CompanyNameSortParm')">Company Name</a></b>
                         </td>*@
-                    <th><b>Comp.<br />Name</b></th>
+                    <th><b>Company<br />Name</b></th>
                     <!--<td>-->
                     @*<b><a style="cursor: pointer" onclick="postForm('@ViewBag.CompanyNameSortParm')">Carporate Address</a></b>*@
                     <!--<b><a style="cursor: pointer; color: black">Corporate Address</a></b>
@@ -47,7 +47,7 @@
                     @*<b><a style="cursor: pointer; color: black">Manage</a></b>*@
                     <!--</td>-->
                     <th>
-                        <b># Assets</b>
+                        <b>#Assets</b>
                         @*<table>
                                 <tr>
                                     <td># Assets<br />Pub</b></td>
@@ -57,14 +57,15 @@
                     </th>
                     @*<th><b>#A.<br />Pub</b></th>
                         <th><b>#Listed<br />A.#s</b></th>*@
-                    <th><b>#MF</b></th>
-                    <th><b>#MHP</b></th>
-                    <th><b>#Ret</b></th>
-                    <th><b>#Off</b></th>
-                    <th><b>#Med</b></th>
-                    <th><b>#Ind</b></th>
-                    <th><b>#Fue</b></th>
-                    <th><b>#Notes</b></th>
+                    @*<th>Listed<br />Assets</th>*@
+                    <th><b>MF</b></th>
+                    <th><b>MHP</b></th>
+                    <th><b>Ret</b></th>
+                    <th><b>Off</b></th>
+                    <th><b>Med</b></th>
+                    <th><b>Ind</b></th>
+                    <th><b>Auto</b></th>
+                    <th><b>Notes</b></th>
 
                     <th><b>Manage</b></th>
                     <td colspan="2"></td>
@@ -75,9 +76,9 @@
                 {
                     <tr id="@item.NarMemberId">
                         <td style="word-wrap: break-word;">
-                            @*@item.LastName, @item.FirstName*@
-                            <span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
-                                  title="@item.LastName, @item.FirstName">@item.LastName, @item.FirstName</span>
+                            @item.LastName, @item.FirstName
+                            @*<span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
+                                  title="@item.LastName, @item.FirstName">@item.LastName, @item.FirstName</span>*@
                             </td>
                             @*<td>
                                     @item.LastName
@@ -89,9 +90,9 @@
                                 </td>*@
 
                             <td style="word-wrap: break-word; ">
-                                @*@item.CompanyName*@
-                                <span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
-                                      title="@item.CompanyName">@item.CompanyName</span>
+                                @item.CompanyName
+                                @*<span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
+                                      title="@item.CompanyName">@item.CompanyName</span>*@
                                 </td>
                                 <td style="word-wrap: break-word; ">
                                     @*@item.AddressLine1 @item.AddressLine2*@
@@ -99,8 +100,9 @@
                                           title="@item.AddressLine1@item.AddressLine2">@item.AddressLine1@item.AddressLine2</span>
                                     </td>
                                     <td style="word-wrap: break-word; ">
-                                        <span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
-                                              title="@item.City@item.State">@item.City@item.State</span>
+                                        @*<span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
+                                              title="@item.City@item.State"><br />@item.City@item.State</span>*@
+                                        @item.City<br />@item.State
                                         </td>
                                         <td style="word-wrap: break-word; ">
                                             <span style="display: inline-block; width: 40px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
@@ -111,7 +113,7 @@
                                                 <table>
                                                     <tr>
                                                         <td>
-                                                            ToT-@item.TotalAssests
+                                                            Total-@item.TotalAssests
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -121,6 +123,7 @@
                                                     </tr>
                                                 </table>
                                             </td>
+                                           
 
                                             <td>@item.TotalAssetType_MF</td>
 
@@ -133,7 +136,7 @@
                                             <td>@item.TotalAssetType_FuelS</td>
 
 
-                                            <td></td>
+                                            <td>0</td>
 
 
 
@@ -141,20 +144,33 @@
                                             @*<td>
                                                     @(item.IsActive ? "Yes" : "No")
                                                 </td>*@
-                                            <td style="text-align: center;">
-                                                <a href="@Url.Action("UpdateNARMember", "Admin", new { id = @item.NarMemberId })" title="edit">
-                                                    <span class="glyphicon glyphicon-pencil"></span>
-                                                </a>
+                    <td style="text-align: center;">
+                        <a href="@Url.Action("UpdateNARMember", "Admin", new { id = @item.NarMemberId })" title="edit">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
 
-                                                <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
-                                                    <span class="glyphicon glyphicon-arrow-up"></span>
-                                                </a>
+                        @*<a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
+            <span class="glyphicon glyphicon-remove"></span>
+        </a>*@
 
-                                                @*else
-                                                    <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
-                                                        <span class="glyphicon glyphicon-arrow-up"></span>
-                                                    </a>*@
-                                            </td>
+                        @if (@item.IsActive)
+                        {
+                            <a href="@Url.Action("DeActivateNarMember", "Admin", new { id = @item.NarMemberId })" title="Deactive NAR Member" onclick="return confirm('Are you sure you wish to make this deactive NAR Member?');">
+                                <span class="glyphicon glyphicon-arrow-up" style="font-size: 12px; color:blue"></span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("ActivateNarMember", "Admin", new { id = @item.NarMemberId })" title="Active Nar Member" onclick="return confirm('Are you sure you wish to make this active Nar Member?');">
+                                <span class="glyphicon glyphicon-arrow-down" style="font-size: 12px; color:red"></span>
+                            </a>
+                        }
+
+                        @*else
+        <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick="return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
+            <span class="glyphicon glyphicon-arrow-up"></span>
+        </a>*@
+                    </td>
                                             @*<td>@item.AssetType</td>*@
                                             @*<td>
                                                     <a href="@Url.Action("DeleteNarMemberLA", "Admin", new { id = @item.NarMemberId })" title="delete" onclick = "return confirm('Are you sure you wish to delete this Asset Listing Agent?');">
@@ -172,3 +188,34 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
 
 @Html.PagedListPager(Model, page => Url.Action("ManageAssetNarMembers",
     new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+<div class="modal fade" id="portfholioAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewPortfolio">
+
+        </div>
+    </div>
+</div>
+<script>
+
+     function ViewRelatedAssets(PortfolioId, curretntSpan) {
+        //alert(PortfolioId);
+        /*show model popup
+         bind data as per the assets list*/
+        $.ajax({
+            url: "@Url.Action("GetAssetsbyPortfolioId", "Admin")",
+            data: { portfolioId: PortfolioId },
+            success: function (data) {
+                $("#divAssetViewPortfolio").html(data);
+                $("#portfholioAssets").modal('toggle');
+
+               
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
+</script>

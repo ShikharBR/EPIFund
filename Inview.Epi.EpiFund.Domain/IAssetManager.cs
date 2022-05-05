@@ -210,8 +210,9 @@ namespace Inview.Epi.EpiFund.Domain
 
 		void ActivateAsset(string assetId);
 		void DeActivateAsset(string assetId);
-
-        List<AssetHCOwnershipModel> GetAssetHCByAssetId(Guid assetId);
+		void ActivateNarMember(int narMemberId);
+		void DeActivateNarMember(int narMemberId);
+		List<AssetHCOwnershipModel> GetAssetHCByAssetId(Guid assetId);
         void SaveUpdateAssetHC(AssetHCOwnership assetHC);		
 		AssetHCOwnershipModel GetAssetHCByAssetHCOwnershipId(int assetHCOwnershipId);
 
