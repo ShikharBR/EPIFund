@@ -2111,7 +2111,7 @@ namespace Inview.Epi.EpiFund.Business
             foreach (var anmGroup in groups)
             {
                 var anm = anmGroup.First();
-                int totalPublished = anmGroup.Where(x => x.Asset.IsPublished).Count();
+                int totalPublished = anmGroup.Where(x => x.Asset.Show==true).Count();
 
                 int mf=0, retail=0, mhp=0,office=0, industrial=0, ConvenienceStoreFuel=0,med=0;
 
