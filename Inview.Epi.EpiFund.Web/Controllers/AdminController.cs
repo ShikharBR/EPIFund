@@ -28,6 +28,11 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using AutoMapper;
 
+using System.Drawing.Imaging;
+using iTextSharp.text.pdf;
+using System.IO;
+
+
 namespace Inview.Epi.EpiFund.Web.Controllers
 {
 	[LayoutActionFilter]
@@ -2136,13 +2141,13 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			return base.RedirectToAction("ManageMBAMembersImported");
 		}
 
-		[Authorize]
-		public ActionResult DeactivateNARMember(int id)
-		{
-			this._user.DeactiveNarMember(id);
-			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "NAR Member successfully deactivated.");
-			return base.RedirectToAction("ManageNarMembersImported");
-		}
+		//[Authorize]
+		//public ActionResult DeactivateNARMember(int id)
+		//{
+		//	this._user.DeactiveNarMember(id);
+		//	base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "NAR Member successfully deactivated.");
+		//	return base.RedirectToAction("ManageNarMembersImported");
+		//}
 
 		public ActionResult DeactivatePrincipalInvestor(int id)
 		{
@@ -8905,9 +8910,14 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 
             model.Assets = new List<SelectListItem>();
             model.FilePath = filepath;
+
             var list = new List<ExtractedImageModel>();
-            list.AddRange(_pdf.GetBitmapImagesFromPDF(getBytesFromFile(filepath), model.GuidId));
-            model.ExtractedImages = list;
+			
+			//list.AddRange(_pdf.GetBitmapImagesFromPDF(getBytesFromFile(filepath), model.GuidId));
+			list.AddRange(ExtractImagesFromPDF(filepath));
+
+			model.ExtractedImages = list;
+
             foreach (var asset in assets.OrderBy(x => x.AssetNumber))
             {
                 model.Assets.Add(new SelectListItem() { Text = string.Format("ID# {0} --- {1},{2} {3}", asset.AssetNumber, asset.AddressLine1, asset.City, asset.State), Value = asset.AssetId.ToString() });
@@ -9818,6 +9828,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 
 					OCViewModel.IsActive = true;
 
+
 					this._user.UpdateOperatingCompany(OCViewModel);
 				}
 				else
@@ -10173,7 +10184,18 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			}
 			return base.RedirectToAction("SellerManageAssets", "Investors");
 		}
-
+		public ActionResult ActivateNarMember(int id)
+		{
+			this._asset.ActivateNarMember(id);
+			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "NAR Member successfully Activated.");
+			return base.RedirectToAction("ManageAssetNarMembers", "Admin");
+		}
+		public ActionResult DeActivateNarMember(int id)
+		{
+			this._asset.DeActivateNarMember(id);
+			base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "NAR Member successfully DeActivated.");
+			return base.RedirectToAction("ManageAssetNarMembers", "Admin");
+		}
 		public ActionResult PublishAsset(Guid id)
 		{
 			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
@@ -10687,6 +10709,117 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 		}
 
 		#endregion
+
+
+		#region ExtractImagesFromPDF
+		public List<ExtractedImageModel> ExtractImagesFromPDF(string sourcePdf)
+		{
+			List<ExtractedImageModel> lstExtractedImageModel = new List<ExtractedImageModel>();
+			string outputPath = Path.Combine(ConfigurationManager.AppSettings["DataRoot"], "ImportFiles", sourcePdf.TrimEnd('\\').Remove(sourcePdf.LastIndexOf('\\') + 1));
+
+			// NOTE:  This will only get the first image it finds per page.
+			PdfReader pdf = new PdfReader(sourcePdf);
+			RandomAccessFileOrArray raf = new iTextSharp.text.pdf.RandomAccessFileOrArray(sourcePdf);
+
+			try
+			{
+				int i = 0;
+
+				for (int pageNumber = 1; pageNumber <= pdf.NumberOfPages; pageNumber++)
+				{
+					PdfDictionary pg = pdf.GetPageN(pageNumber);
+					PdfDictionary res = (PdfDictionary)PdfReader.GetPdfObject(pg.Get(PdfName.RESOURCES));
+					PdfDictionary xobj = (PdfDictionary)PdfReader.GetPdfObject(res.Get(PdfName.XOBJECT));
+					if (xobj != null)
+					{
+						foreach (PdfName name in xobj.Keys)
+						{
+							PdfObject obj = xobj.Get(name);
+							if (obj.IsIndirect())
+							{
+								PdfDictionary tg = (PdfDictionary)PdfReader.GetPdfObject(obj);
+								PdfName type = (PdfName)PdfReader.GetPdfObject(tg.Get(PdfName.SUBTYPE));
+								if (PdfName.IMAGE.Equals(type))
+								{
+									int XrefIndex = Convert.ToInt32(((PRIndirectReference)obj).Number.ToString(System.Globalization.CultureInfo.InvariantCulture));
+									PdfObject pdfObj = pdf.GetPdfObject(XrefIndex);
+									PdfStream pdfStrem = (PdfStream)pdfObj;
+									byte[] bytes = PdfReader.GetStreamBytesRaw((PRStream)pdfStrem);
+									if ((bytes != null))
+									{
+										try
+										{
+											using (System.IO.MemoryStream memStream = new System.IO.MemoryStream(bytes))
+											{
+												memStream.Position = 0;
+												System.Drawing.Image img = System.Drawing.Image.FromStream(memStream);
+												// must save the file while stream is open.
+												if (!Directory.Exists(outputPath))
+												{
+													Directory.CreateDirectory(outputPath);
+												}
+												string path = Path.Combine(outputPath, String.Format(@"{0}.jpg", Guid.NewGuid()));
+												System.Drawing.Imaging.EncoderParameters parms = new System.Drawing.Imaging.EncoderParameters(1);
+												parms.Param[0] = new System.Drawing.Imaging.EncoderParameter(System.Drawing.Imaging.Encoder.Compression, 0);
+												// GetImageEncoder is found below this method
+												System.Drawing.Imaging.ImageCodecInfo jpegEncoder = GetImageEncoder("JPEG");
+												img.Save(path, jpegEncoder, parms);
+
+												lstExtractedImageModel.Add(new ExtractedImageModel()
+												{
+													Image = path,
+													IsSelected = false,
+													//FileByteArray = _fileManager.ConvertImageToBytes(f),
+													//ThumbnailByte = thumbnail,
+													//ThumbnailByteBase64 = Convert.ToBase64String(thumbnail),
+													OrderTemp = i,
+													Height = img.Height.ToString(),
+													Width = img.Width.ToString()
+												});
+												i++;
+											}
+										}
+										catch (Exception ex)
+										{
+											var msg = ex.Message;
+										}
+									}
+								}
+							}
+
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				var msg = ex.Message;
+			}
+			finally
+			{
+				pdf.Close();
+			}
+			return lstExtractedImageModel;
+		}
+		public static System.Drawing.Imaging.ImageCodecInfo GetImageEncoder(string imageType)
+		{
+			imageType = imageType.ToUpperInvariant();
+
+
+
+			foreach (ImageCodecInfo info in ImageCodecInfo.GetImageEncoders())
+			{
+				if (info.FormatDescription == imageType)
+				{
+					return info;
+				}
+			}
+
+			return null;
+		}
+		#endregion
+
+
 
 	}
 	public class JqueryDatatableParam

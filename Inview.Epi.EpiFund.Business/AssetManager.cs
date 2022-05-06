@@ -7686,7 +7686,26 @@ namespace Inview.Epi.EpiFund.Business
                 }
             }
         }
-
+        public void ActivateNarMember(int narMemberId)
+        {
+            var context = _factory.Create();
+            var narMembers = context.NarMembers.SingleOrDefault(w => w.NarMemberId == narMemberId);
+            if (narMembers != null)
+            {
+                narMembers.IsActive = true;
+                context.Save();
+            }
+        }
+        public void DeActivateNarMember(int narMemberId)
+        {
+            var context = _factory.Create();
+            var narMembers = context.NarMembers.SingleOrDefault(w => w.NarMemberId == narMemberId);
+            if (narMembers != null)
+            {
+                narMembers.IsActive = false;
+                context.Save();
+            }
+        }
         public List<AdminAssetQuickListModel> GetAssetsbyHCId(string HcId)
         {
             var list = new List<AdminAssetQuickListModel>();

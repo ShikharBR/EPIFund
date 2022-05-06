@@ -494,6 +494,7 @@
             });
         }
     }
+    //todo :
 
     function ViewRelatedAssets(PortfolioId, curretntSpan) {
         //alert(PortfolioId);
@@ -519,7 +520,7 @@
 
                 } else {
                     $("#divAssetViewPortfolio").html(data);
-                    $("#portfholioAssets").modal();
+                    $("#portfholioAssets").modal('toggle');
                 }
                 //add comma
                 $('.padNumber').each(function (index) {
