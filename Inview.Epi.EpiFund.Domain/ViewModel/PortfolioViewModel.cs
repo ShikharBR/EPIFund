@@ -377,6 +377,11 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
             get;
             set;
         }
+        public List<AdminAssetQuickListModel> PortfolioAssetList
+        {
+            get;
+            set;
+        }
 
         public int? RowCount
         {

@@ -134,6 +134,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				if (model.PortfolioProperties.Count < 1)
 				{
 					model.PortfolioProperties = this._portfolio.GetPortfolioProperties(model.PortfolioId);
+					model.PortfolioAssetList = this._asset.GetAssetByPortfolioId(model.PortfolioId.ToString());
 				}
 				model.SelectedAssets = (
 					from w in model.Assets
@@ -703,8 +704,12 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			portfolio = this.PopulateAssetList(portfolio);
 			portfolio.isIntial = true;
 			this.SearchAssets(portfolio);
-            if (HttpRuntime.Cache["AssetList"] != null) HttpRuntime.Cache.Remove("AssetList");
-            return base.View(portfolio);
+            if (HttpRuntime.Cache["AssetList"] != null) 
+				HttpRuntime.Cache.Remove("AssetList");
+
+			portfolio.PortfolioAssetList = this._asset.GetAssetByPortfolioId(id.ToString());
+
+			return base.View(portfolio);
 		}
 
 		[Authorize]

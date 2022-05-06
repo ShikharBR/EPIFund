@@ -2375,7 +2375,7 @@ namespace Inview.Epi.EpiFund.Business
             }
 
             if (!string.IsNullOrEmpty(model.County))
-            {                
+            {
                 assetList = (from a in assetList
                              where a.County != null && a.County.ToLower().Contains(model.County.ToLower())
                              select a).ToList();
@@ -2384,7 +2384,7 @@ namespace Inview.Epi.EpiFund.Business
             {
                 var NARMembersList = context.NarMembers.
                                      Where(a => a.CompanyName.ToLower().Contains(model.ListAgentCompanyName.ToLower())).
-                                     Select(a=>a.NarMemberId).ToList();
+                                     Select(a => a.NarMemberId).ToList();
 
                 var AssetNARMembersList = context.AssetNARMembers.Where(a => NARMembersList.Contains(a.NarMemberId)).Select(a => a.AssetId).ToList();
                 assetList = assetList.Where(a => AssetNARMembersList.Contains(a.AssetId)).ToList();
@@ -2392,7 +2392,7 @@ namespace Inview.Epi.EpiFund.Business
             if (!string.IsNullOrEmpty(model.ListAgentName))
             {
                 var NARMembersList = context.NarMembers.
-                                     Where(a => a.FirstName.ToLower().Contains(model.ListAgentName.ToLower()) 
+                                     Where(a => a.FirstName.ToLower().Contains(model.ListAgentName.ToLower())
                                      || a.LastName.ToLower().Contains(model.ListAgentName.ToLower())).
                                      Select(a => a.NarMemberId).ToList();
 
@@ -2488,7 +2488,7 @@ namespace Inview.Epi.EpiFund.Business
                             ProformaAnnualIncome = a.ProformaAnnualIncome,
                             ProformaNOI = proformaNOI,
                             CashInvestmentApy = a.CashInvestmentApy,
-                            
+
                             capRate = ((pretax / a.CurrentBpo) * 100),
 
                             AskingPrice = a.AskingPrice,
@@ -2503,7 +2503,8 @@ namespace Inview.Epi.EpiFund.Business
                             ListingStatus = a.ListingStatus,
                             IsActive = a.IsActive,
 
-                            BusDriver = a.Show ? "CA" : "SUS"
+                            BusDriver = a.Show ? "CA" : "SUS",
+                            IsPaper = a.IsPaper
 
                         });
                     }
@@ -2731,7 +2732,8 @@ namespace Inview.Epi.EpiFund.Business
                         UserType = context.Users.Where(us => us.UserId == a.ListedByUserId).FirstOrDefault().UserType,
                         ListingStatus = a.ListingStatus,
                         IsActive = a.IsActive,
-                        BusDriver = a.Show ? "CA" : "SUS"
+                        BusDriver = a.Show ? "CA" : "SUS",
+                        IsPaper = a.IsPaper
 
                     });
 
@@ -7766,7 +7768,9 @@ namespace Inview.Epi.EpiFund.Business
                         UserType = context.Users.Where(us => us.UserId == a.ListedByUserId).FirstOrDefault().UserType,
                         ListingStatus = a.ListingStatus,
                         IsActive = a.IsActive,
-                        BusDriver = a.Show ? "CA" : "SUS"
+                        BusDriver = a.Show ? "CA" : "SUS",
+                        IsPaper = a.IsPaper
+
 
                     });
 
@@ -7862,7 +7866,9 @@ namespace Inview.Epi.EpiFund.Business
                         UserType = context.Users.Where(us => us.UserId == a.ListedByUserId).FirstOrDefault().UserType,
                         ListingStatus = a.ListingStatus,
                         IsActive = a.IsActive,
-                        BusDriver = a.Show ? "CA" : "SUS"
+                        BusDriver = a.Show ? "CA" : "SUS",
+                        IsPaper = a.IsPaper
+
 
                     });
 
@@ -9389,7 +9395,7 @@ namespace Inview.Epi.EpiFund.Business
                 item.UserType = context.Users.Where(us => us.UserId == asset.ListedByUserId).FirstOrDefault().UserType;
                 item.ListingStatus = asset.ListingStatus;                
                 item.BusDriver = asset.Show ? "CA" : "SUS";
-
+                item.IsPaper = asset.IsPaper;
 
                 if (i < assetHC.Count && assetHC[i] != null)
                 {

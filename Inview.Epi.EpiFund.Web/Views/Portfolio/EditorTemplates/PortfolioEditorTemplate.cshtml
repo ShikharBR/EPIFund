@@ -10,6 +10,7 @@
         color: red;
         font-weight: bold;
     }
+
     .detailsHeading {
         margin: 1px;
         color: #fff;
@@ -18,18 +19,22 @@
         position: relative;
         background-color: #428bca;
     }
+
     .layer1 {
         margin: 0;
         padding: 0;
         width: 300px;
     }
+
     .detailsContent {
         padding: 5px 10px;
         background-color: #fafafa;
     }
+
     #uploadDiv #AssetDocumentType, #uploadDiv #docTitle {
         border: 1px solid #ccc;
     }
+
     #documents .deleteDocUpload {
         background-color: transparent;
         border: 0;
@@ -38,12 +43,15 @@
         padding: 0;
         margin: 0;
     }
+
         #documents .deleteDocUpload:hover, #docManager .deleteDocUpload:focus {
             color: #2a6496;
         }
+
     #documents a {
         display: block;
     }
+
     #documents .description {
         color: #888;
         font-weight: normal;
@@ -52,6 +60,7 @@
         display: block;
         margin: 0;
     }
+
     #documents .docPreviewDiv.row {
         background-color: #f7f7f7;
         width: 100%;
@@ -61,44 +70,71 @@
         border: 1px solid #eee;
         border-radius: 4px;
     }
+
         #documents .docPreviewDiv.row .col-sm-2 {
             text-align: right;
         }
+
     #documents .document-item {
         background-color: #fff;
         border: 0;
         padding: 0;
     }
+
     #documents .document-item-expanded {
         background-color: transparent;
         border: 0;
         padding: 0;
         margin: 0;
     }
+
     #PendingUploads .docPreviewDiv.row {
         background-color: #F1FBED;
         border-color: #d6e9c6;
     }
+
     #documents h4 {
         margin-bottom: 5px;
     }
+
     .progressbar {
         width: 300px;
         height: 20px;
         background-color: transparent;
     }
+
     .progressbarlabel {
         width: 300px;
         height: 20px;
         position: absolute;
         text-align: center;
-       font-size: smaller;
+        font-size: smaller;
     }
+
     .ui-progressbar .ui-progressbar-value {
         height: 20px;
     }
+
     select {
         width: 155px;
+    }
+
+    .AssetName {
+        display: inline-block;
+        width: 50px;
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+    }
+
+    .tab-content {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        padding: 6px;
+        text-align: left;
     }
 </style>
 <!-- Nav tabs -->
@@ -282,83 +318,232 @@
         <h3>Manage Assets</h3>
         <div class="panel panel-default" style="border: 1px solid #B1A795;">
             <div class="panel-heading" style="background-color: #428bca">
-                <span style="font-weight: bold;">@Model.PortfolioProperties.Count() Properties are in this Portfolio</span>
+                <span style="font-weight: bold;">@Model.PortfolioAssetList.Count() Properties are in this Portfolio</span>
             </div>
-            @if (Model.PortfolioProperties.Count() > 0)
+            @if (Model.PortfolioAssetList.Count() > 0)
             {
                 <div class="overflow short-xs">
-                    <table class="table table-striped" id="tbAssets" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+
+                    <table class="table table-striped" id="tbAssets" cellpadding="1" cellspacing="1"
+                           style="font-size: 10px !important; padding: 1px; vertical-align: middle;">
                         <thead>
                             <tr>
-                                <td><b><a style="cursor: pointer">Click to View</a></b></td>
-                                <td>
-                                    <b>Asset Name</b>
-                                </td>
-                                <td>
-                                    <b>Number of Assets</b>
-                                </td>
-                                <td colspan="2"></td>
+                                <th><b>Asset<br />ID#</b></th>
+                                <th><b>City/<br />State</b></th>
+                                <th><b>Asset<br />Type</b></th>
+                                <th><b>#Units<br />Sq.Ft</b></th>
+                                <th><b>Asset<br />Name</b></th>
+                                <th><b>Occ%<br />Mo/Year</b></th>
+                                <th><b>Proforma<br /><a title="Annualized Scheduled Gross Income">SGI</a></b></th>
+                                <th><b>Proforma<br /><a title="Annualized Net Operating Income">NOI</a></b></th>
+                                <th><b><a title="Annual Capitalization Rate"> CAP%</a></b></th>
+                                <th><b>Assm<br />Fin</b></th>
+                                <th><b>Pricing:LP<br />CMA/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a></b></th>
+
+                                <th><span class="glyphicon glyphicon-book" title="Portfolio"></span></th>
+                                <th title="Chain of Title"><img style="width:12px;" src="~/Content/images/tringle.png" /></th>
+                                <th><span class="glyphicon glyphicon-user" title="Users"></span></th>
+                                <th><span class="glyphicon glyphicon-retweet" title="Availability Status"></span></th>
+                                <th title="Who’s Driving the Bus"><img style="height:16px;" src="~/Content/images/bus.png" /></th>
+                                <th>Manage</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @for (int i = 0; i < Model.PortfolioProperties.Count(); i++)
+                            @for (int i = 0; i < @Model.PortfolioAssetList.Count; i++)
                             {
-                                <tr id="@Model.PortfolioProperties[i].AssetId">
-                                    @if (@Model.PortfolioProperties[i].IsActive)
-                                    {
-                                        <td style="width: 200px;">
-                                            <a href="@Url.Action("ViewAsset", "DataPortal", new { id = @Model.PortfolioProperties[i].AssetId, fromManageAssets = true })">
-                                                @Model.PortfolioProperties[i].AssetNumber
-                                            </a>
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td style="width: 200px;">
-                                            <a>@Model.PortfolioProperties[i].AssetNumber</a>
-                                        </td>
-                                    }
-                                    <td style="width: 200px;">
-                                        @Model.PortfolioProperties[i].ProjectName
+                                string username = string.Empty;
+                                string email = string.Empty;
+                                if (!string.IsNullOrEmpty(Model.PortfolioAssetList[i].CreatedBy))
+                                {
+                                    username = Model.PortfolioAssetList[i].CreatedBy.Split('~')[0];
+                                    email = Model.PortfolioAssetList[i].CreatedBy.Split('~')[1];
+                                }
+                                <tr id="@Model.PortfolioAssetList[i].AssetId">
+                                    <td>
+                                        <a href="@Url.Action("ViewAsset", "DataPortal", new { id = Model.PortfolioAssetList[i].AssetId, fromManageAssets = true })">
+                                            @Model.PortfolioAssetList[i].AssetNumber
+                                        </a>
                                     </td>
-                                    <td style="width: 200px;">
-                                        @Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(@Model.PortfolioProperties[i].AssetType)
+                                    <td style="word-wrap: break-word;">
+                                        <div style="margin-bottom: -3px !important;" class="AssetName" title="@Model.PortfolioAssetList[i].City"> @Model.PortfolioAssetList[i].City</div><br />@Model.PortfolioAssetList[i].State
                                     </td>
-
-                                    @if (Model.ControllingUserType != Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin)
-                                    {
-                                        if (@Model.PortfolioProperties[i].IsActive)
+                                    <td>
+                                        @if (Model.PortfolioAssetList[i].IsPaper)
                                         {
-                                            <td style="text-align: center;">
-                                                <a onclick="EditAsset('@Model.PortfolioProperties[i].AssetId')" style="cursor:pointer" title="edit">
-                                                    <span class="glyphicon glyphicon-pencil"></span>
-                                                </a>
-                                            </td>
+                                            @Html.Raw("Note(" + Model.PortfolioAssetList[i].Type + ")")
                                         }
                                         else
                                         {
-                                            <td style="text-align: center;">
-                                                <span title="inaccessible" class="glyphicon glyphicon-ban-circle"></span>
-                                            </td>
+                                            @Model.PortfolioAssetList[i].Type
                                         }
-                                        <td style="text-align: center;">
-                                            <a href="@Url.Action("DeactivateAssetfromPortfolio", "Portfolio", new { id = @Model.PortfolioProperties[i].AssetId, pfId = @Model.PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove the Asset from this Portfolio?');">
-                                                <span class="glyphicon glyphicon-remove"></span>
+                                    </td>
+                                    <td>
+                                        <span class="padNumber">@(Model.PortfolioAssetList[i].SquareFeet > 0 ? Model.PortfolioAssetList[i].SquareFeet.ToString() : Model.PortfolioAssetList[i].NumberOfUnits.ToString())</span>
+                                    </td>
+                                    <td style="word-wrap: break-word;">
+                                        <span class="AssetName" title="@Model.PortfolioAssetList[i].AssetName">@Model.PortfolioAssetList[i].AssetName</span>
+                                    </td>
+                                    <td style="word-wrap: break-word;">
+                                        @(((100 - Model.PortfolioAssetList[i].CurrentVacancyFac) / 100).ToString("P"))
+                                        <br />@(Model.PortfolioAssetList[i].LastReportedOccupancyDate.HasValue ? Model.PortfolioAssetList[i].LastReportedOccupancyDate.Value.ToString("MM/yyyy") :
+                                                    Model.PortfolioAssetList[i].OccupancyDate.HasValue? Model.PortfolioAssetList[i].OccupancyDate.Value.ToString("MM/yyyy"):"")
+                                    </td>
+                                    <td>
+                                        <span class="padmoney">@Model.PortfolioAssetList[i].ProformaAnnualIncome.ToString("C0")</span>
+                                    </td>
+                                    <td>
+                                        <span class="padmoney">@Model.PortfolioAssetList[i].ProformaNOI.ToString("C0")</span>
+                                    </td>
+                                    <td>
+                                        @if (Model.PortfolioAssetList[i].AskingPrice > 0)
+                                        {
+                                            @((Model.PortfolioAssetList[i].CashInvestmentApy / 100).ToString("P2"))
+                                        }
+                                        else
+                                        {
+                                            @((Model.PortfolioAssetList[i].capRate / 100).ToString("P2"))
+                                        }
+                                    </td>
+                                    <td>
+                                        @Model.PortfolioAssetList[i].AssmFin
+                                    </td>
+                                    <td>
+                                        @*askingPrice stand for LP and CurrentBpo stand for Calculated Market Value(CMV)*@
+                                        @{
+                                            if (Model.PortfolioAssetList[i].AskingPrice > 0)
+                                            {
+                                                @Model.PortfolioAssetList[i].AskingPrice.ToString("C0")
+                                                <br /> @Html.Raw("LP")
+                                            }
+                                            else
+                                            {
+                                                @Model.PortfolioAssetList[i].CurrentBpo.ToString("C0")
+                                                <br /> @Html.Raw("CMV")
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model.PortfolioAssetList[i].Portfolio)
+                                        {
+                                            <span class="glyphicon glyphicon-book" title="Portfolio" style="cursor:pointer" onclick="Viewportfolio('@Model.PortfolioAssetList[i].AssetId.ToString()',this)"></span>
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw("--")
+                                        }
+                                    </td>
+                                    <td>
+                                        <span style="cursor:pointer" title="Chain Of Title" onclick="ViewChainOfTitle('@Model.PortfolioAssetList[i].AssetId.ToString()')">
+                                            <img title="Chain of Title" style="width:12px;" src="~/Content/images/tringle.png" />
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var uType = "";
+                                            if (Model.PortfolioAssetList[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin)
+                                            {
+                                                uType = "ICA";
+                                            }
+                                            else if (Model.PortfolioAssetList[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+                                            {
+                                                uType = "CA";
+                                            }
+                                            else if (Model.PortfolioAssetList[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.Investor)
+                                            {
+                                                uType = "PI";
+                                            }
+                                            else if (Model.PortfolioAssetList[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ListingAgent)
+                                            {
+                                                uType = "LA";
+                                            }
+                                            else
+                                            {
+                                                uType = "--";
+                                            }
+                                            @Html.Raw(uType)
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            var lstStatus = "";
+                                            if (Model.PortfolioAssetList[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Available)
+                                            {
+                                                lstStatus = "A";
+                                            }
+                                            else if (Model.PortfolioAssetList[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Pending)
+                                            {
+                                                lstStatus = "P";
+                                            }
+                                            else if (Model.PortfolioAssetList[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldNotClosed
+                                                   || Model.PortfolioAssetList[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldAndClosed
+                                                   || Model.PortfolioAssetList[i].ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Withdrawn)
+                                            {
+                                                lstStatus = "U";
+                                            }
+                                            @Html.Raw(lstStatus)
+                                        }
+                                    </td>
+                                    <td title="Who’s Driving the Bus">
+                                        @if (Model.PortfolioAssetList[i].BusDriver == "SUS")
+                                        {
+                                            <span class="red">@Model.PortfolioAssetList[i].BusDriver</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@Model.PortfolioAssetList[i].BusDriver</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        [<a onclick="EditAsset('@Model.PortfolioAssetList[i].AssetId')" style="cursor:pointer" title="edit">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </a>
+                                        <a href="@Url.Action("AssetEscrowProcess", "Admin", new { id = Model.PortfolioAssetList[i].AssetId })" title="accounting">
+                                            <span class="glyphicon glyphicon-usd"></span>
+                                        </a>
+                                        @if (Model.PortfolioAssetList[i].Show == "Yes")
+                                        {
+                                            <a href="@Url.Action("UnPublishAsset", "Admin", new { id = Model.PortfolioAssetList[i].AssetId })" title="unpublish" onclick="return confirm('Are you sure you wish to unpublish this asset?');">
+                                                <span class="fa fa-lock" style="font-size: 13px; margin-top: 1px;"></span>
                                             </a>
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td colspan="2"></td>
-                                    }
+                                        }
+                                        else
+                                        {
+                                            if (Model.PortfolioAssetList[i].IsActive)
+                                            {
+                                                <a href="@Url.Action("PublishAsset", "Admin", new { id = Model.PortfolioAssetList[i].AssetId })" title="publish" onclick="return confirm('Are you sure you wish to publish this asset?');">
+                                                    <span class="glyphicon glyphicon-globe"></span>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <spane style="cursor:pointer;" title="publish" onclick="alert('You need to active this asset first.');">
+                                                    <span class="glyphicon glyphicon-globe"></span>
+                                                </spane>
+                                            }
+                                        }
+                                        @if (Model.PortfolioAssetList[i].IsActive)
+                                        {
+                                            <a href="@Url.Action("DeActivateAsset", "Admin", new { id = Model.PortfolioAssetList[i].AssetId })" title="deactive asset" onclick="return confirm('Are you sure you wish to make this asset deactive?');">
+                                                <span class="glyphicon glyphicon-arrow-up" style="font-size: 12px; color:blue"></span>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("ActivateAsset", "Admin", new { id = Model.PortfolioAssetList[i].AssetId })" title="active asset" onclick="return confirm('Are you sure you wish to make this asset active?');">
+                                                <span class="glyphicon glyphicon-arrow-down" style="font-size: 12px; color:red"></span>
+                                            </a>
+                                        }
+                                        ]
+                                    </td>
                                 </tr>
+
                             }
                         </tbody>
                     </table>
                 </div>
 
             }
-           
+
             <div class="panel-group" id="accordion">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="background-color: #428bca">
@@ -503,23 +688,23 @@
 
 
         </div>
-       
+
         <div id="divError" style="display:none;color:red;font-weight:bold;" class="validation-summary-errors" data-valmsg-summary="true">
-            
+
         </div>
         <br />
-        
+
         <div class="row">
             <div class="col-sm-12">
                 <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage portfolios page.')) goBack()" value="Cancel" />
                 @*@if (Model.PortfolioId != null || Model.PortfolioId != Guid.Empty)
-                {
-                    <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="updatePortfolio()" />
-                }
-                else if (Model.PortfolioId == null || Model.PortfolioId == Guid.Empty)
-                {
-                    <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="createPortfolio()" />
-                }*@
+                    {
+                        <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="updatePortfolio()" />
+                    }
+                    else if (Model.PortfolioId == null || Model.PortfolioId == Guid.Empty)
+                    {
+                        <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="createPortfolio()" />
+                    }*@
                 <input type="submit" id="btnSubmit" class="btn btn-primary" value="Save Portfolio">
             </div>
         </div>
@@ -542,6 +727,22 @@
 <input type="hidden" value="@(Model.PortfolioId)" data-asset="@(Model.PortfolioId)" id="PortfolioId" name="PortfolioId" />
 <input type="hidden" value="@(Model.GetType())" name="TypeOfAsset" />
 
+<div class="modal fade" id="portfholioAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewPortfolio">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="chainOfTitleAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewchainOfTitle"></div>
+    </div>
+</div>
+
 <script>
     var isValidForm = true;
     var valErrorMSg = '';
@@ -555,7 +756,7 @@
             }
         });
     }
-    
+
     $('#btnSubmit').click(function (e) {
         let isSuccess = formValidation('Primary Info');
         if (!isSuccess) {
@@ -584,7 +785,7 @@
                 onInputBlur("PortfolioName");
             }
 
-            
+
 
             if ($('#SellerTerms').val() === '---') {
                 $('#SellerTerms').css("borderColor", "red");
@@ -620,8 +821,8 @@
                 isValidForm = false;
                 onInputBlur("CapRate");
             }
-             
-            if ($('input[name=MustPortfolioAssetsInclusive]:checked').length <= 0) {           
+
+            if ($('input[name=MustPortfolioAssetsInclusive]:checked').length <= 0) {
                 $('.divMustPortfolioAssetsInclusive').css("border", "1px solid red");
                 valErrorMSg += $("label[for='" + $('#MustPortfolioAssetsInclusive').attr('id') + "']").text() + ' is required <br/>';
                 isValidForm = false;
@@ -676,7 +877,7 @@
         $('#Method').val(method);
         fixNumbers();
     }
-    
+
     function fixNumbers() {
         $("input.formatNumber").each(function (index) {
             $(this).val($(this).val().replace(/,/g, ""));
@@ -689,9 +890,9 @@
     function goBack() {
         window.location.href = "/Portfolio/ManagePortfolios";
     }
-   
 
-    $(document).ready(function () {       
+
+    $(document).ready(function () {
         if (location.hash.substr(0, 2) == "#!") {
             $("a[href='#" + location.hash.substr(2) + "']").tab("show");
         }
@@ -703,13 +904,13 @@
         });
     });
 
-    $('#PricingDisplayOption').change(function () {       
+    $('#PricingDisplayOption').change(function () {
         if ($(this).val() === 'Cmv') {
             $('.CapRate').show();
         }
         else {
             $('.CapRate').hide();
-        }           
+        }
     });
 
     $('#SellerTerms').change(function () {
@@ -731,7 +932,7 @@
             var tabLink = '#' + nextId.attr('id');
 
             $("[href = '" + tabLink + "']").closest('li').addClass('active');
-        }       
+        }
     }
 
     function backTab(button) {
@@ -759,7 +960,7 @@
     });
 
     $('#CapRate').on('blur', function () {
-       
+
         var val = parseFloat($(this).val());
         if (val > 100) {
             $(this).val('');
@@ -767,14 +968,14 @@
         else if ($(this).val() == '' || val == 0) {
             $(this).val('');
         }
-        else if ($(this).val() == '100') {            
+        else if ($(this).val() == '100') {
         }
         else {
             $(this).val(parseFloat($(this).val()).toFixed(2))
         }
 
     });
-   
+
     function fillUserInformation() {
         $.ajax({
             type: "POST",
@@ -995,6 +1196,133 @@
         else {
             $(".divCallforOfferDate").show();
         }
+    }
+
+
+        function padCommas(element, addDollarSign) {
+        // asumming element is span, not input
+        if (element) {
+            if (element.innerHTML.length != 0 && element.innerHTML != null) {
+                var sign = (addDollarSign) ? '$' : '';
+                num = getNumberFromNonInput(element);
+                if (num == null) {
+                    return;
+                }
+
+                str = num.toString();
+                sig = str.split('.');
+
+                tmp = '';
+                len = sig[0].length;
+                for (var i = len, j = 1; i > 0; i--, j++) {
+                    var t = sig[0].substring(i, i - 1);
+                    tmp = t + tmp;
+                    if ((j % 3 == 0) && j != len) {
+                        tmp = ',' + tmp;
+                    }
+                }
+
+                if (sig.length > 1 && sig[1].length) {
+                    tmp += '.' + sig[1].substr(0, 1);
+                    var t = sig[1].substr(1, 1);
+                    if (t) {
+                        tmp += t;
+                    } else {
+                        tmp += '0';
+                    }
+                }
+                str = sign + tmp;
+                element.innerHTML = str;
+            }
+        }
+    }
+
+    function Viewportfolio(assetId, curretntSpan) {
+        if ($("#" + assetId + "_portfolio").length) {
+            $("#" + assetId + "_portfolio").remove();
+        }
+        else {
+            $.ajax({
+                url: "@Url.Action("GetRelatedPortfolio", "Admin")",
+                data: { assetId: assetId },
+                async: false,
+                success: function (data) {
+                    $(curretntSpan).closest('tr').after("<tr id='" + assetId + "_portfolio' >" + data + "</tr>");
+                    //add comma
+                    $('.padNumber').each(function (index) {
+                        padCommas(this, false);
+                    });
+                }
+            });
+        }
+    }
+
+    function Viewportfolio_ChainOfTitle(assetId, curretntSpan) {
+        if ($("#" + assetId + "_portfolio").length) {
+            $("#" + assetId + "_portfolio").remove();
+        }
+        else {
+            $.ajax({
+                url: "@Url.Action("GetRelatedPortfolio", "Admin")",
+                data: { assetId: assetId },
+                success: function (data) {
+                    $(curretntSpan).closest('tr').parent().closest('tr').after("<tr id='" + assetId + "_portfolio' >" + data + "</tr>");
+                    //add comma
+                    $('.padNumber').each(function (index) {
+                        padCommas(this, false);
+                    });
+                }
+            });
+        }
+    }
+
+    function ViewRelatedAssets(PortfolioId, curretntSpan) {
+        //alert(PortfolioId);
+        /*show model popup
+         bind data as per the assets list*/
+        $.ajax({
+            url: "@Url.Action("GetAssetsbyPortfolioId", "Admin")",
+            data: { portfolioId: PortfolioId },
+            success: function (data) {
+
+                debugger;
+                if ($("#divAssetViewchainOfTitle").html().length > 0) {
+                    debugger;
+                    var ID = $(curretntSpan).closest('tr').parent().closest('tr').attr("id");
+
+                    if ($('#' + PortfolioId + '_AssetsinPortfolio').length) {
+                        $('#' + PortfolioId + '_AssetsinPortfolio').remove();
+                    }
+                    else {
+                        data = data.replace("<button", "<button style='display:none;'")
+                        $('#' + ID).after("<tr id='" + PortfolioId + "_AssetsinPortfolio'> <td colspan='18'>" + data + "</td></tr>");
+                    }
+
+                } else {
+                    $("#divAssetViewPortfolio").html(data);
+                    $("#portfholioAssets").modal();
+                }
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
+    function ViewChainOfTitle(assetId) {
+        $.ajax({
+            url: "@Url.Action("GetChainOfTitle", "Admin")",
+            data: { assetId: assetId },
+            success: function (data) {
+                $("#divAssetViewchainOfTitle").html(data);
+                $("#chainOfTitleAssets").modal();
+
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
     }
 
 </script>

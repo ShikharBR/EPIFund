@@ -18,6 +18,7 @@
         });
     });
 </script>
+
 <p>Select checkbox(es) and click "Hold and Notify Registrant" to hold asset for specific registrant (per asset search criteria). Note: Assets without a checkbox is already on hold for another registrant and is waiting action before being published to general database. If you would like to circumvent this process, you may click on the globe icon to publish to the general database.</p>
 
 @Html.PagedListPager(Model, page => Url.Action("ManageAssets",
@@ -83,7 +84,14 @@
                                     <div style="margin-bottom: -3px !important;" class="AssetName" title="@Model[i].City"> @Model[i].City</div><br />@Model[i].State
                                 </td>
                                 <td>
-                                    @Model[i].Type
+                                    @if (Model[i].IsPaper)
+                                    {
+                                        @Html.Raw("Note(" + Model[i].Type + ")")
+                                    }
+                                    else
+                                    {
+                                        @Model[i].Type
+                                    }
                                 </td>
                                 <td>
                                     <span class="padNumber">@(Model[i].SquareFeet > 0 ? Model[i].SquareFeet.ToString() : Model[i].NumberOfUnits.ToString())</span>

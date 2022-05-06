@@ -197,6 +197,12 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			get;
 			set;
 		}
+		public bool IsPaper
+		{
+			get;
+			set;
+		}
+
 
 	}
 	public class PortfolioQuickListModel
@@ -422,6 +428,11 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			set;
 		}
 		public string BusDriver
+		{
+			get;
+			set;
+		}
+		public bool IsPaper
 		{
 			get;
 			set;
