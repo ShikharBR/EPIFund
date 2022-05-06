@@ -51,6 +51,9 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
@@ -72,6 +75,9 @@
     <Reference Include="Flurl.Http, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Flurl.Http.0.6.0\lib\net45\Flurl.Http.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.3, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.3\lib\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="Mandrill, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Mandrill.2.0.3.0\lib\net45\Mandrill.dll</HintPath>
@@ -222,6 +228,9 @@
     <Compile Include="Controllers\InvestorsController.cs" />
     <Compile Include="Controllers\PortfolioController.cs" />
     <Compile Include="Controllers\RecordsController.cs" />
+    <Compile Include="Image.ashx.cs">
+      <DependentUpon>Image.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Models\AdminOperatingCompanySearchResultsModel.cs" />
     <Compile Include="Models\AdminHoldingCompanySearchResultsModel.cs" />
     <Compile Include="Models\AdminPortfolioResultsModel.cs" />
@@ -522,6 +531,7 @@
     <Content Include="MBAImportTemplate.xlsx" />
     <Content Include="Content\responsive.scss" />
     <Content Include="PrincipalInvestorImportTemplate.xlsx" />
+    <Content Include="Image.ashx" />
     <None Include="Properties\PublishProfiles\DEVELOPMENT.pubxml" />
     <None Include="Properties\PublishProfiles\MYBOX.pubxml" />
     <None Include="Properties\PublishProfiles\PRODUCTION.pubxml" />
@@ -978,6 +988,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Inview.Epi.EpiFund.Business\Inview.Epi.EpiFund.Business.csproj">
+      <Project>{D0530939-4E6D-4D8A-BAA2-EC8DAF2468B6}</Project>
+      <Name>Inview.Epi.EpiFund.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Inview.Epi.EpiFund.CompositionRoot\Inview.Epi.EpiFund.CompositionRoot.csproj">
       <Project>{e30e1e0b-7f5c-451f-946d-5cfb7f865f5f}</Project>
       <Name>Inview.Epi.EpiFund.CompositionRoot</Name>

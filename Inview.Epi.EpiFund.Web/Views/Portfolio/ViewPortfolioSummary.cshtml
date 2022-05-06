@@ -320,10 +320,10 @@
                 </tr>
                 <tr>
                     <td>
-                        @Html.LabelFor(s => s.isSubjectToAuction)
+                        @Html.LabelFor(s => s.IsTBDMarket)
                     </td>
                     <td style="text-align: right;">
-                        @if (Model.isSubjectToAuction)
+                        @if (Model.IsTBDMarket??false)
                         {
                             <span class="asset-sold">Yes</span>
                         }
