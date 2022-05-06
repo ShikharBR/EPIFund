@@ -225,12 +225,12 @@ export class QuickFilter extends React.Component {
 
         // Middle row
         e('div', { style: { display: 'flex', justifyContent: 'space-between' } },
+          util.addQSLabel(e(DropdownButton, { label: 'Asset Type', id: 'qsAssetTypeDD', className: "generalinputstyle" }, e(NestedCheckBoxListGroup, { id: 'qs-asset-type-list', inputs: this.props.assetTypes, hasSelectAll: false, mapClass: qfAssetTypeClassMap, handleChange: () => this.props.onSearch() })), "Asset Type"),
           util.addQSLabel(e('input', { type: 'text', maxLength: 19, onKeyUp: util.onMoneyKeyUp, onChange: util.onMoneyChange, className: 'biginput input-group', id: 'txtQuickSearchMin', placeholder: "Minimum", defaultValue: this.props.Min, onBlur: () => this.props.onSearch(), onKeyDown: this.handleEnter }), "Min Price"),
           util.addQSLabel(e('input', { type: 'text', maxLength: 19, onKeyUp: util.onMoneyKeyUp, onChange: util.onMoneyChange, className: 'biginput input-group', id: 'txtQuickSearchMax', placeholder: "Maximum", defaultValue: this.props.Max, onBlur: () => this.props.onSearch(), onKeyDown: this.handleEnter }), "Max Price"),
           util.addQSLabel(this.generatePriceTypeSelect(), "CMV/LP"),
           util.addQSLabel(e('input', { type: 'text', className: 'smallinput', id: 'txtQuickSearchCapRate', placeholder: "Cap Rate", style: { marginLeft: "5px" }, onBlur: () => this.props.onSearch(), onKeyDown: this.handleEnter }), "Min Cap Rate %"),
           util.addQSLabel(e('input', { type: 'text', className: 'smallinput', id: 'txtQuickSearchYearBuilt', placeholder: "Year Built", onBlur: () => this.props.onSearch(), onKeyDown: this.handleEnter }), "Min Year Built"),
-          util.addQSLabel(e(DropdownButton, { label: 'Asset Type', id: 'qsAssetTypeDD', className: "generalinputstyle" }, e(NestedCheckBoxListGroup, { id: 'qs-asset-type-list', inputs: this.props.assetTypes, hasSelectAll: false, mapClass: qfAssetTypeClassMap, handleChange: () => this.props.onSearch() })), "Asset Type")
         ),
 
         // Last Row (saved searches and buttons)

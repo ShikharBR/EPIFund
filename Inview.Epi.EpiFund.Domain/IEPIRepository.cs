@@ -394,6 +394,11 @@ namespace Inview.Epi.EpiFund.Domain
 			set;
 		}
 
+		IDbSet<AssetMessage> AssetMessages { get; set; }
+		IDbSet<FavoriteGroup> FavoriteGroups { get; set; }
 
+		IDbSet<FavoriteGroupAsset> FavoriteGroupAssets { get; set; }
+
+		IDbSet<SavedAssetSearch> SavedAssetSearches { get; set; }
 	}
 }

@@ -265,6 +265,7 @@
     <Compile Include="Models\Emails\PrelimConfirmationUploadToTitleCoPISeller.cs" />
     <Compile Include="Models\HoldingCompanySearchResultsModel.cs" />
     <Compile Include="Models\OperatingCompanySearchResultsModel.cs" />
+    <Compile Include="Models\SavedAssetSearchMinimalViewModel.cs" />
     <Compile Include="Models\SellerAssetSearchResultsModel.cs" />
     <Compile Include="Models\Emails\CompanyUserWelcomeEmail.cs" />
     <Compile Include="Models\Emails\NotificationToReferredPIUploadedAssetEmail.cs" />

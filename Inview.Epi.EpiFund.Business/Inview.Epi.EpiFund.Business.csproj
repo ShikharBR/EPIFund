@@ -146,6 +146,7 @@
     <Compile Include="DocusignServiceManager.cs" />
     <Compile Include="EPIFundEmailService.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="InsuranceManager.cs" />
     <Compile Include="PortfolioManager.cs" />
     <Compile Include="SecurityManager.cs" />

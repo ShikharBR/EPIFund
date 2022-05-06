@@ -232,5 +232,27 @@ namespace Inview.Epi.EpiFund.Domain
 
 		bool CheckHCDate(DateTime date, Guid assetId);
 
+		bool CreateFavoriteGroup(FavoriteGroupViewModel model, int UserId);
+
+		void RemoveFavoriteGroup(Guid FavoriteGroupId, int UserId);
+
+		void UpdateFavoriteGroupInfo(FavoriteGroupAssetsViewModel model);
+
+		List<FavoriteGroupViewModel> GetUserFavoriteGroups(int UserId);
+
+		FavoriteGroupAssetsViewModel GetFavoriteGroupAssets(Guid FavoriteGroupId, int userId);
+
+		bool AddAssetToFavoriteGroup(Guid SelectedFavoriteGroupId, Guid SelectedAssetId);
+
+		void RemoveAssetFromFavoriteGroup(Guid SelectedFavoriteGroupId, Guid SelectedAssetId);
+
+		void SaveAssetSearch(SavedAssetSearchViewModel model);
+
+		void DeleteSavedAssetSearch(Guid savedAssetSearchId, int userId);
+
+		SavedAssetSearchViewModel GetSavedSearch(Guid id, int userId);
+
+		List<SavedAssetSearchViewModel> GetSavedSearchesForUser(int userId);
+
 	}
 }
