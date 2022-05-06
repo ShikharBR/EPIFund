@@ -2111,7 +2111,7 @@ namespace Inview.Epi.EpiFund.Business
             foreach (var anmGroup in groups)
             {
                 var anm = anmGroup.First();
-                int totalPublished = anmGroup.Where(x => x.Asset.IsPublished).Count();
+                int totalPublished = anmGroup.Where(x => x.Asset.Show==true).Count();
 
                 int mf=0, retail=0, mhp=0,office=0, industrial=0, ConvenienceStoreFuel=0,med=0;
 
@@ -2229,7 +2229,7 @@ namespace Inview.Epi.EpiFund.Business
             {
                 members = members.Where(w => !string.IsNullOrEmpty(w.CompanyName) && w.CompanyName.ToLower().Contains(model.CompanyName.ToLower())).ToList();
             }
-
+            members = members.OrderBy(x => x.FirstName).ThenBy(x => x.LastName).ThenBy(x => x.CompanyName).ToList();
             return members;
         }
 
