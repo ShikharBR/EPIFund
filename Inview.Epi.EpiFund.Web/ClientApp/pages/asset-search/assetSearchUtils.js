@@ -838,6 +838,9 @@ export const util = {
         if ($(item)[0].dataset.id != util.global.selectedAssetType) {
           $(item)[0].checked = false;
         }
+        else{
+          $(item)[0].checked = true;
+        }
       });
     }
     // On any checkbox change, check to see what's been selected and then update the Asset Type box label

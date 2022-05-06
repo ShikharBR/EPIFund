@@ -277,7 +277,9 @@ async function getAssetsFromCookie() {
 async function getAssetsFromUserLocation() {
   let response;
   var searchCriteria = {};
+
   if (navigator.geolocation) {
+
     navigator.geolocation.getCurrentPosition(async function (position) {
       var searchCriteria = {
         Latitude: position.coords.latitude,
@@ -360,6 +362,7 @@ async function init() {
     var savedSearchId = util.getUrlParam('savedSearchId', 'empty');
     var filterId = util.getUrlParam('filter', 'empty');
     util.global.savedSearchTabId = savedSearchId;
+    
     util.global.selectedAssetType = filterId;
     if (await util.isLoggedIn()) {
 

@@ -63,7 +63,7 @@ export class OneLineSummariesComponent extends Component {
     var data = util.getDataForDataTable();
     // Initialize the DataTable
     var table = $('#assetSearchOneLineSummariesTable').DataTable({
-      searching: false,
+      searching: true,
       info: false,
       paging: true,
       ordering: true,

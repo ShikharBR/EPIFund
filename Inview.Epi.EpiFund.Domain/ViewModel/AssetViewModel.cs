@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web.Mvc;
+using PageCategoryEnum =Inview.Epi.EpiFund.Domain.ViewModel.PageCategory;
+using PageCategoryAtt = Inview.Epi.EpiFund.Domain.Attributes.PageCategory;
 
 namespace Inview.Epi.EpiFund.Domain.ViewModel
 {
@@ -1186,7 +1188,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 		}
 
 		[Display(Name="Listed By User")]
-		public int ListedByUserId
+		public int? ListedByUserId
 		{
 			get;
 			set;
@@ -3049,5 +3051,24 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 		}
 
 		//added new logic of Chain of title END
+
+		[Display(Name = "Is Property in Pending Foreclosure?")]
+		public bool IsPendingForeclosure { get; set; }
+
+		public bool IsPublished { get; set; }
+
+		public float? Latitude { get; set; }
+
+		public float? Longitude { get; set; }
+
+		public double NOI { get; set; }
+
+		[Required]
+		[PageCategoryAtt(PageCategoryEnum.BasicInfo)]
+		[Display(Name = "Has Listing Agent")]
+		public bool HasListingAgent { get; set; }
+
+		public List<AssetMessage> AssetMessages { get; set; }
+
 	}
 }

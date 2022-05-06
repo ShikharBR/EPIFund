@@ -223,7 +223,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			{
 				AssetViewModel asset = this._asset.GetAsset(id, false);
 				AssetDescriptionModel assetByAssetId = this._asset.GetAssetByAssetId(id);
-				UserModel userById = this._user.GetUserById(asset.ListedByUserId);
+				UserModel userById = this._user.GetUserById(asset.ListedByUserId.Value);
 				string empty = string.Empty;
 				if (asset.AssetTaxParcelNumbers != null)
 				{
@@ -516,7 +516,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			{
 				AssetViewModel asset = this._asset.GetAsset(id, false);
 				AssetDescriptionModel assetByAssetId = this._asset.GetAssetByAssetId(id);
-				UserModel userById = this._user.GetUserById(asset.ListedByUserId);
+				UserModel userById = this._user.GetUserById(asset.ListedByUserId.Value);
 				ConfirmationPISellerAssetIsUnPublishedEmail confirmationPISellerAssetIsUnPublishedEmail = new ConfirmationPISellerAssetIsUnPublishedEmail()
 				{
 					DatePublished = DateTime.Now,

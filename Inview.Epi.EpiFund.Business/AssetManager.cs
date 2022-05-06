@@ -20,6 +20,8 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using OfficeOpenXml;
 using OfficeOpenXml.Table.PivotTable;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace Inview.Epi.EpiFund.Business
 {
@@ -1943,7 +1945,7 @@ namespace Inview.Epi.EpiFund.Business
                             isActive = true,
                             NumberofAssets = 1,
                             PortfolioName = model.NewPFName,
-                            UserId = model.ListedByUserId
+                            UserId = model.ListedByUserId.HasValue ? model.ListedByUserId.Value : 0
                         };
                         context.Portfolios.Add(pf);
                         context.Save();
@@ -2380,7 +2382,7 @@ namespace Inview.Epi.EpiFund.Business
             }
 
             if (!string.IsNullOrEmpty(model.County))
-            {                
+            {
                 assetList = (from a in assetList
                              where a.County != null && a.County.ToLower().Contains(model.County.ToLower())
                              select a).ToList();
@@ -2389,7 +2391,7 @@ namespace Inview.Epi.EpiFund.Business
             {
                 var NARMembersList = context.NarMembers.
                                      Where(a => a.CompanyName.ToLower().Contains(model.ListAgentCompanyName.ToLower())).
-                                     Select(a=>a.NarMemberId).ToList();
+                                     Select(a => a.NarMemberId).ToList();
 
                 var AssetNARMembersList = context.AssetNARMembers.Where(a => NARMembersList.Contains(a.NarMemberId)).Select(a => a.AssetId).ToList();
                 assetList = assetList.Where(a => AssetNARMembersList.Contains(a.AssetId)).ToList();
@@ -2397,7 +2399,7 @@ namespace Inview.Epi.EpiFund.Business
             if (!string.IsNullOrEmpty(model.ListAgentName))
             {
                 var NARMembersList = context.NarMembers.
-                                     Where(a => a.FirstName.ToLower().Contains(model.ListAgentName.ToLower()) 
+                                     Where(a => a.FirstName.ToLower().Contains(model.ListAgentName.ToLower())
                                      || a.LastName.ToLower().Contains(model.ListAgentName.ToLower())).
                                      Select(a => a.NarMemberId).ToList();
 
@@ -2493,7 +2495,7 @@ namespace Inview.Epi.EpiFund.Business
                             ProformaAnnualIncome = a.ProformaAnnualIncome,
                             ProformaNOI = proformaNOI,
                             CashInvestmentApy = a.CashInvestmentApy,
-                            
+
                             capRate = ((pretax / a.CurrentBpo) * 100),
 
                             AskingPrice = a.AskingPrice,
@@ -6278,7 +6280,7 @@ namespace Inview.Epi.EpiFund.Business
             return a;
             //var context = _factory.Create();
             //return context.Assets.Where(a => a.AssetType != AssetType.Other && a.AssetType != AssetType.MHP && a.AssetType != AssetType.MultiFamily).Sum(s => s.AskingPrice);
-            
+
             //IEPIRepository ePIRepository = this._factory.Create();
             //double num = (
             //    from a in ePIRepository.Assets
@@ -7669,7 +7671,7 @@ namespace Inview.Epi.EpiFund.Business
             var asset = context.Assets.SingleOrDefault(w => w.AssetId == asId);
             if (asset != null)
             {
-                asset.Show = false;                
+                asset.Show = false;
                 asset.IsActive = false;
                 context.Save();
 
@@ -9078,8 +9080,8 @@ namespace Inview.Epi.EpiFund.Business
                 var lng = searchModel.Longitude.Value;
                 // Rough conversion of KM to lat/lng distance
                 var radius = Math.Pow(searchModel.SearchRadius.Value / 110.25, 2);
-                //dbEntities = dbEntities.AddSearchParameter(searchModel.SearchRadius.Value > 0,
-                //    a => radius > Math.Pow(a.Latitude.Value - lat, 2) + Math.Pow((a.Longitude.Value - lng) * cosLat, 2));
+                dbEntities = dbEntities.AddSearchParameter(searchModel.SearchRadius.Value > 0,
+                    a => radius > Math.Pow(a.Latitude.Value - lat, 2) + Math.Pow((a.Longitude.Value - lng) * cosLat, 2));
             }
 
             #endregion
@@ -9089,7 +9091,7 @@ namespace Inview.Epi.EpiFund.Business
                .Select(col => new
                {
                    TotalAssets = col.Count(),
-                   PublishAssets = col.Where(a => a.IsPublished).Count(),
+                   PublishAssets = col.Where(a => a.Show).Count(),
                    TotalAssetValue = col.Sum(a => (long)(a.AskingPrice > 0 ? a.AskingPrice : a.CurrentBpo)),
                    MultiFamUnits = col.Sum((a => (a.AssetType == AssetType.MultiFamily || a.AssetType == AssetType.MHP ? 1 : 0))),
                    SquareFeet = col.Count() <= 0 ? 0 : col.Sum(a => a.AssetType != AssetType.MHP ? a.SquareFeet : 0)
@@ -9339,7 +9341,7 @@ namespace Inview.Epi.EpiFund.Business
             var assetHCAddress = context.AssetHCOwnership.Where(s => s.AssetId == assetId)
                                     .OrderByDescending(s => s.CreateDate).Select(a => new AssetOCAddressModel
                                     {
-                                        AddressLine1= a.HoldingCompany.AddressLine1,
+                                        AddressLine1 = a.HoldingCompany.AddressLine1,
                                         AddressLine2 = a.HoldingCompany.AddressLine2,
                                         City = a.HoldingCompany.City,
                                         State = a.HoldingCompany.State,
@@ -9364,8 +9366,8 @@ namespace Inview.Epi.EpiFund.Business
             var context = _factory.Create();
             Guid assetId = new Guid(AssetId);
 
-            var asset = context.Assets.Where(x => x.AssetId== assetId).FirstOrDefault();
-            var assetHC = context.AssetHCOwnership.Where(x => x.AssetId == assetId).OrderByDescending(x=>x.CreateDate).ToList();
+            var asset = context.Assets.Where(x => x.AssetId == assetId).FirstOrDefault();
+            var assetHC = context.AssetHCOwnership.Where(x => x.AssetId == assetId).OrderByDescending(x => x.CreateDate).ToList();
             var assetOC = context.AssetOC.Where(x => x.AssetId == assetId).OrderByDescending(x => x.CreateDate).ToList();
 
             var count = assetHC.Count() > assetOC.Count() ? assetHC.Count() : assetOC.Count();
@@ -9391,14 +9393,14 @@ namespace Inview.Epi.EpiFund.Business
             }
 
 
-            for (int i = 0; i < count; i++) 
+            for (int i = 0; i < count; i++)
             {
                 var item = new ChainOfTitleQuickListModel();
 
                 item.AssetId = assetId;
                 item.AssetName = asset.ProjectName;
                 item.AssetNumber = asset.AssetNumber;
-                item.City= asset.City;
+                item.City = asset.City;
                 item.State = asset.State;
                 item.Type = EnumHelper.GetEnumDescription(asset.AssetType);
                 item.SquareFeet = squareFeet;
@@ -9410,7 +9412,7 @@ namespace Inview.Epi.EpiFund.Business
 
                 item.Portfolio = context.PortfolioAssets.Where(x => x.AssetId == asset.AssetId).Any() ? true : false;
                 item.UserType = context.Users.Where(us => us.UserId == asset.ListedByUserId).FirstOrDefault().UserType;
-                item.ListingStatus = asset.ListingStatus;                
+                item.ListingStatus = asset.ListingStatus;
                 item.BusDriver = asset.Show ? "CA" : "SUS";
 
 
@@ -9439,6 +9441,861 @@ namespace Inview.Epi.EpiFund.Business
             return list;
         }
 
+        /// <summary>
+        /// Creates a favorite group
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="UserId"></param>
+        public bool CreateFavoriteGroup(FavoriteGroupViewModel model, int UserId)
+        {
+            IEPIRepository ePIRepository = this._factory.Create();
+            bool duplicateName = false;
 
+            // Get this user's favorite groups
+            List<FavoriteGroup> list = (
+                from x in ePIRepository.FavoriteGroups
+                where x.UserId == UserId
+                orderby x.FavoriteGroupName
+                select x).ToList<FavoriteGroup>();
+
+            // Remove all spaces then check if data is alphanumeric
+            string deSpacedName = model.FavoriteGroupName.Replace(" ", "");
+            if (deSpacedName.All(char.IsLetterOrDigit))
+            {
+                string cleanedString = Regex.Replace(model.FavoriteGroupName, @"\s+", " ");  // Remove extra spaces
+                string cleanedStringLowerCase = cleanedString.ToLower().Trim();
+
+                // Check to see if a group with the same name already exists
+                foreach (FavoriteGroup favGrp in list)
+                {
+                    if (favGrp.FavoriteGroupName.ToLower() == cleanedStringLowerCase)
+                    {
+                        duplicateName = true;
+                    }
+                }
+
+                // If there are no duplicates, go ahead and create the new group
+                if (!duplicateName)
+                {
+                    // Create a new favorite group based on model data
+                    FavoriteGroup favoriteGroup = new FavoriteGroup()
+                    {
+                        FavoriteGroupId = Guid.NewGuid(),
+                        FavoriteGroupName = cleanedString.Trim(),
+                        FavoriteGroupDescription = model.FavoriteGroupDescription
+                    };
+                    favoriteGroup.UserId = UserId;
+
+                    // Update the database
+                    ePIRepository.FavoriteGroups.Add(favoriteGroup);
+                    ePIRepository.Save();
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// Removes a favorite group
+        /// </summary>
+        /// <param name="FavoriteGroupId"></param>
+        /// <param name="UserId"></param>
+        public void RemoveFavoriteGroup(Guid FavoriteGroupId, int UserId)
+        {
+            IEPIRepository ePIRepository = this._factory.Create();
+
+            // Select the desired favorite group
+            FavoriteGroup favoriteGroup = (
+                from x in ePIRepository.FavoriteGroups
+                where x.FavoriteGroupId == FavoriteGroupId && x.UserId == UserId
+                select x).FirstOrDefault<FavoriteGroup>();
+
+            // Update the database
+            if (favoriteGroup != null)
+            {
+                ePIRepository.Entry(favoriteGroup).State = EntityState.Deleted;
+                ePIRepository.Save();
+            }
+        }
+
+
+        /// <summary>
+        /// Updates a favorite group's name and description
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="UserId"></param>
+        public void UpdateFavoriteGroupInfo(FavoriteGroupAssetsViewModel model)
+        {
+            IEPIRepository ePIRepository = this._factory.Create();
+
+            // Select the desired favorite group
+            FavoriteGroup favoriteGroup = (
+                from x in ePIRepository.FavoriteGroups
+                where x.FavoriteGroupId == model.FavoriteGroupId
+                select x).FirstOrDefault<FavoriteGroup>();
+
+            // Update the name and description
+            favoriteGroup.FavoriteGroupName = model.FavoriteGroupName;
+            favoriteGroup.FavoriteGroupDescription = model.FavoriteGroupDescription;
+
+            if (favoriteGroup != null)
+            {
+                ePIRepository.Entry(favoriteGroup).State = EntityState.Modified;
+                ePIRepository.Save();
+            }
+        }
+
+
+        /// <summary>
+        /// Gets a user's favorite groups
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public List<FavoriteGroupViewModel> GetUserFavoriteGroups(int UserId)
+        {
+            IEPIRepository ePIRepository = this._factory.Create();
+            List<FavoriteGroupViewModel> favoriteGroupList = new List<FavoriteGroupViewModel>();
+            AssetImage favGroupAssetImage = new AssetImage();
+            Guid favGroupAssetImageAssetId = new Guid();
+            Random rnd = new Random();
+
+            // Select the desired favorite group based on the UserId
+            List<FavoriteGroup> list = (
+                from x in ePIRepository.FavoriteGroups
+                where x.UserId == UserId
+                orderby x.FavoriteGroupName
+                select x).ToList<FavoriteGroup>();
+
+            // Retrieve the number of assets in each favorite group and an image to represent that group
+            foreach (FavoriteGroup b in list)
+            {
+                AssetViewModel assetViewModel = new AssetViewModel();
+
+                List<FavoriteGroupAsset> favGroupAssetList = (
+                    from x in ePIRepository.FavoriteGroupAssets
+                    where x.FavoriteGroupId == b.FavoriteGroupId
+                    select x).ToList<FavoriteGroupAsset>();
+
+                // Codeblock to get the first legit random image
+                if (favGroupAssetList.Count > 0)
+                {
+                    int i = 0;
+                    do
+                    {
+                        // Get asset data
+                        assetViewModel = GetAssetsData(favGroupAssetList[i].AssetId);
+
+                        // If there are images
+                        if (assetViewModel != null && assetViewModel.Images.Count > 0)
+                        {
+                            // Get a random image
+                            favGroupAssetImage = assetViewModel.Images[rnd.Next(0, assetViewModel.Images.Count)];
+                            favGroupAssetImageAssetId = assetViewModel.AssetId;
+                        }
+
+                        // Repeat until we run out of assets or until an image is retrieved
+                    } while (++i < favGroupAssetList.Count || favGroupAssetImage == null);
+
+                    b.FavoriteGroupImage = favGroupAssetImage;
+                    b.FavoriteGroupImageAssetId = favGroupAssetImageAssetId;
+                }
+                else
+                {
+                    // If no assets, no image
+                    b.FavoriteGroupImage = null;
+                    b.FavoriteGroupImageAssetId = Guid.Empty;
+                }
+
+                b.NumberOfFavoriteGroupAssets = favGroupAssetList.Count;
+            }
+
+            // Convert entity data to model data as a list
+            list.ForEach((FavoriteGroup a) => favoriteGroupList.Add(new FavoriteGroupViewModel()
+            {
+                FavoriteGroupId = a.FavoriteGroupId,
+                FavoriteGroupName = a.FavoriteGroupName,
+                FavoriteGroupDescription = a.FavoriteGroupDescription,
+                NumberOfFavoriteGroupAssets = a.NumberOfFavoriteGroupAssets,
+                FavoriteGroupImage = a.FavoriteGroupImage,
+                FavoriteGroupImageAssetId = a.FavoriteGroupImageAssetId
+            }));
+
+            return favoriteGroupList;
+        }
+
+
+        /// <summary>
+        /// Gets a user's favorite group assets
+        /// </summary>
+        /// <param name="FavoriteGroupId"></param>
+        /// <returns></returns>
+        public FavoriteGroupAssetsViewModel GetFavoriteGroupAssets(Guid FavoriteGroupId, int userId)
+        {
+            IEPIRepository ePIRepository = this._factory.Create();
+            FavoriteGroupAssetsViewModel favoriteGroupAssetsViewModel = new FavoriteGroupAssetsViewModel();
+            favoriteGroupAssetsViewModel.FavoriteGroupAssetsDynamicViewModel = new List<AssetDynamicAssetViewModel>();
+            List<AssetViewModel> assetViewModels = new List<AssetViewModel>();
+
+            // Select favorite group assets based on favorite group id
+            List<FavoriteGroupAsset> favoriteGroupAssetList = (
+                from x in ePIRepository.FavoriteGroupAssets
+                where x.FavoriteGroupId == FavoriteGroupId
+                select x).ToList<FavoriteGroupAsset>();
+
+            // Store a list of AssetViewModels based on AssetIds associated with this FavoriteGroupId
+            foreach (FavoriteGroupAsset favoriteGroupAsset in favoriteGroupAssetList)
+            {
+                assetViewModels.Add(this.GetAssetsData(favoriteGroupAsset.AssetId));
+            }
+
+            // Select favorite group based on favorite group id
+            FavoriteGroup favoriteGroup = (
+                from x in ePIRepository.FavoriteGroups
+                where x.FavoriteGroupId == FavoriteGroupId
+                select x).FirstOrDefault<FavoriteGroup>();
+
+            // Get the NOI
+            assetViewModels = CalculateAssetListNOI(assetViewModels);
+
+            // Get the quick list information
+            MultiFamilyAssetViewModel mfAsset = new MultiFamilyAssetViewModel();
+            CommercialAssetViewModel cAsset = new CommercialAssetViewModel();
+
+            // Get list of portfolios
+            List<PortfolioAsset> PortfolioAssetList = new List<PortfolioAsset>();
+            PortfolioAssetList = ePIRepository.PortfolioAssets.ToList();
+
+            for (int i = 0; i < assetViewModels.Count; i++)
+            {
+                int units = 0;
+                string squarefeet = "";
+                string occPercentage = "";
+                string priceChange = "false";
+                DateTime? occDate = null;
+                DateTime? offersDate = assetViewModels[i].CallforOffersDate;
+                DateTime? auctionDate = assetViewModels[i].AuctionDate;
+                bool offersDateSoon = false;
+                bool disableLOIFPA = false;
+
+                // Check if asset is part of Portfolio
+                AssetViewModel avm = assetViewModels[i];
+                PortfolioAsset assetPF = PortfolioAssetList.Where(x => x.AssetId == avm.AssetId).FirstOrDefault();
+                Portfolio _portfolio = new Portfolio();
+                if (assetPF != null)
+                {
+                    _portfolio = ePIRepository.Portfolios.Where(x => x.PortfolioId == assetPF.PortfolioId && x.UserId == userId).FirstOrDefault();
+                }
+                else
+                {
+                    _portfolio = null;
+                }
+
+                // Indicator requested to display to the user if the price has changed since favorite asset first added
+                if (assetViewModels[i].AskingPrice > 0)
+                {
+                    if (assetViewModels[i].AskingPrice > favoriteGroupAssetList[i].PriceWhenAdded)
+                    {
+                        priceChange = "increase";
+                    }
+                    else if (assetViewModels[i].AskingPrice < favoriteGroupAssetList[i].PriceWhenAdded)
+                    {
+                        priceChange = "decrease";
+                    }
+                    else
+                    {
+                        priceChange = "false";
+                    }
+                }
+                else
+                {
+                    if (assetViewModels[i].CurrentBpo > favoriteGroupAssetList[i].PriceWhenAdded)
+                    {
+                        priceChange = "increase";
+                    }
+                    else if (assetViewModels[i].CurrentBpo < favoriteGroupAssetList[i].PriceWhenAdded)
+                    {
+                        priceChange = "decrease";
+                    }
+                    else
+                    {
+                        priceChange = "false";
+                    }
+                }
+
+                //If the offers date is within 30 days from the present date and hasn't already passed
+                if (offersDate.HasValue && offersDate.Value < DateTime.Now.AddDays(30) && offersDate.Value > DateTime.Now)
+                {
+                    offersDateSoon = true;
+                }
+
+                // Disable LOIFPA if an auction date exists we will display LOIFPA
+                if (auctionDate.HasValue)
+                {
+                    disableLOIFPA = true;
+                }
+
+                if (assetViewModels[i].GetType() == typeof(MultiFamilyAssetViewModel))
+                {
+                    mfAsset = (assetViewModels[i] as MultiFamilyAssetViewModel);
+                    units = mfAsset.TotalUnits;
+                    units += mfAsset.NumberRentableSpace != null ? (int)mfAsset.NumberRentableSpace : 0;
+                    units += mfAsset.NumberNonRentableSpace != null ? (int)mfAsset.NumberNonRentableSpace : 0;
+                    squarefeet = mfAsset.SquareFeet.ToString("N0");
+                    occPercentage = ((100 - mfAsset.CurrentVacancyFac) / 100).ToString("P2");
+                    occDate = mfAsset.LastReportedOccupancyDate;
+                }
+                else if (assetViewModels[i].GetType() == typeof(CommercialAssetViewModel))
+                {
+                    cAsset = (assetViewModels[i] as CommercialAssetViewModel);
+                    units = cAsset.NumberOfRentableSuites;
+                    squarefeet = cAsset.SquareFeet.ToString("N0");
+                    occPercentage = Math.Round(cAsset.OccupancyPercentage, 2).ToString() + "%";
+                    occDate = cAsset.LastReportedOccupancyDate;
+                }
+                else
+                {
+                    squarefeet = assetViewModels[i].SquareFeet.ToString("N0");
+                    occPercentage = Math.Round(cAsset.OccupancyPercentage, 2).ToString() + "%";
+                }
+
+                var fgadvm = new AssetDynamicAssetViewModel
+                {
+                    AssetId = assetViewModels[i].AssetId,
+                    ProjectName = assetViewModels[i].ProjectName,
+                    AddressLine1 = assetViewModels[i].PropertyAddress,
+                    AddressLine2 = assetViewModels[i].PropertyAddress2,
+                    State = assetViewModels[i].State,
+                    City = assetViewModels[i].City,
+                    Zip = assetViewModels[i].Zip,
+                    Longitude = assetViewModels[i].Longitude.HasValue ? assetViewModels[i].Longitude.Value : 0,
+                    Latitude = assetViewModels[i].Latitude.HasValue ? assetViewModels[i].Latitude.Value : 0,
+                    AskingPrice = assetViewModels[i].AskingPrice,
+                    CurrentBpo = assetViewModels[i].CurrentBpo,
+                    PriceChange = priceChange,
+                    AssetType = (int)assetViewModels[i].AssetType,
+                    SquareFeet = assetViewModels[i].SquareFeet,
+                    TotalUnits = units,
+                    ListingStatus = (int)assetViewModels[i].ListingStatus,
+                    ProformaAOE = (int)assetViewModels[i].ProformaAnnualOperExpenses,
+                    ProformaAI = assetViewModels[i].ProformaAnnualIncome,
+                    ProformaMI = assetViewModels[i].ProformaMiscIncome,
+                    ProformaVF = assetViewModels[i].ProformaVacancyFac,
+                    ProformaNOI = assetViewModels[i].NOI,
+                    CapRate = assetViewModels[i].CashInvestmentApy,
+                    OccupancyRate = ((100 - assetViewModels[i].CurrentVacancyFac) / 100).ToString("P0"),
+                    OccupancyYear = occDate.HasValue ? occDate.Value.ToString("yyyy") : "N/A",
+                    OccupancyDate = occDate.HasValue ? occDate.Value.ToString("MM/yyyy") : "N/A",
+                    SalesPrice = assetViewModels[i].SalesPrice,
+                    AuctionDate = assetViewModels[i].AuctionDate.HasValue ? assetViewModels[i].AuctionDate.Value.ToString("MM/dd/yy") : "N/A",
+                    DisableLOIFPA = disableLOIFPA,
+                    CallforOffersDate = assetViewModels[i].CallforOffersDate.HasValue ? assetViewModels[i].CallforOffersDate.Value.ToString("MM/dd/yy") : "N/A",
+                    CallforOffersDateSoon = offersDateSoon,
+                    AssmFinancing = assetViewModels[i].MortgageLienAssumable.ToString(),
+                    IsPartOfPortfolio = (_portfolio == null) ? false : true,
+                    PortfolioId = (_portfolio == null) ? Guid.Empty : _portfolio.PortfolioId,
+                };
+                var imageEntity = ePIRepository.AssetImages.FirstOrDefault(x => x.IsMainImage && x.AssetId == avm.AssetId);
+                if (imageEntity != null)
+                {
+                    fgadvm.Image = new AssetDynamicImageViewModel
+                    {
+                        FileName = imageEntity.FileName,
+                        ContentType = imageEntity.ContentType
+                    };
+                }
+                favoriteGroupAssetsViewModel.FavoriteGroupAssetsDynamicViewModel.Add(fgadvm);
+
+                // Stats
+                favoriteGroupAssetsViewModel.PublishedAssets += assetViewModels[i].IsPublished ? 1 : 0;
+                favoriteGroupAssetsViewModel.TotalAssetVal += assetViewModels[i].AskingPrice > 0 ? (long)assetViewModels[i].AskingPrice : (long)assetViewModels[i].CurrentBpo;
+                favoriteGroupAssetsViewModel.MultiFamUnits += assetViewModels[i].AssetType == AssetType.MultiFamily || assetViewModels[i].AssetType == AssetType.MHP ? 1 : 0;
+                favoriteGroupAssetsViewModel.TotalSqFt += assetViewModels[i].AssetType != AssetType.MHP ? assetViewModels[i].SquareFeet : 0;
+            }
+
+            // Store the selected information in the model
+            favoriteGroupAssetsViewModel.Total = favoriteGroupAssetsViewModel.FavoriteGroupAssetsDynamicViewModel.Count;
+            favoriteGroupAssetsViewModel.FavoriteGroupId = FavoriteGroupId;
+            favoriteGroupAssetsViewModel.FavoriteGroupAssets = assetViewModels;
+            favoriteGroupAssetsViewModel.FavoriteGroupName = favoriteGroup.FavoriteGroupName;
+            favoriteGroupAssetsViewModel.FavoriteGroupDescription = favoriteGroup.FavoriteGroupDescription;
+            return favoriteGroupAssetsViewModel;
+        }
+
+
+        /// <summary>
+        /// Adds an asset to a user's favorite group and updates the number of assets
+        /// </summary>
+        /// <param name="SelectedFavoriteGroupId"></param>
+        /// <param name="SelectedAssetId"></param>
+        public bool AddAssetToFavoriteGroup(Guid SelectedFavoriteGroupId, Guid SelectedAssetId)
+        {
+            IEPIRepository ePIRepository = this._factory.Create();
+            AssetViewModel asset = GetAssetsData(SelectedAssetId);
+
+            // Create the desired favorite group-asset pairing
+            FavoriteGroupAsset favoriteGroupAsset = new FavoriteGroupAsset()
+            {
+                FavoriteGroupAssetId = Guid.NewGuid(),
+                FavoriteGroupId = SelectedFavoriteGroupId,
+                AssetId = SelectedAssetId,
+                PriceWhenAdded = asset.AskingPrice > 0 ? asset.AskingPrice : asset.CurrentBpo,
+            };
+
+            // Update the number of favorite group assets because user added 1
+            FavoriteGroup favoriteGroup = (
+                from x in ePIRepository.FavoriteGroups
+                where x.FavoriteGroupId == SelectedFavoriteGroupId
+                select x).FirstOrDefault<FavoriteGroup>();
+            favoriteGroup.NumberOfFavoriteGroupAssets++;
+
+            // Update the database
+            if (favoriteGroup != null && favoriteGroupAsset != null)
+            {
+                ePIRepository.Entry(favoriteGroup).State = EntityState.Modified;
+                ePIRepository.FavoriteGroupAssets.Add(favoriteGroupAsset);
+                ePIRepository.Save();
+                return true; // Successfully saved an asset to a favorite group
+            }
+
+            return false; // Saving failed
+        }
+
+
+        /// <summary>
+        /// Removes an asset from a user's favorite group and updates the number of assets
+        /// </summary>
+        /// <param name="SelectedFavoriteGroupId"></param>
+        /// <param name="SelectedAssetId"></param>
+        public void RemoveAssetFromFavoriteGroup(Guid SelectedFavoriteGroupId, Guid SelectedAssetId)
+        {
+            IEPIRepository ePIRepository = this._factory.Create();
+
+            // Select the desired favorite group-asset pairing
+            FavoriteGroupAsset favoriteGroupAsset = (
+                from x in ePIRepository.FavoriteGroupAssets
+                where x.FavoriteGroupId == SelectedFavoriteGroupId && x.AssetId == SelectedAssetId
+                select x).FirstOrDefault<FavoriteGroupAsset>();
+
+            // Update the number of favorite group assets because user removed 1
+            FavoriteGroup favoriteGroup = (
+                from x in ePIRepository.FavoriteGroups
+                where x.FavoriteGroupId == SelectedFavoriteGroupId
+                select x).FirstOrDefault<FavoriteGroup>();
+
+            // Update the database
+            if (favoriteGroupAsset != null && favoriteGroup != null)
+            {
+                favoriteGroup.NumberOfFavoriteGroupAssets--;
+                ePIRepository.Entry(favoriteGroup).State = EntityState.Modified;
+                ePIRepository.Entry(favoriteGroupAsset).State = EntityState.Deleted;
+                ePIRepository.Save();
+            }
+        }
+
+
+        public void SaveAssetSearch(SavedAssetSearchViewModel model)
+        {
+            // if an id is provided, attempt to update
+            var context = _factory.Create();
+            if (model.SavedAssetSearchId == Guid.Empty)
+            {
+                var entity = new SavedAssetSearch();
+                entity.SavedAssetSearchId = Guid.NewGuid();
+                entity.Json = model.Json;
+                entity.Title = model.Title.Trim();
+                entity.UserId = model.UserId;
+                entity.Updated = DateTime.UtcNow;
+                entity.Created = DateTime.UtcNow;
+                context.SavedAssetSearches.Add(entity);
+                context.Save();
+            }
+            else
+            {
+                // attempt to update
+                // do we want to allow users to update the title?
+                // or do we want to static the title and allow users to delete instead?
+                // im allowing both atm
+                var entity = context.SavedAssetSearches.FirstOrDefault(ss => ss.SavedAssetSearchId == model.SavedAssetSearchId && ss.UserId == model.UserId);
+                if (entity != null)
+                {
+                    // update
+                    entity.Json = model.Json;
+                    entity.Title = model.Title.Trim();
+                    entity.Updated = DateTime.UtcNow;
+                    context.Save();
+                }
+                else
+                {
+                    // create? logically, the logic shouldnt fall here, a mistake was probably made
+                    throw new InvalidOperationException("TODO: Lets see if this error is ever hit. Remove if this is a logical operation");
+                }
+            }
+
+        }
+
+        public void DeleteSavedAssetSearch(Guid savedAssetSearchId, int userId)
+        {
+            var context = _factory.Create();
+            var entity = context.SavedAssetSearches.FirstOrDefault(ss => ss.SavedAssetSearchId == savedAssetSearchId && ss.UserId == userId);
+            if (entity != null)
+            {
+                context.SavedAssetSearches.Remove(entity);
+                context.Save();
+            }
+        }
+
+        public SavedAssetSearchViewModel GetSavedSearch(Guid id, int userId)
+        {
+            var context = _factory.Create();
+            SavedAssetSearchViewModel model = null;
+
+            var entity = context.SavedAssetSearches.FirstOrDefault(ss => ss.UserId == userId && ss.SavedAssetSearchId == id);
+            if (entity != null)
+            {
+                model = new SavedAssetSearchViewModel();
+                model.SavedAssetSearchId = entity.SavedAssetSearchId;
+                model.UserId = userId;
+                model.Title = entity.Title;
+                model.Json = entity.Json;
+                model.Updated = entity.Updated;
+                model.Created = entity.Created;
+            }
+
+            return model;
+        }
+
+        public List<SavedAssetSearchViewModel> GetSavedSearchesForUser(int userId)
+        {
+            var context = _factory.Create();
+            var list = new List<SavedAssetSearchViewModel>();
+            var entities = context.SavedAssetSearches.Where(ss => ss.UserId == userId).ToList();
+            foreach (var entity in entities)
+            {
+                list.Add(new SavedAssetSearchViewModel
+                {
+                    SavedAssetSearchId = entity.SavedAssetSearchId,
+                    UserId = entity.UserId,
+                    Title = entity.Title,
+                    Json = entity.Json,
+                    Updated = entity.Updated,
+                    Created = entity.Created
+                });
+            }
+            return list;
+        }
+
+
+        public AssetViewModel GetAssetsData(Guid assetId, bool isPublished = false)
+        {
+            var context = _factory.Create();
+
+            var asset = context.Assets.FirstOrDefault(s => s.AssetId == assetId && s.IsActive && s.IsPublished == (isPublished ? true : s.IsPublished));
+            if (asset == null)
+            {
+                return null;
+            }
+
+            if (asset.AssetType == AssetType.MultiFamily || asset.AssetType == AssetType.MHP)
+            {
+                asset = (context.Assets.FirstOrDefault(s => s.AssetId == assetId) as MultiFamilyAsset);
+            }
+            else
+            {
+                asset = (context.Assets.FirstOrDefault(s => s.AssetId == assetId) as CommercialAsset);
+                asset.ProformaAoeFactorAsPerOfSGI = (float)(asset.ProformaAnnualOperExpenses / asset.ProformaAnnualIncome) * 100;
+            }
+
+            if (asset.AssetNARMembers != null)
+            {
+                foreach (var agent in asset.AssetNARMembers)
+                {
+                    agent.SelectedNARMemberId = agent.NarMemberId.ToString();
+                }
+            }
+
+            var model = Mapper.Map<Asset, AssetViewModel>(asset);
+
+            model.TypeOfPositionMortgage = EnumHelper.GetEnumDescription(asset.HasPositionMortgage);
+
+            model.HasListingAgent = (asset.AssetNARMembers != null && asset.AssetNARMembers.Count > 0);
+
+            if (asset.MortgageLienAssumable.HasValue)
+            {
+                model.MortgageLienAssumable = (MortgageLienAssumable)asset.MortgageLienAssumable;
+            }
+
+            model.AssetMessages = GetAllAssetMessages(assetId);
+
+            if (asset.AssetType == AssetType.MHP)
+            {
+                if ((model as MultiFamilyAssetViewModel).MHPUnitSpecifications.Count() == 0)
+                {
+                    context.AssetMHPSpecifications.Add(new AssetMHPSpecification
+                    {
+                        AssetId = model.AssetId,
+                        AssetMHPSpecificationId = Guid.NewGuid(),
+                        CountOfUnits = 0,
+                        CurrentDoubleBaseRent = 0,
+                        CurrentSingleBaseRent = 0,
+                        CurrentTripleBaseRent = 0,
+                        NumberDoubleWide = 0,
+                        NumberSingleWide = 0,
+                        CurrentDoubleOwnedBaseRent = 0,
+                        CurrentSingleOwnedBaseRent = 0,
+                        CurrentTripleOwnedBaseRent = 0,
+                        NumberDoubleWideOwned = 0,
+                        NumberSingleWideOwned = 0,
+                        NumberTripleWide = 0,
+                        NumberTripleWideOwned = 0,
+                    });
+
+                    context.Save();
+                }
+            }
+
+            if (asset.AssetType == AssetType.MultiFamily || asset.AssetType == AssetType.MHP)
+            {
+                var converted = asset as MultiFamilyAsset;
+                model.Description = string.Format("A {0} unit {1} property in {2}, {3}", converted.TotalUnits, EnumHelper.GetEnumDescription(asset.AssetType), asset.City, asset.State);
+            }
+            else
+            {
+                var converted = asset as CommercialAsset;
+                model.Description = string.Format("A {0} {1} property in {2}, {3}", converted.LotSize, EnumHelper.GetEnumDescription(asset.AssetType), asset.City, asset.State);
+            }
+
+            //if (model.IsTBDMarket && forScrollingImages)
+            //{
+            //    model.AskingPrice = model.CurrentBpo;
+            //}
+
+            foreach (var doc in model.Documents)
+            {
+                switch (doc.Type)
+                {
+                    case (int)AssetDocumentType.ArialMap:
+                        model.availablearialMap = true;
+                        break;
+                    case (int)AssetDocumentType.CurrentAppraisal:
+                        model.availablecurrentAppraisal = true;
+                        break;
+                    case (int)AssetDocumentType.CurrentOperatingReport:
+                        model.availablecurrentOperatingReport = true;
+                        break;
+                    case (int)AssetDocumentType.CurrentRentRoll:
+                        model.availablecurrentRentRoll = true;
+                        break;
+                    case (int)AssetDocumentType.EnvironmentalReport:
+                        model.AvailableEnvironmentalRep = true;
+                        break;
+                    case (int)AssetDocumentType.OriginalAppraisal:
+                        model.availableoriginalAppraisal = true;
+                        break;
+                    case (int)AssetDocumentType.PlatMap:
+                        model.availableplatMap = true;
+                        break;
+                    case (int)AssetDocumentType.PreliminaryTitleReport:
+                        model.availablepreliminaryTitleReport = true;
+                        break;
+                    case (int)AssetDocumentType.PriorFiscalYearOperReport:
+                        model.availablepriorFiscalYearOperReport = true;
+                        break;
+                    case (int)AssetDocumentType.ListingAgentMarketingBrochure:
+                        model.availableListingAgentMarketingBrochure = true;
+                        break;
+                    case (int)AssetDocumentType.Other:
+                        model.availableOtherDocument = true;
+                        break;
+                    case (int)AssetDocumentType.MortgageInstrumentOfRecord:
+                        model.availableMortgageInstrumentRecord = true;
+                        break;
+                    case (int)AssetDocumentType.RecordedLiens:
+                        model.availableRecordedLiens = true;
+                        break;
+                    case (int)AssetDocumentType.TaxLiens:
+                        model.availableTaxLiens = true;
+                        break;
+                    case (int)AssetDocumentType.BKRelated:
+                        model.availableBKRelated = true;
+                        break;
+                    case (int)AssetDocumentType.DOTMTG:
+                        model.availableDOTMTG = true;
+                        break;
+                    case (int)AssetDocumentType.OtherTitle:
+                        model.availableOtherTitle = true;
+                        break;
+                    case (int)AssetDocumentType.PreliminaryTitleReportTitle:
+                        model.availablePreliminaryTitleReportTitle = true;
+                        break;
+                    case (int)AssetDocumentType.Insurance:
+                        model.AvailableInsurance = true;
+                        break;
+                }
+            }
+
+            //TODO: ListingAgentInfo
+            //var member = context.NarMembers.FirstOrDefault(s => asset.ListingAgentName.Contains(s.FirstName) && asset.ListingAgentName.Contains(s.LastName));
+            //if (member != null)
+            //{
+            //    model.ListingAgentNewName = member.NarMemberId.ToString();
+            //}
+
+            if (asset.HasDeferredMaintenance.HasValue)
+            {
+                model.HasDeferredMaintenance = asset.HasDeferredMaintenance.Value;
+            }
+
+            model.DeferredMaintenanceItems = GetDefaultDeferredMaintenanceItems();
+            model.DeferredMaintenanceItems = RemoveMaintainanceItems(model.AssetType, model.DeferredMaintenanceItems);
+            model.DeferredMaintenanceItems = OrderMaintainanceItems(model.AssetType, model.DeferredMaintenanceItems);
+
+            var items = context.AssetDeferredMaintenanceItems.Where(w => w.AssetId == asset.AssetId);
+            var otherItemsNotIncluded = new List<AssetDeferredItemViewModel>();
+
+            foreach (var nar in model.AssetNARMembers)
+            {
+                nar.SelectedNARMemberId = nar.NarMemberId.ToString();
+            }
+
+            foreach (var def in model.DeferredMaintenanceItems)
+            {
+                foreach (var item in items)
+                {
+                    if (item.MaintenanceDetail == def.MaintenanceDetail)
+                    {
+                        def.NumberOfUnits = item.Units;
+                        def.UnitCost = item.UnitCost;
+                        def.Selected = true;
+                        def.ItemDescription = item.ItemDescription;
+
+                        if (def.MaintenanceDetail == MaintenanceDetails.LeaseUpCommissions)
+                        {
+                            def.UnitTypeLabel = "Base Estimate Per List Agent/Ownership";
+                        }
+                        else if (def.MaintenanceDetail == MaintenanceDetails.SuiteBuildOut)
+                        {
+                            def.UnitTypeLabel = "Total Sq.Ft.";
+                        }
+                    }
+                }
+            }
+
+            model.PropHoldTypeId = (int)asset.PropHoldTypeId;
+            model.PropHoldType = EnumHelper.GetEnumDescription(asset.PropHoldTypeId); //Enum.GetName(typeof(PropHoldType), model.PropHoldTypeId);
+
+            if (asset.PropLastUpdated.HasValue)
+            {
+                model.PropLastUpdatedYear = asset.PropLastUpdated.Value.Year;
+                model.PropLastUpdated = asset.PropLastUpdated.Value;
+            }
+
+            if (asset.LeaseholdMaturityDate.HasValue)
+            {
+                model.LeaseholdMaturityDate = asset.LeaseholdMaturityDate.Value;
+            }
+
+            if (asset.AmortizationSchedule.HasValue)
+            {
+                model.SelectedAmortSchedule = asset.AmortizationSchedule.Value.ToString();
+            }
+
+            List<string> names = (from p in context.Portfolios
+                                  join pa in context.PortfolioAssets on p.PortfolioId equals pa.PortfolioId
+                                  where pa.AssetId == model.AssetId && p.isActive
+                                  select p.PortfolioName).ToList();
+            model.PortfolioNames = String.Join(", ", names);
+
+            model.ListedByUserId = asset.ListedByUserId;
+
+            model.IsPendingForeclosure = (!string.IsNullOrEmpty(asset.ForeclosureLender) || asset.ForeclosureOriginalMortageDate.HasValue || asset.ForeclosureOriginalMortgageAmount.HasValue || asset.ForeclosureRecordDate.HasValue || asset.ForeclosureSaleDate.HasValue ? true : !string.IsNullOrEmpty(asset.ForeclosureRecordNumber));
+
+            return model;
+        }
+
+        public List<AssetMessage> GetAllAssetMessages(Guid assetId)
+        {
+            var context = _factory.Create();
+            List<AssetMessage> notesList = context.AssetMessages.Where(x => x.AssetId == assetId).OrderByDescending(x => x.CreateDate).ToList();
+            return notesList;
+        }
+
+        public List<AssetViewModel> CalculateAssetListNOI(List<AssetViewModel> assetViewModelList)
+        {
+            double proformaNOI = new double();
+
+            foreach (AssetViewModel assetViewModel in assetViewModelList)
+            {
+                if (assetViewModel != null)
+                {
+                    // Calculations as seen in ViewAsset for NOI
+                    var aoe = assetViewModel.ProformaAnnualOperExpenses;
+                    var pagi = assetViewModel.ProformaAnnualIncome;
+                    var pami = assetViewModel.ProformaMiscIncome;
+                    proformaNOI = 0;
+                    var totalIncome = pagi + pami;
+                    var pvf = (assetViewModel.ProformaVacancyFac / 100) * totalIncome;
+                    proformaNOI = Math.Round((totalIncome - pvf) - aoe);
+
+                    // Save this NOI
+                    assetViewModel.NOI = proformaNOI;
+                }
+            }
+
+            return assetViewModelList;
+        }
+
+
+
+        public void GetAllAssets()
+        {
+            var context = _factory.Create();
+            var queryBuilder = new List<string>();
+
+            var dbEntities = context.Assets.Where(a => a.IsActive && !a.Latitude.HasValue && !a.Longitude.HasValue);
+
+            dbEntities.ToList().ForEach(x =>
+            {
+                GetLatLong(x);
+                if (x.Latitude.HasValue && x.Longitude.HasValue)
+                {
+                    context.Entry(x).State = EntityState.Modified;
+                }
+                context.Save();
+
+            });
+
+        }
+
+        public void GetLatLong(Asset model)
+        {
+            try
+            {
+                string googleAPIKey = "AIzaSyBV3nTZqDmBaifM8IRM_XHMTFeobjfckLw";
+                string address = string.Format("{0},+{1},+{2},+{3}", model.PropertyAddress, model.City, model.Zip, model.State);
+                string api = string.Format("https://maps.googleapis.com/maps/api/geocode/json?address={0},+CA&key={1}", address, googleAPIKey);
+                WebRequest request = HttpWebRequest.Create(api);
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream s = response.GetResponseStream();
+                StreamReader readStream = new StreamReader(s);
+                string dataString = readStream.ReadToEnd();
+
+                var geoResponse = JsonConvert.DeserializeObject<GeoLocationResponse>(dataString);
+                if (geoResponse.results != null && geoResponse.results.Count > 0)
+                {
+                    model.Latitude = geoResponse.results[0].geometry.location.lat;
+                    model.Longitude = geoResponse.results[0].geometry.location.lng;
+                }
+                response.Close();
+                s.Close();
+                readStream.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

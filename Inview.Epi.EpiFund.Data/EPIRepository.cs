@@ -8,6 +8,7 @@ using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
+
 namespace Inview.Epi.EpiFund.Data
 {
     public class EPIRepository : DbContext, IEPIRepository
@@ -427,5 +428,11 @@ namespace Inview.Epi.EpiFund.Data
             set;
         }
 
+        public virtual IDbSet<AssetMessage> AssetMessages { get; set; }
+        public virtual IDbSet<FavoriteGroup> FavoriteGroups { get; set; }
+
+        public virtual IDbSet<FavoriteGroupAsset> FavoriteGroupAssets { get; set; }
+
+        public virtual IDbSet<SavedAssetSearch> SavedAssetSearches { get; set; }
     }
 }

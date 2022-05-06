@@ -119,10 +119,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\PageCategory.cs" />
     <Compile Include="Entity\Asset.cs" />
     <Compile Include="Entity\AssetCommission.cs" />
     <Compile Include="Entity\AssetDeferredMaintenanceItem.cs" />
     <Compile Include="Entity\AssetDocument.cs" />
+    <Compile Include="Entity\AssetMessage.cs" />
     <Compile Include="Entity\AssetOC.cs" />
     <Compile Include="Entity\AssetHCOwnership.cs" />
     <Compile Include="Entity\AssetImage.cs" />
@@ -134,12 +136,15 @@
     <Compile Include="Entity\AssetOwnershipChange.cs" />
     <Compile Include="Entity\ContractFeePayout.cs" />
     <Compile Include="Entity\AssetMHPSpecification.cs" />
+    <Compile Include="Entity\FavoriteGroup.cs" />
+    <Compile Include="Entity\FavoriteGroupAsset.cs" />
     <Compile Include="Entity\OperatingCompany.cs" />
     <Compile Include="Entity\PCInsuranceCompany.cs" />
     <Compile Include="Entity\PCInsuranceCompanyManager.cs" />
     <Compile Include="Entity\Portfolio.cs" />
     <Compile Include="Entity\PortfolioAsset.cs" />
     <Compile Include="Entity\HoldingCompany.cs" />
+    <Compile Include="Entity\SavedAssetSearch.cs" />
     <Compile Include="Entity\TitleOrderPayment.cs" />
     <Compile Include="Entity\AssetSalePayment.cs" />
     <Compile Include="Entity\AssetSearchCriteria.cs" />
@@ -296,7 +301,11 @@
     <Compile Include="ViewModel\CountyModel.cs" />
     <Compile Include="ViewModel\DueDiligenceOptionalModel.cs" />
     <Compile Include="ViewModel\ExtractedImageModel.cs" />
+    <Compile Include="ViewModel\FavoriteGroupAssetsQuickListModel.cs" />
+    <Compile Include="ViewModel\FavoriteGroupAssetsViewModel.cs" />
+    <Compile Include="ViewModel\FavoriteGroupViewModel.cs" />
     <Compile Include="ViewModel\GeneralUploadUserFileModel.cs" />
+    <Compile Include="ViewModel\GeoLocationResponse.cs" />
     <Compile Include="ViewModel\HoldingCompanySearchModel.cs" />
     <Compile Include="ViewModel\HoldingCompanyUpdateResult.cs" />
     <Compile Include="ViewModel\ImportUserModel.cs" />
@@ -311,6 +320,7 @@
     <Compile Include="ViewModel\ManageHoldingCompanyModel.cs" />
     <Compile Include="ViewModel\ManagePortfoliosModel.cs" />
     <Compile Include="ViewModel\MHPadType.cs" />
+    <Compile Include="ViewModel\ModelValidationError.cs" />
     <Compile Include="ViewModel\OperatingCompanyViewModel.cs" />
     <Compile Include="ViewModel\PortfolioAssetsModel.cs" />
     <Compile Include="ViewModel\PortfolioQuickListViewModel.cs" />

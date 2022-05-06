@@ -1,3 +1,4 @@
+using Inview.Epi.EpiFund.Business.Helpers;
 using Inview.Epi.EpiFund.Domain;
 using Inview.Epi.EpiFund.Domain.Entity;
 using Inview.Epi.EpiFund.Domain.Enum;
@@ -3714,10 +3715,10 @@ namespace Inview.Epi.EpiFund.Web.Controllers
             {
                 //ToDo
                 //// Get user information
-                //UserModel userByUsername = _userManager.GetUserByUsername(base.User.Identity.Name);
+                //UserModel userByUsername = _user.GetUserByUsername(base.User.Identity.Name);
 
                 //// Get a list of the user's saved searches
-                //model.SavedSearches = _assetManager.GetSavedSearchesForUser(userByUsername.UserId);
+                //model.SavedSearches = _asset.GetSavedSearchesForUser(userByUsername.UserId);
             }
 
             //if (!string.IsNullOrEmpty(filter))
@@ -3758,23 +3759,274 @@ namespace Inview.Epi.EpiFund.Web.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                //UserModel userByUsername = _userManager.GetUserByUsername(base.User.Identity.Name);
+                UserModel userByUsername = _user.GetUserByUsername(base.User.Identity.Name);
 
-                //var favoriteGroups = _assetManager.GetUserFavoriteGroups(userByUsername.UserId);
+                var favoriteGroups = _asset.GetUserFavoriteGroups(userByUsername.UserId);
 
-                //if (favoriteGroups != null)
-                //{
-                //    return new JsonResult()
-                //    {
-                //        Data = new { success = true, favGrps = favoriteGroups }
-                //    };
-                //}
+                if (favoriteGroups != null)
+                {
+                    return new JsonResult()
+                    {
+                        Data = new { success = true, favGrps = favoriteGroups }
+                    };
+                }
             }
 
             return new JsonResult()
             {
                 Data = new { success = false }
             };
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult CreateFavoriteGroup(string favoriteGroupName, string favoriteGroupDescription)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                UserModel userByUsername = _user.GetUserByUsername(base.User.Identity.Name);
+                FavoriteGroupViewModel model = new FavoriteGroupViewModel
+                {
+                    FavoriteGroupName = favoriteGroupName,
+                    FavoriteGroupDescription = favoriteGroupDescription
+                };
+                model.FavoriteGroupNameExists = _asset.CreateFavoriteGroup(model, userByUsername.UserId);
+
+                return new JsonResult()
+                {
+                    Data = new { nameExists = model.FavoriteGroupNameExists, success = true }
+                };
+            }
+            else
+            {
+                return new JsonResult()
+                {
+                    Data = new { success = false }
+                };
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult SaveFavoriteGroupAsset(string favoriteGroupId, string assetId)
+        {
+            bool success = false;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                UserModel userByUsername = _user.GetUserByUsername(base.User.Identity.Name);
+
+                Guid fId = Guid.Parse(favoriteGroupId);
+                Guid aId = Guid.Parse(assetId);
+
+                success = _asset.AddAssetToFavoriteGroup(fId, aId);
+            }
+
+            return new JsonResult()
+            {
+                Data = new { success }
+            };
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ManageSavedSearches()
+        {
+            // Create a new SavedAssetSearchViewModel object to hold information that will be displayed to the user
+            SavedAssetSearchViewModel model = new SavedAssetSearchViewModel();
+
+            // Get user information
+            UserModel userByUsername = _user.GetUserByUsername(base.User.Identity.Name);
+
+            // Determine whether or not the user can view this page
+            if (!UserHelper.ValidatePFUser(userByUsername))
+            {
+                base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
+                return base.RedirectToAction("Index", "Home");
+            }
+
+            // Get a list of the user's saved searches
+            model.SavedSearches = _asset.GetSavedSearchesForUser(userByUsername.UserId);
+
+            // Return this information to the view
+            return View(model);
+        }
+
+        [HttpPost]
+        public JsonResult RenameSavedSearch(Guid ssId, string newSavedSearchName)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                // Get user info
+                UserModel userByUsername = _user.GetUserByUsername(base.User.Identity.Name);
+
+                // Get the saved search info
+                SavedAssetSearchViewModel model = _asset.GetSavedSearch(ssId, userByUsername.UserId);
+
+                if (!string.IsNullOrWhiteSpace(newSavedSearchName))
+                {
+                    // Update the name
+                    model.Title = newSavedSearchName;
+
+                    // Save the information
+                    _asset.SaveAssetSearch(model);
+
+                    // Success
+                    return new JsonResult()
+                    {
+                        Data = new { Status = "success" }
+                    };
+                }
+                else
+                {
+                    return new JsonResult()
+                    {
+                        Data = new { Status = "empty" }
+                    };
+                }
+            }
+            else
+            {
+                // User needs to be logged in to rename saved searches
+                return new JsonResult()
+                {
+                    Data = new { Status = "failure" }
+                };
+            }
+        }
+
+        [Authorize]
+        public ActionResult RemoveSavedSearch(Guid savedSearchId)
+        {
+            UserModel userByUsername = _user.GetUserByUsername(User.Identity.Name);
+
+            _asset.DeleteSavedAssetSearch(savedSearchId, userByUsername.UserId);
+
+            return RedirectToAction("ManageSavedSearches");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult GetUserSavedSearches()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = _user.GetUserByUsername(User.Identity.Name);
+                if (user != null)
+                {
+                    var savedSearches = _asset.GetSavedSearchesForUser(user.UserId);
+                    // we dont want to send unneeded data to the view(even empty props)
+                    var payload = new List<SavedAssetSearchMinimalViewModel>();
+                    foreach (var ss in savedSearches)
+                    {
+                        payload.Add(new SavedAssetSearchMinimalViewModel
+                        {
+                            Json = ss.Json,
+                            Title = ss.Title,
+                            Id = ss.SavedAssetSearchId
+                        });
+                    }
+                    if (savedSearches != null) { return new JsonResult() { Data = new { success = true, searches = payload } }; }
+                }
+            }
+            return new JsonResult() { Data = new { success = false } };
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult SaveAssetSearch(string data, string title)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = _user.GetUserByUsername(User.Identity.Name);
+                if (user != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(data) && !string.IsNullOrWhiteSpace(title))
+                    {
+                        _asset.SaveAssetSearch(new SavedAssetSearchViewModel
+                        {
+                            SavedAssetSearchId = Guid.Empty,
+                            Json = data,
+                            Title = title.Trim(),
+                            UserId = user.UserId
+                        });
+                        return new JsonResult() { Data = new { success = true } };
+                    }
+                }
+            }
+            return new JsonResult() { Data = new { success = false } };
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult UpdateAssetSearch(Guid id, string data, string title)
+        {
+            // im still not sure about the use case of update so im supporting it all at the moment
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = _user.GetUserByUsername(User.Identity.Name);
+                if (user != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(data) && !string.IsNullOrWhiteSpace(title))
+                    {
+                        _asset.SaveAssetSearch(new SavedAssetSearchViewModel
+                        {
+                            SavedAssetSearchId = id,
+                            Json = data,
+                            Title = title.Trim(),
+                            UserId = user.UserId
+                        });
+                        return new JsonResult() { Data = new { success = true } };
+                    }
+                }
+            }
+            return new JsonResult() { Data = new { success = false } };
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult DeleteAssetSearch(Guid id)
+        {
+            // im still not sure about the use case of update so im supporting it all at the moment
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = _user.GetUserByUsername(User.Identity.Name);
+                if (user != null)
+                {
+                    _asset.DeleteSavedAssetSearch(id, user.UserId);
+                }
+            }
+            return new JsonResult() { Data = new { success = false } };
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public JsonResult GetFavoriteGroupAssets(Guid favGroupId)
+        {
+            UserModel userByUsername = _user.GetUserByUsername(base.User.Identity.Name);
+            var data = _asset.GetFavoriteGroupAssets(favGroupId, userByUsername.UserId);
+            return new JsonResult()
+            {
+                Data = new
+                {
+                    data = data.FavoriteGroupAssetsDynamicViewModel,
+                    Total = data.Total,
+                    PublishedAssets = data.PublishedAssets,
+                    TotalAssetVal = data.TotalAssetVal,
+                    MultiFamUnits = data.MultiFamUnits,
+                    TotalSqFt = data.TotalSqFt,
+                }
+            };
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public JsonResult GetAllAssets()
+        {
+             _asset.GetAllAssets();
+
+            return new JsonResult();
         }
         #endregion
     }
