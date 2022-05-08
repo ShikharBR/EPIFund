@@ -1,5 +1,5 @@
 ﻿@using PagedList.Mvc
-@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.PortfolioQuickListViewModel>
+@model PagedList.IPagedList<Inview.Epi.EpiFund.Domain.ViewModel.PortfolioQuickListModel>
 @{
     bool showCreatedBy = false;   
 }
@@ -24,111 +24,143 @@
     </div>
     @if (Model.Count > 0)
     {
-        <div class="overflow short-xs">
-            <table class="table table-striped" id="tbAssets" cellpadding="5" cellspacing="5" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
-                <thead>
-                    <tr>
-                        <td>
-                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.NameSortParm')">Portfolio Name</a></b>
-                        </td>
-                        <td>
-                            <b><a style="cursor: pointer" onclick="postForm('@ViewBag.NumberSortParm')"># Assets</a></b>
-                        </td>
-                        <td colspan="3"> <b><a style="cursor: pointer" ></a></b></td>
-                        <td colspan="5"></td>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < @Model.Count; i++)
-                    {
-                    <tr id="@Model[i].PortfolioId">
-                        <td style="width: 150px;">
-                            @Model[i].PortfolioName
-                        </td>
-                        <td style="width: 50px;">
-                            @Model[i].PortfolioAssets.Count
-                        </td>
-                        @if (@Model[i].isActive)
-                        {
-                        <td style="width:50px">
-                            <a href="@Url.Action("ViewPortfolioSummary", "Portfolio", new { id = @Model[i].PortfolioId })">View</a>
-                        </td>
-                        }
-                        else
-                        {
-                        <td style="width:50px"><a>Deactivated</a></td>
-                        }
-                        @if (@Model[i].isActive)
-                        {
-                        <td style="text-align: center; width:50px">
-                            <a href="@Url.Action("UpdatePortfolio", "Portfolio", new { id = @Model[i].PortfolioId })" style="cursor:pointer" title="Edit">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </a>
-                        </td>
-                        }
-                        else
-                        {
-                        <td style="text-align: center; width:50px">
-                            <span title="inaccessible" class="glyphicon glyphicon-ban-circle"></span>
-                        </td>
-                        }
-                        <td style="text-align: center; width:50px">
-                            <a href="@Url.Action("DeactivatePortfolio", "Portfolio", new { id = @Model[i].PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove the Asset from this Portfolio?');">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </a>
-                        </td>
-                        <td colspan="5">
-                            <table class="table table-striped" id="tbInner" style="font-size: 10px !important; padding: 5px; vertical-align: middle;">
+<div class="overflow short-xs">
+    <table class="table table-striped" style="font-size: 10px !important; padding: 5px; vertical-align: middle; ">       
+        <tr>
+            <th>Port<br />View</th>
+            <th>States</th>
+            <th>Asset<br />Type</th>
+            <th># Unit<br />Sq.Ft.</th>
+            <th>Portfolio<br />Name</th>
+            <th>Occ %<br />Mo/Year</th>
+            <th>Proforma<br /><a title="Annualized Scheduled Gross Income">SGI</a></th>
+            <th>Proforma<br /><a title="Annualized Net Operating Income">NOI</a></th>
+            <th style="vertical-align: bottom;"><a title="Annual Capitalization Rate"> CAP%</a></th>
+            <th>Assm<br />Fin</th>
+            <th>Pricing:LP<br />CMA/<a title="[Calculated Market Value is based solely on either (1) comparable sales data provided by the Listing Agent or Seller in their Offering Memorandum, or, in the absence thereof, (2) calculated to the displayed CAP Rate only if the offering price for the asset is TBD by Market.]">CMV</a></th>
+            @*action*@
+            <th><span class="glyphicon glyphicon-folder-open" title="View a One-Line Summary Asset"></span></th>
+            @*<th title="Chain of Title"><img style="width:12px;" src="~/Content/images/tringle.png" /></th>*@
+            <th><span class="glyphicon glyphicon-user" title="Users"></span></th>
+            <th><span class="glyphicon glyphicon-retweet" title="Availability Status"></span></th>
+            <th title="Who’s Driving the Bus"><img style="height:16px;" src="~/Content/images/bus.png" /></th>
+            <th>Manage</th>
+        </tr>
+        @{
 
-                                <tr class="header"> <td colspan="5"><label style="color:#428bca">Asset Details</label><a style="float:right;color:#428bca;font-size:medium">-</a> <a style="float:right;color:#428bca;font-size:medium">/</a> <a style="float:right; color:#428bca;font-size:medium">+</a></td></tr>
-                                <tr style="display:none">
-                                    <td>
-                                        <b><a style="cursor: pointer">Asset Name</a></b>
-                                    </td>
-                                    <td>
-                                        <b><a style="cursor: pointer">Asset Type</a></b>
-                                    </td>
-                                    <td>
-                                        <b><a style="cursor: pointer">Address</a></b>
-                                    </td>
-                                    <td>
-                                        <b><a style="cursor: pointer">City</a></b>
-                                    </td>
-                                    <td>
-                                        <b><a style="cursor: pointer">State</a></b>
-                                    </td>
-                                </tr>
-                                @for (int j = 0; j < @Model[i].PortfolioAssets.Count; j++)
+            foreach (var portItem in Model)
+            {
+                <tr>
+                    <td><a href="@Url.Action("ViewPortfolioSummary", "Portfolio", new { id = portItem.PortfolioId })">View</a></td>
+                    <td>@string.Join(" ", portItem.States)</td>
+                    <td>
+                        @{
+                            var lstAssettype = "";
+                            foreach (var asstType in portItem.AssetType)
+                            {
+                                lstAssettype += Inview.Epi.EpiFund.Domain.Helpers.EnumHelper.GetEnumDescription(asstType) + " ";
+                            }
+                            @Html.Raw(lstAssettype)
+                        }
+                    </td>
+                    <td>
+                        @{
+                            var returnStr = "";
+                            if (portItem.NumberOfUnits > 0)
+                            {
+                                returnStr = "<span class='padNumber'>" + portItem.NumberOfUnits.ToString() + "</span>";
+                            }
+                            if (portItem.SquareFeet > 0.0)
+                            {
+                                if (returnStr != "")
                                 {
-                                    <tr style="display:none" id="@Model[i].PortfolioAssets[j].AssetId">
-                                        <td style="width: 200px;">
-                                            @Model[i].PortfolioAssets[j].AssetName
-                                        </td>
-                                        <td style="width: 200px;">
-                                            @Model[i].PortfolioAssets[j].Type
-                                        </td>
-                                        <td style="width: 200px;">
-                                            @Model[i].PortfolioAssets[j].AddressLine1
-                                        </td>
-                                        <td style="width: 100px;">
-                                            @Model[i].PortfolioAssets[j].City
-                                        </td>
-                                        <td style="width: 100px;">
-                                            @Model[i].PortfolioAssets[j].State
-                                        </td>
-                                    </tr>
+                                    returnStr += "<br/><span class='padNumber'>" + portItem.SquareFeet.ToString() + "</span>";
                                 }
-                                <tr class="header"></tr>
-                            </table>
+                                else
+                                {
+                                    returnStr = "<span class='padNumber'>" + portItem.SquareFeet.ToString() + "</span>";
+                                }
+                            }
+                            @Html.Raw(returnStr)
+                        }
 
-                        </td>
+                    </td>
+                    <td><span class="AssetName" title="@portItem.PortfolioName">@portItem.PortfolioName</span></td>
+                    <td>
+                        @(((100 - portItem.OccupancyPercentage) / 100).ToString("P"))
+                        <br />@(portItem.OccupancyDate)
+                    </td>
+                    <td>@portItem.CumiProformaSGI</td>
+                    <td>@portItem.CumiProformaNOI</td>
+                    <td>@portItem.CumiLPCapRate</td>
+                    <td>@portItem.AssmFin</td>
+                    <td>@portItem.Pricing.ToString("C0")<br />@portItem.PricingType</td>
 
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    @*action*@
+                    <td>
+                        <span class="glyphicon glyphicon-folder-open" title="Portfolio" style="cursor:pointer" onclick="ViewRelatedAssets('@portItem.PortfolioId.ToString()',this)"></span>
+                    </td>
+                    <td>
+                        @{
+                            var uType = "";
+                            if (portItem.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ICAdmin)
+                            {
+                                uType = "ICA";
+                            }
+                            else if (portItem.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.CorpAdmin)
+                            {
+                                uType = "CA";
+                            }
+                            else if (portItem.UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.Investor)
+                            {
+                                uType = "PI";
+                            }
+                            else //if (Model[i].UserType == Inview.Epi.EpiFund.Domain.Enum.UserType.ListingAgent)
+                            {
+                                uType = "LA";
+                            }
+                            @Html.Raw(uType)
+                        }
+                    </td>
+                    <td>
+                        @{
+                            var lstStatus = "";
+                            if (portItem.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Available)
+                            {
+                                lstStatus = "A";
+                            }
+                            else if (portItem.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Pending)
+                            {
+                                lstStatus = "P";
+                            }
+                            else if (portItem.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldNotClosed
+                                   || portItem.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.SoldAndClosed
+                                   || portItem.ListingStatus == Inview.Epi.EpiFund.Domain.Enum.ListingStatus.Withdrawn)
+                            {
+                                lstStatus = "U";
+                            }
+                            @Html.Raw(lstStatus)
+                        }
+                    </td>
+                    <td title="Who’s Driving the Bus">
+                        @if (portItem.BusDriver == "SUS")
+                        {
+                            <span class="red">@portItem.BusDriver</span>
+                        }
+                        else
+                        {
+                            <span>@portItem.BusDriver</span>
+                        }
+                    </td>
+                    <td>
+                        [ <a href="@Url.Action("UpdatePortfolio", "Portfolio", new { id = @portItem.PortfolioId })" style="cursor:pointer" title="Edit"> <span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="@Url.Action("DeactivatePortfolio", "Portfolio", new { id = @portItem.PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove this Portfolio?');"><span class="glyphicon glyphicon-remove"></span></a>]
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
        
     }
 </div>

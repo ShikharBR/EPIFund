@@ -145,7 +145,7 @@
 
 <!-- Tab panes -->
 <div id="mainDiv" class="tab-content">
-    <div class="tab-pane active" id="basic">
+    <div class="tab-pane active" id="basic" style="padding-left:15px;">
         <h3>Portfolio Information</h3>
         <div class="row">
             <div class="col-sm-6 text-right">
@@ -533,6 +533,9 @@
                                                 <span class="glyphicon glyphicon-arrow-down" style="font-size: 12px; color:red"></span>
                                             </a>
                                         }
+                                        <a href="@Url.Action("DeactivateAssetfromPortfolio", "Portfolio", new { id = @Model.PortfolioAssetList[i].AssetId, pfId = @Model.PortfolioId })" title="Remove from Portfolio" onclick="return confirm('Are you sure you want to remove the Asset from this Portfolio?');">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
                                         ]
                                     </td>
                                 </tr>
@@ -697,14 +700,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage portfolios page.')) goBack()" value="Cancel" />
-                @*@if (Model.PortfolioId != null || Model.PortfolioId != Guid.Empty)
-                    {
-                        <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="updatePortfolio()" />
-                    }
-                    else if (Model.PortfolioId == null || Model.PortfolioId == Guid.Empty)
-                    {
-                        <input type="button" value="Search" class="btn btn-primary proceed" style="width: 200px; margin: 30px auto; background-color: #428bca" onclick="createPortfolio()" />
-                    }*@
+                
                 <input type="submit" id="btnSubmit" class="btn btn-primary" value="Save Portfolio">
             </div>
         </div>
@@ -724,6 +720,7 @@
 @Html.HiddenFor(model => Model.Assets)
 @Html.HiddenFor(model => Model.Assets, new { id = "hdnAssetList" })
 @Html.HiddenFor(model => Model.hasOffersDate)
+
 <input type="hidden" value="@(Model.PortfolioId)" data-asset="@(Model.PortfolioId)" id="PortfolioId" name="PortfolioId" />
 <input type="hidden" value="@(Model.GetType())" name="TypeOfAsset" />
 

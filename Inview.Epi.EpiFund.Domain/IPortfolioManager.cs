@@ -20,7 +20,7 @@ namespace Inview.Epi.EpiFund.Domain
 
 		List<AssetViewModel> GetPortfolioProperties(Guid PortfolioId);
 
-		List<PortfolioQuickListViewModel> GetSearchPortfolios(ManagePortfoliosModel model);
+		List<PortfolioQuickListModel> GetSearchPortfolios(ManagePortfoliosModel model);
 
 		List<PortfolioQuickListViewModel> GetUserPortfolios(int UserId);
 
@@ -30,9 +30,9 @@ namespace Inview.Epi.EpiFund.Domain
 
 		bool PortfolioExist(Guid PortfolioId);
 
-        List<PortfolioQuickListViewModel> SortPortfoliosModel(List<PortfolioQuickListViewModel> input, bool descending);
+        List<PortfolioQuickListModel> SortPortfoliosModel(List<PortfolioQuickListModel> input, bool descending);
 
-        List<PortfolioQuickListViewModel> TrimStringProperty(List<PortfolioQuickListViewModel> input);
+        List<PortfolioQuickListModel> TrimStringProperty(List<PortfolioQuickListModel> input);
 
         void UpdatePortfolio(PortfolioViewModel model, int UserId);
 	}

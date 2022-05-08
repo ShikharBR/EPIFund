@@ -84,6 +84,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			portfolioViewModel.isIntial = true;
 
 			portfolioViewModel.LastReportedOccupancyDate = null;
+			portfolioViewModel.PortfolioAssetList = new List<AdminAssetQuickListModel>();
 
 			this.SearchAssets(portfolioViewModel);
 			this.GetLayout(userByUsername);
@@ -238,7 +239,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 
             int value;
             this._user.RemoveUserAssetLocks(base.User.Identity.Name);
-			List<PortfolioQuickListViewModel> portfolioQuickListViewModels = new List<PortfolioQuickListViewModel>();
+			List<PortfolioQuickListModel> portfolioQuickListViewModels = new List<PortfolioQuickListModel>();
 			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
 			this.GetLayout(userByUsername);
 			if (!base.ValidatePFUser(userByUsername))
@@ -246,6 +247,8 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
 				return base.RedirectToAction("Index", "Home");
 			}
+
+
 			model.ControllingUserType = new UserType?(userByUsername.UserType);
 			ManagePortfoliosModel managePortfoliosModel = new ManagePortfoliosModel()
 			{
@@ -263,55 +266,10 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				ControllingUserType = userByUsername.UserType,
                 IsSearching = model.IsSearching
 			};
+
 			portfolioQuickListViewModels = this._portfolio.GetSearchPortfolios(managePortfoliosModel);
-			((dynamic)base.ViewBag).CurrentSort = model.SortOrder;
-			base.ViewBag.PortfolioIdSortParm = (model.SortOrder == "assetId" ? "assetId_desc" : "assetId");
-			base.ViewBag.NameSortParm = (model.SortOrder == "name" ? "name_desc" : "name");
-            base.ViewBag.NumberSortParm = (model.SortOrder == "number" ? "number_desc" : "number");
-			string str = model.SortOrder;
-			if (str == "name_desc")
-			{
-                // Trim the portfolio names eliminating any spaces that could meddle with the sort
-                // Sort portfolios by PortfolioName in descending order
-                portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
-                portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, true);
-            }
-            else if (str == "name")
-			{
-                // Trim the portfolio names eliminating any spaces that could meddle with the sort
-                // Sort portfolios by PortfolioName 
-                portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
-                portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, false);
-                
-			}
-			else if (str == "number_desc")
-			{
-                
-                portfolioQuickListViewModels = (
-					from s in portfolioQuickListViewModels
-					orderby s.PortfolioAssets.Count descending
-					select s).ToList<PortfolioQuickListViewModel>();
-			}
-			else if (str == "number")
-			{
-				portfolioQuickListViewModels = (
-					from w in portfolioQuickListViewModels
-					orderby w.PortfolioAssets.Count
-                    select w).ToList<PortfolioQuickListViewModel>();
-			}
-			else if (str == "assetId_desc")
-			{
-				portfolioQuickListViewModels = (
-					from s in portfolioQuickListViewModels
-					orderby s.PortfolioId descending
-					select s).ToList<PortfolioQuickListViewModel>();
-			}
-			else
-			{
-                // by default sort by name ascending 
-                portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
-                portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, false);
-            }
+			
+			
             int num = 0;
             TempDataDictionary tempData = base.TempData;
             int? rowCount = model.RowCount;
@@ -334,7 +292,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
             }
             rowCount = page;
             int num1 = (rowCount.HasValue ? rowCount.GetValueOrDefault() : 1);
-            model.Portfolios = portfolioQuickListViewModels.ToPagedList<PortfolioQuickListViewModel>(num1, num);
+            model.Portfolios = portfolioQuickListViewModels.ToPagedList<PortfolioQuickListModel>(num1, num);
 			return base.View(model);
 		}
 
