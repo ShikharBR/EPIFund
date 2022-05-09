@@ -965,6 +965,7 @@
     <Content Include="Views\Admin\_HoldingComapnyDeatails.cshtml" />
     <Content Include="Views\Admin\_OpertingComapnyDeatails.cshtml" />
     <Content Include="Views\Admin\_AdminOperatingCompanyListView.cshtml" />
+    <Content Include="Views\Portfolio\_AssetViewPortfolio.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

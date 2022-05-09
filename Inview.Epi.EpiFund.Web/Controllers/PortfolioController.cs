@@ -717,11 +717,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 					model.PortfolioProperties = this._portfolio.GetPortfolioProperties(model.PortfolioId);
 				}
 
-				model.SelectedAssets = (
-					from w in model.Assets
-					where w.IsSelected
-					select w into s
-					select s.AssetId).ToList<Guid>();
+				model.SelectedAssets = (from w in model.Assets where w.IsSelected select w into s select s.AssetId).ToList<Guid>();
 
 				if (!base.ModelState.IsValid)
 				{
@@ -766,7 +762,8 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                     this._portfolio.UpdatePortfolio(model, userByUsername.UserId);
 					base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Portfolio and related assets successfully updated.");
 
-                    if (HttpRuntime.Cache["AssetList"] != null) HttpRuntime.Cache.Remove("AssetList");
+                    if (HttpRuntime.Cache["AssetList"] != null) 
+						HttpRuntime.Cache.Remove("AssetList");
 
                     return base.RedirectToAction("ManagePortfolios", "Portfolio", new { PortfolioNumber = model.PortfolioId.ToString() });
 				}
@@ -805,5 +802,12 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
 			return base.RedirectToAction("Index", "Home");
 		}
+
+		public ActionResult GetAssetsbyAssetsId(string portfolioId, string assetsIds)
+		{
+			var assetsList = this._portfolio.GetAssetsByAssetsIds(portfolioId,assetsIds);
+			return this.PartialView("_AssetViewPortfolio", assetsList);
+		}
+		 
 	}
 }

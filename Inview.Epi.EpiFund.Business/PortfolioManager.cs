@@ -986,6 +986,103 @@ namespace Inview.Epi.EpiFund.Business
             return sortedList;
         }
 
+
+        public List<AdminAssetQuickListModel> GetAssetsByAssetsIds(string portfolioId, string assetsIds)
+        {
+            var list = new List<AdminAssetQuickListModel>();
+            var context = _factory.Create();
+
+            Guid portId = new Guid(portfolioId);
+            var AssetsidsInPortfolio = context.PortfolioAssets.Where(x => x.PortfolioId == portId).Select(a => a.AssetId).ToList();
+
+            var assets = context.Assets.Where(la => AssetsidsInPortfolio.Contains(la.AssetId));
+
+            var users = context.Users.ToList();
+            bool isSpecificType = false;
+
+            var assetList = assets.ToList();
+
+            assetList.ForEach(a =>
+            {
+
+                int units = 0;
+                int squareFeet = 0;
+                if (a.AssetType == AssetType.MultiFamily)
+                {
+                    var mf = a as MultiFamilyAsset;
+                    units = mf.TotalUnits;
+                }
+                else if (a.AssetType == AssetType.MHP)
+                {
+                    var mf = a as MultiFamilyAsset;
+                    units = mf.TotalUnits;
+                    units += a.NumberRentableSpace != null ? (int)a.NumberRentableSpace : 0;
+                    units += a.NumberNonRentableSpace != null ? (int)a.NumberNonRentableSpace : 0;
+                }
+                else
+                {
+                    var ca = a as CommercialAsset;
+                    squareFeet = ca.SquareFeet;
+                }
+
+                if (a != null)
+                {
+                    //-------
+                    var aoe = a.ProformaAnnualOperExpenses;
+                    var pagi = a.ProformaAnnualIncome;
+                    var pami = a.ProformaMiscIncome;
+                    var totalIncome = pagi + pami;
+                    var pvf = (a.ProformaVacancyFac / 100) * totalIncome;
+                    var proformaNOI = Math.Round((totalIncome - pvf) - aoe);
+                    var pretax = totalIncome - pvf - aoe;
+                    //-------
+
+                    list.Add(new AdminAssetQuickListModel()
+                    {
+                        AddressLine1 = a.PropertyAddress,
+                        AssetId = a.AssetId,
+                        AssetNumber = a.AssetNumber,
+                        City = a.City,
+                        Show = a.Show ? "Yes" : "No",
+                        State = a.State,
+                        Zip = a.Zip,
+                        Status = EnumHelper.GetEnumDescription(a.ListingStatus),
+                        Type = EnumHelper.GetEnumDescription(a.AssetType),
+                        //ControllingUserType = model.ControllingUserType,
+                        IsOnHold = a.HoldForUserId.HasValue,
+                        IsSampleAsset = a.IsSampleAsset,
+                        CreatedBy = context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault() != null
+                                  ? context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault().FullName + "~" +
+                                  context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault().Username : "",
+                        AssetName = a.ProjectName,
+                        SquareFeet = squareFeet,
+                        NumberOfUnits = units,
+                        isSpecificType = isSpecificType,
+                        CurrentVacancyFac = a.CurrentVacancyFac,
+                        LastReportedOccupancyDate = a.LastReportedOccupancyDate != null ? a.LastReportedOccupancyDate : a.OccupancyDate,
+                        ProformaAnnualIncome = a.ProformaAnnualIncome,
+                        ProformaNOI = proformaNOI,
+                        CashInvestmentApy = a.CashInvestmentApy,
+                        capRate = ((pretax / a.CurrentBpo) * 100),
+                        AskingPrice = a.AskingPrice,
+                        CurrentBpo = a.CurrentBpo,
+                        Portfolio = context.PortfolioAssets.Where(x => x.AssetId == a.AssetId).Any() ? true : false,
+
+                        /*Unknown 0,Yes 1,No 2	 */
+                        AssmFin = a.HasPositionMortgage == PositionMortgageType.Yes ? "Yes" : "No",
+                        UserType = context.Users.Where(us => us.UserId == a.ListedByUserId).FirstOrDefault().UserType,
+                        ListingStatus = a.ListingStatus,
+                        IsActive = a.IsActive,
+                        BusDriver = a.Show ? "CA" : "SUS",
+                        IsPaper = a.IsPaper
+
+                    });
+
+                }
+            });
+            return list;
+        }
+
     }
 
     public class AlphaNumericComparator : IComparer

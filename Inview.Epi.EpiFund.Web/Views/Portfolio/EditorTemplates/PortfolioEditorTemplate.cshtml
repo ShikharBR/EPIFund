@@ -287,7 +287,7 @@
                 </div>
             </div>
         </div>
-        <div class="row divCallforOfferDate">
+        <div class="row divCallforOfferDate" style="display:@((Model.IsTBDMarket == false && Model.IsCallOffersDate == false ) ? "none":"block")">
             <div class="col-sm-6">
                 <div class="input-group">
                     @Html.LabelFor(model => model.CallforOfferDate)
@@ -707,6 +707,7 @@
 
     </div>
 </div>
+
 @Html.HiddenFor(model => model.PortfolioName)
 @Html.HiddenFor(s => s.CallforOfferDate)
 @Html.HiddenFor(model => Model.EstDeferredMaintenance)
@@ -740,6 +741,13 @@
     </div>
 </div>
 
+<div class="modal fade" id="assetPrice" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divassetPrice"></div>
+    </div>
+</div>
+
 <script>
     var isValidForm = true;
     var valErrorMSg = '';
@@ -754,11 +762,28 @@
         });
     }
 
+    $("#btnSave").click(function (e) {
+        $("#UpdatePortfolioform").submit();
+    });
+
     $('#btnSubmit').click(function (e) {
+        debugger;
         let isSuccess = formValidation('Primary Info');
         if (!isSuccess) {
             e.preventDefault();
             $('#divError').show();
+        }
+        else {
+            var assetList = $("#hdnAssetList").val();
+            e.preventDefault()
+            $.ajax({
+                url: "@Url.Action("GetAssetsbyAssetsId", "Portfolio")",
+                data: { assetsIds: assetList, portfolioId: $("#PortfolioId").val()},
+                success: function (data) {
+                    $("#divassetPrice").html(data);
+                    $("#assetPrice").modal();
+                }
+            });
         }
     });
 
@@ -888,7 +913,6 @@
         window.location.href = "/Portfolio/ManagePortfolios";
     }
 
-
     $(document).ready(function () {
         if (location.hash.substr(0, 2) == "#!") {
             $("a[href='#" + location.hash.substr(2) + "']").tab("show");
@@ -1016,7 +1040,7 @@
     }
 
     function storeSelection() {
-
+        debugger;
         var form = $('#assetPartial :input').serialize();// serializeAnything($('#assetPartial'));
         $.ajax({
             type: "POST",
@@ -1195,8 +1219,7 @@
         }
     }
 
-
-        function padCommas(element, addDollarSign) {
+    function padCommas(element, addDollarSign) {
         // asumming element is span, not input
         if (element) {
             if (element.innerHTML.length != 0 && element.innerHTML != null) {

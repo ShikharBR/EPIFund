@@ -35,5 +35,7 @@ namespace Inview.Epi.EpiFund.Domain
         List<PortfolioQuickListModel> TrimStringProperty(List<PortfolioQuickListModel> input);
 
         void UpdatePortfolio(PortfolioViewModel model, int UserId);
+
+		List<AdminAssetQuickListModel> GetAssetsByAssetsIds(string portfolioId, string assetsIds);
 	}
 }
