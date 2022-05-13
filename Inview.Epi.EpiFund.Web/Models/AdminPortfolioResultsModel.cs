@@ -114,7 +114,7 @@ namespace Inview.Epi.EpiFund.Web.Models
 			set;
 		}
 
-		public PagedList.IPagedList<PortfolioQuickListViewModel> Portfolios
+		public PagedList.IPagedList<PortfolioQuickListModel> Portfolios
 		{
 			get;
 			set;

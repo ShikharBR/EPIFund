@@ -436,13 +436,13 @@ namespace Inview.Epi.EpiFund.Business
                 SellerTermsOther = model.SellerTermsOther,
                 PricingDisplayOption = model.PricingDisplayOption,
 
-
             };
             portfolio.NumberofAssets = model.SelectedAssets.Count<Guid>();
             portfolio.UserId = UserId;
             portfolio.isActive = true;
             ePIRepository.Portfolios.Add(portfolio);
             ePIRepository.Save();
+
             foreach (Guid selectedAsset in model.SelectedAssets)
             {
                 PortfolioAsset portfolioAsset = new PortfolioAsset()
@@ -453,15 +453,29 @@ namespace Inview.Epi.EpiFund.Business
                     isActive = true
                 };
                 ePIRepository.PortfolioAssets.Add(portfolioAsset);
+                ePIRepository.Save();
             }
-            ePIRepository.Save();
-
+            
 
             //update related Assets as suggested at time of update porfoliyo          
             var assets = (from x in ePIRepository.PortfolioAssets where x.PortfolioId == portfolio.PortfolioId select x.Asset);
+
+            var results = model.AssetIdsLpCMV.Split(',').ToList();
+            var lstassetLPCMV = new List<assetLPCMV>();
+            foreach (var assetResult in results)
+            {
+                var itemassetLPCMV = new assetLPCMV();
+                itemassetLPCMV.Assetid = new Guid(assetResult.Split('_')[0]);
+                itemassetLPCMV.Lp = Convert.ToDouble(assetResult.Split('_')[1]);
+                itemassetLPCMV.Cmv = Convert.ToDouble(assetResult.Split('_')[2]);
+                lstassetLPCMV.Add(itemassetLPCMV);
+            }
+
             foreach (Asset asset in assets)
             {
-                //Asset asset = (from x in ePIRepository.Assets where x.AssetId == selectedAsset select x).First<Asset>();
+                var itemassetLPCMV = lstassetLPCMV.Where(a => a.Assetid == asset.AssetId);
+                asset.AskingPrice = itemassetLPCMV.FirstOrDefault().Lp;
+                asset.CurrentBpo = itemassetLPCMV.FirstOrDefault().Cmv;
 
                 asset.LastReportedOccupancyDate = model.LastReportedOccupancyDate;
                 asset.OccupancyDate = model.LastReportedOccupancyDate;
@@ -535,7 +549,6 @@ namespace Inview.Epi.EpiFund.Business
             PortfolioAsset portfolioAsset = ePIRepository.PortfolioAssets.FirstOrDefault<PortfolioAsset>((PortfolioAsset x) => (x.AssetId == AssetId) && (x.PortfolioId == PfId));
             if (portfolioAsset != null)
             {
-                portfolioAsset.isActive = false;
                 ePIRepository.Entry(portfolioAsset).State = EntityState.Deleted;
                 ePIRepository.Save();
             }
@@ -630,227 +643,196 @@ namespace Inview.Epi.EpiFund.Business
             return assetViewModels;
         }
 
-        public List<PortfolioQuickListViewModel> GetSearchPortfolios(ManagePortfoliosModel model)
+        public List<PortfolioQuickListModel> GetSearchPortfolios(ManagePortfoliosModel model)
         {
             IEPIRepository ePIRepository = this._factory.Create();
-            List<PortfolioQuickListViewModel> portfolioQuickListViewModels = new List<PortfolioQuickListViewModel>();
-            List<User> users = ePIRepository.Users.ToList<User>();
-            List<Guid> guids = new List<Guid>();
-            int? nullable1 = model.UserId;
-            if ((nullable1.GetValueOrDefault() <= 0 ? 0 : Convert.ToInt32(nullable1.HasValue)) != 0)
-            {
-                guids = (
-                    from x in ePIRepository.AssetUserMDAs
-                    where (int?)x.UserId == model.UserId
-                    select x.AssetId).ToList<Guid>();
-            }
-            List<Portfolio> portfolios = new List<Portfolio>();
+            var portfolios = ePIRepository.Portfolios.Where(a=>a.isActive).ToList();
+            var portfolioQuickListViewModels = new List<PortfolioQuickListModel>();
+            var users = ePIRepository.Users.ToList();
+            var portfolioAssets = ePIRepository.PortfolioAssets.ToList();
+            var assets = ePIRepository.Assets.ToList();
 
-            if (model.PortfolioId != Guid.Empty)
-            {
-                portfolios = ((model.ControllingUserType == UserType.CorpAdmin || model.ControllingUserType == UserType.CorpAdmin2 ? false : model.ControllingUserType != UserType.SiteAdmin) ? (
-                from w in ePIRepository.Portfolios
-                where w.isActive && (int?)w.UserId == model.UserId
-                && w.PortfolioId == model.PortfolioId
-                select w).ToList<Portfolio>() : (
-                from w in ePIRepository.Portfolios
-                where w.isActive && w.PortfolioId == model.PortfolioId
-                select w).ToList<Portfolio>());
-            }
-            else
-            {
-                portfolios = ((model.ControllingUserType == UserType.CorpAdmin || model.ControllingUserType == UserType.CorpAdmin2 ? false : model.ControllingUserType != UserType.SiteAdmin) ? (
-                from w in ePIRepository.Portfolios
-                where w.isActive && (int?)w.UserId == model.UserId
-                select w).ToList<Portfolio>() : (
-                from w in ePIRepository.Portfolios
-                where w.isActive
-                select w).ToList<Portfolio>());
-            }
 
-            List<PortfolioAsset> portfolioAssets = new List<PortfolioAsset>();
-            List<Asset> assets1 = new List<Asset>();
             if (!string.IsNullOrEmpty(model.PortfolioName))
             {
                 var regex = "[^A-Za-z0-9]";
-                model.PortfolioName = Regex.Replace(model.PortfolioName, regex, "");
-                portfolios = (
-                    from a in portfolios
-                    where (a.PortfolioName == null ? false : Regex.Replace(a.PortfolioName.ToLower(), regex, "").Contains(model.PortfolioName.ToLower()))
-                    select a).ToList<Portfolio>();
+                var portfolioName = Regex.Replace(model.PortfolioName, regex, "");
+                portfolios = portfolios.Where(a => a.PortfolioName != null && 
+                                              Regex.Replace(a.PortfolioName.ToLower(), regex, "").Contains(portfolioName.ToLower())).ToList();
             }
-
-
-            foreach (Portfolio portfolio in portfolios)
+            if (model.PortfolioId != Guid.Empty)
             {
-                IQueryable<PortfolioAsset> portfolioAssets1 =
-                    from x in ePIRepository.PortfolioAssets
-                    where x.PortfolioId == portfolio.PortfolioId
-                    select x;
-                portfolioAssets.AddRange(portfolioAssets1);
-                List<Guid> guids1 = (
-                    from x in portfolioAssets1
-                    select x.AssetId).ToList<Guid>();
-                foreach (Guid guid in guids1)
-                {
-                    if (model.ControllingUserType == UserType.ICAdmin)
-                    {
-                        var asset = ePIRepository.Assets.FirstOrDefault(a => a.AssetId == guid && a.ListedByUserId == model.UserId.Value && !a.IsSubmitted);
-                        if (asset != null) assets1.Add(asset);
-                    }
-                    else assets1.Add(ePIRepository.Assets.FirstOrDefault<Asset>((Asset x) => x.AssetId == guid));
-                }
+                portfolios = portfolios.Where(a => a.PortfolioId == model.PortfolioId).ToList();
             }
 
-            bool usingAssetSearchCriteria = false;
             if ((int)model.AssetType != 0)
             {
-                assets1 = (
-                    from w in assets1
-                    where w.AssetType == model.AssetType
-                    select w).ToList<Asset>();
-                usingAssetSearchCriteria = true;
+               var assetsList = assets.Where(a => a.AssetType == model.AssetType).Select(a=>a.AssetId).ToList();
+               var portfolioList = portfolioAssets.Where(a => assetsList.Contains(a.AssetId)).Select(a => a.PortfolioId).ToList();
+                portfolios = portfolios.Where(a => portfolioList.Contains(a.PortfolioId) ).ToList();
             }
             if (!string.IsNullOrEmpty(model.AssetName))
             {
-                assets1 = (
-                    from a in assets1
-                    where (a.ProjectName == null ? false : a.ProjectName.ToLower().Contains(model.AssetName.ToLower()))
-                    select a).ToList<Asset>();
-                usingAssetSearchCriteria = true;
+                var regex = "[^A-Za-z0-9]";
+                var assetName = Regex.Replace(model.AssetName, regex, "");
+
+                var assetsList = assets.Where(a => a.ProjectName != null &&
+                                              Regex.Replace(a.ProjectName.ToLower(), regex, "").Contains(assetName.ToLower())).
+                                              Select(a => a.AssetId).ToList();
+
+                var portfolioList = portfolioAssets.Where(a => assetsList.Contains(a.AssetId)).Select(a => a.PortfolioId).ToList();
+                portfolios = portfolios.Where(a => portfolioList.Contains(a.PortfolioId)).ToList();
             }
             if (!string.IsNullOrEmpty(model.AssetNumber))
             {
-                int num = 0;
-                int.TryParse(model.AssetNumber, out num);
-                if (num != 0)
-                {
-                    assets1 = (
-                        from a in assets1
-                        where a.AssetNumber == num
-                        select a).ToList<Asset>();
-                }
-                usingAssetSearchCriteria = true;
+                var assetsList = assets.Where(a => model.AssetNumber.Contains(a.AssetNumber.ToString())).Select(a => a.AssetId).ToList();
+                var portfolioList = portfolioAssets.Where(a => assetsList.Contains(a.AssetId)).Select(a => a.PortfolioId).ToList();
+                portfolios = portfolios.Where(a => portfolioList.Contains(a.PortfolioId)).ToList();
             }
             if (!string.IsNullOrEmpty(model.City))
             {
-                assets1 = (
-                    from x in assets1
-                    where (string.IsNullOrEmpty(x.City) ? false : x.City.ToLower().Contains(model.City.ToLower()))
-                    select x).ToList<Asset>();
-                usingAssetSearchCriteria = true;
+                var regex = "[^A-Za-z0-9]";
+                var assetCity = Regex.Replace(model.City, regex, "");
+
+                var assetsList = assets.Where(a => a.City != null &&
+                                              Regex.Replace(a.City.ToLower(), regex, "").Contains(assetCity.ToLower())).
+                                              Select(a => a.AssetId).ToList();
+
+                var portfolioList = portfolioAssets.Where(a => assetsList.Contains(a.AssetId)).Select(a => a.PortfolioId).ToList();
+                portfolios = portfolios.Where(a => portfolioList.Contains(a.PortfolioId)).ToList(); 
             }
             if (!string.IsNullOrEmpty(model.State))
             {
-                assets1 = (
-                    from a in assets1
-                    where a.State == model.State
-                    select a).ToList<Asset>();
-                usingAssetSearchCriteria = true;
+                var assetsList = assets.Where(a => a.State != null &&
+                                              a.State.ToLower().Contains(model.State.ToLower())).
+                                              Select(a => a.AssetId).ToList();
+
+                var portfolioList = portfolioAssets.Where(a => assetsList.Contains(a.AssetId)).Select(a => a.PortfolioId).ToList();
+                portfolios = portfolios.Where(a => portfolioList.Contains(a.PortfolioId)).ToList();
             }
             if (!string.IsNullOrEmpty(model.ZipCode))
             {
-                assets1 = (
-                    from a in assets1
-                    where a.Zip == model.ZipCode
-                    select a).ToList<Asset>();
-                usingAssetSearchCriteria = true;
+                var assetsList = assets.Where(a => a.Zip != null &&
+                                            a.Zip.ToLower().Contains(model.ZipCode.ToLower())).
+                                            Select(a => a.AssetId).ToList();
+
+                var portfolioList = portfolioAssets.Where(a => assetsList.Contains(a.AssetId)).Select(a => a.PortfolioId).ToList();
+                portfolios = portfolios.Where(a => portfolioList.Contains(a.PortfolioId)).ToList();
             }
             if (!string.IsNullOrEmpty(model.AddressLine1))
             {
-                assets1 = (
-                    from a in assets1
-                    where (string.IsNullOrEmpty(a.PropertyAddress) ? false : a.PropertyAddress.ToLower().Contains(model.AddressLine1.ToLower()))
-                    select a).ToList<Asset>();
-                usingAssetSearchCriteria = true;
+                var regex = "[^A-Za-z0-9]";
+                var assetAddressLine1 = Regex.Replace(model.AddressLine1, regex, "");
+
+                var assetsList = assets.Where(a => a.City != null &&
+                                              Regex.Replace(a.PropertyAddress.ToLower(), regex, "").Contains(assetAddressLine1.ToLower())).
+                                              Select(a => a.AssetId).ToList();
+
+                var portfolioList = portfolioAssets.Where(a => assetsList.Contains(a.AssetId)).Select(a => a.PortfolioId).ToList();
+                portfolios = portfolios.Where(a => portfolioList.Contains(a.PortfolioId)).ToList();
             }
+
             if (!string.IsNullOrEmpty(model.APNNumber))
             {
                 var regex = "[^A-Za-z0-9]";
-                var parcelNumber = Regex.Replace(model.APNNumber, regex, "");
-                var parcelNumbers = from atpn in ePIRepository.AssetTaxParcelNumbers
-                                    join a in ePIRepository.Assets on atpn.AssetId equals a.AssetId
-                                    where atpn.TaxParcelNumber != null
-                                    select atpn;
-                var matches = parcelNumbers.ToList().Where(a => Regex.Replace(a.TaxParcelNumber, regex, "") == parcelNumber);
-                assets1 = new List<Asset>();
-                foreach (var apn in matches)
-                {
-                    assets1.Add(ePIRepository.Assets.First(a => a.AssetId == apn.AssetId));
-                }
-                usingAssetSearchCriteria = true;
+                List<Asset> apnAssetList = new List<Asset>();
+                var apnNumber = Regex.Replace(model.APNNumber, regex, "");
+                var apnList = ePIRepository.AssetTaxParcelNumbers.ToList();
+                var assetsList = apnList.Where(w => w.TaxParcelNumber != null && Regex.Replace(w.TaxParcelNumber.ToLower(), regex, "").Contains(apnNumber.ToLower())).Select(s => s.AssetId).Distinct().ToList();
+
+                var portfolioList = portfolioAssets.Where(a => assetsList.Contains(a.AssetId)).Select(a => a.PortfolioId).ToList();
+                portfolios = portfolios.Where(a => portfolioList.Contains(a.PortfolioId)).ToList();
             }
-            // only show portfolios where none of the assets have been submitted to corp admin
-            if (model.ControllingUserType == UserType.ICAdmin)
-            {
-                portfolioAssets.ForEach(f =>
-                {
-                    var asset = ePIRepository.Assets.First(a => a.AssetId == f.AssetId);
-                    if (asset.IsSubmitted)
-                    {
-                        portfolios.Remove(portfolios.Find(p => p.PortfolioId == f.PortfolioId));
-                    }
-                });
-            }
+            
+            
+            /* After filter loop on portfolio*/
             foreach (var p in portfolios)
             {
-                User user = users.Where<User>((User x) =>
-                {
-                    int userId = x.UserId;
-                    int? nullable = model.UserId;
-                    return (userId != nullable.GetValueOrDefault() ? false : nullable.HasValue);
-                }).FirstOrDefault<User>();
+                var lstAssetInPortfolio = portfolioAssets.Where(x => x.PortfolioId == p.PortfolioId && x.isActive).Select(x => x.AssetId).ToList();
+                var relatedAsstes = assets.Where(la => lstAssetInPortfolio.Contains(la.AssetId)).ToList();
 
-                List<PortfolioAsset> list = (
-                    from x in portfolioAssets
-                    where x.PortfolioId == p.PortfolioId
-                    select x).ToList<PortfolioAsset>();
+                int units = 0;
+                int squareFeet = 0;
 
-                List<Asset> assets = new List<Asset>();
-                foreach (PortfolioAsset portfolioAsset in list)
+                var proformaNOIP = 0.0D;
+                var pretaxP = 0.0D;
+                var CurrentBpoP = 0.0D;
+
+                foreach (var itemAsset in relatedAsstes)
                 {
-                    assets.Add(assets1.FirstOrDefault<Asset>((Asset x) => x.AssetId == portfolioAsset.AssetId));
-                }
-                List<PortfolioAssetsModel> portfolioAssetsModels = new List<PortfolioAssetsModel>();
-                foreach (Asset asset in assets)
-                {
-                    if (asset != null)
+                    if (itemAsset.AssetType == AssetType.MultiFamily)
                     {
-                        portfolioAssetsModels.Add(new PortfolioAssetsModel()
-                        {
-                            AddressLine1 = asset.PropertyAddress,
-                            AssetId = asset.AssetId,
-                            AssetNumber = asset.AssetNumber,
-                            City = asset.City,
-                            Show = (asset.Show ? "Yes" : "No"),
-                            State = asset.State,
-                            Zip = asset.Zip,
-                            Status = EnumHelper.GetEnumDescription(asset.ListingStatus),
-                            Type = EnumHelper.GetEnumDescription(asset.AssetType),
-                            IsOnHold = asset.HoldForUserId.HasValue,
-                            IsSampleAsset = asset.IsSampleAsset,
-                            CreatedBy = (user != null ? string.Concat(user.FullName, "~", user.Username) : ""),
-                            AssetName = asset.ProjectName,
-                            CanViewAssetName = guids.Contains(asset.AssetId)
-                        });
+                        var mf = itemAsset as MultiFamilyAsset;
+                        units += mf.TotalUnits;
                     }
-                }
-                if (!usingAssetSearchCriteria || (usingAssetSearchCriteria && portfolioAssetsModels.Count > 0))
-                {
-                    portfolioQuickListViewModels.Add(new PortfolioQuickListViewModel()
+                    else if (itemAsset.AssetType == AssetType.MHP)
                     {
-                        NumberofAssets = p.NumberofAssets,
-                        PortfolioId = p.PortfolioId,
-                        PortfolioName = p.PortfolioName,
-                        TotalItemCount = assets1.Count<Asset>(),
-                        ControllingUserType = new UserType?(user.UserType),
-                        HasPrivileges = (p.UserId == user.UserId ? true : false),
-                        isActive = p.isActive,
-                        PortfolioAssets = portfolioAssetsModels
-                    });
+                        var mf = itemAsset as MultiFamilyAsset;
+                        units += mf.TotalUnits;
+                        units += itemAsset.NumberRentableSpace != null ? (int)itemAsset.NumberRentableSpace : 0;
+                        units += itemAsset.NumberNonRentableSpace != null ? (int)itemAsset.NumberNonRentableSpace : 0;
+                    }
+                    else
+                    {
+                        var ca = itemAsset as CommercialAsset;
+                        squareFeet += ca.SquareFeet;
+                    }
+
+                    var aoeP = itemAsset.ProformaAnnualOperExpenses;
+                    var pagiP = itemAsset.ProformaAnnualIncome;
+                    var pamiP = itemAsset.ProformaMiscIncome;
+                    var totalIncomeP = pagiP + pamiP;
+                    var pvfP = (itemAsset.ProformaVacancyFac / 100) * totalIncomeP;
+                    proformaNOIP += Math.Round((totalIncomeP - pvfP) - aoeP);
+
+                    pretaxP += totalIncomeP - pvfP - aoeP;
+                    CurrentBpoP += itemAsset.CurrentBpo;
                 }
+
+                var calcLastOccupancyDateLst = relatedAsstes.Where(ra => ra.LastReportedOccupancyDate.HasValue);
+                var calcOccupancyDateLst = relatedAsstes.Where(ra => ra.OccupancyDate.HasValue);
+
+               
+                var userType = users.Where(us => us.UserId == relatedAsstes.FirstOrDefault().ListedByUserId).FirstOrDefault().UserType;
+
+                var priceing = ((relatedAsstes.Where(ra => ra.AskingPrice > 0).Any() ?
+                                       relatedAsstes.Where(ra => ra.AskingPrice > 0).Sum(ra => ra.AskingPrice) : 0)
+                                         + (relatedAsstes.Where(ra => ra.AskingPrice == 0).Any() ?
+                                         relatedAsstes.Where(ra => ra.AskingPrice == 0).Sum(ra => ra.CurrentBpo) : 0));
+
+
+                portfolioQuickListViewModels.Add(new PortfolioQuickListModel()
+                {
+                    NumberOfAssets = p.NumberofAssets,
+                    PortfolioId = p.PortfolioId,
+                    PortfolioName = p.PortfolioName,
+                    States = relatedAsstes.Select(ra => ra.State).Distinct().ToList(),
+                    AssetType = relatedAsstes.Select(ra => ra.AssetType).Distinct().ToList(),
+                    UnitsSqFt = 0,
+                    NumberOfUnits = units,
+                    SquareFeet = squareFeet,
+                    OccupancyDate = calcLastOccupancyDateLst.Count() > 0 ?
+                                    calcLastOccupancyDateLst.Max(ra => ra.LastReportedOccupancyDate).Value.ToString("MM/yyyy") :
+                                    calcOccupancyDateLst.Max(ra => ra.OccupancyDate).Value.ToString("MM/yyyy"),
+                    OccupancyPercentage = Math.Round(relatedAsstes.Sum(ra => ra.CurrentVacancyFac) / (double)relatedAsstes.Count(), 2),
+                    CumiProformaSGI = relatedAsstes.Sum(ra => ra.ProformaAnnualIncome).ToString("C0"),
+
+                    CumiProformaNOI = proformaNOIP.ToString("C0"),
+
+                    AssmFin = relatedAsstes.First().HasPositionMortgage == PositionMortgageType.Yes ? "Yes" : "No",
+                    Pricing = priceing,
+                    PricingType = relatedAsstes.Where(ra => ra.AskingPrice > 0).Any() ? "LP" : "CMV",
+                    CumiLPCapRate = ((proformaNOIP / priceing)).ToString("P2"),
+                    UserType = userType,
+                    ListingStatus = relatedAsstes.First().ListingStatus,
+                    BusDriver = relatedAsstes.Where(ra => ra.Show).Any() ? "CA" : "SUS",
+
+                });
+
             }
+
             return portfolioQuickListViewModels;
+
         }
 
         public List<PortfolioQuickListViewModel> GetUserPortfolios(int UserId)
@@ -945,14 +927,30 @@ namespace Inview.Epi.EpiFund.Business
                     isActive = true
                 };
                 ePIRepository.PortfolioAssets.Add(portfolioAsset);
+                ePIRepository.Save();
             }
-
+            
 
             //update related Assets as suggested at time of update porfoliyo          
             var assets = (from x in ePIRepository.PortfolioAssets where x.PortfolioId == model.PortfolioId select x.Asset);
+                     
+            var results = model.AssetIdsLpCMV.Split(',').ToList();            
+            var lstassetLPCMV = new List<assetLPCMV>();
+            foreach (var assetResult in results)
+            {
+                var itemassetLPCMV = new assetLPCMV();
+                itemassetLPCMV.Assetid = new Guid(assetResult.Split('_')[0]);
+                itemassetLPCMV.Lp =  Convert.ToDouble(assetResult.Split('_')[1]);
+                itemassetLPCMV.Cmv = Convert.ToDouble(assetResult.Split('_')[2]);
+                lstassetLPCMV.Add(itemassetLPCMV);
+            }           
+
+
             foreach (Asset asset in assets)
             {
-                //Asset asset = (from x in ePIRepository.Assets where x.AssetId == selectedAsset select x).First<Asset>();
+                var itemassetLPCMV = lstassetLPCMV.Where(a => a.Assetid == asset.AssetId);
+                asset.AskingPrice = itemassetLPCMV.FirstOrDefault().Lp;
+                asset.CurrentBpo = itemassetLPCMV.FirstOrDefault().Cmv;
 
                 asset.LastReportedOccupancyDate = model.LastReportedOccupancyDate;
                 asset.SellerTerms = model.SellerTerms;
@@ -990,12 +988,11 @@ namespace Inview.Epi.EpiFund.Business
             ePIRepository.Save();
         }
 
-        public List<PortfolioQuickListViewModel> TrimStringProperty(List<PortfolioQuickListViewModel> input)
+        public List<PortfolioQuickListModel> TrimStringProperty(List<PortfolioQuickListModel> input)
         {
             // Get list of portfolios where the name starts with a space
-            List<PortfolioQuickListViewModel> list = input.Where(x => x.PortfolioName.Substring(0, 1).Equals(" ")).ToList();
-
-            foreach (PortfolioQuickListViewModel item in list)
+            List<PortfolioQuickListModel> list = input.Where(x => x.PortfolioName.Substring(0, 1).Equals(" ")).ToList();
+            foreach (PortfolioQuickListModel item in list)
             {
                 item.PortfolioName = item.PortfolioName.Trim();
                 input.Where(x => x.PortfolioId == item.PortfolioId).First().PortfolioName = item.PortfolioName;
@@ -1004,24 +1001,118 @@ namespace Inview.Epi.EpiFund.Business
             return input;
         }
 
-        public List<PortfolioQuickListViewModel> SortPortfoliosModel(List<PortfolioQuickListViewModel> input, bool descending)
+        public List<PortfolioQuickListModel> SortPortfoliosModel(List<PortfolioQuickListModel> input, bool descending)
         {
             // Sort the portfolio names
             string[] portfolioNames = input.Select(o => o.PortfolioName).ToList().ToArray();
-
             Array.Sort(portfolioNames, new AlphaNumericComparator());
-
             if (descending)
                 portfolioNames = portfolioNames.OrderByDescending(d => d).ToArray();
-
-            List<PortfolioQuickListViewModel> sortedList = new List<PortfolioQuickListViewModel>();
-
+            List<PortfolioQuickListModel> sortedList = new List<PortfolioQuickListModel>();
             foreach (string name in portfolioNames)
             {
                 sortedList.Add(input.Where(x => x.PortfolioName.Equals(name)).First());
             }
-
             return sortedList;
+        }
+
+
+        public List<AdminAssetQuickListModel> GetAssetsByAssetsIds(string portfolioId, List<AdminAssetQuickListModel> assetsIds)
+        {
+            var list = new List<AdminAssetQuickListModel>();
+            var context = _factory.Create();
+
+            Guid portId = new Guid(portfolioId);
+            var AssetsidsInPortfolio = context.PortfolioAssets.Where(x => x.PortfolioId == portId).Select(a => a.AssetId).ToList();
+
+            var assetsIDS = assetsIds != null ? assetsIds.Where(s => s.IsSelected).Select(s => s.AssetId) : Enumerable.Range(0, 0).Select(_ => Guid.NewGuid()).ToList();
+           
+            var assets = context.Assets.Where(la => AssetsidsInPortfolio.Contains(la.AssetId) || assetsIDS.Contains(la.AssetId));
+
+            var users = context.Users.ToList();
+            bool isSpecificType = false;
+
+            var assetList = assets.ToList();
+
+            assetList.ForEach(a =>
+            {
+
+                int units = 0;
+                int squareFeet = 0;
+                if (a.AssetType == AssetType.MultiFamily)
+                {
+                    var mf = a as MultiFamilyAsset;
+                    units = mf.TotalUnits;
+                }
+                else if (a.AssetType == AssetType.MHP)
+                {
+                    var mf = a as MultiFamilyAsset;
+                    units = mf.TotalUnits;
+                    units += a.NumberRentableSpace != null ? (int)a.NumberRentableSpace : 0;
+                    units += a.NumberNonRentableSpace != null ? (int)a.NumberNonRentableSpace : 0;
+                }
+                else
+                {
+                    var ca = a as CommercialAsset;
+                    squareFeet = ca.SquareFeet;
+                }
+
+                if (a != null)
+                {
+                    //-------
+                    var aoe = a.ProformaAnnualOperExpenses;
+                    var pagi = a.ProformaAnnualIncome;
+                    var pami = a.ProformaMiscIncome;
+                    var totalIncome = pagi + pami;
+                    var pvf = (a.ProformaVacancyFac / 100) * totalIncome;
+                    var proformaNOI = Math.Round((totalIncome - pvf) - aoe);
+                    var pretax = totalIncome - pvf - aoe;
+                    //-------
+
+                    list.Add(new AdminAssetQuickListModel()
+                    {
+                        AddressLine1 = a.PropertyAddress,
+                        AssetId = a.AssetId,
+                        AssetNumber = a.AssetNumber,
+                        City = a.City,
+                        Show = a.Show ? "Yes" : "No",
+                        State = a.State,
+                        Zip = a.Zip,
+                        Status = EnumHelper.GetEnumDescription(a.ListingStatus),
+                        Type = EnumHelper.GetEnumDescription(a.AssetType),
+                        //ControllingUserType = model.ControllingUserType,
+                        IsOnHold = a.HoldForUserId.HasValue,
+                        IsSampleAsset = a.IsSampleAsset,
+                        CreatedBy = context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault() != null
+                                  ? context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault().FullName + "~" +
+                                  context.Users.Where(x => x.UserId == a.ListedByUserId).FirstOrDefault().Username : "",
+                        AssetName = a.ProjectName,
+                        SquareFeet = squareFeet,
+                        NumberOfUnits = units,
+                        isSpecificType = isSpecificType,
+                        CurrentVacancyFac = a.CurrentVacancyFac,
+                        LastReportedOccupancyDate = a.LastReportedOccupancyDate != null ? a.LastReportedOccupancyDate : a.OccupancyDate,
+                        ProformaAnnualIncome = a.ProformaAnnualIncome,
+                        ProformaNOI = proformaNOI,
+                        CashInvestmentApy = a.CashInvestmentApy,
+                        capRate = ((pretax / a.CurrentBpo) * 100),
+                        AskingPrice = a.AskingPrice,
+                        CurrentBpo = a.CurrentBpo,
+                        Portfolio = context.PortfolioAssets.Where(x => x.AssetId == a.AssetId).Any() ? true : false,
+
+                        /*Unknown 0,Yes 1,No 2	 */
+                        AssmFin = a.HasPositionMortgage == PositionMortgageType.Yes ? "Yes" : "No",
+                        UserType = context.Users.Where(us => us.UserId == a.ListedByUserId).FirstOrDefault().UserType,
+                        ListingStatus = a.ListingStatus,
+                        IsActive = a.IsActive,
+                        BusDriver = a.Show ? "CA" : "SUS",
+                        IsPaper = a.IsPaper
+
+                    });
+
+                }
+            });
+            return list;
         }
 
     }
@@ -1116,5 +1207,12 @@ namespace Inview.Epi.EpiFund.Business
             }
             return len1 - len2;
         }
+    }
+
+    public class assetLPCMV
+    {
+        public Guid Assetid { get; set; }
+        public double Lp { get; set; }
+        public double Cmv { get; set; }
     }
 }

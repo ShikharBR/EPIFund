@@ -4,14 +4,18 @@
     Layout = ViewBag.Layout; ;
 }
 <style>
-    .header
-    {
+    .header {
         margin: 1px;
         color: #fff;
         padding: 3px 10px;
         cursor: pointer;
         position: relative;
         background-color: #B1A795 !important;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        padding: 6px;
+        text-align: left;
     }
 </style>
 <h3>Portfolios</h3>
@@ -165,6 +169,22 @@
 }
 @{ Html.RenderPartial("_PortfolioListView", Model.Portfolios); }
 
+
+<div class="modal fade" id="portfholioAssets" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewPortfolio"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="chainOfTitleAssets" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewchainOfTitle"></div>
+    </div>
+</div>
+
+
 <script>
 
     $(document).ready(function () {
@@ -216,25 +236,57 @@
             failure: function (response) {
             }
         });
-}
+    }
 
-$('.pagination li a').click(function () {
-    var href = $(this).attr('href');
-    if (typeof href !== typeof undefined && href !== false) {
-        var page = parseInt(getPageNumber(href));
-        $('#Page').val(page);
+    $('.pagination li a').click(function () {
+        var href = $(this).attr('href');
+        if (typeof href !== typeof undefined && href !== false) {
+            var page = parseInt(getPageNumber(href));
+            $('#Page').val(page);
+            $('#searchForm').submit();
+            return false;
+        }
+    });
+    function postForm(order) {
+        $('#SortOrder').val(order);
         $('#searchForm').submit();
         return false;
     }
-});
-function postForm(order) {
-    $('#SortOrder').val(order);
-    $('#searchForm').submit();
-    return false;
-}
-function changeResults() {
-    $('#RowCount').val($('#ddlRowCount').val());
-    $('#searchForm').submit();
-}
+    function changeResults() {
+        $('#RowCount').val($('#ddlRowCount').val());
+        $('#searchForm').submit();
+    }
+
+    function ViewRelatedAssets(PortfolioId, curretntSpan) {
+        //alert(PortfolioId);
+        /*show model popup
+         bind data as per the assets list*/
+        $.ajax({
+            url: "@Url.Action("GetAssetsbyPortfolioId", "Admin")",
+            data: { portfolioId: PortfolioId },
+            success: function (data) {
+
+                if ($("#divAssetViewchainOfTitle").html().length > 0) {
+                    var ID = $(curretntSpan).closest('tr').parent().closest('tr').attr("id");
+
+                    if ($('#' + PortfolioId + '_AssetsinPortfolio').length) {
+                        $('#' + PortfolioId + '_AssetsinPortfolio').remove();
+                    }
+                    else {
+                        data = data.replace("<button", "<button style='display:none;'")
+                        $('#' + ID).after("<tr id='" + PortfolioId + "_AssetsinPortfolio'> <td colspan='18'>" + data + "</td></tr>");
+                    }
+
+                } else {
+                    $("#divAssetViewPortfolio").html(data);
+                    $("#portfholioAssets").modal();
+                }
+                //add comma
+                $('.padNumber').each(function (index) {
+                    padCommas(this, false);
+                });
+            }
+        });
+    }
 </script>
 

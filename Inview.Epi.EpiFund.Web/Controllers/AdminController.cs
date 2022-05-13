@@ -9693,14 +9693,8 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			var assetsList = this._asset.GetAssetByPortfolioId(portfolioId);
 			return this.PartialView("_AssetViewPortfolio", assetsList);
 		}
-				
-
-
-
+		
 		//HC & OC Logic
-
-		
-		
 		[HttpPost]
 		public JsonResult GetApplicableOwnerCompanyOptions(string name, string type)
 		{
@@ -9720,9 +9714,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			}
 			return jsonResult;
 		}
-
 		
-
 		[HttpPost]
 		public ActionResult UpdateCreateHCnAssetHCOwnerships(HCCAssetHCOwnerships model)
 		{

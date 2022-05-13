@@ -55,18 +55,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			return base.RedirectToAction("ManagePortfolios", "Portfolio");
 		}
 
-		[HttpPost]
-		public List<AdminAssetQuickListModel> AssetsList(List<AdminAssetQuickListModel> assets)
-		{
-			this._user.RemoveUserAssetLocks(base.User.Identity.Name);
-			((dynamic)base.ViewBag).AssetType = base.populateAssetTypeDDL();
-			((dynamic)base.ViewBag).PortfolioList = this.populatePortfolioListDDL();
-			if (assets != null)
-			{
-				HttpRuntime.Cache["AssetList"] = assets;
-			}
-			return assets;
-		}
+		
 
 		[Authorize]
 		[HttpGet]
@@ -84,6 +73,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			portfolioViewModel.isIntial = true;
 
 			portfolioViewModel.LastReportedOccupancyDate = null;
+			portfolioViewModel.PortfolioAssetList = new List<AdminAssetQuickListModel>();
 
 			this.SearchAssets(portfolioViewModel);
 			this.GetLayout(userByUsername);
@@ -134,6 +124,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				if (model.PortfolioProperties.Count < 1)
 				{
 					model.PortfolioProperties = this._portfolio.GetPortfolioProperties(model.PortfolioId);
+					model.PortfolioAssetList = this._asset.GetAssetByPortfolioId(model.PortfolioId.ToString());
 				}
 				model.SelectedAssets = (
 					from w in model.Assets
@@ -237,7 +228,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 
             int value;
             this._user.RemoveUserAssetLocks(base.User.Identity.Name);
-			List<PortfolioQuickListViewModel> portfolioQuickListViewModels = new List<PortfolioQuickListViewModel>();
+			List<PortfolioQuickListModel> portfolioQuickListViewModels = new List<PortfolioQuickListModel>();
 			UserModel userByUsername = this._user.GetUserByUsername(base.User.Identity.Name);
 			this.GetLayout(userByUsername);
 			if (!base.ValidatePFUser(userByUsername))
@@ -245,6 +236,8 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
 				return base.RedirectToAction("Index", "Home");
 			}
+
+
 			model.ControllingUserType = new UserType?(userByUsername.UserType);
 			ManagePortfoliosModel managePortfoliosModel = new ManagePortfoliosModel()
 			{
@@ -262,55 +255,10 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 				ControllingUserType = userByUsername.UserType,
                 IsSearching = model.IsSearching
 			};
+
 			portfolioQuickListViewModels = this._portfolio.GetSearchPortfolios(managePortfoliosModel);
-			((dynamic)base.ViewBag).CurrentSort = model.SortOrder;
-			base.ViewBag.PortfolioIdSortParm = (model.SortOrder == "assetId" ? "assetId_desc" : "assetId");
-			base.ViewBag.NameSortParm = (model.SortOrder == "name" ? "name_desc" : "name");
-            base.ViewBag.NumberSortParm = (model.SortOrder == "number" ? "number_desc" : "number");
-			string str = model.SortOrder;
-			if (str == "name_desc")
-			{
-                // Trim the portfolio names eliminating any spaces that could meddle with the sort
-                // Sort portfolios by PortfolioName in descending order
-                portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
-                portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, true);
-            }
-            else if (str == "name")
-			{
-                // Trim the portfolio names eliminating any spaces that could meddle with the sort
-                // Sort portfolios by PortfolioName 
-                portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
-                portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, false);
-                
-			}
-			else if (str == "number_desc")
-			{
-                
-                portfolioQuickListViewModels = (
-					from s in portfolioQuickListViewModels
-					orderby s.PortfolioAssets.Count descending
-					select s).ToList<PortfolioQuickListViewModel>();
-			}
-			else if (str == "number")
-			{
-				portfolioQuickListViewModels = (
-					from w in portfolioQuickListViewModels
-					orderby w.PortfolioAssets.Count
-                    select w).ToList<PortfolioQuickListViewModel>();
-			}
-			else if (str == "assetId_desc")
-			{
-				portfolioQuickListViewModels = (
-					from s in portfolioQuickListViewModels
-					orderby s.PortfolioId descending
-					select s).ToList<PortfolioQuickListViewModel>();
-			}
-			else
-			{
-                // by default sort by name ascending 
-                portfolioQuickListViewModels = _portfolio.TrimStringProperty(portfolioQuickListViewModels);
-                portfolioQuickListViewModels = _portfolio.SortPortfoliosModel(portfolioQuickListViewModels, false);
-            }
+			
+			
             int num = 0;
             TempDataDictionary tempData = base.TempData;
             int? rowCount = model.RowCount;
@@ -333,7 +281,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
             }
             rowCount = page;
             int num1 = (rowCount.HasValue ? rowCount.GetValueOrDefault() : 1);
-            model.Portfolios = portfolioQuickListViewModels.ToPagedList<PortfolioQuickListViewModel>(num1, num);
+            model.Portfolios = portfolioQuickListViewModels.ToPagedList<PortfolioQuickListModel>(num1, num);
 			return base.View(model);
 		}
 
@@ -703,8 +651,12 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			portfolio = this.PopulateAssetList(portfolio);
 			portfolio.isIntial = true;
 			this.SearchAssets(portfolio);
-            if (HttpRuntime.Cache["AssetList"] != null) HttpRuntime.Cache.Remove("AssetList");
-            return base.View(portfolio);
+            if (HttpRuntime.Cache["AssetList"] != null) 
+				HttpRuntime.Cache.Remove("AssetList");
+
+			portfolio.PortfolioAssetList = this._asset.GetAssetByPortfolioId(id.ToString());
+
+			return base.View(portfolio);
 		}
 
 		[Authorize]
@@ -754,11 +706,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 					model.PortfolioProperties = this._portfolio.GetPortfolioProperties(model.PortfolioId);
 				}
 
-				model.SelectedAssets = (
-					from w in model.Assets
-					where w.IsSelected
-					select w into s
-					select s.AssetId).ToList<Guid>();
+				model.SelectedAssets = (from w in model.Assets where w.IsSelected select w into s select s.AssetId).ToList<Guid>();
 
 				if (!base.ModelState.IsValid)
 				{
@@ -803,7 +751,8 @@ namespace Inview.Epi.EpiFund.Web.Controllers
                     this._portfolio.UpdatePortfolio(model, userByUsername.UserId);
 					base.TempData["message"] = new MessageViewModel(MessageTypes.Success, "Portfolio and related assets successfully updated.");
 
-                    if (HttpRuntime.Cache["AssetList"] != null) HttpRuntime.Cache.Remove("AssetList");
+                    if (HttpRuntime.Cache["AssetList"] != null) 
+						HttpRuntime.Cache.Remove("AssetList");
 
                     return base.RedirectToAction("ManagePortfolios", "Portfolio", new { PortfolioNumber = model.PortfolioId.ToString() });
 				}
@@ -842,5 +791,27 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			base.TempData["message"] = new MessageViewModel(MessageTypes.Error, "You do not have access to view this page.");
 			return base.RedirectToAction("Index", "Home");
 		}
-	}
+
+
+		[HttpPost]
+		public List<AdminAssetQuickListModel> AssetsList(List<AdminAssetQuickListModel> assets)
+		{
+			this._user.RemoveUserAssetLocks(base.User.Identity.Name);
+			((dynamic)base.ViewBag).AssetType = base.populateAssetTypeDDL();
+			((dynamic)base.ViewBag).PortfolioList = this.populatePortfolioListDDL();
+			if (assets != null)
+			{
+				HttpRuntime.Cache["AssetList"] = assets;
+			}
+			return assets;
+		}
+
+		[HttpPost]
+        public ActionResult GetAssetsbyAssetsId(List<AdminAssetQuickListModel> assets, string portfolioId)
+        {
+            var assetsList = this._portfolio.GetAssetsByAssetsIds(portfolioId, assets);
+            return this.PartialView("_AssetViewPortfolio", assetsList);
+        }
+
+    }
 }

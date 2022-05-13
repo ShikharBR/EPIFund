@@ -1,0 +1,112 @@
+﻿@using PagedList.Mvc
+@model List<Inview.Epi.EpiFund.Domain.ViewModel.AdminAssetQuickListModel>
+
+
+<div class="modal-header">   
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" style="text-align:center;" >[ @Model.Count.ToString() result(s) found]</h4>
+    <h5>
+        If you select Pricing Display Option as "Submit Offer" or "CMV" then LP will marked as zero.
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="panel panel-default" style="border: 1px solid #B1A795;">
+            @if (Model != null && Model.Count > 0)
+            {
+                <div class="overflow short-xs">
+                    <table class="table table-striped" id="tbAssets" cellpadding="1" cellspacing="1"
+                           style="font-size: 10px !important; padding: 1px; vertical-align: middle;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th><b>Asset ID#</b></th>
+                                <th><b>Asset Name</b></th>
+                                <th><b>Asset Type</b></th>
+                                <th><b>Current LP</b></th>
+                                <th><b>Current<br />CMV/CMA</b></th>
+                                <th><b>Portfolio CAP<br />Rate</b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < @Model.Count; i++)
+                            {
+                                <tr>
+                                    <td>@(i+1)</td>
+                                    <td>
+                                        <a href="@Url.Action("ViewAsset", "DataPortal", new { id = @Model[i].AssetId, fromManageAssets = true })">
+                                            @Model[i].AssetNumber
+                                        </a>
+                                    </td>
+                                    <td style="word-wrap:break-word;">                                   
+                                        <a onclick="EditAsset('@Model[i].AssetId')" style="cursor:pointer">
+                                            <span class="AssetName" title="@Model[i].AssetName">
+                                                @Model[i].AssetName
+                                            </span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @Model[i].Type
+                                    </td>
+                                    <td>
+                                        <input type="text" onblur="calcTotalCapRate(this)" onchange="addCommasToInput(this)" class="formatNumber" id="txtLP_@Model[i].AssetId" value="@Model[i].AskingPrice"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" onblur="calcTotalCapRate(this)" onchange="addCommasToInput(this)" class="formatNumber" id="txtCMV_@Model[i].AssetId" value="@Model[i].CurrentBpo" />
+                                    </td>
+                                    <td id="capRate_@Model[i].AssetId">
+                                        @if (Model[i].AskingPrice > 0)
+                                        {
+                                            @((Model[i].CashInvestmentApy / 100).ToString("P2"))
+                                        }
+                                        else
+                                        {
+                                            @((Model[i].capRate / 100).ToString("P2"))
+                                        }                                       
+                                    </td>
+                                </tr>
+                            }
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>Total:</td>
+                            <td id="TotalLP">
+                                <span class="padmoney" id="AskingPriceTotal">@Model.Sum(a => a.AskingPrice).ToString("C0")</span>                            
+                            </td>
+                            <td id="TotalCMV">
+                                <span class="padmoney" id="CurrentBpoTotal">@Model.Sum(a => a.CurrentBpo).ToString("C0")</span>                                
+                            </td>
+                            <td>
+                                <input type="button" id="btnSave" class="btn btn-primary" value="Save">
+                            </td>
+                        </tr>
+                            </tbody>
+                        </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#btnSave").click(function (e) {
+
+        var allElements = [];
+
+        $("input[id*='txtLP_']").each(function (i, el) {
+            debugger;
+            var idd = $(this).attr('id');
+            var id = idd.split('_')[1];
+            var lp = $(this).val().replaceAll(',','');
+            var cmv = $('#txtCMV_' + id).val().replaceAll(',', '');
+            var tab = id + '_' + lp + '_' + cmv;
+            allElements.push(tab);
+        });              
+
+        $("#AssetIdsLpCMV").val(allElements);
+
+        $("#UpdatePortfolioform").submit();
+    });
+</script>
