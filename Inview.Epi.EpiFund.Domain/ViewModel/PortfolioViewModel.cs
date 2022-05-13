@@ -930,5 +930,7 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
             };
             return portfolio;
         }
+                
+        public string AssetIdsLpCMV { get; set; }
     }
 }

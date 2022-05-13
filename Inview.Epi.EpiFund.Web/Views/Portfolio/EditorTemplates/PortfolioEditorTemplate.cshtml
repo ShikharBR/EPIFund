@@ -6,52 +6,14 @@
 @using Inview.Epi.EpiFund.Domain.Enum
 @using Newtonsoft.Json
 <style>
-    .field-validation-error {
-        color: red;
-        font-weight: bold;
-    }
-
-    .detailsHeading {
-        margin: 1px;
-        color: #fff;
-        padding: 3px 10px;
-        cursor: pointer;
-        position: relative;
-        background-color: #428bca;
-    }
-
-    .layer1 {
-        margin: 0;
-        padding: 0;
-        width: 300px;
-    }
-
-    .detailsContent {
-        padding: 5px 10px;
-        background-color: #fafafa;
-    }
-
-    #uploadDiv #AssetDocumentType, #uploadDiv #docTitle {
-        border: 1px solid #ccc;
-    }
-
-    #documents .deleteDocUpload {
-        background-color: transparent;
-        border: 0;
-        font-size: 10px;
-        color: #428bca;
-        padding: 0;
-        margin: 0;
-    }
-
-        #documents .deleteDocUpload:hover, #docManager .deleteDocUpload:focus {
-            color: #2a6496;
-        }
-
-    #documents a {
-        display: block;
-    }
-
+    .field-validation-error {color: red;font-weight: bold;}
+    .detailsHeading {margin: 1px;color: #fff;padding: 3px 10px;cursor: pointer;position: relative;background-color: #428bca;}
+    .layer1 {margin: 0;padding: 0;width: 300px;}
+    .detailsContent {padding: 5px 10px;background-color: #fafafa;}
+    #uploadDiv #AssetDocumentType, #uploadDiv #docTitle {border: 1px solid #ccc;}
+    #documents .deleteDocUpload {background-color: transparent;border: 0;font-size: 10px;color: #428bca;padding: 0;margin: 0;}
+    #documents .deleteDocUpload:hover, #docManager .deleteDocUpload:focus {color: #2a6496;}
+    #documents a { display: block;}
     #documents .description {
         color: #888;
         font-weight: normal;
@@ -60,7 +22,6 @@
         display: block;
         margin: 0;
     }
-
     #documents .docPreviewDiv.row {
         background-color: #f7f7f7;
         width: 100%;
@@ -70,39 +31,17 @@
         border: 1px solid #eee;
         border-radius: 4px;
     }
-
-        #documents .docPreviewDiv.row .col-sm-2 {
-            text-align: right;
-        }
-
-    #documents .document-item {
-        background-color: #fff;
-        border: 0;
-        padding: 0;
-    }
-
+    #documents .docPreviewDiv.row .col-sm-2 {text-align: right;}
+    #documents .document-item {background-color: #fff;border: 0;padding: 0;}
     #documents .document-item-expanded {
         background-color: transparent;
         border: 0;
         padding: 0;
         margin: 0;
     }
-
-    #PendingUploads .docPreviewDiv.row {
-        background-color: #F1FBED;
-        border-color: #d6e9c6;
-    }
-
-    #documents h4 {
-        margin-bottom: 5px;
-    }
-
-    .progressbar {
-        width: 300px;
-        height: 20px;
-        background-color: transparent;
-    }
-
+    #PendingUploads .docPreviewDiv.row {background-color: #F1FBED;border-color: #d6e9c6;}
+    #documents h4 {margin-bottom: 5px;}
+    .progressbar {width: 300px;height: 20px;background-color: transparent;}
     .progressbarlabel {
         width: 300px;
         height: 20px;
@@ -110,33 +49,16 @@
         text-align: center;
         font-size: smaller;
     }
-
-    .ui-progressbar .ui-progressbar-value {
-        height: 20px;
-    }
-
-    select {
-        width: 155px;
-    }
-
-    .AssetName {
-        display: inline-block;
-        width: 50px;
-        white-space: nowrap;
-        overflow: hidden !important;
-        text-overflow: ellipsis;
-    }
-
-    .tab-content {
-        padding-left: 0px !important;
-        padding-right: 0px !important;
-    }
-
+    .ui-progressbar .ui-progressbar-value {height: 20px;}
+    select {width: 155px;}
+    .AssetName {display: inline-block;width: 50px;white-space: nowrap;overflow: hidden !important;text-overflow: ellipsis;}
+    .tab-content {padding-left: 0px !important;padding-right: 0px !important;}
     .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
         padding: 6px;
         text-align: left;
     }
 </style>
+
 <!-- Nav tabs -->
 <ul class="nav nav-pills">
     <li class="active"><a href="#basic" data-toggle="pill">Primary Info</a></li>
@@ -700,7 +622,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <input type="button" class="btn btn-warning" onclick="if (confirm('If you click ok, you will lose all of the data you entered and be returned to the manage portfolios page.')) goBack()" value="Cancel" />
-                
+
                 <input type="submit" id="btnSubmit" class="btn btn-primary" value="Save Portfolio">
             </div>
         </div>
@@ -722,31 +644,12 @@
 @Html.HiddenFor(model => Model.Assets, new { id = "hdnAssetList" })
 @Html.HiddenFor(model => Model.hasOffersDate)
 
+@Html.HiddenFor(model => Model.AssetIdsLpCMV)
+
 <input type="hidden" value="@(Model.PortfolioId)" data-asset="@(Model.PortfolioId)" id="PortfolioId" name="PortfolioId" />
 <input type="hidden" value="@(Model.GetType())" name="TypeOfAsset" />
 
-<div class="modal fade" id="portfholioAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
-    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
-        <!-- Modal content-->
-        <div class="modal-content" id="divAssetViewPortfolio">
 
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="chainOfTitleAssets" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
-    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
-        <!-- Modal content-->
-        <div class="modal-content" id="divAssetViewchainOfTitle"></div>
-    </div>
-</div>
-
-<div class="modal fade" id="assetPrice" role="dialog" data-keyboard="false" style="top:10%;" data-backdrop="static">
-    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
-        <!-- Modal content-->
-        <div class="modal-content" id="divassetPrice"></div>
-    </div>
-</div>
 
 <script>
     var isValidForm = true;
@@ -762,30 +665,77 @@
         });
     }
 
-    $("#btnSave").click(function (e) {
-        $("#UpdatePortfolioform").submit();
-    });
+    
 
     $('#btnSubmit').click(function (e) {
-        debugger;
         let isSuccess = formValidation('Primary Info');
         if (!isSuccess) {
             e.preventDefault();
             $('#divError').show();
         }
-        else {
-            var assetList = $("#hdnAssetList").val();
+        else {            
+            var form = $('#assetPartial :input').serialize();
             e.preventDefault()
             $.ajax({
-                url: "@Url.Action("GetAssetsbyAssetsId", "Portfolio")",
-                data: { assetsIds: assetList, portfolioId: $("#PortfolioId").val()},
+                type: "POST",
+                url: "/Portfolio/GetAssetsbyAssetsId/",
+                data: form + "&portfolioId=" + $("#PortfolioId").val(),
                 success: function (data) {
+
                     $("#divassetPrice").html(data);
                     $("#assetPrice").modal();
+
+                    $("input.formatNumber").each(function (index) {
+                        $(this).val(addCommas($(this).val(), true));
+                        $(this).on("input", null, null, function () {
+                            $(this).val(addCommas($(this).val(), true));
+                        });
+                    });
+
+                    var PricingDisplayOption = $("#PricingDisplayOption").val();
+                    if (PricingDisplayOption == "SubmitOffer") {
+                        //as per call we should set 0 to LP and ready only and CMV is edit able
+                        $("input[id*='txtLP_']").each(function (i, el) {
+                            $(this).val("0.00");
+                            $(this).prop("readonly", true);
+                            $(this).css("background-color", "lightgrey");
+                        });
+                        $('#AskingPriceTotal').html("$0.00")
+                    }
+                    else if (PricingDisplayOption == "Lp") {
+
+                    }
+                    else if (PricingDisplayOption == "Cmv") {
+                        $("input[id*='txtLP_']").each(function (i, el) {
+                            $(this).val("0.00");
+                            $(this).prop("readonly", true);
+                            $(this).css("background-color", "lightgrey");
+                        });
+                        $('#AskingPriceTotal').html("$0.00")
+                    }
                 }
             });
         }
     });
+
+    function storeSelection() {      
+        var form = $('#assetPartial :input').serialize();// serializeAnything($('#assetPartial'));
+        $.ajax({
+            type: "POST",
+            url: "/Portfolio/AssetsList/",
+            data: form,
+            async: false,
+            cache: false,
+            success: function (response) {
+                ("#hdnAssetList").value = response;
+            },
+            error: function (jqXHR, exception) {
+            },
+            failure: function (response) {
+            }
+        });
+
+    }
 
     function formValidation(tabText) {
         valErrorMSg = '';
@@ -869,9 +819,9 @@
         return isValidForm;
     }
 
-    window.setInterval(function () {
-        getAssetList();
-    }, 500);
+    //window.setInterval(function () {
+    //    getAssetList();
+    //}, 500);
 
     function serializeAnything(element) {
         var toReturn = [];
@@ -1039,25 +989,7 @@
         }
     }
 
-    function storeSelection() {
-        debugger;
-        var form = $('#assetPartial :input').serialize();// serializeAnything($('#assetPartial'));
-        $.ajax({
-            type: "POST",
-            url: "/Portfolio/AssetsList/",
-            data: form,
-            async: false,
-            cache: false,
-            success: function (response) {
-                ("#hdnAssetList").value = response;
-            },
-            error: function (jqXHR, exception) {
-            },
-            failure: function (response) {
-            }
-        });
-
-    }
+    
 
     function sortResults(SortOrder) {
         var tab = $("ul.nav li.active a").text();
@@ -1081,26 +1013,26 @@
             });
         }
 
-    function getAssetList() {
-        var tab = $("ul.nav li.active a").text();
-        if (tab != "Images" && tab != "Documents" && tab != "Videos" && tab != "Finish") {
-            var form = $('#assetPartial :input').serialize();
-            $.ajax({
-                type: "POST",
-                url: "/Portfolio/AssetsList/",
-                data: form,
-                async: false,
-                cache: false,
-                success: function (response) {
-                    ("#hdnAssetList").value = response;
-                },
-                error: function (jqXHR, exception) {
-                },
-                failure: function (response) {
-                }
-            });
-        }
-    }
+    //function getAssetList() {
+    //    var tab = $("ul.nav li.active a").text();
+    //    if (tab != "Images" && tab != "Documents" && tab != "Videos" && tab != "Finish") {
+    //        var form = $('#assetPartial :input').serialize();
+    //        $.ajax({
+    //            type: "POST",
+    //            url: "/Portfolio/AssetsList/",
+    //            data: form,
+    //            async: false,
+    //            cache: false,
+    //            success: function (response) {
+    //                ("#hdnAssetList").value = response;
+    //            },
+    //            error: function (jqXHR, exception) {
+    //            },
+    //            failure: function (response) {
+    //            }
+    //        });
+    //    }
+    //}
 
     //Prepare Image and Document index
     $(document).ready(function () {
@@ -1208,8 +1140,6 @@
         var valisSubjectToAuction = $("input[name='IsTBDMarket']:checked").val()
         var valIsCallOffersDate = $("input[name='IsCallOffersDate']:checked").val()
 
-        debugger;
-
         if (valisSubjectToAuction === "false" && valIsCallOffersDate === "false") {
             $(".divCallforOfferDate").hide();
             $("#CallforOfferDate").val('');
@@ -1305,9 +1235,7 @@
             data: { portfolioId: PortfolioId },
             success: function (data) {
 
-                debugger;
                 if ($("#divAssetViewchainOfTitle").html().length > 0) {
-                    debugger;
                     var ID = $(curretntSpan).closest('tr').parent().closest('tr').attr("id");
 
                     if ($('#' + PortfolioId + '_AssetsinPortfolio').length) {
@@ -1329,6 +1257,7 @@
             }
         });
     }
+
     function ViewChainOfTitle(assetId) {
         $.ajax({
             url: "@Url.Action("GetChainOfTitle", "Admin")",
@@ -1345,4 +1274,44 @@
         });
     }
 
+    function calcTotalCapRate() {
+
+        var sumLP = 0;
+        var sumCMV = 0;
+        $("input[id*='txtLP_']").each(function (i, el) {
+            sumLP += parseInt($(this).val().replaceAll(',', ''));
+        });
+
+        $("input[id*='txtCMV_']").each(function (i, el) {
+            sumCMV += parseInt($(this).val().replaceAll(',', ''));
+        });
+
+        var strLp = sumLP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        var strLmv = sumCMV.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        $('#AskingPriceTotal').html(strLp);
+        $('#CurrentBpoTotal').html(strLmv);
+    }
+
+
 </script>
+
+<div class="modal fade" id="portfholioAssets" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewPortfolio"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="chainOfTitleAssets" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divAssetViewchainOfTitle"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="assetPrice" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" style="padding:10%;text-align:center; width:1100px;">
+        <!-- Modal content-->
+        <div class="modal-content" id="divassetPrice"></div>
+    </div>
+</div>

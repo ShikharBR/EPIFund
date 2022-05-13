@@ -436,13 +436,13 @@ namespace Inview.Epi.EpiFund.Business
                 SellerTermsOther = model.SellerTermsOther,
                 PricingDisplayOption = model.PricingDisplayOption,
 
-
             };
             portfolio.NumberofAssets = model.SelectedAssets.Count<Guid>();
             portfolio.UserId = UserId;
             portfolio.isActive = true;
             ePIRepository.Portfolios.Add(portfolio);
             ePIRepository.Save();
+
             foreach (Guid selectedAsset in model.SelectedAssets)
             {
                 PortfolioAsset portfolioAsset = new PortfolioAsset()
@@ -453,15 +453,29 @@ namespace Inview.Epi.EpiFund.Business
                     isActive = true
                 };
                 ePIRepository.PortfolioAssets.Add(portfolioAsset);
+                ePIRepository.Save();
             }
-            ePIRepository.Save();
-
+            
 
             //update related Assets as suggested at time of update porfoliyo          
             var assets = (from x in ePIRepository.PortfolioAssets where x.PortfolioId == portfolio.PortfolioId select x.Asset);
+
+            var results = model.AssetIdsLpCMV.Split(',').ToList();
+            var lstassetLPCMV = new List<assetLPCMV>();
+            foreach (var assetResult in results)
+            {
+                var itemassetLPCMV = new assetLPCMV();
+                itemassetLPCMV.Assetid = new Guid(assetResult.Split('_')[0]);
+                itemassetLPCMV.Lp = Convert.ToDouble(assetResult.Split('_')[1]);
+                itemassetLPCMV.Cmv = Convert.ToDouble(assetResult.Split('_')[2]);
+                lstassetLPCMV.Add(itemassetLPCMV);
+            }
+
             foreach (Asset asset in assets)
             {
-                //Asset asset = (from x in ePIRepository.Assets where x.AssetId == selectedAsset select x).First<Asset>();
+                var itemassetLPCMV = lstassetLPCMV.Where(a => a.Assetid == asset.AssetId);
+                asset.AskingPrice = itemassetLPCMV.FirstOrDefault().Lp;
+                asset.CurrentBpo = itemassetLPCMV.FirstOrDefault().Cmv;
 
                 asset.LastReportedOccupancyDate = model.LastReportedOccupancyDate;
                 asset.OccupancyDate = model.LastReportedOccupancyDate;
@@ -913,14 +927,30 @@ namespace Inview.Epi.EpiFund.Business
                     isActive = true
                 };
                 ePIRepository.PortfolioAssets.Add(portfolioAsset);
+                ePIRepository.Save();
             }
-
+            
 
             //update related Assets as suggested at time of update porfoliyo          
             var assets = (from x in ePIRepository.PortfolioAssets where x.PortfolioId == model.PortfolioId select x.Asset);
+                     
+            var results = model.AssetIdsLpCMV.Split(',').ToList();            
+            var lstassetLPCMV = new List<assetLPCMV>();
+            foreach (var assetResult in results)
+            {
+                var itemassetLPCMV = new assetLPCMV();
+                itemassetLPCMV.Assetid = new Guid(assetResult.Split('_')[0]);
+                itemassetLPCMV.Lp =  Convert.ToDouble(assetResult.Split('_')[1]);
+                itemassetLPCMV.Cmv = Convert.ToDouble(assetResult.Split('_')[2]);
+                lstassetLPCMV.Add(itemassetLPCMV);
+            }           
+
+
             foreach (Asset asset in assets)
             {
-                //Asset asset = (from x in ePIRepository.Assets where x.AssetId == selectedAsset select x).First<Asset>();
+                var itemassetLPCMV = lstassetLPCMV.Where(a => a.Assetid == asset.AssetId);
+                asset.AskingPrice = itemassetLPCMV.FirstOrDefault().Lp;
+                asset.CurrentBpo = itemassetLPCMV.FirstOrDefault().Cmv;
 
                 asset.LastReportedOccupancyDate = model.LastReportedOccupancyDate;
                 asset.SellerTerms = model.SellerTerms;
@@ -987,7 +1017,7 @@ namespace Inview.Epi.EpiFund.Business
         }
 
 
-        public List<AdminAssetQuickListModel> GetAssetsByAssetsIds(string portfolioId, string assetsIds)
+        public List<AdminAssetQuickListModel> GetAssetsByAssetsIds(string portfolioId, List<AdminAssetQuickListModel> assetsIds)
         {
             var list = new List<AdminAssetQuickListModel>();
             var context = _factory.Create();
@@ -995,7 +1025,9 @@ namespace Inview.Epi.EpiFund.Business
             Guid portId = new Guid(portfolioId);
             var AssetsidsInPortfolio = context.PortfolioAssets.Where(x => x.PortfolioId == portId).Select(a => a.AssetId).ToList();
 
-            var assets = context.Assets.Where(la => AssetsidsInPortfolio.Contains(la.AssetId));
+            var assetsIDS = assetsIds != null ? assetsIds.Where(s => s.IsSelected).Select(s => s.AssetId) : Enumerable.Range(0, 0).Select(_ => Guid.NewGuid()).ToList();
+           
+            var assets = context.Assets.Where(la => AssetsidsInPortfolio.Contains(la.AssetId) || assetsIDS.Contains(la.AssetId));
 
             var users = context.Users.ToList();
             bool isSpecificType = false;
@@ -1175,5 +1207,12 @@ namespace Inview.Epi.EpiFund.Business
             }
             return len1 - len2;
         }
+    }
+
+    public class assetLPCMV
+    {
+        public Guid Assetid { get; set; }
+        public double Lp { get; set; }
+        public double Cmv { get; set; }
     }
 }

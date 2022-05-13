@@ -16,12 +16,17 @@ namespace Inview.Epi.EpiFund.Domain.Helpers
         {
             try
             {
+
                 FieldInfo fi = value.GetType().GetField(value.ToString());
-                DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                if (attributes != null && attributes.Length > 0)
-                    return attributes[0].Description;
-                else
-                    return value.ToString();
+                if (fi != null)
+                {
+                    DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                    if (attributes != null && attributes.Length > 0)
+                        return attributes[0].Description;
+                    else
+                        return value.ToString();
+                }
+                return value.ToString();
             }
             catch
             {

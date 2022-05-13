@@ -36,6 +36,6 @@ namespace Inview.Epi.EpiFund.Domain
 
         void UpdatePortfolio(PortfolioViewModel model, int UserId);
 
-		List<AdminAssetQuickListModel> GetAssetsByAssetsIds(string portfolioId, string assetsIds);
+		List<AdminAssetQuickListModel> GetAssetsByAssetsIds(string portfolioId, List<AdminAssetQuickListModel> assetsIds);
 	}
 }

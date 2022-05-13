@@ -55,18 +55,7 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			return base.RedirectToAction("ManagePortfolios", "Portfolio");
 		}
 
-		[HttpPost]
-		public List<AdminAssetQuickListModel> AssetsList(List<AdminAssetQuickListModel> assets)
-		{
-			this._user.RemoveUserAssetLocks(base.User.Identity.Name);
-			((dynamic)base.ViewBag).AssetType = base.populateAssetTypeDDL();
-			((dynamic)base.ViewBag).PortfolioList = this.populatePortfolioListDDL();
-			if (assets != null)
-			{
-				HttpRuntime.Cache["AssetList"] = assets;
-			}
-			return assets;
-		}
+		
 
 		[Authorize]
 		[HttpGet]
@@ -803,11 +792,26 @@ namespace Inview.Epi.EpiFund.Web.Controllers
 			return base.RedirectToAction("Index", "Home");
 		}
 
-		public ActionResult GetAssetsbyAssetsId(string portfolioId, string assetsIds)
+
+		[HttpPost]
+		public List<AdminAssetQuickListModel> AssetsList(List<AdminAssetQuickListModel> assets)
 		{
-			var assetsList = this._portfolio.GetAssetsByAssetsIds(portfolioId,assetsIds);
-			return this.PartialView("_AssetViewPortfolio", assetsList);
+			this._user.RemoveUserAssetLocks(base.User.Identity.Name);
+			((dynamic)base.ViewBag).AssetType = base.populateAssetTypeDDL();
+			((dynamic)base.ViewBag).PortfolioList = this.populatePortfolioListDDL();
+			if (assets != null)
+			{
+				HttpRuntime.Cache["AssetList"] = assets;
+			}
+			return assets;
 		}
-		 
-	}
+
+		[HttpPost]
+        public ActionResult GetAssetsbyAssetsId(List<AdminAssetQuickListModel> assets, string portfolioId)
+        {
+            var assetsList = this._portfolio.GetAssetsByAssetsIds(portfolioId, assets);
+            return this.PartialView("_AssetViewPortfolio", assetsList);
+        }
+
+    }
 }
