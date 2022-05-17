@@ -44,8 +44,8 @@
         }
         else if (Model.CurrentBpo != 0)
         {
-            cashInvCAP = @Model.CashInvestmentApy;
             cashInvLP = 0;
+            cashInvCAP = @Model.CashInvestmentApy;
         }
 
     }
@@ -2268,7 +2268,6 @@
                     <div class="col-sm-6">
                         <div class="input-group" style="line-height: 34px">
                             <input type="text" id="capLPCOM" style="border:0; width:34px" readonly><div style="margin-left: 5px; display: inline">%</div>
-
                             @Html.HiddenFor(s => s.CashInvestmentApy)
                             @Html.ValidationMessageFor(model => model.CashInvestmentApy)
                         </div>
@@ -6454,8 +6453,6 @@
 
     function validateHCAddEdit() {
 
-        debugger;
-
         var rtn = true;
         var assetId = $("#AssetId").val();
         var date = $("#ActualClosingDate").val();
@@ -6541,7 +6538,6 @@
 
     function UpdateCreateHCInsertHCOwnership() {
 
-        debugger;
         var validate = validateHCAddEdit();
         if (validate) {
 
@@ -8671,6 +8667,7 @@
         var calc = 0;
         var calc2 = 0;
         if (assetType == "MultiFamily" || assetType == "MHP") {
+         
             var EstDeferredMaintenance = getNumberFromValue($('#EstDeferredMaintenance').val());
             var AverageAdjustmentToBaseRentalIncomePerUnitAfterRenovations = getNumberFromValue($('#AverageAdjustmentToBaseRentalIncomePerUnitAfterRenovations').val());
             var units = getNumberFromValue($("#TotalUnits").val());

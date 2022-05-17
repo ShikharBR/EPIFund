@@ -14,6 +14,8 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Web;
 
+using AutoMapper;
+
 namespace Inview.Epi.EpiFund.Business
 {
     public class PortfolioManager : IPortfolioManager
@@ -1106,15 +1108,22 @@ namespace Inview.Epi.EpiFund.Business
                         ListingStatus = a.ListingStatus,
                         IsActive = a.IsActive,
                         BusDriver = a.Show ? "CA" : "SUS",
-                        IsPaper = a.IsPaper
+                        IsPaper = a.IsPaper,
 
-                    });
+                        ProformaAnnualOperExpenses = a.ProformaAnnualOperExpenses,
+                        ProformaMiscIncome = a.ProformaMiscIncome,
+                        ProformaVacancyFac = a.ProformaVacancyFac,
+                        EstDeferredMaintenance =  a.EstDeferredMaintenance??0,
+                        AverageAdjustmentToBaseRentalIncomePerUnitAfterRenovations = a.AverageAdjustmentToBaseRentalIncomePerUnitAfterRenovations,
+
+                        TotalUnits = (a.AssetType == AssetType.MultiFamily ? ((Mapper.Map<Asset, AssetViewModel>(a)) as MultiFamilyAssetViewModel).TotalUnits : 0 )
+
+                    });;
 
                 }
             });
             return list;
         }
-
     }
 
     public class AlphaNumericComparator : IComparer

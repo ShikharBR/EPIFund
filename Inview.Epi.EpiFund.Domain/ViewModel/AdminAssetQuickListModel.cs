@@ -7,71 +7,27 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 {
 	public class AdminAssetQuickListModel
 	{
-		public string AddressLine1
-		{
-			get;
-			set;
-		}
+		public string AddressLine1 { get; set; }
 
-		public Guid AssetId
-		{
-			get;
-			set;
-		}
+		public Guid AssetId { get; set; }
 
-		public string AssetName
-		{
-			get;
-			set;
-		}
+		public string AssetName { get; set; }
 
-		public int AssetNumber
-		{
-			get;
-			set;
-		}
+		public int AssetNumber { get; set; }
 
-		public string City
-		{
-			get;
-			set;
-		}
+		public string City { get; set; }
 
-		public UserType ControllingUserType
-		{
-			get;
-			set;
-		}
+		public UserType ControllingUserType { get; set; }
 
-		public string CreatedBy
-		{
-			get;
-			set;
-		}
+		public string CreatedBy { get; set; }
 
-		public bool IsOnHold
-		{
-			get;
-			set;
-		}
+		public bool IsOnHold { get; set; }
 
-		public bool IsSampleAsset
-		{
-			get;
-			set;
-		}
+		public bool IsSampleAsset { get; set; }
 
-		public bool IsSelected
-		{
-			get;
-			set;
-		}
+		public bool IsSelected { get; set; }
 
-		public bool isSpecificType
-		{
-			get;
-			set;
-		}
+		public bool isSpecificType { get; set; }
 
 		public int NumberOfUnits
 		{
@@ -144,64 +100,29 @@ namespace Inview.Epi.EpiFund.Domain.ViewModel
 			get;
 			set;
 		}
-		public float CashInvestmentApy
-		{
-			get;
-			set;
-		}
-		public double capRate
-		{
-			get;
-			set;
-		}
-		public double AskingPrice
-		{
-			get;
-			set;
-		}
-		public double CurrentBpo
-		{
-			get;
-			set;
-		}
-		public bool Portfolio
-		{
-			get;
-			set;
-		}
+		public float CashInvestmentApy { get; set; }
+		public double capRate { get; set; }
+		public double AskingPrice { get; set; }
+		public double CurrentBpo { get; set; }
+		public bool Portfolio { get; set; }
 
-		public string AssmFin
-		{
-			get;
-			set;
-		}
+		public string AssmFin { get; set; }
 
-		public UserType UserType
-		{
-			get;
-			set;
-		}
-		public ListingStatus ListingStatus
-		{
-			get;
-			set;
-		}
-		public bool IsActive
-		{
-			get;
-			set;
-		}
+		public UserType UserType { get; set; }
+		public ListingStatus ListingStatus { get; set; }
+		public bool IsActive { get; set; }
 
-		public string BusDriver
-		{
-			get;
-			set;
-		}
-		public bool IsPaper
-		{
-			get;
-			set;
-		}
+		public string BusDriver { get; set; }
+		public bool IsPaper { get; set; }
+
+		//added due to portfolio edit 
+		public double ProformaAnnualOperExpenses { get; set; }
+		public double ProformaMiscIncome { get; set; }
+		public double ProformaVacancyFac { get; set; }
+		public int EstDeferredMaintenance { get; set; }
+		public double? AverageAdjustmentToBaseRentalIncomePerUnitAfterRenovations { get; set; }
+		public int TotalUnits { get; set; }
+
 
 
 	}

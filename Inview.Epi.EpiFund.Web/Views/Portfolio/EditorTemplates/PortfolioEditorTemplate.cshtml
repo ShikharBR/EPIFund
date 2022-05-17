@@ -665,8 +665,6 @@
         });
     }
 
-    
-
     $('#btnSubmit').click(function (e) {
         let isSuccess = formValidation('Primary Info');
         if (!isSuccess) {
@@ -713,6 +711,17 @@
                         });
                         $('#AskingPriceTotal').html("$0.00")
                     }
+
+                    //sum and devided by count
+                    var sumCapRate = 0;
+                    var count = 0;
+                    $("td[id*='capRate_']").each(function (i, el) {
+                        count = i + 1;
+                        sumCapRate += parseFloat(getNumberFromValue($(this).html()));
+                    });
+                    $('#AvgCapRate').html((sumCapRate / count).toFixed(2) + '%');
+
+                    $("#PricingDisplayOptionDisplay").html($("#PricingDisplayOption option:selected").text());
                 }
             });
         }
@@ -988,9 +997,7 @@
             });
         }
     }
-
     
-
     function sortResults(SortOrder) {
         var tab = $("ul.nav li.active a").text();
         var form = $('#searchData :input').serialize();
@@ -1273,25 +1280,6 @@
             }
         });
     }
-
-    function calcTotalCapRate() {
-
-        var sumLP = 0;
-        var sumCMV = 0;
-        $("input[id*='txtLP_']").each(function (i, el) {
-            sumLP += parseInt($(this).val().replaceAll(',', ''));
-        });
-
-        $("input[id*='txtCMV_']").each(function (i, el) {
-            sumCMV += parseInt($(this).val().replaceAll(',', ''));
-        });
-
-        var strLp = sumLP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        var strLmv = sumCMV.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        $('#AskingPriceTotal').html(strLp);
-        $('#CurrentBpoTotal').html(strLmv);
-    }
-
 
 </script>
 
